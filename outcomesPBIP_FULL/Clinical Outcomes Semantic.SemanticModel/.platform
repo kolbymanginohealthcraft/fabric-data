@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Clinical Outcomes Semantic"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "77477b8b-928c-4d4d-af08-823eb3e848ff"
+  }
+}

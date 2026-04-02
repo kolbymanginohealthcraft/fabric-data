@@ -1,0 +1,33 @@
+table 'Override State'
+	lineageTag: e311157c-65a8-40dc-9198-6260b7c12d91
+
+	measure 'Override State Condition' = ```
+			
+			IF(
+			    SELECTEDVALUE('Override State'[BillingState]) IN VALUES(Account[BillingState]) && 
+			    (
+			        CALCULATE(DISTINCTCOUNT(Account[Id]),ALLSELECTED(Account))=1 ||
+			        ISFILTERED(Chain[Name])
+			    ),
+			    1,
+			    0
+			)
+			```
+		lineageTag: 51af9548-aa0b-4a92-8f52-ad617fc6b52c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BillingState
+		lineageTag: d0b2a6fd-f1e8-45f2-b35b-dddac7f7478d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Account[BillingState]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Override State' = calculated
+		mode: import
+		source = FILTER(DISTINCT(Account[BillingState]),NOT(ISBLANK(Account[BillingState])))
+
+	annotation PBI_Id = d1e47b9cc1d24b8282b33c44cd229b99
+

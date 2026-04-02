@@ -1,0 +1,100 @@
+table BenchmarkTable
+	lineageTag: e6d019ee-864f-4148-8fe5-1ac63c8c1b50
+
+	calculationGroup
+		precedence: 2
+
+		calculationItem Provider = SELECTEDMEASURE()
+
+		calculationItem Benchmark = ```
+				
+				// CALCULATE(
+				//     SELECTEDMEASURE(),
+				
+				//     //main filters
+				//     ALL('Aegis Contract'),
+				//     ALL(StayCases[PatientCase_ID]),
+				//     ALL(vw_UpnFacilityAccess),
+				//     ALL(Perspectives),
+				//     ALL(Employees),
+				
+				//     //override filters for state, type, and chain
+				//     SWITCH(TRUE(),ISFILTERED('Override State'[BillingState]),Account[BillingState] IN VALUES('Override State'[BillingState]),TRUE()),
+				//     SWITCH(TRUE(),ISFILTERED('Override Type'[Type]),Account[Type] IN VALUES('Override Type'[Type]),TRUE()),
+				//     SWITCH(TRUE(),ISFILTERED('Override Chain'[Name]),Chain[Name] IN VALUES('Override Chain'[Name]),TRUE())
+				
+				//     // //override filter for payer
+				//     // SWITCH(
+				//     //     TRUE(),
+				//     //     ISFILTERED('Override Payer'[Payer Grouping]),'Payer Buckets'[Payer Grouping] IN VALUES('Override Payer'[Payer Grouping]),
+				//     //     ISFILTERED('Payer Buckets'[Payer Categorization]),'Payer Buckets'[Payer Categorization] IN VALUES('Payer Buckets'[Payer Categorization]),
+				//     //     ISFILTERED('Payer Buckets'[Payer Grouping]),'Payer Buckets'[Payer Grouping] IN VALUES('Payer Buckets'[Payer Grouping]),
+				//     //     TRUE()
+				//     // )
+				// )
+				
+				
+				
+				
+				
+				
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Department])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				    REMOVEFILTERS(Patients),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+				
+				```
+
+	column BenchmarkSetting
+		dataType: string
+		lineageTag: 4713524f-7a6e-4015-a19d-8082c4f04ab9
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a799bb4-dc76-4a8f-9f9a-a7c6bb0c695b
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

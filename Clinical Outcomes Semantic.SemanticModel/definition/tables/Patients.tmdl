@@ -1,0 +1,147 @@
+table Patients
+	lineageTag: e385ba61-0ec6-4266-9246-c8e1228db2aa
+
+	measure 'Total Patients' = COUNTROWS(Patients)
+		formatString: #,0
+		lineageTag: 2328b156-d4a6-4b4f-a757-56069a798ba4
+
+	measure 'Avg Age' =
+			
+			CALCULATE(
+			    DIVIDE(
+			        SUMX(StayCases,[Avg Age Unweighted]*[Total Visits]),
+			        [Total Visits]
+			    ),
+			    FILTER(
+			        StayCases,
+			        NOT(ISBLANK([Avg Age Unweighted])) && NOT(ISBLANK([Total Visits]))
+			    )
+			)
+		formatString: 0.0
+		lineageTag: d1c98fcb-f3e6-4e59-9ade-4e9709734591
+
+	measure 'Patient Name for Title' =
+			
+			IF(
+			    HASONEVALUE(Patients[PatientID]),
+			    SELECTEDVALUE(Patients[Patient Name])&" (age "&FORMAT([Avg Age],"0")&")"
+			)
+		lineageTag: 99fdae27-bc81-467f-8cdb-937bdaf6962f
+
+	measure 'Avg Age BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Avg Age],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0
+		lineageTag: 997564e6-128d-4fb9-bf60-f32782e8b213
+
+	measure 'Avg Age Delta' =
+			
+			IF([Report Scope]="Filtered",[Avg Age]-[Avg Age BM])
+		lineageTag: 3b6a8269-6b01-48df-ad66-c84a00f7a94d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Age Unweighted' =
+			
+			AVERAGEX(
+			    FILTER(StayCases,RELATED(Patients[DOB])>DATE(1900,1,1)),
+			    var patientAge = DATEDIFF(RELATED(Patients[DOB]),StayCases[TherapyEndDate],YEAR)
+			    var patientAgeADJ = SWITCH(TRUE(),patientAge>0 && patientAge<120,patientAge)
+			    RETURN patientAgeADJ
+			)
+		formatString: 0.0
+		lineageTag: 9c2798da-7647-4d26-bb0c-57aaef48dfc7
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "WeightedAverage"
+				}
+
+		changedProperty = FormatString
+
+	column PatientID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 52c6e636-cf98-42d3-98ad-1287b4fd9695
+		summarizeBy: none
+		sourceColumn: PatientID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Patient Name'
+		dataType: string
+		lineageTag: 66deec32-9824-4356-8e81-a793c6a25f45
+		summarizeBy: none
+		sourceColumn: Patient Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOB
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: c7dfe732-165a-46b5-98ba-86efa86c8f5b
+		summarizeBy: none
+		sourceColumn: DOB
+
+		variation Variation
+			isDefault
+			relationship: 7c4afb56-a0e6-46cf-96d6-57918ff784e4
+			defaultHierarchy: LocalDateTable_40fdc1f3-9e86-4c8c-b6df-2588df851a45.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Facility
+		dataType: string
+		isHidden
+		lineageTag: 7ef64ba2-9074-4211-905d-048c16133a38
+		summarizeBy: none
+		sourceColumn: Facility
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Patient Name FirstLast'
+		dataType: string
+		lineageTag: bee3525c-6232-414a-bfab-80e66ab5af6b
+		summarizeBy: none
+		sourceColumn: Patient Name FirstLast
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Patients = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
+				    Patients_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="Patients",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Patients_,{"PatientID", "FirstName", "LastName", "DOB", "Facility"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"DOB", type date}}),
+				    #"Inserted Merged Column" = Table.AddColumn(#"Changed Type", "Patient Name FirstLast", each Text.Combine({[FirstName], [LastName]}, " "), type text),
+				    #"Merged Columns" = Table.CombineColumns(#"Inserted Merged Column",{"LastName", "FirstName"},Combiner.CombineTextByDelimiter(", ", QuoteStyle.None),"Patient Name"),
+				    #"Trimmed Text" = Table.TransformColumns(#"Merged Columns",{{"Patient Name", Text.Trim, type text}}),
+				    #"Cleaned Text" = Table.TransformColumns(#"Trimmed Text",{{"Patient Name", Text.Clean, type text}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Cleaned Text","  "," ",Replacer.ReplaceText,{"Patient Name"}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Replaced Value",{{"Patient Name", Text.Proper, type text}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Capitalized Each Word", each [Facility] <> null and [Facility] <> "" and not Text.Contains([Facility], "TST"))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,208 @@
+expression dbo_vw_PatientStays =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_PatientStays = Source{[Schema="dbo",Item="dbo_vw_PatientStays"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_PatientStays, each [DischargeDate] > StartDate or [DischargeDate] = null),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"MedicalRecordNumber"})
+		in
+		    #"Removed Columns"
+	lineageTag: 4553c8be-9028-412a-a335-63d8ff914f2f
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_StayCases =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_StayCases = Source{[Schema="dbo",Item="dbo_vw_StayCases"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_StayCases, each [TherapyEndDate] > StartDate or [TherapyEndDate] = null),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"TypeOfCare"})
+		in
+		    #"Removed Columns"
+	lineageTag: bf581141-dc30-4e9e-97e8-f2358b7b2dac
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_CaseTracks =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_CaseTracks = Source{[Schema="dbo",Item="dbo_vw_CaseTracks"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_CaseTracks, each [EndDate] > StartDate or [EndDate] = null)
+		in
+		    #"Filtered Rows"
+	lineageTag: d4fe1eaf-8d1e-47c1-b455-1840b60c2e1b
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'dbo vw_AllEvalsAndDischargesLight' =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo.vw_AllEvalsAndDischargesLight = Source{[Schema="dbo",Item="dbo.vw_AllEvalsAndDischargesLight"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo.vw_AllEvalsAndDischargesLight, each [CreatedDate] > StartDate),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"CreatedDate"})
+		in
+		    #"Removed Columns"
+	lineageTag: f96ac244-c9e3-4a4d-8d39-2d9910a3e73a
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression excelOutcomesCrosswalk =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_excelOutcomesCrosswalk = Source{[Schema="dbo",Item="excelOutcomesCrosswalk"]}[Data]
+		in
+		    dbo_excelOutcomesCrosswalk
+	lineageTag: 152fcd6e-4d79-4bba-a6f4-4871b3a745d9
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'dbo vw_AllEvalsAndDischargesLight_Items' =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo.vw_AllEvalsAndDischargesLight_Items = Source{[Schema="dbo",Item="dbo.vw_AllEvalsAndDischargesLight_Items"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo.vw_AllEvalsAndDischargesLight_Items, each [CreatedDate] > StartDate),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"CreatedDate"})
+		in
+		    #"Removed Columns"
+	lineageTag: 2aaa8513-4701-4124-81f6-500d5e2d8625
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression excelOutcomesCustomScales =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_excelOutcomesCustomScales = Source{[Schema="dbo",Item="excelOutcomesCustomScales"]}[Data]
+		in
+		    dbo_excelOutcomesCustomScales
+	lineageTag: 49337ec3-810e-4cf0-8707-fee228c1becb
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Salesforce_Aegis_Contract =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_Salesforce_Aegis_Contract = Source{[Schema="dbo",Item="Salesforce_Aegis_Contract"]}[Data]
+		in
+		    dbo_Salesforce_Aegis_Contract
+	lineageTag: 164c4c59-de35-40ab-ac15-e1ce537e0611
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Salesforce_Account =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_Salesforce_Account = Source{[Schema="dbo",Item="Salesforce_Account"]}[Data]
+		in
+		    dbo_Salesforce_Account
+	lineageTag: 34f3aab1-69a5-4a6a-bac5-3c473b8bc2cc
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_Treatments =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_Treatments = Source{[Schema="dbo",Item="dbo_vw_Treatments"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_Treatments, each [LaborDate] > StartDate),
+		    #"Select Columns" = Table.SelectColumns(#"Filtered Rows",{"Person_ID", "SessionId", "LaborDate", "AssistantModifier", "TxTrack_ID", "Duration", "Units", "ServiceCode"})
+		in
+		    #"Select Columns"
+	lineageTag: 1ae51eca-e144-4660-b7bb-3139dec4822b
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_Diagnosis =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_Diagnosis = Source{[Schema="dbo",Item="dbo_vw_Diagnosis"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_Diagnosis, each [OnsetDate] > StartDate),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"TxDocument_ID", "DiagnosisType", "DisplayOrder", "DiagnosisCode_ID", "OnsetDate"})
+		in
+		    #"Removed Other Columns"
+	lineageTag: 94579a73-0171-437b-92ad-6448fa71e469
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression ICD_10_CM_Mappings =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_ICD_10_CM_Mappings = Source{[Schema="dbo",Item="ICD_10_CM_Mappings"]}[Data]
+		in
+		    dbo_ICD_10_CM_Mappings
+	lineageTag: 7d998b94-ea86-4a96-a772-cb8e181251c0
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression csv_C2824T2n =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_csv_C2824T2n = Source{[Schema="dbo",Item="csv_C2824T2n"]}[Data]
+		in
+		    dbo_csv_C2824T2n
+	lineageTag: ba81edb5-95a0-435a-9274-d44fbc150596
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster = Source{[Schema="dbo",Item="excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster"]}[Data]
+		in
+		    dbo_excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster
+	lineageTag: cf58414f-7eaf-4092-b475-d371bacf7742
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_UpnFacilityAccess =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_Treatments = Source{[Schema="dbo",Item="dbo_vw_UpnFacilityAccess"]}[Data]
+		in
+		    dbo_dbo_vw_Treatments
+	lineageTag: 3bfeb463-f2ca-4f81-abd1-9962d04d0614
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

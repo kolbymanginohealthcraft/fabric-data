@@ -1,0 +1,441 @@
+table PercentileTable
+	lineageTag: 8e2bc395-76ca-4382-874c-74fb4b99c050
+
+	calculationGroup
+		precedence: 4
+
+		calculationItem cases_p10 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        StayCases,
+				        SELECTEDMEASURE(),
+				        .1
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem cases_p25 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        StayCases,
+				        SELECTEDMEASURE(),
+				        .25
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem cases_p50 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        StayCases,
+				        SELECTEDMEASURE(),
+				        .50
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem cases_p75 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        StayCases,
+				        SELECTEDMEASURE(),
+				        .75
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem cases_p90 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        StayCases,
+				        SELECTEDMEASURE(),
+				        .9
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem sites_p10 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        Account,
+				        SELECTEDMEASURE(),
+				        .1
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem sites_p25 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        Account,
+				        SELECTEDMEASURE(),
+				        .25
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem sites_p50 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        Account,
+				        SELECTEDMEASURE(),
+				        .50
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem sites_p75 =
+				
+				VAR __Div = VALUES(VW_NHAegisFacilities[Division])   -- capture current Division selection
+				RETURN
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        Account,
+				        SELECTEDMEASURE(),
+				        .75
+				    ),
+				    // reset almost everything
+				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(StayCases[PatientCase_ID]),
+				    REMOVEFILTERS(vw_UpnFacilityAccess),
+				    REMOVEFILTERS(Perspectives),
+				    REMOVEFILTERS(Employees),
+				
+				    // keep Division if it was filtered (exactly as filtered)
+				    KEEPFILTERS(__Div),
+				
+				    // override filters for state, type, and chain
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override State'[BillingState]),
+				            Account[BillingState] IN VALUES('Override State'[BillingState]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Type'[Type]),
+				            Account[Type] IN VALUES('Override Type'[Type]),
+				        TRUE()
+				    ),
+				    SWITCH(
+				        TRUE(),
+				        ISFILTERED('Override Chain'[Name]),
+				            Chain[Name] IN VALUES('Override Chain'[Name]),
+				        TRUE()
+				    )
+				
+				    // payer override block unchanged / optional
+				)
+
+		calculationItem sites_p90 =
+				
+				CALCULATE(
+				    PERCENTILEX.INC(
+				        Account,
+				        SELECTEDMEASURE(),
+				        .90
+				    ),
+				    //main filters
+				    ALL('Aegis Contract'),
+				    ALL(StayCases[PatientCase_ID]),
+				    ALL(vw_UpnFacilityAccess),
+				    ALL(Perspectives),
+				    ALL(Employees),
+				
+				    //override filters for state, type, and chain
+				    SWITCH(TRUE(),ISFILTERED('Override State'[BillingState]),Account[BillingState] IN VALUES('Override State'[BillingState]),TRUE()),
+				    SWITCH(TRUE(),ISFILTERED('Override Type'[Type]),Account[Type] IN VALUES('Override Type'[Type]),TRUE()),
+				    SWITCH(TRUE(),ISFILTERED('Override Chain'[Name]),Chain[Name] IN VALUES('Override Chain'[Name]),TRUE())
+				
+				    //override filter for payer
+				    // SWITCH(
+				    //     TRUE(),
+				    //     ISFILTERED('Override Payer'[Payer Grouping]),'Payer Buckets'[Payer Grouping] IN VALUES('Override Payer'[Payer Grouping]),
+				    //     ISFILTERED('Payer Buckets'[Payer Categorization]),'Payer Buckets'[Payer Categorization] IN VALUES('Payer Buckets'[Payer Categorization]),
+				    //     ISFILTERED('Payer Buckets'[Payer Grouping]),'Payer Buckets'[Payer Grouping] IN VALUES('Payer Buckets'[Payer Grouping]),
+				    //     TRUE()
+				    // )
+				)
+
+	column PercentileColumn
+		dataType: string
+		lineageTag: f611d4ca-2a95-42a8-9228-02a3452276fc
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: d1541761-a0a1-4b32-a867-1eca892aa259
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

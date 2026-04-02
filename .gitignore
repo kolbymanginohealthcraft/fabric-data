@@ -1,0 +1,5 @@
+node_modules/
+.env
+databases.json
+.token-cache.json
+*.pbi/localSettings.json
