@@ -1,0 +1,81 @@
+table 'Outcomes Custom Scales'
+	lineageTag: 43d44741-091b-4474-bf37-8dc81137889f
+
+	column 'Library Scale Value'
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: 60f9495e-7f9e-4d6f-ae3a-6f0ef5a8f964
+		summarizeBy: none
+		sourceColumn: Library Scale Value
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Scale Name'
+		dataType: string
+		isHidden
+		lineageTag: 26d4dd18-83fa-4d73-9d8b-74d8f06cd0d3
+		summarizeBy: none
+		sourceColumn: Scale Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Response Description'
+		dataType: string
+		isHidden
+		lineageTag: 4ebe7a28-f33a-4d13-a788-51fa859a2b1a
+		summarizeBy: none
+		sourceColumn: Response Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Response Type'
+		dataType: string
+		isHidden
+		lineageTag: 7e78ad22-9262-479c-929b-9e1967b9eaf4
+		summarizeBy: none
+		sourceColumn: Response Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Points
+		dataType: double
+		lineageTag: a933d356-aff6-48a0-a40f-2c195a255ff5
+		summarizeBy: none
+		sourceColumn: Points
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Outcomes Custom Scales' = m
+		mode: directQuery
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://aegis.sharepoint.com/sites/ITPowerBiFiles/Shared%20Documents/Outcomes/Outcomes%20Custom%20Scales.xlsx"), null, true),
+				    Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Library Scale Value", Int64.Type}, {"Scale Name", type text}, {"Response Description", type text}, {"Points", type number}, {"Response Type", type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "AdjPoints", each if [Response Type]="N/A" then null else [Points]),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Custom",{"Points"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"AdjPoints", "Points"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Points", type number}})
+				in
+				    #"Changed Type1"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

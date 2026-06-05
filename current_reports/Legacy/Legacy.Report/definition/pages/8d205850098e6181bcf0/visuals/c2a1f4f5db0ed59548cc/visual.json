@@ -1,0 +1,144 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "c2a1f4f5db0ed59548cc",
+  "position": {
+    "x": 64,
+    "y": 472,
+    "z": 2000,
+    "height": 128,
+    "width": 784,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Account"
+                    }
+                  },
+                  "Property": "Total Facilities"
+                }
+              },
+              "queryRef": "Account.Total Facilities",
+              "nativeQueryRef": "Total Facilities"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Total Cases"
+                }
+              },
+              "queryRef": "MeasureTable.Total Cases",
+              "nativeQueryRef": "Total Cases"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "ALOS"
+                }
+              },
+              "queryRef": "MeasureTable.ALOS",
+              "nativeQueryRef": "ALOS"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Admit Level"
+                }
+              },
+              "queryRef": "MeasureTable.Admit Level",
+              "nativeQueryRef": "Admit Level"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Discharge Level"
+                }
+              },
+              "queryRef": "MeasureTable.Discharge Level",
+              "nativeQueryRef": "Discharge Level"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "% Improvement"
+                }
+              },
+              "queryRef": "MeasureTable.% Improvement",
+              "nativeQueryRef": "% Improvement"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "% Total Cases Improved"
+                }
+              },
+              "queryRef": "MeasureTable.% Total Cases Improved",
+              "nativeQueryRef": "% Total Cases Improved"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Tech3'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

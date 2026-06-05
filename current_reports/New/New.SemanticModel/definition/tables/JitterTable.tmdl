@@ -1,0 +1,42 @@
+table JitterTable
+	isHidden
+	lineageTag: cdedd6f0-5ab6-4d46-853b-eb19d5e3b05f
+
+	calculationGroup
+		precedence: 1
+
+		calculationItem Jitter =
+				
+				var factor = 150
+				return
+				IF(ISBLANK(SELECTEDMEASURE())=FALSE(),
+				MIN(
+				    ABS(
+				        SELECTEDMEASURE()+
+				        (
+				            IF(RAND()>.5,1,-1)*RAND()/factor
+				        )
+				    ),
+				    1
+				))
+
+	column JitterSetting
+		dataType: string
+		isHidden
+		lineageTag: 4b7300b3-a3ab-4d16-8d49-c8e833726c28
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d699a462-6b7b-4d40-b6ac-8dc2a905f434
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

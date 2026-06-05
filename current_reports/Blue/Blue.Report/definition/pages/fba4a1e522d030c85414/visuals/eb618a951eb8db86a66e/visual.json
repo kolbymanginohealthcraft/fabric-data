@@ -1,0 +1,164 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "eb618a951eb8db86a66e",
+  "position": {
+    "x": 24,
+    "y": 24,
+    "z": 0,
+    "height": 152,
+    "width": 256,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "StayCases"
+                    }
+                  },
+                  "Property": "Expected Discharge Destination"
+                }
+              },
+              "queryRef": "StayCases.Expected Discharge Destination",
+              "nativeQueryRef": "Expected Discharge Destination"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Total Cases"
+                }
+              },
+              "queryRef": "MeasureTable.Total Cases",
+              "nativeQueryRef": "Total Cases"
+            },
+            {
+              "field": {
+                "Arithmetic": {
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "MeasureTable"
+                        }
+                      },
+                      "Property": "Total Cases"
+                    }
+                  },
+                  "Right": {
+                    "ScopedEval": {
+                      "Expression": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "MeasureTable"
+                            }
+                          },
+                          "Property": "Total Cases"
+                        }
+                      },
+                      "Scope": []
+                    }
+                  },
+                  "Operator": 3
+                }
+              },
+              "queryRef": "Divide(MeasureTable.Total Cases, ScopedEval(MeasureTable.Total Cases, []))",
+              "nativeQueryRef": "%GT Total Cases"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "StayCases"
+                  }
+                },
+                "Property": "Expected Discharge Destination"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "106.09755966849156D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "StayCases.Expected Discharge Destination"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "56.487805400895965D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "MeasureTable.Total Cases"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "56.53658444130663D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Divide(MeasureTable.Total Cases, ScopedEval(MeasureTable.Total Cases, []))"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Expected Discharge Destination'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

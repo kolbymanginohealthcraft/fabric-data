@@ -29,26 +29,35 @@ const TOKEN_CACHE_FILE = path.join(__dirname, ".token-cache.json");
 
 const pools = {};
 
-async function getToken() {
-  // Check file-based token cache first
+function readTokenCache() {
   if (fs.existsSync(TOKEN_CACHE_FILE)) {
-    try {
-      const cached = JSON.parse(fs.readFileSync(TOKEN_CACHE_FILE, "utf8"));
-      if (cached.expiresOn > Date.now() + 60000) {
-        return cached.token;
-      }
-    } catch {}
+    try { return JSON.parse(fs.readFileSync(TOKEN_CACHE_FILE, "utf8")); } catch {}
+  }
+  return {};
+}
+
+function writeTokenCache(cache) {
+  fs.writeFileSync(TOKEN_CACHE_FILE, JSON.stringify(cache, null, 2));
+}
+
+async function getTokenForScope(scope) {
+  const cache = readTokenCache();
+  const cached = cache[scope];
+  if (cached && cached.expiresOn > Date.now() + 60000) {
+    return cached.token;
   }
 
-  const tokenResponse = await credential.getToken("https://database.windows.net/.default");
-
-  // Save to file cache for cross-process reuse
-  fs.writeFileSync(TOKEN_CACHE_FILE, JSON.stringify({
+  const tokenResponse = await credential.getToken(scope);
+  cache[scope] = {
     token: tokenResponse.token,
     expiresOn: tokenResponse.expiresOnTimestamp,
-  }));
-
+  };
+  writeTokenCache(cache);
   return tokenResponse.token;
+}
+
+async function getToken() {
+  return getTokenForScope("https://database.windows.net/.default");
 }
 
 async function getPool(dbName) {
@@ -62,10 +71,14 @@ async function getPool(dbName) {
 
   const token = await getToken();
 
-  pools[dbName] = await sql.connect({
+  // Use a dedicated ConnectionPool per database (NOT the global sql.connect(),
+  // which only supports one connection per process — opening a second db would
+  // silently reuse the first pool and run queries against the wrong database).
+  const pool = new sql.ConnectionPool({
     server: db.endpoint,
     database: db.database,
     port: 1433,
+    requestTimeout: 600000,
     options: {
       encrypt: true,
     },
@@ -74,6 +87,7 @@ async function getPool(dbName) {
       options: { token },
     },
   });
+  pools[dbName] = await pool.connect();
 
   return pools[dbName];
 }
@@ -120,4 +134,4 @@ if (require.main === module) {
     .finally(() => closeAll());
 }
 
-module.exports = { query, closeAll, databases };
+module.exports = { query, closeAll, databases, getTokenForScope, credential };

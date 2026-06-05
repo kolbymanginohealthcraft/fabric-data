@@ -1,0 +1,36 @@
+table PriorLivingEnvironment
+	lineageTag: 1fbff6cf-44c6-46d3-8f68-d2e966657432
+
+	column TxDocument_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 72ec6874-5c0f-4f74-a836-e0c167361362
+		summarizeBy: none
+		sourceColumn: TxDocument_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryScaleValue_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 63ada3e2-b141-4ce5-970b-00ac2630f97e
+		summarizeBy: none
+		sourceColumn: LibraryScaleValue_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PriorLivingEnvironment = m
+		mode: directQuery
+		queryGroup: Patient
+		source =
+				let
+				    Source = #"dbo vw_AllEvalsAndDischargesLight_Items",
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([LibraryScaleValue_ID] <> null and [LibraryScaleValue_ID] <> "") and ([LibraryItem_ID] = 7857)),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"LibraryItem_ID"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

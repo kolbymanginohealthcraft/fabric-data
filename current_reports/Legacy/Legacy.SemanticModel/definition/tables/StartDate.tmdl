@@ -1,0 +1,30 @@
+table StartDate
+	lineageTag: 3dbb2aee-0883-4ced-bb75-d707e8dc17db
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 16a5df5c-7b52-43f6-9ad4-d7fb9cfc294b
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		variation Variation
+			isDefault
+			relationship: 80149344-3678-4cc8-bbc1-f58d8f64c517
+			defaultHierarchy: LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StartDate = m
+		mode: import
+		queryGroup: Fabric
+		source =
+				let
+				    StartDate = DateTime.From(Date.AddDays(DateTime.Date(DateTime.LocalNow()), -420))
+				in
+				    StartDate
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = DateTime
+

@@ -1,0 +1,171 @@
+table Account
+	lineageTag: de80411b-29fe-4d92-96a0-79f90f45680b
+
+	measure 'Customer Name' =
+			
+			//if one therapist is selected
+			IF(ISFILTERED(Employees[Person_ID]),SELECTEDVALUE(Employees[Name])&" ("&SELECTEDVALUE(Employees[StaffTitle])&")",
+			
+			//if one account is selected
+			IF(HASONEVALUE(Account[Id]),SELECTEDVALUE(Account[Name])&" ("&SELECTEDVALUE(Account[BillingCity])&", "&SELECTEDVALUE(Account[BillingState])&")",
+			
+			//if multiple accounts are selected
+			IF(ISFILTERED(Chain[Name]),SELECTEDVALUE(Chain[Name]),
+			IF(ISFILTERED(VW_NHAegisFacilities[Region]),"Region "&SELECTEDVALUE(VW_NHAegisFacilities[Region]),
+			IF(ISFILTERED(VW_NHAegisFacilities[District]),"District "&SELECTEDVALUE(VW_NHAegisFacilities[District]),
+			IF(ISFILTERED(VW_NHAegisFacilities[Division]),SELECTEDVALUE(VW_NHAegisFacilities[Division]),
+			IF(ISFILTERED(Account[BillingState]),"State of "&SELECTEDVALUE(Account[BillingState]),
+			IF(ISFILTERED(Perspectives[UPN]),"Customers of "&SELECTEDVALUE(Perspectives[UPN]),
+			IF([Total Facilities]=[Total Facilities BM],"Aegis Therapies",
+			"My Customers"
+			)))))))))
+			
+			//shows number of facilities if more than one are selected
+			&IF([Total Facilities]>1," ("&[Total Facilities]&" facilities)")
+		lineageTag: 2d04ebc2-0b34-4df4-a7fa-ae16d1ee25f2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Facilities' =
+			
+			// DISTINCTCOUNT(Account[Id])
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Account[Id]),
+			    VW_NHAegisFacilities[IsValid]
+			)
+		formatString: #,0
+		lineageTag: e44133cf-a2f7-403d-8aca-99f2450f188b
+
+	measure 'Total Facilities BM' =
+			
+			CALCULATE(
+			    [Total Facilities],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0
+		lineageTag: 0922def0-5323-43f4-b70d-3ccc26761f45
+
+	measure AvgLAT = AVERAGE(Account[BillingLatitude])
+		lineageTag: 92105f2e-d4ad-42dc-8cf3-f6a7739449d4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure AvgLONG = AVERAGE(Account[BillingLongitude])
+		lineageTag: 004fd669-6cee-4ca7-9e55-462327c45db9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: 608ea16e-2268-4b96-87bb-24e603935b17
+		summarizeBy: none
+		sourceColumn: Id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 8de62160-91de-4663-81e2-b87b6ebc5b47
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 5eb5399b-6cc7-4a57-8923-aa36b1506711
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingStreet
+		dataType: string
+		lineageTag: 367b7781-578f-42f3-a907-d0f7ed12008b
+		summarizeBy: none
+		sourceColumn: BillingStreet
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingCity
+		dataType: string
+		lineageTag: 40b3e75f-4033-402d-b84c-b614260a8bc0
+		summarizeBy: none
+		sourceColumn: BillingCity
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingState
+		dataType: string
+		lineageTag: a84233ca-4a61-4568-b14c-c989f5e679d2
+		summarizeBy: none
+		sourceColumn: BillingState
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingPostalCode
+		dataType: string
+		lineageTag: 0d3b3ab1-3e0e-4253-b7cd-5abdb926fe80
+		summarizeBy: none
+		sourceColumn: BillingPostalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingLatitude
+		dataType: double
+		lineageTag: bad9b685-f063-4495-9a70-54c6b430765d
+		dataCategory: Latitude
+		summarizeBy: sum
+		sourceColumn: BillingLatitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BillingLongitude
+		dataType: double
+		lineageTag: 368ae5b5-e0a6-4df1-965d-a8aa2e65f7a1
+		dataCategory: Longitude
+		summarizeBy: sum
+		sourceColumn: BillingLongitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CCN__c
+		dataType: string
+		lineageTag: 31535ee3-c589-464c-a34f-1d22a41cfa5d
+		summarizeBy: none
+		sourceColumn: CCN__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Logo__c
+		dataType: string
+		lineageTag: 29fe52fc-61a4-4d8b-a788-163987707adf
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: Logo__c
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Account = m
+		mode: directQuery
+		queryGroup: Places
+		source =
+				let
+				    Source = Salesforce_Account,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Id", "Name", "Type", "BillingStreet", "BillingCity", "BillingState", "BillingPostalCode", "BillingLatitude", "BillingLongitude", "CCN__c", "Logo__c"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_ResultType = Exception
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,3474 @@
+[
+  {
+    "[Table Name]": "Patients",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 716099,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Patients",
+    "[Column Name]": "PatientID",
+    "[Min]": 1,
+    "[Max]": 751544,
+    "[Cardinality]": 716099,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Patients",
+    "[Column Name]": "Patient Name",
+    "[Min]": "(((Cheek))), Fredna",
+    "[Max]": "Zzzzzzzzzzdesselle, John",
+    "[Cardinality]": 547390,
+    "[Max Length]": 54
+  },
+  {
+    "[Table Name]": "Patients",
+    "[Column Name]": "DOB",
+    "[Min]": "0124-12-29T00:00:00",
+    "[Max]": "2962-04-25T00:00:00",
+    "[Cardinality]": 36187,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Patients",
+    "[Column Name]": "Facility",
+    "[Min]": "00088",
+    "[Max]": "TST06",
+    "[Cardinality]": 1461,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "Date",
+    "[Min]": "2015-01-01T00:00:00",
+    "[Max]": "2015-01-01T00:00:00",
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "Year",
+    "[Min]": 2015,
+    "[Max]": 2015,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "Month",
+    "[Min]": "January",
+    "[Max]": "January",
+    "[Cardinality]": 1,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 1",
+    "[Cardinality]": 1,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1036924,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "Date",
+    "[Min]": "0124-01-01T00:00:00",
+    "[Max]": "2962-12-31T00:00:00",
+    "[Cardinality]": 1036924,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "Year",
+    "[Min]": 124,
+    "[Max]": 2962,
+    "[Cardinality]": 2839,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "PatientStays",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 203351,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "PatientStays",
+    "[Column Name]": "PatientID",
+    "[Min]": 1,
+    "[Max]": 751544,
+    "[Cardinality]": 165778,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "PatientStays",
+    "[Column Name]": "Stay_ID",
+    "[Min]": 1,
+    "[Max]": 1170514,
+    "[Cardinality]": 203351,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "PatientStays",
+    "[Column Name]": "AdmitDate",
+    "[Min]": "1925-07-10T00:00:00",
+    "[Max]": "2026-04-08T00:00:00",
+    "[Cardinality]": 5267,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "PatientStays",
+    "[Column Name]": "DischargeDate",
+    "[Min]": "2025-02-13T00:00:00",
+    "[Max]": "2026-04-07T00:00:00",
+    "[Cardinality]": 420,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "PatientStays",
+    "[Column Name]": "IntakeSource_ID",
+    "[Min]": 1,
+    "[Max]": 25,
+    "[Cardinality]": 17,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 37255,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "Date",
+    "[Min]": "1925-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 37255,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "Year",
+    "[Min]": 1925,
+    "[Max]": 2026,
+    "[Cardinality]": 102,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "Date",
+    "[Min]": "2025-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "Year",
+    "[Min]": 2025,
+    "[Max]": 2026,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 164405,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "PatientCase_ID",
+    "[Min]": 1,
+    "[Max]": 1201689,
+    "[Cardinality]": 164405,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Stay_ID",
+    "[Min]": 1,
+    "[Max]": 1170506,
+    "[Cardinality]": 136334,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "TherapyStartDate",
+    "[Min]": "1998-11-18T00:00:00",
+    "[Max]": "2026-04-08T00:00:00",
+    "[Cardinality]": 2023,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "TherapyEndDate",
+    "[Min]": "2025-02-13T00:00:00",
+    "[Max]": "2026-04-07T00:00:00",
+    "[Cardinality]": 420,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "DischargedTo_ID",
+    "[Min]": 208,
+    "[Max]": 1542,
+    "[Cardinality]": 27,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "EndReason_ID",
+    "[Min]": 464,
+    "[Max]": 1558,
+    "[Cardinality]": 25,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Payer Categorization",
+    "[Min]": "(1) Medicare A",
+    "[Max]": "(8) Multiple Payers",
+    "[Cardinality]": 7,
+    "[Max Length]": 19
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Diagnostic Category",
+    "[Min]": "Abnormal findings on diagnostic imaging and in function studies, without diagnosis (R90-R94)",
+    "[Max]": "Visual disturbances and blindness (H53-H54)",
+    "[Cardinality]": 232,
+    "[Max Length]": 184
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Age Range",
+    "[Min]": "17 and under",
+    "[Max]": "DOB N/A",
+    "[Cardinality]": 11,
+    "[Max Length]": 12
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Intensity Range",
+    "[Min]": "0.0-1.8",
+    "[Max]": "4.2+",
+    "[Cardinality]": 9,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "ISNP Comparison",
+    "[Min]": "ISNP",
+    "[Max]": "Other Payers",
+    "[Cardinality]": 3,
+    "[Max Length]": 12
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Telehealth Minutes Range",
+    "[Min]": "(a) None",
+    "[Max]": "(g) More than 10%",
+    "[Cardinality]": 7,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Telehealth Visits Range",
+    "[Min]": "(a) None",
+    "[Max]": "(g) More than 10%",
+    "[Cardinality]": 7,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Modalities Minutes Range",
+    "[Min]": "(a) None",
+    "[Max]": "(g) More than 10%",
+    "[Cardinality]": 7,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Modalities Visits Range",
+    "[Min]": "(a) None",
+    "[Max]": "(g) More than 10%",
+    "[Cardinality]": 7,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Disc Inv",
+    "[Min]": "OT",
+    "[Max]": "ST",
+    "[Cardinality]": 8,
+    "[Max Length]": 8
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Group Therapy Minutes Range",
+    "[Min]": "(a) None",
+    "[Max]": "(g) More than 10%",
+    "[Cardinality]": 7,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Aquatic Minutes Range",
+    "[Min]": "(a) None",
+    "[Max]": "(g) More than 10%",
+    "[Cardinality]": 7,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Reported Pain",
+    "[Min]": "(b) Cases who did not report pain",
+    "[Max]": "(b) Cases who did not report pain",
+    "[Cardinality]": 1,
+    "[Max Length]": 33
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "UniqueDays",
+    "[Min]": 1,
+    "[Max]": 2057,
+    "[Cardinality]": 701,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Minutes per Week",
+    "[Min]": 25,
+    "[Max]": 1000,
+    "[Cardinality]": 41,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Minutes per Visit",
+    "[Min]": 13,
+    "[Max]": 70,
+    "[Cardinality]": 58,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Minutes per Case",
+    "[Min]": 100,
+    "[Max]": 5000,
+    "[Cardinality]": 51,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: LOS",
+    "[Min]": 5,
+    "[Max]": 150,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Admit Level",
+    "[Min]": 0.02,
+    "[Max]": 1,
+    "[Cardinality]": 51,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Units per Visit",
+    "[Min]": 0.625,
+    "[Max]": 6,
+    "[Cardinality]": 43,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Visits per Week",
+    "[Min]": 0.15,
+    "[Max]": 7.05,
+    "[Cardinality]": 48,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Visits per Case",
+    "[Min]": 6,
+    "[Max]": 120,
+    "[Cardinality]": 59,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "ST Utilization",
+    "[Min]": "(a) None",
+    "[Max]": "(i) 25+",
+    "[Cardinality]": 9,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Discharge Level",
+    "[Min]": 0.02,
+    "[Max]": 1,
+    "[Cardinality]": 51,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "Range: Gain",
+    "[Min]": 0.02,
+    "[Max]": 1,
+    "[Cardinality]": 51,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StayCases",
+    "[Column Name]": "IsStroke",
+    "[Min]": "No",
+    "[Max]": "Yes",
+    "[Cardinality]": 2,
+    "[Max Length]": 3
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 10592,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "Date",
+    "[Min]": "1998-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 10592,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "Year",
+    "[Min]": 1998,
+    "[Max]": 2026,
+    "[Cardinality]": 29,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 310339,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "TxTrack_ID",
+    "[Min]": 1,
+    "[Max]": 2543505,
+    "[Cardinality]": 310339,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "PatientCase_ID",
+    "[Min]": 1,
+    "[Max]": 1201689,
+    "[Cardinality]": 160283,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "Discipline",
+    "[Min]": "OT",
+    "[Max]": "ST",
+    "[Cardinality]": 3,
+    "[Max Length]": 2
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "StartDate",
+    "[Min]": "2005-05-17T00:00:00",
+    "[Max]": "2026-04-08T00:00:00",
+    "[Cardinality]": 1873,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "EndDate",
+    "[Min]": "2025-02-13T00:00:00",
+    "[Max]": "2026-04-07T00:00:00",
+    "[Cardinality]": 420,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "Track Length",
+    "[Min]": 1,
+    "[Max]": 2560,
+    "[Cardinality]": 715,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseTracks",
+    "[Column Name]": "Evaluating Therapist",
+    "[Min]": "Aaron Giese",
+    "[Max]": "Zubia Saleem",
+    "[Cardinality]": 2661,
+    "[Max Length]": 27
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 8035,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "Date",
+    "[Min]": "2005-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 8035,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "Year",
+    "[Min]": 2005,
+    "[Max]": 2026,
+    "[Cardinality]": 22,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_febca194-1226-4e46-8c16-e69576d74576",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "Date",
+    "[Min]": "2025-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "Year",
+    "[Min]": 2025,
+    "[Max]": 2026,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1365571,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "CaseID",
+    "[Min]": 1,
+    "[Max]": 1201689,
+    "[Cardinality]": 1173312,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "FromDate",
+    "[Min]": "1901-09-20T00:00:00",
+    "[Max]": "2026-04-08T00:00:00",
+    "[Cardinality]": 9758,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "ThruDate",
+    "[Min]": "1974-12-06T00:00:00",
+    "[Max]": "2026-05-12T00:00:00",
+    "[Cardinality]": 9208,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "PayorType",
+    "[Min]": "Commercial Insurance",
+    "[Max]": "Workers' Compensation",
+    "[Cardinality]": 11,
+    "[Max Length]": 21
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "Payer_ID",
+    "[Min]": 1,
+    "[Max]": 1683,
+    "[Cardinality]": 1215,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "Payer Group",
+    "[Min]": "(1) Medicare A",
+    "[Max]": "(6) Other",
+    "[Cardinality]": 6,
+    "[Max Length]": 14
+  },
+  {
+    "[Table Name]": "vw_PatientPayers",
+    "[Column Name]": "Days",
+    "[Min]": 1,
+    "[Max]": 38008,
+    "[Cardinality]": 3941,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 46021,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "Date",
+    "[Min]": "1901-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 46021,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "Year",
+    "[Min]": 1901,
+    "[Max]": 2026,
+    "[Cardinality]": 126,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 19358,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "Date",
+    "[Min]": "1974-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 19358,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "Year",
+    "[Min]": 1974,
+    "[Max]": 2026,
+    "[Cardinality]": 53,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Payers",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1678,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Payers",
+    "[Column Name]": "Payer_ID",
+    "[Min]": 1,
+    "[Max]": 1687,
+    "[Cardinality]": 1678,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Payers",
+    "[Column Name]": "Name",
+    "[Min]": " American Family Insurance MIPS",
+    "[Max]": "Zusman Hospice",
+    "[Cardinality]": 1521,
+    "[Max Length]": 50
+  },
+  {
+    "[Table Name]": "Payers",
+    "[Column Name]": "Special Needs",
+    "[Min]": "ISNP",
+    "[Max]": "ISNP",
+    "[Cardinality]": 2,
+    "[Max Length]": 4
+  },
+  {
+    "[Table Name]": "Documents",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 530594,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Documents",
+    "[Column Name]": "TxDocument_ID",
+    "[Min]": 15585022,
+    "[Max]": 20994235,
+    "[Cardinality]": 530594,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Documents",
+    "[Column Name]": "TxTrack_ID",
+    "[Min]": 51,
+    "[Max]": 2543505,
+    "[Cardinality]": 301663,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Documents",
+    "[Column Name]": "DocumentType",
+    "[Min]": "ADMIT",
+    "[Max]": "DISCH",
+    "[Cardinality]": 2,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "Documents",
+    "[Column Name]": "Physician_ID",
+    "[Min]": 1,
+    "[Max]": 48050,
+    "[Cardinality]": 11206,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Assessments",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 5544198,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Assessments",
+    "[Column Name]": "TxDocument_ID",
+    "[Min]": 15585022,
+    "[Max]": 20994235,
+    "[Cardinality]": 499389,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Assessments",
+    "[Column Name]": "LibraryItem_ID",
+    "[Min]": 919,
+    "[Max]": 11081,
+    "[Cardinality]": 136,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Assessments",
+    "[Column Name]": "LibraryScaleValue_ID",
+    "[Min]": 1448,
+    "[Max]": 26426,
+    "[Cardinality]": 1375,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 26,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "Lookup_ID",
+    "[Min]": 208,
+    "[Max]": 1542,
+    "[Cardinality]": 26,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "Descrip",
+    "[Min]": "Acute care hospital",
+    "[Max]": "SNF-Other-Aegis",
+    "[Cardinality]": 26,
+    "[Max Length]": 19
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "Setting",
+    "[Min]": "ALF",
+    "[Max]": "SNF",
+    "[Cardinality]": 11,
+    "[Max Length]": 17
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "Group",
+    "[Min]": "Community",
+    "[Max]": "Other",
+    "[Cardinality]": 3,
+    "[Max Length]": 13
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "Type",
+    "[Min]": "Planned",
+    "[Max]": "Unplanned",
+    "[Cardinality]": 2,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "Updated",
+    "[Min]": "2021-10-01T11:20:30",
+    "[Max]": "2022-03-16T08:21:27",
+    "[Cardinality]": 7,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "FromDate",
+    "[Min]": "2011-02-11T09:06:37",
+    "[Max]": "2021-10-01T11:22:48",
+    "[Cardinality]": 22,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "ThruDate",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "DisplaySequence",
+    "[Min]": 1,
+    "[Max]": 39,
+    "[Cardinality]": 26,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "IsSystem",
+    "[Min]": false,
+    "[Max]": false,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "ModifiedBy",
+    "[Min]": "jnolasco",
+    "[Max]": "rcs0042",
+    "[Cardinality]": 2,
+    "[Max Length]": 8
+  },
+  {
+    "[Table Name]": "DischargeDestination",
+    "[Column Name]": "IsCommon",
+    "[Min]": false,
+    "[Max]": false,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 3566,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Contract_Number__c",
+    "[Min]": "00088",
+    "[Max]": "99103",
+    "[Cardinality]": 3566,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Aegis_District__c",
+    "[Min]": "a1f1C000005i71DQAQ",
+    "[Max]": "a1fPB000007jrddYAA",
+    "[Cardinality]": 834,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Chain_Account__c",
+    "[Min]": "0011500001bMXuhAAG",
+    "[Max]": "001PB00000XHcqfYAD",
+    "[Cardinality]": 259,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Account__c",
+    "[Min]": "0011500001aduyjAAA",
+    "[Max]": "001PB00000ZXveUYAT",
+    "[Cardinality]": 2064,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Effective_Date__c",
+    "[Min]": "1999-06-30T00:00:00",
+    "[Max]": "2026-06-01T00:00:00",
+    "[Cardinality]": 971,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Term_Date__c",
+    "[Min]": "2007-05-01T00:00:00",
+    "[Max]": "2026-05-31T00:00:00",
+    "[Cardinality]": 606,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Contract_Type__c",
+    "[Min]": "CCRC",
+    "[Max]": "Worker's Comp",
+    "[Cardinality]": 17,
+    "[Max Length]": 22
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Qualified Customer",
+    "[Min]": true,
+    "[Max]": true,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Name",
+    "[Min]": "1st Care Home Health Services",
+    "[Max]": "Zon Beachside - EnerG",
+    "[Cardinality]": 3496,
+    "[Max Length]": 80
+  },
+  {
+    "[Table Name]": "Aegis Contract",
+    "[Column Name]": "Tech Status",
+    "[Min]": "(a) Has Rehab Tech",
+    "[Max]": "(b) No Rehab Tech",
+    "[Cardinality]": 2,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 10227,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "Date",
+    "[Min]": "1999-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 10227,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "Year",
+    "[Min]": 1999,
+    "[Max]": 2026,
+    "[Cardinality]": 28,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 7305,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "Date",
+    "[Min]": "2007-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 7305,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "Year",
+    "[Min]": 2007,
+    "[Max]": 2026,
+    "[Cardinality]": 20,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 54602,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "Id",
+    "[Min]": "0011500001aduhxAAA",
+    "[Max]": "001PB00000ZXveUYAT",
+    "[Cardinality]": 54602,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "Name",
+    "[Min]": "1 & 1 Home Health, Inc",
+    "[Max]": "Zutan Home Healthcare Incorporated",
+    "[Cardinality]": 50505,
+    "[Max Length]": 94
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "Type",
+    "[Min]": "ALF",
+    "[Max]": "SNF",
+    "[Cardinality]": 15,
+    "[Max Length]": 14
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "BillingStreet",
+    "[Min]": "﻿6073 West 44th Ave Suite 202",
+    "[Max]": "Wyman Gordon Bldg 1 Ingalls D",
+    "[Cardinality]": 52145,
+    "[Max Length]": 67
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "BillingCity",
+    "[Min]": "6000 Fairview Road",
+    "[Max]": "Zwolle",
+    "[Cardinality]": 6947,
+    "[Max Length]": 25
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "BillingState",
+    "[Min]": "AK",
+    "[Max]": "WY",
+    "[Cardinality]": 54,
+    "[Max Length]": 16
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "BillingPostalCode",
+    "[Min]": "0",
+    "[Max]": "V6E 2S1",
+    "[Cardinality]": 12992,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "BillingLatitude",
+    "[Min]": 19.199812,
+    "[Max]": 64.83136,
+    "[Cardinality]": 51460,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "BillingLongitude",
+    "[Min]": -159.671089,
+    "[Max]": -66.986954,
+    "[Cardinality]": 51604,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "CCN__c",
+    "[Min]": "000003",
+    "[Max]": "K000010",
+    "[Cardinality]": 50334,
+    "[Max Length]": 10
+  },
+  {
+    "[Table Name]": "Account",
+    "[Column Name]": "Logo__c",
+    "[Min]": "data:image/jpeg;base64,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",
+    "[Max]": "data:image/webp;base64,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",
+    "[Cardinality]": 10,
+    "[Max Length]": 20743
+  },
+  {
+    "[Table Name]": "Chain",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1913,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Chain",
+    "[Column Name]": "Id",
+    "[Min]": "0011500001bMbkGAAS",
+    "[Max]": "001PB00000XHcqfYAD",
+    "[Cardinality]": 1913,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "Chain",
+    "[Column Name]": "Name",
+    "[Min]": "1 Stop Assisted Living",
+    "[Max]": "Young Crane & Associates",
+    "[Cardinality]": 1906,
+    "[Max Length]": 94
+  },
+  {
+    "[Table Name]": "Outcomes Crosswalk",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 148,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Outcomes Crosswalk",
+    "[Column Name]": "LibraryItem_ID",
+    "[Min]": 919,
+    "[Max]": 11081,
+    "[Cardinality]": 148,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Outcomes Crosswalk",
+    "[Column Name]": "Family",
+    "[Min]": "(a) Section GG Mobility",
+    "[Max]": "(d) Other ST Items",
+    "[Cardinality]": 4,
+    "[Max Length]": 24
+  },
+  {
+    "[Table Name]": "Outcomes Crosswalk",
+    "[Column Name]": "Name",
+    "[Min]": "30 Second Sit to Stand Test",
+    "[Max]": "Written Expression",
+    "[Cardinality]": 75,
+    "[Max Length]": 43
+  },
+  {
+    "[Table Name]": "Outcomes Crosswalk",
+    "[Column Name]": "Group",
+    "[Min]": "A: Eating",
+    "[Max]": "Transfers",
+    "[Cardinality]": 22,
+    "[Max Length]": 22
+  },
+  {
+    "[Table Name]": "Outcomes Custom Scales",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1683,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Outcomes Custom Scales",
+    "[Column Name]": "Library Scale Value",
+    "[Min]": 1448,
+    "[Max]": 26646,
+    "[Cardinality]": 1683,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Outcomes Custom Scales",
+    "[Column Name]": "Scale Name",
+    "[Min]": "100-point Barthel scale",
+    "[Max]": "SL 9-point scale",
+    "[Cardinality]": 41,
+    "[Max Length]": 42
+  },
+  {
+    "[Table Name]": "Outcomes Custom Scales",
+    "[Column Name]": "Response Description",
+    "[Min]": "",
+    "[Max]": "UTD",
+    "[Cardinality]": 1117,
+    "[Max Length]": 107
+  },
+  {
+    "[Table Name]": "Outcomes Custom Scales",
+    "[Column Name]": "Response Type",
+    "[Min]": "N/A",
+    "[Max]": "N/A",
+    "[Cardinality]": 2,
+    "[Max Length]": 3
+  },
+  {
+    "[Table Name]": "Outcomes Custom Scales",
+    "[Column Name]": "Points",
+    "[Min]": 0,
+    "[Max]": 1,
+    "[Cardinality]": 993,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 3230734,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "PatientCase_ID",
+    "[Min]": 141871,
+    "[Max]": 1201685,
+    "[Cardinality]": 142873,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "LibraryItem_ID",
+    "[Min]": 919,
+    "[Max]": 11081,
+    "[Cardinality]": 136,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "TableEval",
+    "[Min]": 0,
+    "[Max]": 1,
+    "[Cardinality]": 734,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "TableDisch",
+    "[Min]": 0,
+    "[Max]": 1,
+    "[Cardinality]": 868,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "Status",
+    "[Min]": "Excluded",
+    "[Max]": "Included",
+    "[Cardinality]": 2,
+    "[Max Length]": 8
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "EvalNEW",
+    "[Min]": 0,
+    "[Max]": 1,
+    "[Cardinality]": 732,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "StartScoreValues",
+    "[Min]": "10638",
+    "[Max]": "9341",
+    "[Cardinality]": 1487,
+    "[Max Length]": 306
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "EndScoreValues",
+    "[Min]": "10638",
+    "[Max]": "9341",
+    "[Cardinality]": 2203,
+    "[Max Length]": 663
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "Criteria Start",
+    "[Min]": "Independent",
+    "[Max]": "Valid",
+    "[Cardinality]": 4,
+    "[Max Length]": 11
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "Criteria End",
+    "[Min]": "Invalid",
+    "[Max]": "Valid",
+    "[Cardinality]": 3,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "TxTrack_ID",
+    "[Min]": 149638,
+    "[Max]": 2543505,
+    "[Cardinality]": 280899,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "OutcomeSummary",
+    "[Column Name]": "IsCrosswalked",
+    "[Min]": true,
+    "[Max]": true,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Dictionary",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 148,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Dictionary",
+    "[Column Name]": "LibraryItem_ID",
+    "[Min]": 919,
+    "[Max]": 11081,
+    "[Cardinality]": 148,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Dictionary",
+    "[Column Name]": "Family",
+    "[Min]": "(a) Section GG Mobility",
+    "[Max]": "(d) Other ST Items",
+    "[Cardinality]": 4,
+    "[Max Length]": 24
+  },
+  {
+    "[Table Name]": "Dictionary",
+    "[Column Name]": "Name",
+    "[Min]": "30 Second Sit to Stand Test",
+    "[Max]": "Written Expression",
+    "[Cardinality]": 75,
+    "[Max Length]": 43
+  },
+  {
+    "[Table Name]": "Dictionary",
+    "[Column Name]": "Group",
+    "[Min]": "A: Eating",
+    "[Max]": "Transfers",
+    "[Cardinality]": 22,
+    "[Max Length]": 22
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 2290,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Date",
+    "[Min]": "2020-01-01T00:00:00",
+    "[Max]": "2026-04-08T00:00:00",
+    "[Cardinality]": 2290,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "YearMonth",
+    "[Min]": "2020-01",
+    "[Max]": "2026-04",
+    "[Cardinality]": 76,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "YearQuarter",
+    "[Min]": "2020-Q1",
+    "[Max]": "2026-Q2",
+    "[Cardinality]": 26,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Year",
+    "[Min]": 2020,
+    "[Max]": 2026,
+    "[Cardinality]": 7,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Week Number",
+    "[Min]": 1,
+    "[Max]": 53,
+    "[Cardinality]": 53,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Week Day",
+    "[Min]": 1,
+    "[Max]": 7,
+    "[Cardinality]": 7,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Day Name",
+    "[Min]": "Fri",
+    "[Max]": "Wed",
+    "[Cardinality]": 7,
+    "[Max Length]": 3
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Week Start Date",
+    "[Min]": "2019-12-29T00:00:00",
+    "[Max]": "2026-04-05T00:00:00",
+    "[Cardinality]": 328,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "Month",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Calendar",
+    "[Column Name]": "ReliableScope",
+    "[Min]": false,
+    "[Max]": true,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 4493441,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "SessionId",
+    "[Min]": 34385521,
+    "[Max]": 39198048,
+    "[Cardinality]": 4493441,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "LaborDate",
+    "[Min]": "2025-02-13T00:00:00",
+    "[Max]": "2026-04-07T00:00:00",
+    "[Cardinality]": 419,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "TxTrack_ID",
+    "[Min]": 35929,
+    "[Max]": 2543494,
+    "[Cardinality]": 299154,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "CaseIDDate",
+    "[Min]": "1000026 - 2/24/2025",
+    "[Max]": "999988 - 2/18/2025",
+    "[Cardinality]": 2942038,
+    "[Max Length]": 20
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "Person_ID",
+    "[Min]": 219,
+    "[Max]": 106908,
+    "[Cardinality]": 5216,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "AssistantModifier",
+    "[Min]": false,
+    "[Max]": true,
+    "[Cardinality]": 3,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Treatments",
+    "[Column Name]": "TherapistLabel",
+    "[Min]": "Aaliyah Harvey (A)",
+    "[Max]": "Zyra Idos (A)",
+    "[Cardinality]": 5411,
+    "[Max Length]": 31
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "Date",
+    "[Min]": "2025-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "Year",
+    "[Min]": 2025,
+    "[Max]": 2026,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "TreatmentsDetails",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 8708042,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "TreatmentsDetails",
+    "[Column Name]": "SessionId",
+    "[Min]": 34385521,
+    "[Max]": 39198048,
+    "[Cardinality]": 4493441,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "TreatmentsDetails",
+    "[Column Name]": "Duration",
+    "[Min]": 0,
+    "[Max]": 180,
+    "[Cardinality]": 163,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "TreatmentsDetails",
+    "[Column Name]": "Units",
+    "[Min]": 0,
+    "[Max]": 12,
+    "[Cardinality]": 13,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "TreatmentsDetails",
+    "[Column Name]": "ServiceCode",
+    "[Min]": "20560",
+    "[Max]": "zz-HY",
+    "[Cardinality]": 128,
+    "[Max Length]": 10
+  },
+  {
+    "[Table Name]": "Disciplines",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 3,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Disciplines",
+    "[Column Name]": "Discipline",
+    "[Min]": "OT",
+    "[Max]": "ST",
+    "[Cardinality]": 3,
+    "[Max Length]": 2
+  },
+  {
+    "[Table Name]": "Disciplines",
+    "[Column Name]": "Ordered Discipline",
+    "[Min]": "(a) PT",
+    "[Max]": "(c) ST",
+    "[Cardinality]": 3,
+    "[Max Length]": 6
+  },
+  {
+    "[Table Name]": "Service",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 2474,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Service",
+    "[Column Name]": "ServiceCode",
+    "[Min]": " PTDC",
+    "[Max]": "ZZZG0329",
+    "[Cardinality]": 2474,
+    "[Max Length]": 10
+  },
+  {
+    "[Table Name]": "Service",
+    "[Column Name]": "Description",
+    "[Min]": "(DO NOT USE UNLESS PAYER IS \"MANAGED CARE LEVELED PATIENTS\") OT Concurrent/Grouped Treatment",
+    "[Max]": "zz-Hybrid",
+    "[Cardinality]": 1705,
+    "[Max Length]": 491
+  },
+  {
+    "[Table Name]": "Service",
+    "[Column Name]": "Abbrev",
+    "[Min]": "",
+    "[Max]": "Wound Eval - Outpt",
+    "[Cardinality]": 643,
+    "[Max Length]": 20
+  },
+  {
+    "[Table Name]": "Service",
+    "[Column Name]": "Type",
+    "[Min]": "Eval",
+    "[Max]": "Treat",
+    "[Cardinality]": 2,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "Service",
+    "[Column Name]": "Specialty",
+    "[Min]": "Aquatic",
+    "[Max]": "-None-",
+    "[Cardinality]": 4,
+    "[Max Length]": 8
+  },
+  {
+    "[Table Name]": "Basis",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 54,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Basis",
+    "[Column Name]": "Code",
+    "[Min]": "20560",
+    "[Max]": "SkldM",
+    "[Cardinality]": 54,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "Basis",
+    "[Column Name]": "Basis",
+    "[Min]": "Other",
+    "[Max]": "Timed per 60 min",
+    "[Cardinality]": 4,
+    "[Max Length]": 16
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 24,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "Lookup_ID",
+    "[Min]": 464,
+    "[Max]": 1558,
+    "[Cardinality]": 24,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "Descrip",
+    "[Min]": "Against Medical Advice",
+    "[Max]": "Therapist Decision",
+    "[Cardinality]": 24,
+    "[Max Length]": 50
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "Type",
+    "[Min]": "Planned",
+    "[Max]": "Unplanned",
+    "[Cardinality]": 2,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "Updated",
+    "[Min]": "2024-09-25T23:58:05",
+    "[Max]": "2024-09-25T23:58:05",
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "FromDate",
+    "[Min]": "2000-01-01T00:00:00",
+    "[Max]": "2023-09-14T23:38:35",
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "ThruDate",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "DisplaySequence",
+    "[Min]": 1,
+    "[Max]": 24,
+    "[Cardinality]": 24,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "IsSystem",
+    "[Min]": false,
+    "[Max]": true,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "ModifiedBy",
+    "[Min]": "sys",
+    "[Max]": "sys",
+    "[Cardinality]": 1,
+    "[Max Length]": 3
+  },
+  {
+    "[Table Name]": "DischargeReason",
+    "[Column Name]": "IsCommon",
+    "[Min]": false,
+    "[Max]": false,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Diagnosis",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 2808370,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Diagnosis",
+    "[Column Name]": "TxDocument_ID",
+    "[Min]": 14373499,
+    "[Max]": 20994244,
+    "[Cardinality]": 840713,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Diagnosis",
+    "[Column Name]": "DiagnosisType",
+    "[Min]": "MEDICAL",
+    "[Max]": "TREATMENT",
+    "[Cardinality]": 2,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "Diagnosis",
+    "[Column Name]": "DisplayOrder",
+    "[Min]": 1,
+    "[Max]": 37,
+    "[Cardinality]": 37,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Diagnosis",
+    "[Column Name]": "DiagnosisCode_ID",
+    "[Min]": 10,
+    "[Max]": 99278,
+    "[Cardinality]": 9770,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Diagnosis",
+    "[Column Name]": "OnsetDate",
+    "[Min]": "2025-02-13T00:00:00",
+    "[Max]": "2026-04-07T00:00:00",
+    "[Cardinality]": 419,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DiagnosisCode",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 99306,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DiagnosisCode",
+    "[Column Name]": "DiagnosisCode_ID",
+    "[Min]": 1,
+    "[Max]": 99306,
+    "[Cardinality]": 99306,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DiagnosisCode",
+    "[Column Name]": "L4",
+    "[Min]": "A00 - Cholera",
+    "[Max]": "Z99.89 - Dependence on other enabling machines and devices",
+    "[Cardinality]": 98870,
+    "[Max Length]": 239
+  },
+  {
+    "[Table Name]": "DiagnosisCode",
+    "[Column Name]": "L3",
+    "[Min]": "A00 - Cholera",
+    "[Max]": "Z99.8 - Dependence on other enabling machines and devices",
+    "[Cardinality]": 24145,
+    "[Max Length]": 216
+  },
+  {
+    "[Table Name]": "DiagnosisCode",
+    "[Column Name]": "L2",
+    "[Min]": " Genetic disorders, not elsewhere classified (QA0)",
+    "[Max]": "Water transport accidents (V90-V94)",
+    "[Cardinality]": 291,
+    "[Max Length]": 184
+  },
+  {
+    "[Table Name]": "DiagnosisCode",
+    "[Column Name]": "L1",
+    "[Min]": "Certain conditions originating in the perinatal period (P00-P96)",
+    "[Max]": "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified  (R00-R99)",
+    "[Cardinality]": 22,
+    "[Max Length]": 109
+  },
+  {
+    "[Table Name]": "Outcome Families",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Outcome Families",
+    "[Column Name]": "Family Code",
+    "[Min]": "(a) GG Mobility",
+    "[Max]": "(d) Other",
+    "[Cardinality]": 4,
+    "[Max Length]": 16
+  },
+  {
+    "[Table Name]": "Outcome Families",
+    "[Column Name]": "Family",
+    "[Min]": "GG Mobility",
+    "[Max]": "SPPB",
+    "[Cardinality]": 4,
+    "[Max Length]": 12
+  },
+  {
+    "[Table Name]": "Outcomes Breakdown",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Outcomes Breakdown",
+    "[Column Name]": "Group",
+    "[Min]": "Declined",
+    "[Max]": "No Change",
+    "[Cardinality]": 4,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "Outcomes Breakdown",
+    "[Column Name]": "Order",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Telehealth",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 89434,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Telehealth",
+    "[Column Name]": "TxSession_ID",
+    "[Min]": 7397127,
+    "[Max]": 39112167,
+    "[Cardinality]": 89434,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_UpnFacilityAccess",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 191644,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "vw_UpnFacilityAccess",
+    "[Column Name]": "FacilityId",
+    "[Min]": "00088",
+    "[Max]": "99103",
+    "[Cardinality]": 3574,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "vw_UpnFacilityAccess",
+    "[Column Name]": "UPN",
+    "[Min]": "aaliyah.harvey@aegistherapies.com",
+    "[Max]": "zubia.saleem@aegistherapies.com",
+    "[Cardinality]": 3896,
+    "[Max Length]": 63
+  },
+  {
+    "[Table Name]": "ContextTable",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "ContextTable",
+    "[Column Name]": "Context",
+    "[Min]": "FacilityRestricted",
+    "[Max]": "FacilityRestricted",
+    "[Cardinality]": 1,
+    "[Max Length]": 18
+  },
+  {
+    "[Table Name]": "ContextTable",
+    "[Column Name]": "Ordinal",
+    "[Min]": -1,
+    "[Max]": -1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Payer Buckets",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 7,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Payer Buckets",
+    "[Column Name]": "Payer Categorization",
+    "[Min]": "(1) Medicare A",
+    "[Max]": "(8) Multiple Payers",
+    "[Cardinality]": 7,
+    "[Max Length]": 19
+  },
+  {
+    "[Table Name]": "Payer Buckets",
+    "[Column Name]": "Payer Grouping",
+    "[Min]": "(a) Medicare Part A and A-Like",
+    "[Max]": "(c) Other",
+    "[Cardinality]": 3,
+    "[Max Length]": 30
+  },
+  {
+    "[Table Name]": "JitterTable",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "JitterTable",
+    "[Column Name]": "JitterSetting",
+    "[Min]": "Jitter",
+    "[Max]": "Jitter",
+    "[Cardinality]": 1,
+    "[Max Length]": 6
+  },
+  {
+    "[Table Name]": "JitterTable",
+    "[Column Name]": "Ordinal",
+    "[Min]": -1,
+    "[Max]": -1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "BenchmarkTable",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "BenchmarkTable",
+    "[Column Name]": "BenchmarkSetting",
+    "[Min]": "Benchmark",
+    "[Max]": "Benchmark",
+    "[Cardinality]": 1,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "BenchmarkTable",
+    "[Column Name]": "Ordinal",
+    "[Min]": -1,
+    "[Max]": -1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Employees",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 106827,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Employees",
+    "[Column Name]": "Person_ID",
+    "[Min]": 2,
+    "[Max]": 106914,
+    "[Cardinality]": 106827,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Employees",
+    "[Column Name]": "Name",
+    "[Min]": " Kandyce Hansen",
+    "[Max]": "Zyra Idos",
+    "[Cardinality]": 76206,
+    "[Max Length]": 41
+  },
+  {
+    "[Table Name]": "Physician",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 42919,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Physician",
+    "[Column Name]": "Physician_ID",
+    "[Min]": 1,
+    "[Max]": 48050,
+    "[Cardinality]": 42919,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Physician",
+    "[Column Name]": "Name",
+    "[Min]": "",
+    "[Max]": "Zvezdomir Zamfirov",
+    "[Cardinality]": 40791,
+    "[Max Length]": 36
+  },
+  {
+    "[Table Name]": "Physician",
+    "[Column Name]": "NPI",
+    "[Min]": "",
+    "[Max]": "N/A",
+    "[Cardinality]": 41914,
+    "[Max Length]": 10
+  },
+  {
+    "[Table Name]": "CustomerGroups",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 117,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CustomerGroups",
+    "[Column Name]": "CCN",
+    "[Min]": "015460",
+    "[Max]": "T00000",
+    "[Cardinality]": 117,
+    "[Max Length]": 6
+  },
+  {
+    "[Table Name]": "CustomerGroups",
+    "[Column Name]": "Customer Group",
+    "[Min]": "Brickyard Central",
+    "[Max]": "Tutera Region 7",
+    "[Cardinality]": 17,
+    "[Max Length]": 20
+  },
+  {
+    "[Table Name]": "DestinationPage",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 3,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DestinationPage",
+    "[Column Name]": "Destination",
+    "[Min]": "Cohort Comparison",
+    "[Max]": "Patient Episode Summary",
+    "[Cardinality]": 3,
+    "[Max Length]": 28
+  },
+  {
+    "[Table Name]": "DestinationPage",
+    "[Column Name]": "Intended Audience",
+    "[Min]": "Customer",
+    "[Max]": "Patient, family caregiver",
+    "[Cardinality]": 3,
+    "[Max Length]": 25
+  },
+  {
+    "[Table Name]": "DestinationPage",
+    "[Column Name]": "Sort Order",
+    "[Min]": 1,
+    "[Max]": 3,
+    "[Cardinality]": 3,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "DestinationPage",
+    "[Column Name]": "Label",
+    "[Min]": "Cohort Comparison (customer-facing)",
+    "[Max]": "Patient Episode Summary (patient-facing)",
+    "[Cardinality]": 3,
+    "[Max Length]": 44
+  },
+  {
+    "[Table Name]": "CaseInclusionTable",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "CaseInclusionTable",
+    "[Column Name]": "CaseInclusionSetting",
+    "[Min]": "NAs In",
+    "[Max]": "NAs Out",
+    "[Cardinality]": 2,
+    "[Max Length]": 7
+  },
+  {
+    "[Table Name]": "CaseInclusionTable",
+    "[Column Name]": "Ordinal",
+    "[Min]": -1,
+    "[Max]": -1,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Tech",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 132,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "Tech",
+    "[Column Name]": "Id",
+    "[Min]": "00090",
+    "[Max]": "97857",
+    "[Cardinality]": 132,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 21,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "IntakeSource_ID",
+    "[Min]": 1,
+    "[Max]": 25,
+    "[Cardinality]": 21,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "Name",
+    "[Min]": "Assisted Living Facility",
+    "[Max]": "Skilled Nursing Facility",
+    "[Cardinality]": 21,
+    "[Max Length]": 30
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "Abbrev",
+    "[Min]": "ALD",
+    "[Max]": "SNF",
+    "[Cardinality]": 21,
+    "[Max Length]": 3
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "SourceType",
+    "[Min]": "Inpatient",
+    "[Max]": "Outpatient",
+    "[Cardinality]": 2,
+    "[Max Length]": 10
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "ModifiedBy",
+    "[Min]": "EXR0001",
+    "[Max]": "TWL0001",
+    "[Cardinality]": 9,
+    "[Max Length]": 16
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "CreatedDate",
+    "[Min]": "2011-02-11T09:06:34",
+    "[Max]": "2025-07-21T09:33:16",
+    "[Cardinality]": 17,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "FieldSet_ID",
+    "[Min]": 1,
+    "[Max]": 7,
+    "[Cardinality]": 3,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "PlanUsage",
+    "[Min]": "DirectBill",
+    "[Max]": "FFS",
+    "[Cardinality]": 2,
+    "[Max Length]": 10
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "PlaceOfResidenceUsage",
+    "[Min]": "HHA",
+    "[Max]": "SOS",
+    "[Cardinality]": 2,
+    "[Max Length]": 3
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "IsInstitutional",
+    "[Min]": false,
+    "[Max]": true,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "IntakeSources",
+    "[Column Name]": "IsSNF",
+    "[Min]": false,
+    "[Max]": true,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 6162,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "FacilityId",
+    "[Min]": "00014",
+    "[Max]": "99991",
+    "[Cardinality]": 6162,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "District",
+    "[Min]": "1080",
+    "[Max]": "8459",
+    "[Cardinality]": 433,
+    "[Max Length]": 6
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "Region",
+    "[Min]": "1111",
+    "[Max]": "8375",
+    "[Cardinality]": 55,
+    "[Max Length]": 4
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "Division",
+    "[Min]": "1111",
+    "[Max]": "8450 (Contract Rehab)",
+    "[Cardinality]": 14,
+    "[Max Length]": 23
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "IsValid",
+    "[Min]": false,
+    "[Max]": true,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "VW_NHAegisFacilities",
+    "[Column Name]": "Department",
+    "[Min]": "All Other",
+    "[Max]": "Senior Living",
+    "[Cardinality]": 2,
+    "[Max Length]": 13
+  },
+  {
+    "[Table Name]": "StartDate",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "StartDate",
+    "[Column Name]": "StartDate",
+    "[Min]": "2025-02-12T00:00:00",
+    "[Max]": "2025-02-12T00:00:00",
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 365,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "Date",
+    "[Min]": "2025-01-01T00:00:00",
+    "[Max]": "2025-12-31T00:00:00",
+    "[Cardinality]": 365,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "Year",
+    "[Min]": 2025,
+    "[Max]": 2025,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "Date",
+    "[Min]": "2021-01-01T00:00:00",
+    "[Max]": "2022-12-31T00:00:00",
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "Year",
+    "[Min]": 2021,
+    "[Max]": 2022,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 4018,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "Date",
+    "[Min]": "2011-01-01T00:00:00",
+    "[Max]": "2021-12-31T00:00:00",
+    "[Cardinality]": 4018,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "Year",
+    "[Min]": 2011,
+    "[Max]": 2021,
+    "[Cardinality]": 11,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 366,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "Date",
+    "[Min]": "2000-01-01T00:00:00",
+    "[Max]": "2000-12-31T00:00:00",
+    "[Cardinality]": 366,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "Year",
+    "[Min]": 2000,
+    "[Max]": 2000,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 366,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "Date",
+    "[Min]": "2024-01-01T00:00:00",
+    "[Max]": "2024-12-31T00:00:00",
+    "[Cardinality]": 366,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "Year",
+    "[Min]": 2024,
+    "[Max]": 2024,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 8766,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "Date",
+    "[Min]": "2000-01-01T00:00:00",
+    "[Max]": "2023-12-31T00:00:00",
+    "[Cardinality]": 8766,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "Year",
+    "[Min]": 2000,
+    "[Max]": 2023,
+    "[Cardinality]": 24,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_78295776-baa8-46db-9442-10c00803b1be",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 366,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "Date",
+    "[Min]": "2000-01-01T00:00:00",
+    "[Max]": "2000-12-31T00:00:00",
+    "[Cardinality]": 366,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "Year",
+    "[Min]": 2000,
+    "[Max]": 2000,
+    "[Cardinality]": 1,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "Date",
+    "[Min]": "2025-01-01T00:00:00",
+    "[Max]": "2026-12-31T00:00:00",
+    "[Cardinality]": 730,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "Year",
+    "[Min]": 2025,
+    "[Max]": 2026,
+    "[Cardinality]": 2,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "RowNumber-2662979B-1795-4F74-8F37-6A1BA8059B61",
+    "[Min]": null,
+    "[Max]": null,
+    "[Cardinality]": 5479,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "Date",
+    "[Min]": "2011-01-01T00:00:00",
+    "[Max]": "2025-12-31T00:00:00",
+    "[Cardinality]": 5479,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "Year",
+    "[Min]": 2011,
+    "[Max]": 2025,
+    "[Cardinality]": 15,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "MonthNo",
+    "[Min]": 1,
+    "[Max]": 12,
+    "[Cardinality]": 12,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "Month",
+    "[Min]": "April",
+    "[Max]": "September",
+    "[Cardinality]": 12,
+    "[Max Length]": 9
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "QuarterNo",
+    "[Min]": 1,
+    "[Max]": 4,
+    "[Cardinality]": 4,
+    "[Max Length]": null
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "Quarter",
+    "[Min]": "Qtr 1",
+    "[Max]": "Qtr 4",
+    "[Cardinality]": 4,
+    "[Max Length]": 5
+  },
+  {
+    "[Table Name]": "LocalDateTable_932d55de-d265-4481-9293-721332596c5f",
+    "[Column Name]": "Day",
+    "[Min]": 1,
+    "[Max]": 31,
+    "[Cardinality]": 31,
+    "[Max Length]": null
+  }
+]

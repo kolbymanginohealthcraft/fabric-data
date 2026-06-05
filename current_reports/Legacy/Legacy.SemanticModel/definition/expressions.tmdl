@@ -1,0 +1,104 @@
+expression dbo_vw_Treatments =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_Treatments = Source{[Schema="dbo",Item="dbo_vw_Treatments"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_Treatments, each [LaborDate] > StartDate),
+		    #"Select Columns" = Table.SelectColumns(#"Filtered Rows",{"Person_ID", "SessionId", "LaborDate", "AssistantModifier", "TxTrack_ID", "Duration", "Units", "ServiceCode"})
+		in
+		    #"Select Columns"
+	lineageTag: 15197751-c6ee-45f0-941c-d7e949e65953
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'dbo vw_AllEvalsAndDischargesLight' =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo.vw_AllEvalsAndDischargesLight = Source{[Schema="dbo",Item="dbo.vw_AllEvalsAndDischargesLight"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo.vw_AllEvalsAndDischargesLight, each [CreatedDate] > StartDate),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"CreatedDate"})
+		in
+		    #"Removed Columns"
+	lineageTag: a22b49b9-a478-4202-9866-303e1314b608
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'dbo vw_AllEvalsAndDischargesLight_Items' =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo.vw_AllEvalsAndDischargesLight_Items = Source{[Schema="dbo",Item="dbo.vw_AllEvalsAndDischargesLight_Items"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo.vw_AllEvalsAndDischargesLight_Items, each [CreatedDate] > StartDate),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"CreatedDate"})
+		in
+		    #"Removed Columns"
+	lineageTag: b74e0dfc-fb69-40f7-bcac-bb793cc155ed
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_CaseTracks =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_CaseTracks = Source{[Schema="dbo",Item="dbo_vw_CaseTracks"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_CaseTracks, each [EndDate] > StartDate or [EndDate] = null)
+		in
+		    #"Filtered Rows"
+	lineageTag: ceefd220-d6e7-478f-a927-c9822baeaa09
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_PatientStays =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_PatientStays = Source{[Schema="dbo",Item="dbo_vw_PatientStays"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_PatientStays, each [DischargeDate] > StartDate or [DischargeDate] = null),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"MedicalRecordNumber"})
+		in
+		    #"Removed Columns"
+	lineageTag: 9d2c5b4e-7e1a-45ee-bd25-aa4c8e3e2068
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_StayCases =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_StayCases = Source{[Schema="dbo",Item="dbo_vw_StayCases"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_StayCases, each [TherapyEndDate] > StartDate or [TherapyEndDate] = null),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"TypeOfCare"})
+		in
+		    #"Removed Columns"
+	lineageTag: 13633308-9c37-4d51-aee8-83543e3dc002
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression dbo_vw_Diagnosis =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
+		    dbo_dbo_vw_Diagnosis = Source{[Schema="dbo",Item="dbo_vw_Diagnosis"]}[Data],
+		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_Diagnosis, each [OnsetDate] > StartDate),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"TxDocument_ID", "DiagnosisType", "DisplayOrder", "DiagnosisCode_ID", "OnsetDate"})
+		in
+		    #"Removed Other Columns"
+	lineageTag: 33fe12e5-12c0-456f-ae02-83b254fe0694
+	queryGroup: Fabric
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

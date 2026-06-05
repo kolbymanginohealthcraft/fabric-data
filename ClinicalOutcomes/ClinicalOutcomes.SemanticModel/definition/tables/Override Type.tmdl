@@ -1,0 +1,33 @@
+table 'Override Type'
+	lineageTag: 2bcc9279-cee8-4b3f-b0ea-f9310ec1e49b
+
+	measure 'Override Type Condition' = ```
+			
+			IF(
+			    SELECTEDVALUE('Override Type'[Type]) IN VALUES(Account[Type]) && 
+			    (
+			        CALCULATE(DISTINCTCOUNT(Account[Id]),ALLSELECTED(Account))=1 ||
+			        ISFILTERED(Chain[Name])
+			    ),
+			    1,
+			    0
+			)
+			```
+		lineageTag: 179c3d2d-27e1-4a27-ba9a-23861d902136
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Type
+		lineageTag: 4312f959-f70c-4aea-b3fb-2a09d2a095e2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Account[Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Override Type' = calculated
+		mode: directQuery
+		source = FILTER(DISTINCT(Account[Type]),NOT(ISBLANK(Account[Type])))
+
+	annotation PBI_Id = 695dde282b0648699a3e73421269e56a
+

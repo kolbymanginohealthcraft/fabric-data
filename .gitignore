@@ -1,5 +1,26 @@
 node_modules/
 .env
+
+# Nested standalone repo, kept locally for agent context only.
+# Has its own git/GitHub (kolbymanginohealthcraft/people-dashboard) — do not track here.
+PeopleDashboard/
 databases.json
 .token-cache.json
 *.pbi/localSettings.json
+# PBIP local user settings — nested-path match (the line above only matches top-level)
+**/.pbi/localSettings.json
+
+# Patient-level data extracts — PHI, never commit
+outcomes-summary.csv
+track-cohort-dimensions.csv
+
+# Generated / debug artifacts
+queries/.rendered.sql
+queries/.pull.log
+queries/.debug-render.js
+
+# Binary workbooks (may contain sensitive metrics) — keep local only
+*.xlsx
+
+# Compiled Power BI binaries — huge, may embed imported data (PHI). Keep PBIP text format only.
+*.pbix

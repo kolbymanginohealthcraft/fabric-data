@@ -1,0 +1,200 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "74952d600d06c7e073e5",
+  "position": {
+    "x": 0,
+    "y": 240,
+    "z": 5000,
+    "height": 168,
+    "width": 320,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "StayCases"
+                    }
+                  },
+                  "Property": "Expected Discharge Destination"
+                }
+              },
+              "queryRef": "StayCases.Expected Discharge Destination",
+              "nativeQueryRef": "Expected Discharge Destination"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Total Cases %"
+                }
+              },
+              "queryRef": "MeasureTable.Total Cases %",
+              "nativeQueryRef": "Total Cases %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Admit Level"
+                }
+              },
+              "queryRef": "MeasureTable.Admit Level",
+              "nativeQueryRef": "Admit Level"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Discharge Level"
+                }
+              },
+              "queryRef": "MeasureTable.Discharge Level",
+              "nativeQueryRef": "Discharge Level"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Gain"
+                }
+              },
+              "queryRef": "MeasureTable.Gain",
+              "nativeQueryRef": "Gain"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "MeasureTable"
+                  }
+                },
+                "Property": "Discharge Level"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "51.560977178297755D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "MeasureTable.Total Cases %"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "48.951219512195124D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "MeasureTable.Admit Level"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "57.926816561111025D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "MeasureTable.Discharge Level"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "44.14634242655448D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "MeasureTable.Gain"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "71.97561287240562D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "StayCases.Expected Discharge Destination"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'EDD'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

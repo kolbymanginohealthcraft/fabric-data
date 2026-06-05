@@ -1,0 +1,106 @@
+table Diagnosis
+	lineageTag: c2ed0130-260d-4789-94d6-556b333c32b8
+
+	measure 'Number of Primary Medical Diagnoses' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    Diagnosis[DisplayOrder]=1,
+			    Diagnosis[DiagnosisType]="MEDICAL"
+			)
+		formatString: #,0
+		lineageTag: 5b870dc5-7193-4625-a6aa-8cc9bd333d22
+
+	measure 'Distinct L2 Values per Case' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(DiagnosisCode[L2]),
+			    Diagnosis[DisplayOrder]=1,
+			    Diagnosis[DiagnosisType]="Medical"
+			)
+		lineageTag: d329042b-5f1e-441a-b18c-d27168a95b75
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Distinct L1 Values per Case' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(DiagnosisCode[L1]),
+			    Diagnosis[DisplayOrder]=1,
+			    Diagnosis[DiagnosisType]="Medical"
+			)
+		lineageTag: 2496d1dc-ea51-493b-ba99-62b77949b165
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TxDocument_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4cb08a15-e584-4dba-a436-7d67c5b17349
+		summarizeBy: none
+		sourceColumn: TxDocument_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiagnosisType
+		dataType: string
+		lineageTag: f477d559-789b-420e-8f4f-a0d1b295982b
+		summarizeBy: none
+		sourceColumn: DiagnosisType
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplayOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: 93cb80ff-7d14-41a1-89ce-4ad138f0f278
+		summarizeBy: sum
+		sourceColumn: DisplayOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiagnosisCode_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a2d10598-113c-4a37-b2e9-1ce344db77da
+		summarizeBy: none
+		sourceColumn: DiagnosisCode_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnsetDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 430dcf3c-5eef-4c87-86d7-849ae239b7f2
+		summarizeBy: none
+		sourceColumn: OnsetDate
+
+		variation Variation
+			isDefault
+			relationship: 69fd5008-2f94-4258-a737-c4415cfe886d
+			defaultHierarchy: LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Diagnosis = m
+		mode: import
+		queryGroup: Diagnoses
+		source =
+				let
+				    Source = dbo_vw_Diagnosis,
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"OnsetDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Exception
+
+	annotation PBI_NavigationStepName = Navigation
+

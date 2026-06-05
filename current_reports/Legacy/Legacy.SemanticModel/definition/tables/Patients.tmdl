@@ -1,0 +1,114 @@
+table Patients
+	lineageTag: e385ba61-0ec6-4266-9246-c8e1228db2aa
+
+	measure 'Total Patients' = COUNTROWS(Patients)
+		formatString: #,0
+		lineageTag: 2328b156-d4a6-4b4f-a757-56069a798ba4
+
+	measure 'Avg Age' =
+			
+			AVERAGEX(
+			    Treatments,
+			    IF(
+			        AND(
+			            RELATED(Patients[DOB])>DATE(1900,1,1),
+			            RELATED(Patients[DOB])<Treatments[LaborDate]
+			        ),
+			        IF(
+			            MONTH(RELATED(Patients[DOB]))+DAY(RELATED(Patients[DOB]))/100 > MONTH(Treatments[LaborDate])+DAY(Treatments[LaborDate])/100,
+			            DATEDIFF(
+			                RELATED(Patients[DOB]),
+			                Treatments[LaborDate],
+			                YEAR
+			            )-1,
+			            DATEDIFF(
+			                RELATED(Patients[DOB]),
+			                Treatments[LaborDate],
+			                YEAR
+			            )
+			        )
+			    )
+			)
+		formatString: 0.0
+		lineageTag: d1c98fcb-f3e6-4e59-9ade-4e9709734591
+
+	measure 'Patient Name for Title' =
+			
+			IF(
+			    HASONEVALUE(Patients[PatientID]),
+			    SELECTEDVALUE(Patients[Patient Name])&" (age "&FORMAT([Avg Age],"0")&")"
+			)
+		lineageTag: 99fdae27-bc81-467f-8cdb-937bdaf6962f
+
+	column PatientID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 52c6e636-cf98-42d3-98ad-1287b4fd9695
+		summarizeBy: none
+		sourceColumn: PatientID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Patient Name'
+		dataType: string
+		lineageTag: 66deec32-9824-4356-8e81-a793c6a25f45
+		summarizeBy: none
+		sourceColumn: Patient Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOB
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: c7dfe732-165a-46b5-98ba-86efa86c8f5b
+		summarizeBy: none
+		sourceColumn: DOB
+
+		variation Variation
+			isDefault
+			relationship: f43f144f-3efd-49ac-8470-cbedb74c4fe7
+			defaultHierarchy: LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Facility
+		dataType: string
+		isHidden
+		lineageTag: 7ef64ba2-9074-4211-905d-048c16133a38
+		summarizeBy: none
+		sourceColumn: Facility
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Patients = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
+				    Patients_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="Patients",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Patients_,{"PatientID", "FirstName", "LastName", "DOB", "Facility"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"DOB", type date}}),
+				    #"Merged Columns" = Table.CombineColumns(#"Changed Type",{"LastName", "FirstName"},Combiner.CombineTextByDelimiter(", ", QuoteStyle.None),"Patient Name"),
+				    #"Trimmed Text" = Table.TransformColumns(#"Merged Columns",{{"Patient Name", Text.Trim, type text}}),
+				    #"Cleaned Text" = Table.TransformColumns(#"Trimmed Text",{{"Patient Name", Text.Clean, type text}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Cleaned Text","  "," ",Replacer.ReplaceText,{"Patient Name"}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Replaced Value",{{"Patient Name", Text.Proper, type text}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Capitalized Each Word", each [Facility] <> null and [Facility] <> "")
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

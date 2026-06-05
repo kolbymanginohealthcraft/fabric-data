@@ -1,0 +1,607 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 732.55995833545012,
+        "y": 2.5348095444133221
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 546.22804461727,
+            "y": 2443.9160984673331
+          },
+          "nodeIndex": "Account",
+          "nodeLineageTag": "de80411b-29fe-4d92-96a0-79f90f45680b",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 19,
+          "expandedHeight": 296
+        },
+        {
+          "location": {
+            "x": 1028.85761388255,
+            "y": 2464.4654108271
+          },
+          "nodeIndex": "Aegis Contract",
+          "nodeLineageTag": "9277a1a4-0aee-482d-b4c0-d24d5374606b",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 27,
+          "expandedHeight": 300
+        },
+        {
+          "location": {
+            "x": 5317.8915261090551,
+            "y": 1907.1371830714008
+          },
+          "nodeIndex": "CaseTracks",
+          "nodeLineageTag": "2f70d1c5-9fb4-4d9d-941b-5ce3ae7e833e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 29,
+          "expandedHeight": 221.97359497905427
+        },
+        {
+          "location": {
+            "x": 540.92197192682033,
+            "y": 2642.8244599660748
+          },
+          "nodeIndex": "Chain",
+          "nodeLineageTag": "657c25e3-3c08-4758-9be1-358671d9b79d",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 16,
+          "expandedHeight": 128
+        },
+        {
+          "location": {
+            "x": 1026.0713347910282,
+            "y": 2144.3159847808579
+          },
+          "nodeIndex": "Patients",
+          "nodeLineageTag": "e385ba61-0ec6-4266-9246-c8e1228db2aa",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 18
+        },
+        {
+          "location": {
+            "x": 1025.5373374621688,
+            "y": 1838.9258304287266
+          },
+          "nodeIndex": "PatientStays",
+          "nodeLineageTag": "40351199-8ac4-4405-95a4-c849ef65ff3a",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 31
+        },
+        {
+          "location": {
+            "x": 2170.5545975504028,
+            "y": 2353.2195291242551
+          },
+          "nodeIndex": "Payers",
+          "nodeLineageTag": "b8105cf2-7565-48c3-a456-0448416a59cb",
+          "size": {
+            "height": 145,
+            "width": 234
+          },
+          "zIndex": 17
+        },
+        {
+          "location": {
+            "x": 3141.305559294934,
+            "y": 967.2591455931888
+          },
+          "nodeIndex": "StayCases",
+          "nodeLineageTag": "5c3d551f-2ca1-46e1-bed1-bae0250f8e70",
+          "size": {
+            "height": 631.5699676422621,
+            "width": 234
+          },
+          "zIndex": 23
+        },
+        {
+          "location": {
+            "x": 2157.6088267606574,
+            "y": 2024.3633023865493
+          },
+          "nodeIndex": "vw_PatientPayers",
+          "nodeLineageTag": "876298ed-e8c0-4dc4-9ac4-7d39121b9894",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 25,
+          "expandedHeight": 200
+        },
+        {
+          "location": {
+            "x": 4133.1632043616692,
+            "y": 1440.7503092522552
+          },
+          "nodeIndex": "DischargeDestination",
+          "nodeLineageTag": "5fe2a3e2-3055-482c-a178-aae58a78794e",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 15,
+          "expandedHeight": 200
+        },
+        {
+          "location": {
+            "x": 5545.5841399058545,
+            "y": 3026.1084319435022
+          },
+          "nodeIndex": "Outcomes Crosswalk",
+          "nodeLineageTag": "2b0d15d8-338a-4d84-8cc8-a20229f6021f",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 13,
+          "expandedHeight": 200
+        },
+        {
+          "location": {
+            "x": 5833.4056644125267,
+            "y": 3031.6932820488296
+          },
+          "nodeIndex": "Outcomes Custom Scales",
+          "nodeLineageTag": "43d44741-091b-4474-bf37-8dc81137889f",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 14,
+          "expandedHeight": 200
+        },
+        {
+          "location": {
+            "x": 3157.5892401612518,
+            "y": 1841.6158784899862
+          },
+          "nodeIndex": "OutcomeSummary",
+          "nodeLineageTag": "6243f5eb-66bb-4295-8f46-f46d830330c7",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 42
+        },
+        {
+          "location": {
+            "x": 3166.9085834216075,
+            "y": 2137.752231359359
+          },
+          "nodeIndex": "Dictionary",
+          "nodeLineageTag": "08141ebe-28e4-4ebc-abb3-543a5ca32e26",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 20,
+          "expandedHeight": 200
+        },
+        {
+          "location": {
+            "x": 3102.4591838275837,
+            "y": 516.70573063712345
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "74314849-39dd-40d3-9386-e3ea04963081",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 41
+        },
+        {
+          "location": {
+            "x": 4877.6142539577659,
+            "y": 2271.7875452485196
+          },
+          "nodeIndex": "Treatments",
+          "nodeLineageTag": "3d89d687-6afb-41b7-879b-898698788a34",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 36,
+          "expandedHeight": 176
+        },
+        {
+          "location": {
+            "x": 4884.3604421038144,
+            "y": 2576.6582462231777
+          },
+          "nodeIndex": "TreatmentsDetails",
+          "nodeLineageTag": "99167761-ad1c-420f-b9d1-fba565467ac0",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 22,
+          "expandedHeight": 176
+        },
+        {
+          "location": {
+            "x": 5907.7070700022568,
+            "y": 1925.8104005257674
+          },
+          "nodeIndex": "Disciplines",
+          "nodeLineageTag": "efca7f91-0da9-4b28-9a39-6498128b0585",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 21,
+          "expandedHeight": 145
+        },
+        {
+          "location": {
+            "x": 4898.0561645808257,
+            "y": 2855.6301679279859
+          },
+          "nodeIndex": "Service",
+          "nodeLineageTag": "d1f0d06f-0626-4513-a232-edddb8c2d9f1",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 12,
+          "expandedHeight": 176
+        },
+        {
+          "location": {
+            "x": 4890.5172953077508,
+            "y": 3050.965623797405
+          },
+          "nodeIndex": "Basis",
+          "nodeLineageTag": "31f5d60c-bb67-40a1-9ccb-31e7c75afdf3",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 11,
+          "expandedHeight": 145
+        },
+        {
+          "location": {
+            "x": 6207.4682603907768,
+            "y": 2616.4927151566058
+          },
+          "nodeIndex": "Diagnosis",
+          "nodeLineageTag": "c2ed0130-260d-4789-94d6-556b333c32b8",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 39,
+          "expandedHeight": 176
+        },
+        {
+          "location": {
+            "x": 6218.6796431175553,
+            "y": 2986.3917730748435
+          },
+          "nodeIndex": "DiagnosisCode",
+          "nodeLineageTag": "98fd4e14-52fd-41a5-adda-415c7e36b5e5",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 38,
+          "expandedHeight": 152
+        },
+        {
+          "location": {
+            "x": 3862.8826065928815,
+            "y": 1405.0821857037711
+          },
+          "nodeIndex": "DischargeReason",
+          "nodeLineageTag": "4ef6a34f-883c-4bb7-b4d1-7a02bf4f74a8",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 28,
+          "expandedHeight": 183.31391137234618
+        },
+        {
+          "location": {
+            "x": 3157.3268089516405,
+            "y": 2423.0050239657949
+          },
+          "nodeIndex": "Outcome Families",
+          "nodeLineageTag": "b945d4be-dc76-4574-a362-b14679fd0ae9",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 24,
+          "expandedHeight": 145
+        },
+        {
+          "location": {
+            "x": 2662.488120302578,
+            "y": 0
+          },
+          "nodeIndex": "Outcomes Breakdown",
+          "nodeLineageTag": "09025d1a-320b-4e40-83bf-eac7f4dd098c",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 4454.79218272525,
+            "y": 2285.5853835731714
+          },
+          "nodeIndex": "Telehealth",
+          "nodeLineageTag": "3e7fba33-73f2-48bc-97bc-dca627a34842",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 9,
+          "expandedHeight": 145
+        },
+        {
+          "location": {
+            "x": 2409.029423889514,
+            "y": 0
+          },
+          "nodeIndex": "MeasureTable",
+          "nodeLineageTag": "81d3a9b3-47f2-40a4-a981-c24b4592eac3",
+          "size": {
+            "height": 145,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1384.7710891121992,
+            "y": 2475.5136694766561
+          },
+          "nodeIndex": "vw_UpnFacilityAccess",
+          "nodeLineageTag": "f8ac5f42-43bf-4bc4-80e1-a58bdab7b0f4",
+          "size": {
+            "height": 168.00809671553088,
+            "width": 234
+          },
+          "zIndex": 26
+        },
+        {
+          "location": {
+            "x": 1907.6545865291425,
+            "y": 11.074216658133082
+          },
+          "nodeIndex": "ContextTable",
+          "nodeLineageTag": "963d7e11-3bdc-4491-a07e-428653efaf62",
+          "size": {
+            "height": 197.48774692697498,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 2436.5006783879558,
+            "y": 2036.7579469474294
+          },
+          "nodeIndex": "Payer Buckets",
+          "nodeLineageTag": "52c30171-1c79-41ee-b8c6-33e4f6d7aaa8",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 30
+        },
+        {
+          "location": {
+            "x": 1643.5346565147324,
+            "y": 16.675880613856862
+          },
+          "nodeIndex": "JitterTable",
+          "nodeLineageTag": "cdedd6f0-5ab6-4d46-853b-eb19d5e3b05f",
+          "size": {
+            "height": 145,
+            "width": 234
+          },
+          "zIndex": 32
+        },
+        {
+          "location": {
+            "x": 2158.1465729304759,
+            "y": 2.0101164790539769
+          },
+          "nodeIndex": "BenchmarkTable",
+          "nodeLineageTag": "e6d019ee-864f-4148-8fe5-1ac63c8c1b50",
+          "size": {
+            "height": 145,
+            "width": 234
+          },
+          "zIndex": 37
+        },
+        {
+          "location": {
+            "x": 4349.3939687153825,
+            "y": 2708.558254811549
+          },
+          "nodeIndex": "Employees",
+          "nodeLineageTag": "05807a58-3a85-42cc-9afe-f00852e0d42a",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 40,
+          "expandedHeight": 218.74347430292482
+        },
+        {
+          "location": {
+            "x": 6287.9779283042835,
+            "y": 2308.1801820907021
+          },
+          "nodeIndex": "Physician",
+          "nodeLineageTag": "0c225407-294b-4b55-9da5-8d958606d30c",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 35,
+          "expandedHeight": 182.24782476764176
+        },
+        {
+          "location": {
+            "x": 558.12645766776336,
+            "y": 2210.4812960895215
+          },
+          "nodeIndex": "CustomerGroups",
+          "nodeLineageTag": "bafc9850-4f47-4b7a-ae06-abac2e29cc8e",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 6,
+          "expandedHeight": 128
+        },
+        {
+          "location": {
+            "x": 2915.159862480612,
+            "y": 4.5696380400374892
+          },
+          "nodeIndex": "DestinationPage",
+          "nodeLineageTag": "a56a74c4-81fc-4844-82a0-59a90c406234",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 33,
+          "expandedHeight": 152
+        },
+        {
+          "location": {
+            "x": 5683.4683503615161,
+            "y": 2609.9150100707266
+          },
+          "nodeIndex": "Assessments",
+          "nodeLineageTag": "8a1a4fb5-071b-4eb4-8fb0-4ca6b515119d",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 34,
+          "expandedHeight": 190.31391137234596
+        },
+        {
+          "location": {
+            "x": 5902.6718801047127,
+            "y": 2294.3208862968668
+          },
+          "nodeIndex": "Documents",
+          "nodeLineageTag": "3b37687d-db9b-4a4e-80bf-0305d92d9590",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 5,
+          "expandedHeight": 303.0408640240953
+        },
+        {
+          "location": {
+            "x": 3167.70402102278,
+            "y": 0
+          },
+          "nodeIndex": "CaseInclusionTable",
+          "nodeLineageTag": "c50b08a3-8212-4f6e-baa5-df16c15427d8",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 4,
+          "expandedHeight": 128
+        },
+        {
+          "location": {
+            "x": 1599.9356054552954,
+            "y": 3008.9919887239871
+          },
+          "nodeIndex": "Tech",
+          "nodeLineageTag": "c593e078-30bf-4d51-8863-85455d258daf",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 575.70899463466958,
+            "y": 1841.8112720415932
+          },
+          "nodeIndex": "IntakeSources",
+          "nodeLineageTag": "6bdd1239-e1bb-4c11-9b27-488a1ebee466",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 731.3123019078871,
+            "y": 2925.4743435512578
+          },
+          "nodeIndex": "VW_NHAegisFacilities",
+          "nodeLineageTag": "1c744165-f91f-499b-86e1-ac69110db68b",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 6031.0559563774632,
+            "y": 1525.4828118987025
+          },
+          "nodeIndex": "StartDate",
+          "nodeLineageTag": "3dbb2aee-0883-4ced-bb75-d707e8dc17db",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 39.450695702325376,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

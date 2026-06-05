@@ -1,0 +1,60 @@
+table Employees
+	lineageTag: 05807a58-3a85-42cc-9afe-f00852e0d42a
+
+	measure 'Total Therapists' = COUNTROWS(Employees)
+		formatString: #,0
+		lineageTag: 1f9fc776-56d6-44f6-8f0c-0a025d3f04f8
+
+	measure 'Therapist List' =
+			
+			IF(HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),BLANK(),
+			    IF(
+			        ISINSCOPE(Service[Type]),
+			        CONCATENATEX(
+			            FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
+			            Treatments[TherapistLabel],
+			            ", ",
+			            [Total Minutes],
+			            DESC
+			        )
+			    )
+			)
+		lineageTag: 79f2b150-bd2f-4e87-9ed5-e6cb801ae347
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Person_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: a0756802-bb89-4737-b448-7e513eb79d97
+		summarizeBy: none
+		sourceColumn: Person_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 86701224-536a-43d0-8b73-3e97d6b27c2b
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Employees = m
+		mode: import
+		queryGroup: Provider
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"e467353e-471f-4f3e-9ccf-6ecfb20b7f0a" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="e467353e-471f-4f3e-9ccf-6ecfb20b7f0a"]}[Data],
+				    Employees_ = #"e467353e-471f-4f3e-9ccf-6ecfb20b7f0a"{[entity="Employees",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Employees_,{"Person_ID", "FirstName", "LastName"}),
+				    #"Merged Columns" = Table.CombineColumns(#"Removed Other Columns",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name")
+				in
+				    #"Merged Columns"
+
+	annotation PBI_ResultType = Table
+

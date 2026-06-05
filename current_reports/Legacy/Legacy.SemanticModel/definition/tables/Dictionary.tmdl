@@ -1,0 +1,52 @@
+table Dictionary
+	lineageTag: 08141ebe-28e4-4ebc-abb3-543a5ca32e26
+
+	column LibraryItem_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ba3c136e-d997-458a-b988-121eefaf9e1a
+		summarizeBy: none
+		sourceColumn: LibraryItem_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Family
+		dataType: string
+		lineageTag: 778b8011-1672-4785-a846-6aaa852909cd
+		summarizeBy: none
+		sourceColumn: Family
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: bd5ddfbf-9460-48f8-a551-c0521d023dc6
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: 68dfa2d6-3d38-44d7-8ea9-ff5e8bffa9a3
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dictionary = m
+		mode: import
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = #"Outcomes Crosswalk"
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

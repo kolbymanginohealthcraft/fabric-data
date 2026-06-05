@@ -1,0 +1,144 @@
+table 'Aegis Contract'
+	lineageTag: 9277a1a4-0aee-482d-b4c0-d24d5374606b
+
+	measure 'Total Contracts' = COUNTROWS('Aegis Contract')
+		formatString: #,0
+		lineageTag: b4ab3b76-9320-446b-8220-26f65d498590
+
+	column Contract_Number__c
+		dataType: string
+		isKey
+		lineageTag: 3d5bd9e8-2699-4706-b041-3a80a0876043
+		summarizeBy: none
+		sourceColumn: Contract_Number__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Aegis_District__c
+		dataType: string
+		isHidden
+		lineageTag: 1b034e8e-6bfc-43b5-8735-889d11f6e90e
+		summarizeBy: none
+		sourceColumn: Aegis_District__c
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Chain_Account__c
+		dataType: string
+		isHidden
+		lineageTag: 39e14bbb-b11a-4fe3-acdd-4a1324515143
+		summarizeBy: none
+		sourceColumn: Chain_Account__c
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Account__c
+		dataType: string
+		isHidden
+		lineageTag: 4e60deb6-e89c-4944-8b1f-6f5e1edc3551
+		summarizeBy: none
+		sourceColumn: Account__c
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Effective_Date__c
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: b86ad513-6642-4d33-9eb8-443eae605607
+		summarizeBy: none
+		sourceColumn: Effective_Date__c
+
+		variation Variation
+			isDefault
+			relationship: a7c926c0-5a32-40da-ab30-5097c645818f
+			defaultHierarchy: LocalDateTable_00c23b7c-5f16-4b52-a1b3-c2366e3215a8.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Term_Date__c
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: f43a8323-7b0d-4fa9-aab1-e93dd802b978
+		summarizeBy: none
+		sourceColumn: Term_Date__c
+
+		variation Variation
+			isDefault
+			relationship: 49b49e35-c913-4311-8f45-14e67de53135
+			defaultHierarchy: LocalDateTable_7cbf2a81-ca06-49a6-9e12-9be68a420da7.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Contract_Type__c
+		dataType: string
+		lineageTag: b89ebe03-f24c-4217-9e6d-a731e2f6c9e2
+		summarizeBy: none
+		sourceColumn: Contract_Type__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Qualified Customer' = TRUE()
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a351c029-fd8d-4ac0-b146-37bcc68ebd00
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 32c59685-21fe-4d3b-9fa8-50e81c52a9a4
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tech Status' =
+			
+			IF(
+			    ISBLANK(RELATED(Tech[ID])),
+			    "(b) No Rehab Tech",
+			    "(a) Has Rehab Tech"
+			)
+		lineageTag: f4d57a71-546b-41c9-b967-780262ed1aaf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contract Label' = 'Aegis Contract'[Contract_Number__c]&" - "&'Aegis Contract'[Name]
+		lineageTag: eaa5c207-4686-4b51-84d2-abcd8830f24e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aegis Contract' = m
+		mode: directQuery
+		queryGroup: Management
+		source =
+				let
+				    Source = Salesforce_Aegis_Contract,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Name", "Contract_Number__c", "Aegis_District__c", "Chain_Account__c", "Account__c", "Effective_Date__c", "Term_Date__c", "Contract_Type__c"}),
+				    #"Added Prefix" = Table.TransformColumns(#"Removed Other Columns", {{"Contract_Number__c", each "0000" & _, type text}}),
+				    #"Extracted Last Characters" = Table.TransformColumns(#"Added Prefix", {{"Contract_Number__c", each Text.End(_, 5), type text}})
+				in
+				    #"Extracted Last Characters"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

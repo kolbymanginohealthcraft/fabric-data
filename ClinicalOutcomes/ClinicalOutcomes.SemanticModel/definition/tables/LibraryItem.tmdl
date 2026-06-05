@@ -1,0 +1,94 @@
+table LibraryItem
+	lineageTag: b67c23af-753e-4690-b1da-9f99598f3c14
+
+	column LibraryItem_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f247992-a6a5-409b-9c13-0278dc57d063
+		summarizeBy: none
+		sourceColumn: LibraryItem_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Caption
+		dataType: string
+		lineageTag: bf6fcabc-af0d-48db-ab4d-986275bad98a
+		summarizeBy: none
+		sourceColumn: Caption
+
+		annotation SummarizationSetBy = Automatic
+
+	column SectionName
+		dataType: string
+		lineageTag: ca2da8df-fb83-4ad5-a130-9b6c72649767
+		summarizeBy: none
+		sourceColumn: SectionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column GroupName
+		dataType: string
+		lineageTag: 715c3e94-62d4-4220-a227-09da228a20fc
+		summarizeBy: none
+		sourceColumn: GroupName
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrintCaption
+		dataType: string
+		lineageTag: fb8f940c-ea39-4fbf-a634-da9bfa2cd0d4
+		summarizeBy: none
+		sourceColumn: PrintCaption
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryScale_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 807cc84e-f577-4371-97f0-e05c0d75a27c
+		summarizeBy: none
+		sourceColumn: LibraryScale_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrintSectionName
+		dataType: string
+		lineageTag: 6028f8c8-6423-4f7a-8278-073d103b4076
+		summarizeBy: none
+		sourceColumn: PrintSectionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrintGroupName
+		dataType: string
+		lineageTag: c356960c-c09a-4567-8a5b-03ca0bc305b5
+		summarizeBy: none
+		sourceColumn: PrintGroupName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: ac176413-0b8f-4dba-ac44-719bee612810
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition LibraryItem = m
+		mode: directQuery
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"5527ef94-26ec-4a1d-b65c-21ed39104f2d" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
+				    LibraryItem_ = #"5527ef94-26ec-4a1d-b65c-21ed39104f2d"{[entity="LibraryItem",version=""]}[Data]
+				in
+				    LibraryItem_
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

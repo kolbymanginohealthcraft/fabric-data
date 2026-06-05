@@ -1,0 +1,14 @@
+{
+  "layoutOptimization": 0,
+  "publicCustomVisuals": [],
+  "reportId": "00000000-0000-0000-0000-000000000001",
+  "resourcePackages": [],
+  "settings": {
+    "defaultDrillFilterOtherVisuals": true,
+    "useDefaultAggregateDisplayName": true,
+    "useEnhancedTooltips": true,
+    "allowChangeFilterTypes": true
+  },
+  "objects": {},
+  "filters": "[]"
+}

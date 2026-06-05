@@ -1,0 +1,47 @@
+table 'Override Chain'
+	lineageTag: 964dfc40-1767-46f4-b977-74d242859f4a
+
+	measure 'Override Chain Condition' = ```
+			
+			IF(
+			    SELECTEDVALUE('Override Chain'[Name]) IN VALUES(Chain[Name]) && 
+			    (
+			        CALCULATE(DISTINCTCOUNT(Account[Id]),ALLSELECTED(Account))=1 &&
+			        NOT(ISBLANK(SELECTEDVALUE(Chain[Name])))
+			    ),
+			    1,
+			    0
+			)
+			```
+		lineageTag: 7d2070a9-a669-4577-a51c-3b57dcf18421
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ID
+		lineageTag: d5c31736-08c7-4813-b62e-465517e0da28
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		lineageTag: 7b32edd4-b2fb-43cf-b157-ea898b8e3b37
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Override Chain' = calculated
+		mode: directQuery
+		source =
+				
+				SELECTCOLUMNS(
+				    Chain,
+				    "ID",Chain[Id],
+				    "Name",Chain[Name]
+				)
+
+	annotation PBI_Id = 202da94f501d4b6e88971534da36c4db
+

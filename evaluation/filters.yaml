@@ -1,0 +1,17 @@
+# Global Filter Configuration — therapist evaluation
+# Ported from PeopleDashboard/configs/global_filters.yaml (2026-04-15).
+# May need re-tuning under the new multi-dimension cohort design — smaller
+# cohort cells than the old StaffTitle-only peer group.
+
+# Minimum track duration (in days)
+# Tracks with duration <= this value are excluded (outcomes not as meaningful for very short stays)
+min_track_duration_days: 5
+
+# Minimum number of tracks per therapist
+# Therapists with fewer than this number of tracks are excluded (filters out PRN/as-needed therapists)
+min_tracks_per_therapist: 25
+
+# Minimum number of therapists per peer group / cohort
+# Peer groups with fewer than this number of therapists are excluded from display
+# (ensures meaningful percentile comparisons)
+min_peer_group_size: 100

@@ -1,0 +1,1390 @@
+table MeasureTable
+	lineageTag: 81d3a9b3-47f2-40a4-a981-c24b4592eac3
+
+	measure '% Improvement' =
+			
+			DIVIDE(
+			    [Discharge Level]-[Admit Level],
+			    [Admit Level]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 2f02235f-cc18-4fe4-8392-db420421a617
+
+	measure '% Improvement BM' =
+			
+			DIVIDE(
+			    [Discharge Level BM]-[Admit Level BM],
+			    [Admit Level BM]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: c1cb8bc9-9e90-4967-b6a2-37665748f12b
+
+	measure '% Improvement Delta' = TRUNC([% Improvement]-[% Improvement BM],5)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 5b57d1d8-e3dc-44df-88da-7d42102a15d7
+
+	measure Gain = [Discharge Level]-[Admit Level]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: aba5c6a3-5359-4cd3-837d-e67eee3f6fd7
+
+	measure 'Gain BM' = [Discharge Level BM]-[Admit Level BM]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ec8b2cd5-4731-46be-b85f-346fe0a16cef
+
+	measure 'Gain Delta' = [Gain]-[Gain BM]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 929d3709-0479-4d7b-a543-668aa4318481
+
+	measure 'Discharge Level' =
+			
+			CALCULATE(
+			    AVERAGE(OutcomeSummary[TableDisch]),
+			    OR(
+			        OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Status] IN {"Included" ,"Started with ANA 88", "No start score"},
+			        NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Status] IN {"Included"}
+			    )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 3bf84c2d-11e2-41b7-81ee-227199aabc6f
+
+	measure 'Discharge Level BM' =
+			
+			CALCULATE(
+			    [Discharge Level],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 578e61fc-3159-409f-ad6f-06fe45d9c2a5
+
+	measure 'Admit Level' =
+			
+			CALCULATE(
+			    AVERAGE(OutcomeSummary[EvalNEW]),
+			    OR(
+			        OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Status] IN {"Included" ,"Started with ANA 88", "No start score"},
+			        NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Status] IN {"Included"}
+			    )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: c4ca960c-91fe-44b6-a9c8-46edcfd51e7a
+
+	measure 'Admit Level BM' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: bb5470a8-0b8e-4ce5-adeb-46039c62115d
+
+	measure 'Total Measurements' =
+			
+			CALCULATE(
+			    COUNTROWS(OutcomeSummary),
+			    OR(
+			        OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Status] IN {"Included" ,"Started with ANA 88", "No start score"},
+			        NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Status] IN {"Included"}
+			    )
+			)
+		formatString: #,0
+		displayFolder: Outcomes
+		lineageTag: a5932dd1-21c8-403a-a991-c4d9f6e89cf4
+
+	measure 'Total Outcome Areas' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Dictionary[Name]),
+			    OR(
+			        OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Status] IN {"Included" ,"Started with ANA 88", "No start score"},
+			        NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Status] IN {"Included"}
+			    )
+			)
+		formatString: 0
+		displayFolder: Outcomes
+		lineageTag: 35717f59-d6c6-478a-8650-fade06168e18
+
+	measure 'Total Outcome Areas Subtitle' = [Total Outcome Areas]&" areas measured"
+		displayFolder: Outcomes
+		lineageTag: ffbf6c01-02ca-40b0-9d0a-7802a5f54ffb
+
+	measure ALOS =
+			
+			DIVIDE(
+			    [Total Days],
+			    [Total Cases]
+			)
+		formatString: #,0.0
+		displayFolder: ALOS
+		lineageTag: 630298d4-6fa8-4095-a83c-c6e6f4033dbc
+
+	measure 'ALOS BM' =
+			
+			CALCULATE(
+			    [ALOS],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.0
+		displayFolder: ALOS
+		lineageTag: 3d34b86d-327c-4aa5-b48d-754baa3af1ed
+
+	measure 'ALOS Delta' = [ALOS]-[ALOS BM]
+		formatString: 0.0
+		displayFolder: ALOS
+		lineageTag: 5bddd9bd-8c53-4f48-a1c7-49a8a7fad294
+
+	measure '% Total Cases Improved' =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(StayCases,[Gain]>0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE()))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 2009c7d3-34a0-4538-aa16-e9062a9490f2
+
+	measure '% Total Cases Improved BM' =
+			
+			CALCULATE(
+			    [% Total Cases Improved],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 402f5ea2-942d-4469-90f7-fd01c7cb7704
+
+	measure '% Total Cases Improved Delta' = [% Total Cases Improved]-[% Total Cases Improved BM]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ec8329b4-d253-42ef-bb4a-42f6dfae30ae
+
+	measure DTC =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],DischargeDestination[Group] = "Community"),
+			    [Total Cases]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: c0c4a183-0f59-487e-b863-419b6f2a549c
+
+	measure 'DTC BM' =
+			
+			CALCULATE(
+			    [DTC],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 45d83007-8003-4ebe-b97d-223b60a8c4c6
+
+	measure 'DTC Delta' = [DTC]-[DTC BM]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 8db3087d-bd46-46ce-affa-f0e248dbba17
+
+	measure Rehosp =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(DischargeDestination,DischargeDestination[Setting] = "Hospital")),
+			    [Total Cases]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: e558747b-e8ad-4732-88c7-26c7276228bf
+
+	measure 'Rehosp BM' =
+			
+			CALCULATE(
+			    [Rehosp],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 3462e0ab-55d8-41af-b9fa-2a62d3651861
+
+	measure 'Rehosp Delta' = [Rehosp]-[Rehosp BM]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 282d3e79-b3b2-44ef-ad36-cf1dd42741d8
+
+	measure 'Total Units' = SUM(TreatmentsDetails[Units])
+		formatString: #,0
+		displayFolder: Units
+		lineageTag: 041af93e-4596-43f7-be46-2b3b9acbf6ea
+
+	measure 'Units per Visit' =
+			
+			IF([Total Cases All Payers]>0,
+			CALCULATE(
+			    DIVIDE(
+			        [Total Units],
+			        [Total Visits]
+			    ),
+			    Disciplines[Discipline] IN {"PT", "OT"}
+			))
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: 53b2f234-8bb4-425b-af53-c885887b0e79
+
+	measure 'Units per Visit BM' =
+			
+			CALCULATE(
+			    [Units per Visit],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: de8a866b-2505-4ec3-931f-8f946ba5fe3a
+
+	measure 'Units per Visit Delta' = [Units per Visit]-[Units per Visit BM]
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: 72ef3f37-c58a-43e0-831e-494f9cc6ddb8
+
+	measure 'Minutes per Case' = [Total Minutes]/[Total Cases]
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 09ca9c98-9580-4994-8ccc-86a868cd0fb7
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Minutes per Code' = AVERAGE(TreatmentsDetails[Duration])
+		displayFolder: Minutes
+		lineageTag: 09b59067-ec3b-4429-81b1-6ee518c45303
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Unit' = [Total Minutes]/[Total Units]
+		displayFolder: Minutes
+		lineageTag: d8c992c1-5536-4d67-a686-8e7550ad81ee
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Visit' = [Total Minutes]/[Total Visits]
+		displayFolder: Minutes
+		lineageTag: 7f234f4c-fab9-420d-88b0-43f471d3c32b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Week' =
+			
+			DIVIDE(
+			    [Total Minutes],
+			    [Total Days]
+			)*7
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: c69eb433-9ea3-4846-8162-e08312d65158
+
+	measure 'Minutes per Week BM' =
+			
+			CALCULATE(
+			    [Minutes per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 46e96f44-608f-452a-901b-29c64aa1503b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Minutes Variance' =
+			
+			STDEVX.P(
+			    KEEPFILTERS(VALUES(StayCases[PatientCase_ID])),
+			    CALCULATE([Minutes per Week])
+			)
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: d07b96eb-63ae-4cfc-9932-686dc4e7d7bf
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Minutes' = SUM(TreatmentsDetails[Duration])
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 9150bd80-028f-4835-b56d-4f57923a42eb
+
+	measure 'Total Days with Visits' = DISTINCTCOUNT(Treatments[CaseIDDate])
+		formatString: #,0
+		displayFolder: Visits
+		lineageTag: 3736d65f-010b-4cef-b6a1-812476178245
+
+	measure 'Total Visits' = COUNTROWS(Treatments)
+		formatString: #,0
+		displayFolder: Visits
+		lineageTag: a7244d21-36e1-4319-a650-3808c07d4b02
+
+	measure 'Visits per Week' =
+			
+			// AVERAGEX(
+			//     FILTER(StayCases,[Total Days]>=7),
+			//     DIVIDE(
+			//         DIVIDE(
+			//             [Total Visits],
+			//             [Total Days]
+			//         )*7,
+			//         [Total Disciplines]
+			//     )
+			// )
+			
+			AVERAGEX(
+			    StayCases,
+			    DIVIDE(
+			        DIVIDE(
+			            [Total Visits],
+			            [Total Days]
+			        )*7,
+			        [Total Disciplines]
+			    )
+			)
+		displayFolder: Visits
+		lineageTag: 2073f7b4-5040-4bbd-b36b-f70c5b1056e7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Visits per Week BM' =
+			
+			CALCULATE(
+			    [Visits per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: e25c035d-b5cd-4d55-812d-83c0b6aad355
+
+	measure 'Visits per Week Delta' = [Visits per Week]-[Visits per Week BM]
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: 7813a48b-ce90-462b-ae0b-dcea35aa8371
+
+	measure BoxplotMinutes_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: 493703fb-2405-48fc-936a-3f320c826266
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: 0b922951-ed8c-41aa-b651-69fe9e01c336
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: 832200b7-05b8-48c1-b91b-23bacbf07ff6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_50th =
+			
+			CALCULATE(
+			    [Minutes per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: Minutes
+		lineageTag: abbbe932-457f-4827-9c51-d5cef1c6225d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: c643f465-fa5b-45fe-91ae-ba5d6f4909a4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: cedaa85d-2796-44db-9b74-82f0b4df7f56
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: 82d843bd-5c12-4d5c-863d-02db8bd3902e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_50th =
+			
+			CALCULATE(
+			    [ALOS],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: ALOS
+		lineageTag: 7972dbee-a92b-402b-b759-58ecbbe379a3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: 14e42d5f-061f-4677-abda-c17a65a1d7b5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: 25a94264-7517-4bcb-ab62-7da958a52048
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: 116119df-ebd2-4fde-bff8-a396dfb25da0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: b48bbbb9-fcaa-4f0e-ae8a-3fe5310da495
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_50th =
+			
+			CALCULATE(
+			    [Visits per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: Visits
+		lineageTag: 23977c40-bc2e-42f9-9cf5-e6ed13a56666
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: 6a7030fa-2a9c-425c-a368-8e5900fb661a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: 84330ccf-0e1a-4297-b0d8-6aa09c3528ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: 3e539eb9-b54c-4fb4-aa93-ed7d5ad0ed65
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: dc6b7efe-1d12-4528-9c61-cb4f37411cbe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: 25f46f39-ab02-4dfa-99ee-b197c34034a6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: b538c25d-d680-4353-8f06-5035f0cd16d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_50th =
+			
+			CALCULATE(
+			    [Units per Visit],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: Units
+		lineageTag: 33e26ef8-32c8-46fd-85cc-2b9a84c49130
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_05th =
+			
+			var range = [BoxplotUnitsPerVisit_90th]-[BoxplotUnitsPerVisit_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotUnitsPerVisit_10th]-incrementalrange
+			return calc
+		displayFolder: Units
+		lineageTag: 047271b9-a7af-4d05-baca-f7c8da67d0bb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_95th =
+			
+			var range = [BoxplotUnitsPerVisit_90th]-[BoxplotUnitsPerVisit_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotUnitsPerVisit_90th]+incrementalrange
+			return calc
+		displayFolder: Units
+		lineageTag: a24c50bc-cd97-4bc2-9c72-a39d20366ed7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_05th =
+			
+			var range = [BoxplotVistsPerWeek_90th]-[BoxplotVistsPerWeek_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotVistsPerWeek_10th]-incrementalrange
+			return calc
+		displayFolder: Visits
+		lineageTag: 2c84718b-55e8-4156-89b4-446af478cc96
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_95th =
+			
+			var range = [BoxplotVistsPerWeek_90th]-[BoxplotVistsPerWeek_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotVistsPerWeek_90th]+incrementalrange
+			return calc
+		displayFolder: Visits
+		lineageTag: 3af68bc5-6f5a-4dda-a900-641b7c5763d6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_05th =
+			
+			var range = [BoxplotMinutes_90th]-[BoxplotMinutes_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotMinutes_10th]-incrementalrange
+			return calc
+		displayFolder: Minutes
+		lineageTag: c8bc7606-ca22-4ce1-ac6c-84295eac78df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_95th =
+			
+			var range = [BoxplotMinutes_90th]-[BoxplotMinutes_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotMinutes_90th]+incrementalrange
+			return calc
+		displayFolder: Minutes
+		lineageTag: 8be6ac3d-9250-4957-a55d-5d35a49780a1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_05th =
+			
+			var range = [BoxplotALOS_90th]-[BoxplotALOS_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotALOS_10th]-incrementalrange
+			return calc
+		displayFolder: ALOS
+		lineageTag: 32cf9bcd-de6f-41ae-8027-65af91885a41
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_95th =
+			
+			var range = [BoxplotALOS_90th]-[BoxplotALOS_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotALOS_90th]+incrementalrange
+			return calc
+		displayFolder: ALOS
+		lineageTag: 82f21a41-c2c4-4b18-b925-925f0e6e17a1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain AxisLow' =
+			
+			var range = [Gain BM]-[Gain]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MIN(0,[Gain])-incrementalrange
+			return IF([Gain]<0,calc,0)
+		displayFolder: Outcomes
+		lineageTag: 7437af67-348b-413a-a09c-94123acc108d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain AxisHigh' =
+			
+			var range = [Gain]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MAX([Gain],[Gain BM])+incrementalrange
+			return IF([Gain]>[Gain BM]-.1,calc,[Gain BM])
+		displayFolder: Outcomes
+		lineageTag: 1d70399f-f6cd-42cd-be10-1b191c38ddcf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Week Percentile' =
+			
+			var myvalue = [Minutes per Week]
+			return
+			DIVIDE(
+			    CALCULATE(
+			        COUNTROWS(
+			            FILTER(
+			                StayCases,
+			                [Minutes per Week]<myvalue
+			            )
+			        ),
+			        ALLSELECTED(StayCases[PatientCase_ID]),
+			        ALL(StayCases[PatientCase_ID]),
+			        ALL(vw_UpnFacilityAccess)
+			    ),
+			    [Total Cases BM]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Minutes
+		lineageTag: 4e8e6106-3831-4209-a850-33a16d2d122e
+
+	measure 'Minutes per Week Percentile Text' =
+			
+			"Provider avg minutes = "&FORMAT([Minutes per Week],"#,###")&"; Percentile = "&FORMAT([Minutes per Week Percentile],"0%")
+		displayFolder: Minutes
+		lineageTag: 9378e808-51d2-4584-a01f-8587cc9bfccc
+
+	measure 'Total Cases' =
+			
+			var v1 = COUNTROWS(StayCases)
+			var v2 = CALCULATE(COUNTROWS(StayCases),FILTER(StayCases,[Total Tracks]>0))
+			return v2
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: 77a0d69a-1460-4d25-b7e1-774421d4d8a6
+
+	measure 'Total Cases All Payers' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    ALL(StayCases[Payer Categorization])
+			)
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: e10db99f-6d15-41b2-a2b8-31d29896fbce
+
+	measure 'Total Cases BM' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: b43fba77-6414-4b70-bca7-d21b2523d080
+
+	measure 'Drill Button Text' =
+			
+			IF(
+			    HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),
+			    "<<Please select a single episode from the table below, and then click this button>>",
+			    "Show details for "&SELECTEDVALUE(Patients[Patient Name])
+			)
+		displayFolder: Outcomes
+		lineageTag: 20866bb4-7c4b-4705-bdff-9fddc4becd12
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cohort Text' = ```
+			
+			var AgeRange = IF(ISFILTERED(StayCases[Age Range]), "age range")
+			var DiagnosticCategory = IF(ISFILTERED(StayCases[Diagnostic Category]), "diagnostic category")
+			var PayerCategorization = IF(OR(ISFILTERED('Payer Buckets'[Payer Categorization]),ISFILTERED('Payer Buckets'[Payer Grouping])), "payer")
+			
+			var ValuesTable = FILTER({AgeRange, DiagnosticCategory, PayerCategorization}, NOT(ISBLANK([Value])))
+			var TableLength = COUNTROWS(ValuesTable)
+			
+			var ValuesList = 
+			    IF(TableLength<3,
+			        //if two or less items - no need for "and"
+			        CONCATENATEX(ValuesTable,[Value]," and "),
+			        
+			        //if three or more items - need "and"
+			        CONCATENATEX(TOPN(TableLength-1,ValuesTable),[Value],", ")&", and "&
+			        CONCATENATEX(TOPN(1,ValuesTable,[Value],DESC),[Value],", ")
+			    )
+			
+			return
+			"National cohort of "&FORMAT([Total Cases BM]-1,"#,###")&" similar patients "&
+			IF(TableLength>0,"based on "&ValuesList)
+			```
+		displayFolder: Cases
+		lineageTag: 706e09d3-54f7-49e3-9786-5c85f1a45be2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Admit Level Jitter' = MIN(ABS([Admit Level] + IF(RAND()>.5,1,-1)*RAND()/500),1)
+		formatString: 0%;-0%;0%
+		displayFolder: Outcomes
+		lineageTag: 2ca55427-5fc7-4ee1-a849-722f63c414aa
+
+	measure 'Discharge Level Jitter' = MIN(ABS([Discharge Level] + IF(RAND()>.5,1,-1)*RAND()/500),1)
+		formatString: 0%;-0%;0%
+		displayFolder: Outcomes
+		lineageTag: 16b865d5-280e-4efd-a2f8-8ca5e45c590e
+
+	measure 'Admit Level (Pain)' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    Dictionary[Name]="Pain at Rest or w/ Activity"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: f5c5913d-751b-48f1-8a36-de79f73a57c0
+
+	measure 'Discharge Level (Pain)' =
+			
+			CALCULATE(
+			    [Discharge Level],
+			    Dictionary[Name]="Pain at Rest or w/ Activity"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: 952398a8-568a-4100-bee9-ecd7709f2445
+
+	measure '% Improvement (Pain)' =
+			
+			IF([Total Cases All Payers]>0,
+			    DIVIDE(
+			        [Discharge Level (Pain)]-[Admit Level (Pain)],
+			        [Admit Level (Pain)]
+			    )+.00001
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: e5424d15-57ce-4875-ba21-d14b1f8070ad
+
+	measure '% Minutes Group Therapy' =
+			
+			DIVIDE(
+			    [Total Minutes Group Therapy],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Group Therapy
+		lineageTag: b7270072-775e-414d-870d-f9f955796237
+
+	measure '% Minutes Group Therapy Text' =
+			
+			FORMAT(
+			    [% Minutes Group Therapy]+0,
+			    "0.0%"
+			)
+			&" group minutes"
+		displayFolder: Group Therapy
+		lineageTag: 23bb5e0a-9f90-459d-93d0-480e842bce98
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Visits Group Therapy' =
+			
+			DIVIDE(
+			    [Total Visits Group Therapy],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Group Therapy
+		lineageTag: 0b055e89-10ca-4348-8df3-430284117bd5
+
+	measure '% Minutes Telehealth' =
+			
+			DIVIDE(
+			    [Total Minutes Telehealth],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Telehealth
+		lineageTag: 51642e05-f654-4bf5-9457-221a3755e662
+
+	measure '% Visits Telehealth' =
+			
+			DIVIDE(
+			    [Total Visits Telehealth],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Telehealth
+		lineageTag: 38b56051-652e-4ce2-b5a6-abae358de27e
+
+	measure '% Minutes Modalities' =
+			
+			DIVIDE(
+			    [Total Minutes Modalities],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Modalities
+		lineageTag: 150e6b1a-2b17-4259-b7c4-cc9d464f9914
+
+	measure '% Visits Modalities' =
+			
+			DIVIDE(
+			    [Total Visits Modalities],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Modalities
+		lineageTag: 980309bb-2df9-4935-a24f-b3b827b5c438
+
+	measure '% Minutes Aquatic' =
+			
+			DIVIDE(
+			    [Total Minutes Aquatic],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Aquatic
+		lineageTag: a7ed64f1-2aab-4fcf-9d1a-c6095f9ca25d
+
+	measure '% Visits Aquatic' =
+			
+			DIVIDE(
+			    [Total Visits Aquatic],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Aquatic
+		lineageTag: ee74d04f-9aa0-4fbb-b5ff-dd154bd485c9
+
+	measure 'Total Units Aquatic' =
+			
+			CALCULATE(
+			    [Total Units],
+			    Service[Specialty]="Aquatic"
+			)
+		formatString: 0.00
+		displayFolder: Aquatic
+		lineageTag: 20a478b4-2a06-4bb9-995d-a549db1d0537
+
+	measure 'Total Visits Aquatic' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Specialty]="Aquatic"
+			)
+		formatString: #,0
+		displayFolder: Aquatic
+		lineageTag: 09f984a6-c6d0-4514-b19d-e5238dd3bdf0
+
+	measure 'Gap: Stay to Case' =
+			
+			AVERAGEX(
+			    StayCases,
+			    DATEDIFF(RELATED(PatientStays[AdmitDate]),StayCases[TherapyStartDate],DAY)
+			)
+		displayFolder: Misc
+		lineageTag: d4ef0e71-eaa1-4cf0-9a21-bd5dbe92042c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Day 1 Evals' =
+			
+			var numerator = CALCULATE([Total Cases],FILTER(StayCases,[Gap: Stay to Case]=0))
+			var denominator = [Total Cases]
+			return DIVIDE(numerator,denominator)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Misc
+		lineageTag: fdf9e2eb-60ee-439a-ae84-1987cf722c0c
+
+	measure 'Diagnosis Equals Cohort' =
+			
+			IF(
+			    SELECTEDVALUE(DiagnosisCode[L2])=SELECTEDVALUE(StayCases[Diagnostic Category]),
+			    1,0
+			)
+		displayFolder: Misc
+		lineageTag: 5f3bc0ed-8f98-454d-9170-8122d8a746b1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Disciplines Involved' =
+			
+			var VisitsPT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="PT")>0,"PT")
+			var VisitsOT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="OT")>0,"OT")
+			var VisitsST = IF(CALCULATE([Total Visits],Disciplines[Discipline]="ST")>0,"ST")
+			var ValuesTable = FILTER({VisitsPT, VisitsOT, VisitsST}, NOT(ISBLANK([Value])))
+			var ValuesList = CONCATENATEX(ValuesTable,[Value],"/")
+			return ValuesList
+		displayFolder: Misc
+		lineageTag: 35288c9d-f2a5-4f80-880b-b642bb83bd14
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Days' =
+			
+			/*
+			SUMX (
+			    VALUES(StayCases[PatientCase_ID]),
+			    CALCULATE (
+			        COUNTROWS (
+			            FILTER (
+			                ALL('Calendar'),
+			                COUNTROWS (
+			                    FILTER (
+			                        CaseTracks,
+			                        CaseTracks[PatientCase_ID] = MAX(StayCases[PatientCase_ID])
+			                        && 'Calendar'[Date] >= CaseTracks[StartDate]
+			                        && 'Calendar'[Date] <= CaseTracks[EndDate]
+			                    )
+			                ) > 0
+			            )
+			        )
+			    )
+			)
+			*/
+			
+			SUM(StayCases[UniqueDays])
+		formatString: #,0
+		displayFolder: Misc
+		lineageTag: e577077a-991e-4e07-aa63-8f4d448220d1
+
+	measure 'Total Disciplines' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Disciplines[Discipline]),
+			    FILTER(
+			        CaseTracks,
+			        [Total Visits]>0
+			    )
+			)
+		formatString: 0
+		displayFolder: Misc
+		lineageTag: 30637786-6920-4722-9f4a-0c59fc87f64c
+
+	measure 'Total Minutes Modalities' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Specialty]="Modality"
+			)
+		formatString: #,0
+		displayFolder: Modalities
+		lineageTag: bb0e3b1a-7683-40bb-ac32-a0e0e77683e6
+
+	measure 'Total Visits Modalities' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Specialty]="Modality"
+			)
+		formatString: #,0
+		displayFolder: Modalities
+		lineageTag: 0beb139e-54f6-4ba2-b9e1-fdf5d3e7c78b
+
+	measure 'Total Minutes Aquatic' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Specialty]="Aquatic"
+			)
+		formatString: #,0
+		displayFolder: Aquatic
+		lineageTag: 6596c2c5-da48-4ccf-9c49-022a36a1ced3
+
+	measure 'Total Minutes Group Therapy' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Specialty]="Group"
+			)
+		formatString: #,0
+		displayFolder: Group Therapy
+		lineageTag: a143ce6d-d146-4894-8456-e9eb63a753d9
+
+	measure 'Total Visits Group Therapy' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Specialty]="Group"
+			)
+		displayFolder: Group Therapy
+		lineageTag: bd74514f-6473-4201-a20d-a04be32f0c04
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Units Modalities' =
+			
+			CALCULATE(
+			    [Total Units],
+			    Service[Specialty]="Modality"
+			)
+		formatString: #,0
+		displayFolder: Modalities
+		lineageTag: 2d661b13-a9b3-4151-915f-6970666e003b
+
+	measure 'Total Units Group Therapy' =
+			
+			CALCULATE(
+			    [Total Units],
+			    Service[Specialty]="Group"
+			)
+		formatString: #,0
+		displayFolder: Group Therapy
+		lineageTag: 85b064db-d923-4f20-941a-6b5868892ffa
+
+	measure 'Total Minutes Telehealth' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    ISBLANK(Telehealth[TxSession_ID])=FALSE()
+			)
+		formatString: #,0
+		displayFolder: Telehealth
+		lineageTag: 5d02331b-44d1-40cf-9fa5-e276e94e4884
+
+	measure 'Total Visits Telehealth' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    ISBLANK(Telehealth[TxSession_ID])=FALSE()
+			)
+		formatString: #,0
+		displayFolder: Telehealth
+		lineageTag: 5ed0f889-0c99-45cb-a165-f2b10355ace5
+
+	measure 'Total Units Telehealth' =
+			
+			CALCULATE(
+			    [Total Units],
+			    ISBLANK(Telehealth[TxSession_ID])=FALSE()
+			)
+		formatString: #,0
+		displayFolder: Telehealth
+		lineageTag: a97b255a-f73a-43f0-96b1-7877a9fdb2f6
+
+	measure 'Total Cases Reported Pain' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    LEFT(StayCases[Reported Pain],3)="(a)"
+			)
+		formatString: #,0
+		displayFolder: Pain
+		lineageTag: b7fcbebe-5854-4fd5-9f23-172bd5dd647c
+
+	measure '% Total Cases Reported Pain' =
+			
+			DIVIDE(
+			    [Total Cases Reported Pain],
+			    [Total Cases]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: fb9f1d9d-56f2-444b-9231-e7285a8522dc
+
+	measure 'Visits per Week 2' = ```
+			
+			// AVERAGEX(
+			//     StayCases,
+			//     DIVIDE(
+			//         [Total Visits],
+			//         SUM(CaseTracks[Track Length])
+			//     )*7     
+			// )
+			
+			// DIVIDE(
+			//     [Total Visits],
+			//     [Track Days]
+			// )*7
+			
+			AVERAGEX(
+			    StayCases,
+			    AVERAGEX(
+			        CaseTracks,
+			        DIVIDE([Total Visits],[Track Days])*7
+			    )
+			)
+			```
+		displayFolder: Visits
+		lineageTag: 330e6d53-7434-4202-9701-1813f830f8fc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Midpoint Level' = ([Admit Level]+[Discharge Level])/2
+		displayFolder: Outcomes
+		lineageTag: a2e4c761-c770-477a-a224-90ef31cc0895
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Visits per Case' =
+			
+			DIVIDE(
+			    [Total Visits],
+			    [Total Cases]
+			)
+		formatString: 0.0
+		displayFolder: Visits
+		lineageTag: ab38a2fc-ed64-4890-89c6-49bce949f092
+
+	measure '% Total Cases Declined' =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(StayCases,[Gain]<0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE()))
+			)
+		displayFolder: Outcomes
+		lineageTag: db0b7253-d085-481f-99e3-37b7acad4da8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Total Cases No Change' =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(StayCases,[Gain]=0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE()))
+			)
+		displayFolder: Outcomes
+		lineageTag: 6aa17abe-5ffa-45a6-a078-6c66ed798005
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Caseload' =
+			
+			DIVIDE(
+			    [Total Days],
+			    [Total Calendar Days]
+			)
+		displayFolder: Cases
+		lineageTag: cf7a006a-84c0-4942-b315-e0fbd8dea458
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Assistant Minutes' =
+			
+			DIVIDE(
+			    CALCULATE([Total Minutes],Treatments[AssistantModifier]=TRUE()),
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Minutes
+		lineageTag: 9f0f0498-5768-4290-a52f-53f42042d5f7
+
+	measure 'Total Visits ST' = CALCULATE([Total Visits],Disciplines[Discipline]="ST")
+		displayFolder: Visits
+		lineageTag: 803ca051-dad9-454c-92be-64fcf3e086cc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rehosp Numerator' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    DischargeDestination[Setting]="Hospital"
+			)
+		formatString: #,0
+		displayFolder: Discharge Destination
+		lineageTag: 37f26861-54c1-4227-925e-6a51a308d657
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	partition MeasureTable = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

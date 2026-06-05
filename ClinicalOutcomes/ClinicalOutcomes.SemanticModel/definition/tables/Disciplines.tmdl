@@ -1,0 +1,46 @@
+table Disciplines
+	lineageTag: efca7f91-0da9-4b28-9a39-6498128b0585
+
+	column Discipline
+		dataType: string
+		isHidden
+		lineageTag: bcaef356-699d-41b0-8b91-d32d9404bdcc
+		summarizeBy: none
+		sourceColumn: Discipline
+		sortByColumn: 'Ordered Discipline'
+
+		changedProperty = IsHidden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordered Discipline'
+		dataType: string
+		lineageTag: 1eabef4a-f372-485a-82b7-1386233f2ca3
+		summarizeBy: none
+		sourceColumn: Ordered Discipline
+
+		annotation SummarizationSetBy = Automatic
+
+	column Disc
+		dataType: string
+		lineageTag: bd901f27-f47f-4aa0-b3d6-c913fc9b3f82
+		summarizeBy: none
+		sourceColumn: Disc
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Disciplines = m
+		mode: directQuery
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WCghR0lHSSNRUQGbE6kQr+YP5SZoKyAyQRDCYn6ypgMyIjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Discipline = _t, #"Ordered Discipline" = _t, Disc = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Discipline", type text}, {"Ordered Discipline", type text}, {"Disc", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

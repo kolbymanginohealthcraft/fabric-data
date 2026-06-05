@@ -1,0 +1,79 @@
+table VW_NHAegisFacilities
+	lineageTag: 1c744165-f91f-499b-86e1-ac69110db68b
+
+	column FacilityId
+		dataType: string
+		lineageTag: e8d27e8f-ac04-432a-88b0-6ba7774f7616
+		summarizeBy: none
+		sourceColumn: FacilityId
+
+		annotation SummarizationSetBy = Automatic
+
+	column District
+		dataType: string
+		lineageTag: cf2d81eb-3d7f-4238-a30c-1899df988cdc
+		summarizeBy: none
+		sourceColumn: District
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 31fb696b-7a09-4e0c-96cf-eb77deef2f73
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Division
+		dataType: string
+		lineageTag: 66c27125-a968-4878-a59a-4d7b9cd31b7e
+		summarizeBy: none
+		sourceColumn: Division
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsValid = VW_NHAegisFacilities[Division] IN {"5500 (Direct Bill)", "8450 (Contract Rehab)"}
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 03fe3fe9-0d5b-4605-a686-b677bd7127fa
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department =
+			
+			SWITCH(
+			    VW_NHAegisFacilities[Division],
+			    "5500 (Direct Bill)","Senior Living",
+			    "All Other"
+			)
+		lineageTag: b51c1b47-d3ee-4c6e-9a8d-f9686038ff09
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition VW_NHAegisFacilities = m
+		mode: import
+		queryGroup: Provider
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"7db0035e-f62e-4a62-ad9a-89e21cac8cce" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="7db0035e-f62e-4a62-ad9a-89e21cac8cce"]}[Data],
+				    VW_NHAegisFacilities_ = #"7db0035e-f62e-4a62-ad9a-89e21cac8cce"{[entity="VW_NHAegisFacilities",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(VW_NHAegisFacilities_,{"FacilityId", "DistrictId", "AreaId", "Regionid"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Regionid", "Division"}, {"AreaId", "Region"}, {"DistrictId", "District"}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns","5555","5555 (Closed Locations)",Replacer.ReplaceText,{"Division"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","5500","5500 (Direct Bill)",Replacer.ReplaceText,{"Division"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","6500","6500 (PACS Consulting)",Replacer.ReplaceText,{"Division"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"}),
+				    #"Added Prefix" = Table.TransformColumns(#"Replaced Value3", {{"FacilityId", each "00000" & _, type text}}),
+				    #"Extracted Last Characters" = Table.TransformColumns(#"Added Prefix", {{"FacilityId", each Text.End(_, 5), type text}})
+				in
+				    #"Extracted Last Characters"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

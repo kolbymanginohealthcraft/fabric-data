@@ -1,0 +1,163 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Patient
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup Payer
+
+	annotation PBI_QueryGroupOrder = 4
+
+queryGroup Outcomes
+
+	annotation PBI_QueryGroupOrder = 5
+
+queryGroup Visits
+
+	annotation PBI_QueryGroupOrder = 6
+
+queryGroup Procedures
+
+	annotation PBI_QueryGroupOrder = 7
+
+queryGroup Discharge
+
+	annotation PBI_QueryGroupOrder = 8
+
+queryGroup Diagnoses
+
+	annotation PBI_QueryGroupOrder = 9
+
+queryGroup Places
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup People
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Management
+
+	annotation PBI_QueryGroupOrder = 9
+
+queryGroup FabricTables
+
+	annotation PBI_QueryGroupOrder = 10
+
+annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Assessments","Outcomes Crosswalk","Outcomes Custom Scales","Aegis Contract","Account","Chain","Dictionary","Outcome Families","LibraryItem","LibraryScaleValue","Treatments","TreatmentsDetails","Disciplines","Service","Basis","DischargeReason","Diagnosis","DiagnosisCode","Telehealth","MeasureTable","DestinationPage","IntakeSources","vw_UpnFacilityAccess","Perspectives","Employees","CustomerGroups","Tech","CaseTrackDays","PriorLivingEnvironment","HCC","Weights","ExpectedDischargeDestination","EDD","EmployeeBasicInfo","FTEType","Physician","PLE","VW_NHAegisFacilities","dbo_vw_Treatments","StartDate","dbo_vw_CaseTracks","dbo_vw_PatientStays","dbo_vw_StayCases","dbo vw_AllEvalsAndDischargesLight_Items","dbo vw_AllEvalsAndDischargesLight","dbo_vw_Diagnosis","excelOutcomesCrosswalk","excelOutcomesCustomScales","ICD_10_CM_Mappings","csv_C2824T2n","Salesforce_Account","Salesforce_Aegis_Contract","excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster","dbo_vw_UpnFacilityAccess","PatientScreens"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["CalcGroup","DevMode"]
+
+ref table Patients
+ref table PatientStays
+ref table StayCases
+ref table CaseTracks
+ref table vw_PatientPayers
+ref table Payers
+ref table Documents
+ref table Assessments
+ref table DischargeDestination
+ref table 'Aegis Contract'
+ref table Account
+ref table Chain
+ref table 'Outcomes Crosswalk'
+ref table 'Outcomes Custom Scales'
+ref table OutcomeSummary
+ref table Dictionary
+ref table Calendar
+ref table Treatments
+ref table TreatmentsDetails
+ref table Disciplines
+ref table Service
+ref table Basis
+ref table DischargeReason
+ref table Diagnosis
+ref table DiagnosisCode
+ref table 'Outcome Families'
+ref table 'Outcomes Breakdown'
+ref table Telehealth
+ref table MeasureTable
+ref table vw_UpnFacilityAccess
+ref table ContextTable
+ref table 'Payer Buckets'
+ref table JitterTable
+ref table BenchmarkTable
+ref table Employees
+ref table Physician
+ref table CustomerGroups
+ref table DestinationPage
+ref table CaseInclusionTable
+ref table Tech
+ref table IntakeSources
+ref table DX_Cases
+ref table CaseTrackDays
+ref table PercentileTable
+ref table Boxplot_Table
+ref table HCC
+ref table Weights
+ref table Perspectives
+ref table ExpectedDischargeDestination
+ref table EDD
+ref table EmployeeBasicInfo
+ref table FTEType
+ref table Timeline
+ref table PriorLivingEnvironment
+ref table PLE
+ref table VW_NHAegisFacilities
+ref table 'X-Axis Parameter'
+ref table 'Y-Axis Parameter'
+ref table ShowScales
+ref table 'Diagnosis Hierarchy'
+ref table 'Service Rows'
+ref table 'Service Columns'
+ref table 'Calendar Parameter'
+ref table 'Override Chain'
+ref table 'Override Payer'
+ref table 'Override State'
+ref table 'Override Type'
+ref table 'Service Columns BM'
+ref table StartDate
+ref table DateTableTemplate_1076b9b7-fd53-4abb-87f9-646530e71f43
+ref table LocalDateTable_40fdc1f3-9e86-4c8c-b6df-2588df851a45
+ref table LocalDateTable_3e5673c6-9976-4658-be6e-2fad58ea2a5c
+ref table LocalDateTable_b8ea571a-deed-46a3-b3b3-f91ba19c8dd8
+ref table LocalDateTable_21309256-202d-42eb-a386-51990176119e
+ref table LocalDateTable_3002af17-beee-4a55-b8e2-18c5467ab6fc
+ref table LocalDateTable_6f94c7d5-e0f8-4b39-9777-afd8b1b9f279
+ref table LocalDateTable_fee57495-1b91-4ee4-9c2d-f9f8835f4ff1
+ref table LocalDateTable_6fdb85a3-2131-4437-9f34-4fe96d3cf0ac
+ref table LocalDateTable_a7c3593a-a733-49ff-b800-7e7da4482e43
+ref table LocalDateTable_a4e0e4d9-76c7-441f-9d6a-660ddf526c00
+ref table LocalDateTable_ae436351-83d3-450f-941a-f7c5f89a7a74
+ref table LocalDateTable_00c23b7c-5f16-4b52-a1b3-c2366e3215a8
+ref table LocalDateTable_7cbf2a81-ca06-49a6-9e12-9be68a420da7
+ref table LocalDateTable_42d8ee98-afe2-459f-a644-035332cf8201
+ref table LocalDateTable_1359a118-0123-45a5-837d-ffc4ce8d29d7
+ref table LocalDateTable_a7ca9c6c-d677-4d0a-a6bb-6eb771c319d6
+ref table LocalDateTable_b4850052-9206-4a79-85ee-43fb4bff8207
+ref table LocalDateTable_c53ff11a-9f7d-433a-bd98-185f0eda6a28
+ref table LocalDateTable_a577b568-4aa7-4dcb-a02d-bc2269743809
+ref table LocalDateTable_fadfd2d6-2e0a-49f0-b963-1f936b635966
+ref table LocalDateTable_a4cc8487-4eb6-4592-aecd-29b228020808
+ref table LocalDateTable_6b49659d-efb7-4183-b2ec-db35869d205d
+ref table LibraryItem
+ref table LibraryScaleValue
+ref table 'Dimension Selector'
+ref table PatientScreens
+ref table LocalDateTable_53593660-4636-4454-9b22-820fc66859a0
+ref table LocalDateTable_5f59e978-f3db-4b71-b65c-0f28f0a3dfe6
+ref table LocalDateTable_1d67e324-065c-471b-a1b6-f0d01ae88ac9
+ref table LocalDateTable_ad249ee6-2bbe-446d-b43b-15eaec8aa2df
+
+ref cultureInfo en-US
+

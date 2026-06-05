@@ -1,0 +1,39 @@
+table Chain
+	lineageTag: 657c25e3-3c08-4758-9be1-358671d9b79d
+
+	column Id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: ae9d9ded-c81a-4538-98fa-71b616b4b95e
+		summarizeBy: none
+		sourceColumn: Id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: bf422674-5689-4a8d-beaa-acc1fe74ad58
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Chain = m
+		mode: import
+		queryGroup: Places
+		source =
+				let
+				    Source = Salesforce_Account,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Id", "Name", "Type"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Type] = "Corporate")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

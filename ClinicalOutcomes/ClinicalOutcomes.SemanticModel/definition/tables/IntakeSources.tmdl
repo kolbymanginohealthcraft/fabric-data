@@ -1,0 +1,117 @@
+table IntakeSources
+	lineageTag: 6bdd1239-e1bb-4c11-9b27-488a1ebee466
+
+	column IntakeSource_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: f31893cc-7f5a-406c-9a63-0faab2aded74
+		summarizeBy: none
+		sourceColumn: IntakeSource_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 62883d1a-9d01-4969-828d-a91007422742
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Abbrev
+		dataType: string
+		lineageTag: 16e1aa46-ab25-4f3e-a2f7-43bb08369db6
+		summarizeBy: none
+		sourceColumn: Abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceType
+		dataType: string
+		lineageTag: 768c5f1f-ecae-4a46-a80f-44713dda9287
+		summarizeBy: none
+		sourceColumn: SourceType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedBy
+		dataType: string
+		lineageTag: 69532c24-fc05-41f0-9f39-6627b5fd01dd
+		summarizeBy: none
+		sourceColumn: ModifiedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 675f7dd2-bf53-498f-a5f3-88b51b43a6af
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		variation Variation
+			isDefault
+			relationship: 89550f34-bb6f-4647-8664-d6a3120a4117
+			defaultHierarchy: LocalDateTable_a577b568-4aa7-4dcb-a02d-bc2269743809.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column FieldSet_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 578ef88f-4ee8-4365-834a-4f213cd48232
+		summarizeBy: count
+		sourceColumn: FieldSet_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlanUsage
+		dataType: string
+		lineageTag: 9f920841-f31e-4c73-a949-8403262cc33d
+		summarizeBy: none
+		sourceColumn: PlanUsage
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlaceOfResidenceUsage
+		dataType: string
+		lineageTag: 057103e5-7b0a-4f45-9c1d-ed091368938b
+		summarizeBy: none
+		sourceColumn: PlaceOfResidenceUsage
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsInstitutional
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4d692ed2-690e-4d41-96b4-7c1f43d4b1ea
+		summarizeBy: none
+		sourceColumn: IsInstitutional
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSNF
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fbadeb44-9643-456c-b05d-d776fbd46278
+		summarizeBy: none
+		sourceColumn: IsSNF
+
+		annotation SummarizationSetBy = Automatic
+
+	partition IntakeSources = m
+		mode: directQuery
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
+				    IntakeSources_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="IntakeSources",version=""]}[Data]
+				in
+				    IntakeSources_
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,36 @@
+table ExpectedDischargeDestination
+	lineageTag: ad3c6697-604a-4989-adbd-f54629f713ed
+
+	column TxDocument_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: a4c18103-28f3-4453-b87c-8eec1590de97
+		summarizeBy: none
+		sourceColumn: TxDocument_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryScaleValue_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: ef25252a-659b-442b-aa0e-ddb056f8ad7f
+		summarizeBy: none
+		sourceColumn: LibraryScaleValue_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ExpectedDischargeDestination = m
+		mode: directQuery
+		queryGroup: Discharge
+		source =
+				let
+				    Source = #"dbo vw_AllEvalsAndDischargesLight_Items",
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([LibraryScaleValue_ID] <> null and [LibraryScaleValue_ID] <> "") and ([LibraryItem_ID] = 7614)),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"LibraryItem_ID"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,286 @@
+relationship f43f144f-3efd-49ac-8470-cbedb74c4fe7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Patients.DOB
+	toColumn: LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca.Date
+
+relationship 2df048c0-06d5-4e15-a646-80700923a8ba
+	joinOnDateBehavior: datePartOnly
+	fromColumn: PatientStays.AdmitDate
+	toColumn: LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7.Date
+
+relationship b1e45dbd-421e-446d-8563-08169ffe9d19
+	joinOnDateBehavior: datePartOnly
+	fromColumn: PatientStays.DischargeDate
+	toColumn: LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7.Date
+
+relationship 2897ab3c-c225-4a45-8f71-1371ab21fd7f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: StayCases.TherapyStartDate
+	toColumn: LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f.Date
+
+relationship f0c9e52a-4ee7-487c-929e-040e7696e33e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CaseTracks.StartDate
+	toColumn: LocalDateTable_febca194-1226-4e46-8c16-e69576d74576.Date
+
+relationship 46d9c0fd-f964-4a29-a6ef-ee4702b1e4b5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: CaseTracks.EndDate
+	toColumn: LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02.Date
+
+relationship 15c42cb8-d447-4b58-8f85-8701842d5509
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_PatientPayers.FromDate
+	toColumn: LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746.Date
+
+relationship eed92052-5cd1-4724-b072-bf54501c502d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: vw_PatientPayers.ThruDate
+	toColumn: LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f.Date
+
+relationship 24ee3b0b-f6d2-4d90-8d57-1908a42fbbb5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Aegis Contract'.Effective_Date__c
+	toColumn: LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5.Date
+
+relationship 985026f4-d75f-4f0f-8397-79e411d4aac7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Aegis Contract'.Term_Date__c
+	toColumn: LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2.Date
+
+relationship fcf9f264-3205-4956-971a-3e630c61f675
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientStays.PatientID
+	toColumn: Patients.PatientID
+
+relationship c177e7b8-b678-4ab2-bbf6-14a775ca67e9
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.Stay_ID
+	toColumn: PatientStays.Stay_ID
+
+relationship c38b63d8-336d-4f7f-9f3b-644040b4a02d
+	crossFilteringBehavior: bothDirections
+	fromColumn: CaseTracks.PatientCase_ID
+	toColumn: StayCases.PatientCase_ID
+
+relationship 20f74ad0-34f8-4c46-bcd1-4ee55f9c2ec7
+	crossFilteringBehavior: bothDirections
+	fromColumn: Documents.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship b8fc5cba-e0ea-4509-9f45-f39251ff9cae
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_PatientPayers.Payer_ID
+	toColumn: Payers.Payer_ID
+
+relationship 39230298-9cd7-4ca0-b23f-9b9cb3a4f6ef
+	crossFilteringBehavior: bothDirections
+	fromColumn: Assessments.TxDocument_ID
+	toColumn: Documents.TxDocument_ID
+
+relationship cfa99d51-0ce4-4fc5-894b-2950c8a64b61
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_PatientPayers.CaseID
+	toColumn: StayCases.PatientCase_ID
+
+relationship b6ff7395-fe56-4da9-a26e-3178fe96eaaa
+	crossFilteringBehavior: bothDirections
+	fromColumn: Patients.Facility
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship c408437e-240f-45c2-a3f0-ecb6d1abea63
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Aegis Contract'.Account__c
+	toColumn: Account.Id
+
+relationship 6bf26691-747a-4cd8-99de-9a22317ea4b2
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Aegis Contract'.Chain_Account__c
+	toColumn: Chain.Id
+
+relationship 138f499d-a430-41e4-9fb9-a0d7f4f4c279
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.DischargedTo_ID
+	toColumn: DischargeDestination.Lookup_ID
+
+relationship 5612bd7c-c0ac-4498-b01a-d6a002d154fe
+	crossFilteringBehavior: bothDirections
+	fromColumn: Assessments.LibraryItem_ID
+	toColumn: 'Outcomes Crosswalk'.LibraryItem_ID
+
+relationship 06b3dba9-4e7a-4ab2-bafd-f3123b0a7ee2
+	crossFilteringBehavior: bothDirections
+	fromColumn: Assessments.LibraryScaleValue_ID
+	toColumn: 'Outcomes Custom Scales'.'Library Scale Value'
+
+relationship 5579e76c-e0ab-4803-98d8-beee220e4d3f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Treatments.LaborDate
+	toColumn: LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86.Date
+
+relationship 33a3fd8f-b2a6-45ea-a64e-ef7b7f15006d
+	crossFilteringBehavior: bothDirections
+	fromColumn: Treatments.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship 4a1a4c7b-58de-48c6-b150-e5c64e0176e1
+	crossFilteringBehavior: bothDirections
+	fromColumn: TreatmentsDetails.SessionId
+	toColumn: Treatments.SessionId
+
+relationship 6633e018-89bb-45b2-af47-92e5980ad165
+	crossFilteringBehavior: bothDirections
+	fromColumn: CaseTracks.Discipline
+	toColumn: Disciplines.Discipline
+
+relationship 6154d5d7-371b-4a71-9dd1-241d9b6dc08e
+	crossFilteringBehavior: bothDirections
+	fromColumn: TreatmentsDetails.ServiceCode
+	toColumn: Service.ServiceCode
+
+relationship 3bbfdd5a-978b-4695-9d65-075419f018aa
+	crossFilteringBehavior: bothDirections
+	fromColumn: Diagnosis.DiagnosisCode_ID
+	toColumn: DiagnosisCode.DiagnosisCode_ID
+
+relationship 00cb0b70-7888-43ee-b258-30e554619a95
+	crossFilteringBehavior: bothDirections
+	fromColumn: Diagnosis.TxDocument_ID
+	toColumn: Documents.TxDocument_ID
+
+relationship f47638fc-5057-4d5a-9395-912614064f46
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.EndReason_ID
+	toColumn: DischargeReason.Lookup_ID
+
+relationship 1d1d2772-84a9-4db4-ba10-b924b4b3f1e6
+	crossFilteringBehavior: bothDirections
+	fromColumn: Dictionary.Family
+	toColumn: 'Outcome Families'.'Family Code'
+
+relationship b69078a5-8f4c-4e17-88ca-bb5cfb2e7ad9
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Treatments.SessionId
+	toColumn: Telehealth.TxSession_ID
+
+relationship 0c4f4b51-743b-4130-92e6-aaa97ff9a84b
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_UpnFacilityAccess.FacilityId
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship 3c298fa5-d45f-4810-bf9f-5acec3f438ce
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.'Payer Categorization'
+	toColumn: 'Payer Buckets'.'Payer Categorization'
+
+relationship 7fc7692b-639f-477f-b9da-86e56f83e690
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Basis.Code
+	toColumn: Service.ServiceCode
+
+relationship AutoDetected_2525ee13-01fd-4c39-b28e-99d280cc78cd
+	crossFilteringBehavior: bothDirections
+	fromColumn: Documents.Physician_ID
+	toColumn: Physician.Physician_ID
+
+relationship AutoDetected_8687f4c6-9ebb-4bff-b4ba-6657356e01d1
+	crossFilteringBehavior: bothDirections
+	fromColumn: Treatments.Person_ID
+	toColumn: Employees.Person_ID
+
+relationship e6ee4293-88c4-0ede-aa5f-99d68df721b5
+	crossFilteringBehavior: bothDirections
+	fromColumn: Account.CCN__c
+	toColumn: CustomerGroups.CCN
+
+relationship 1979577c-bfc5-594a-5e4e-909910d0a183
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Tech.ID
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship 43beaaa5-fec0-41a0-a5fe-2b61bead6144
+	fromColumn: StayCases.TherapyEndDate
+	toColumn: Calendar.Date
+
+relationship AutoDetected_0824a98b-b04f-4ca7-b692-d36b27c694f5
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientStays.IntakeSource_ID
+	toColumn: IntakeSources.IntakeSource_ID
+
+relationship 1f6753e5-71fc-d728-b9a9-84df7368cb58
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: VW_NHAegisFacilities.FacilityId
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship 9e3f5f6d-99a5-4ec9-8ac5-01d3d457fdba
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromColumn: OutcomeSummary.PatientCase_ID
+	toColumn: StayCases.PatientCase_ID
+
+relationship 39e30131-d82f-4539-97ae-869e215160a6
+	crossFilteringBehavior: bothDirections
+	fromColumn: OutcomeSummary.LibraryItem_ID
+	toColumn: Dictionary.LibraryItem_ID
+
+relationship 58acdc86-446b-eec4-1b41-3e54e76597d0
+	crossFilteringBehavior: bothDirections
+	fromColumn: OutcomeSummary.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship 80149344-3678-4cc8-bbc1-f58d8f64c517
+	joinOnDateBehavior: datePartOnly
+	fromColumn: StartDate.StartDate
+	toColumn: LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5.Date
+
+relationship 077b68f6-e797-4870-be9b-638511cb4925
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DischargeDestination.Updated
+	toColumn: LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b.Date
+
+relationship bcdb5f88-a702-465a-9578-3d88ccc1f066
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DischargeDestination.FromDate
+	toColumn: LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1.Date
+
+relationship 99f91416-ba60-430e-a88d-879d827438be
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DischargeDestination.ThruDate
+	toColumn: LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce.Date
+
+relationship 8cfc0eae-44fc-46cd-9689-198e8182d0d9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DischargeReason.Updated
+	toColumn: LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5.Date
+
+relationship 2ff96930-0909-4267-b71c-a1b86578ceac
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DischargeReason.FromDate
+	toColumn: LocalDateTable_78295776-baa8-46db-9442-10c00803b1be.Date
+
+relationship 7e006a92-f4c9-4f9a-939c-bb2101db5119
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DischargeReason.ThruDate
+	toColumn: LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9.Date
+
+relationship 69fd5008-2f94-4258-a737-c4415cfe886d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Diagnosis.OnsetDate
+	toColumn: LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052.Date
+
+relationship eb7d9daa-3ed6-4f87-9078-4a6030bb3fce
+	joinOnDateBehavior: datePartOnly
+	fromColumn: IntakeSources.CreatedDate
+	toColumn: LocalDateTable_932d55de-d265-4481-9293-721332596c5f.Date
+
+relationship AutoDetected_63c5c4a5-99dc-4eff-922f-af71df4e82ae
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: DischargeReason.DisplaySequence
+	toColumn: DischargeDestination.DisplaySequence
+

@@ -1,0 +1,124 @@
+createOrReplace
+
+	table Dictionary
+		lineageTag: 08141ebe-28e4-4ebc-abb3-543a5ca32e26
+
+		measure 'Family Label' = SELECTEDVALUE(Dictionary[Family])
+			lineageTag: a64df213-986b-4d11-b25f-26535d2bb047
+
+			annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		measure 'Label Placeholder' = 0
+			lineageTag: 7586ecc1-b375-49bd-8197-edb07baadc57
+
+			annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		measure 'Scale Used' =
+				
+				// var numberofscales = DISTINCTCOUNT(ShowScales[Scale Name])
+				// RETURN
+				// IF(numberofscales>1,"Multiple",
+				// CONCATENATEX(
+				//     VALUES(ShowScales[Scale Name]),
+				//     ShowScales[Scale Name],
+				//     ", ",
+				//     ShowScales[Scale Name]
+				// ))
+				
+				// SELECTEDVALUE(ShowScales[Scale Name],"Multiple scales used")
+				
+				var numberofscales = DISTINCTCOUNT(ShowScales[Scale Name])
+				RETURN
+				IF(numberofscales>1,"Multiple",
+				CONCATENATEX(
+				    VALUES(ShowScales[Scale Name]),
+				    ShowScales[Scale Name],
+				    ", ",
+				    ShowScales[Scale Name]
+				))
+			lineageTag: 4140f471-d3d6-4f27-9df2-8d3a1e9e8b11
+
+			annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		measure 'DFS Flag' = ```
+				
+				VAR _id = SELECTEDVALUE ( Dictionary[LibraryItem_ID] )
+				RETURN
+				IF (
+				    _id IN {
+				        7753, -- A. Roll left and right
+				        7755, -- C. Lying to sitting on side of bed
+				        7756, -- D. Sit to stand
+				        7757, -- E. Chair/bed-to-chair transfer
+				        7758, -- F. Toilet transfer
+				        7760, -- I. Walk 10 feet
+				        7761, -- J. Walk 50 feet with Two Turns
+				        7769, -- R. Wheel 50 feet with two turns
+				        7780, -- A. Eating
+				        7781, -- B. Oral hygiene
+				        7782  -- C. Toileting hygiene
+				    },
+				    1,
+				    BLANK()
+				)
+				
+				```
+			lineageTag: 6bf85d5b-631b-48a7-8468-d78b5d445eec
+
+			annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		column LibraryItem_ID
+			dataType: int64
+			isHidden
+			formatString: 0
+			lineageTag: ba3c136e-d997-458a-b988-121eefaf9e1a
+			summarizeBy: none
+			sourceColumn: LibraryItem_ID
+
+			changedProperty = IsHidden
+
+			annotation SummarizationSetBy = Automatic
+
+		column Family
+			dataType: string
+			lineageTag: 778b8011-1672-4785-a846-6aaa852909cd
+			summarizeBy: none
+			sourceColumn: Family
+
+			annotation SummarizationSetBy = Automatic
+
+		column Name
+			dataType: string
+			lineageTag: bd5ddfbf-9460-48f8-a551-c0521d023dc6
+			summarizeBy: none
+			sourceColumn: Name
+
+			annotation SummarizationSetBy = Automatic
+
+		column Group
+			dataType: string
+			lineageTag: 149fca3a-0912-4fef-af88-625ea83453b8
+			summarizeBy: none
+			sourceColumn: Group
+
+			annotation SummarizationSetBy = Automatic
+
+		column 'Family and Name' = Dictionary[Family]&": "&Dictionary[Name]
+			lineageTag: 965a8794-e7c8-4fe3-875c-a559fdac941e
+			summarizeBy: none
+
+			annotation SummarizationSetBy = Automatic
+
+		partition Dictionary = m
+			mode: import
+			queryGroup: Outcomes
+			source =
+					let
+					    Source = #"Outcomes Crosswalk"
+					in
+					    Source
+
+		annotation PBI_ResultType = Table
+
+		annotation PBI_NavigationStepName = Navigation
+

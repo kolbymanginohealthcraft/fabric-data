@@ -1,0 +1,128 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "0e14dfda00215da9c080",
+  "position": {
+    "x": 768,
+    "y": 88,
+    "z": 20003,
+    "height": 216,
+    "width": 184,
+    "tabOrder": 20000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Disciplines"
+                    }
+                  },
+                  "Property": "Ordered Discipline"
+                }
+              },
+              "queryRef": "Disciplines.Ordered Discipline",
+              "nativeQueryRef": "Discipline",
+              "displayName": "Discipline"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Patients"
+                    }
+                  },
+                  "Property": "Total Patients"
+                }
+              },
+              "queryRef": "Patients.Total Patients",
+              "nativeQueryRef": "Total Patients"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CaseTracks"
+                    }
+                  },
+                  "Property": "Total Tracks"
+                }
+              },
+              "queryRef": "CaseTracks.Total Tracks",
+              "nativeQueryRef": "Total Tracks"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "51.68292034890567D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Patients.Total Patients"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "47.95122625860819D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CaseTracks.Total Tracks"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "57.99999543899138D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Disciplines.Ordered Discipline"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sample Size'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

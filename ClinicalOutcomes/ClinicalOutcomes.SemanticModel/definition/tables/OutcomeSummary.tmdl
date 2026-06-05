@@ -1,0 +1,223 @@
+table OutcomeSummary
+	lineageTag: 6243f5eb-66bb-4295-8f46-f46d830330c7
+
+	column PatientCase_ID
+		isHidden
+		formatString: 0
+		lineageTag: de83dd0f-d425-4053-a2d1-0def0ca6c984
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: StayCases[PatientCase_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryItem_ID
+		isHidden
+		formatString: 0
+		lineageTag: 309439c4-9355-49f6-8fe0-f90c967f07d6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Assessments[LibraryItem_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TableEval
+		isHidden
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 46174af8-fe7b-471e-bec0-773010d968c9
+		summarizeBy: average
+		isNameInferred
+		sourceColumn: [TableEval]
+
+		annotation SummarizationSetBy = User
+
+	column TableDisch
+		isHidden
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 2c3100db-9a41-4855-8c11-78cc0fa524b9
+		summarizeBy: average
+		isNameInferred
+		sourceColumn: [TableDisch]
+
+		annotation SummarizationSetBy = User
+
+	column EvalNEW = ```
+			
+			// IF(
+			//     RELATED(Dictionary[Family]) IN {"(a) Section GG Mobility","(b) Section GG Self Care"} && 
+			//     OutcomeSummary[Criteria Start] IN {"ANA","Missing"},0,
+			//     OutcomeSummary[TableEval]
+			// )
+			
+			
+			IF(
+			    RELATED(Dictionary[Family]) IN {"(a) Section GG Mobility","(b) Section GG Self Care"} &&
+			    ISBLANK(OutcomeSummary[StartScoreValues]) || 
+			    (
+			        CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15102") || //score value of 07
+			        CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15103") || //score value of 08
+			        CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15104") || //score value of 10
+			        CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15105") //score value of 88
+			    ),
+			    0,
+			    OutcomeSummary[TableEval]
+			)
+			```
+		lineageTag: 5e224f89-c0b4-46bb-9439-059c32eec06c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Status =
+			
+			IF(
+			    ISBLANK(OutcomeSummary[EvalNEW])=FALSE() && ISBLANK(OutcomeSummary[TableDisch])=FALSE() && OutcomeSummary[EvalNEW]<>1 && OutcomeSummary[IsCrosswalked]=TRUE(),
+			    "Included",
+			    "Excluded"
+			)
+		lineageTag: 8b825428-12dc-4d64-82c7-1783f18082c1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column EvalMethod
+		lineageTag: c5030e96-8289-44c4-b35d-0f5a2bbf7785
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [EvalMethod]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Story =
+			
+			SWITCH(
+			    TRUE(),
+			    OutcomeSummary[Status]="Included","Included",
+			    OutcomeSummary[IsCrosswalked]=FALSE(),"Not Crosswalked",
+			    OutcomeSummary[Criteria Start]="Independent","Excluded: Started Independent",
+			    "Excluded: Other"
+			)
+		lineageTag: 849d9dde-e842-47b7-9104-92ba259a08c8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Criteria Start' = ```
+			
+			// SWITCH(
+			//     TRUE(),
+			//     OutcomeSummary[IsCrosswalked]=FALSE(),"Not Crosswalked",
+			//     OutcomeSummary[TableEval]=1,"Independent",
+			//     ISBLANK(OutcomeSummary[StartScoreValues]),"Missing",
+			//     NOT(ISBLANK(OutcomeSummary[TableEval])),"Valid",
+			//     RELATED(Dictionary[Family]) IN {"(a) Section GG Mobility", "(b) Section GG Self Care"} && 
+			//     (
+			//         CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15102") || //score value of 07
+			//         CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15103") || //score value of 08
+			//         CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15104") || //score value of 10
+			//         CONTAINSSTRING(OutcomeSummary[StartScoreValues],"15105") //score value of 88
+			//     ),"ANA",
+			//     "Invalid"
+			// )
+			
+			SWITCH(
+			    TRUE(),
+			    OutcomeSummary[IsCrosswalked]=FALSE(),"Not Crosswalked",
+			    OutcomeSummary[TableEval]=1,"Independent",
+			    ISBLANK(OutcomeSummary[StartScoreValues]),"Missing",
+			    NOT(ISBLANK(OutcomeSummary[EvalNEW])),"Valid",
+			    "Invalid"
+			)
+			```
+		lineageTag: b01f2f59-e5d9-4344-8eda-25fcb24768db
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Criteria End' = ```
+			
+			// SWITCH(
+			//     TRUE(),
+			//     OutcomeSummary[IsCrosswalked]=FALSE(),"Not Crosswalked",
+			//     ISBLANK(OutcomeSummary[EndScoreValues]),"Missing",
+			//     NOT(ISBLANK(OutcomeSummary[TableDisch])),"Valid",
+			//     RELATED(Dictionary[Family]) IN {"(a) Section GG Mobility", "(b) Section GG Self Care"} && 
+			//         (
+			//             CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15102") || //score value of 07
+			//             CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15103") || //score value of 08
+			//             CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15104") || //score value of 10
+			//             CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15105") //score value of 88
+			//         ),"ANA",
+			//     "Invalid"
+			// )
+			
+			SWITCH(
+			    TRUE(),
+			    OutcomeSummary[IsCrosswalked]=FALSE(),"Not Crosswalked",
+			    ISBLANK(OutcomeSummary[EndScoreValues]),"Missing",
+			    NOT(ISBLANK(OutcomeSummary[TableDisch])),"Valid",
+			    // RELATED(Dictionary[Family]) IN {"(a) Section GG Mobility", "(b) Section GG Self Care"} && 
+			    //     (
+			    //         CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15102") || //score value of 07
+			    //         CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15103") || //score value of 08
+			    //         CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15104") || //score value of 10
+			    //         CONTAINSSTRING(OutcomeSummary[EndScoreValues],"15105") //score value of 88
+			    //     ),"ANA",
+			    "Invalid"
+			)
+			```
+		lineageTag: 0f5848ba-01d7-46d4-853c-5b5c7c04fc1d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartScoreValues
+		lineageTag: a2792a21-4bf4-4d30-9a3a-6250bbdc5a3e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [StartScoreValues]
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndScoreValues
+		lineageTag: 210f4b78-bf82-49e9-b87b-a2ef2fb2b459
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [EndScoreValues]
+
+		annotation SummarizationSetBy = Automatic
+
+	column TxTrack_ID
+		formatString: 0
+		lineageTag: 70ed3318-410c-4cfa-8820-4efdb85e2e21
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: CaseTracks[TxTrack_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCrosswalked = ISBLANK(RELATED(Dictionary[LibraryItem_ID]))=FALSE()
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b70973e7-a528-44d4-bd98-91444bdaaad9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition OutcomeSummary = calculated
+		mode: directQuery
+		source =
+				
+				SUMMARIZE(
+				    Assessments,
+				    StayCases[PatientCase_ID],CaseTracks[TxTrack_ID],Assessments[LibraryItem_ID],
+				    "TableEval",CALCULATE(AVERAGE('Outcomes Custom Scales'[Points]),Documents[DocumentType]="ADMIT"),
+				    "TableDisch",CALCULATE(AVERAGE('Outcomes Custom Scales'[Points]),Documents[DocumentType]="DISCH"),
+				    "StartScoreValues",CALCULATE(CONCATENATEX(DISTINCT(Assessments[LibraryScaleValue_ID]),Assessments[LibraryScaleValue_ID],", ",Assessments[LibraryScaleValue_ID],ASC),Documents[DocumentType]="ADMIT"),
+				    "EndScoreValues",CALCULATE(CONCATENATEX(DISTINCT(Assessments[LibraryScaleValue_ID]),Assessments[LibraryScaleValue_ID],", ",Assessments[LibraryScaleValue_ID],ASC),Documents[DocumentType]="DISCH"),
+				    "EvalMethod",CALCULATE(CONCATENATEX(DISTINCT(CaseTracks[Evaluation Method]),CaseTracks[Evaluation Method],", ",CaseTracks[Evaluation Method],ASC)
+				))
+
+	annotation PBI_Id = 69afafddf20a4bb1a962f6764722afa4
+

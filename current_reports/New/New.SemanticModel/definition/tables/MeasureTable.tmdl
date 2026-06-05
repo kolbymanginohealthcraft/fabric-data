@@ -1,0 +1,2688 @@
+table MeasureTable
+	lineageTag: 81d3a9b3-47f2-40a4-a981-c24b4592eac3
+
+	measure '% Improvement' =
+			
+			DIVIDE(
+			    [Discharge Level]-[Admit Level],
+			    [Admit Level]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 2f02235f-cc18-4fe4-8392-db420421a617
+
+	measure '% Improvement BM' =
+			
+			DIVIDE(
+			    [Discharge Level BM]-[Admit Level BM],
+			    [Admit Level BM]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: c1cb8bc9-9e90-4967-b6a2-37665748f12b
+
+	measure '% Improvement Delta' = IF([Report Scope]="Filtered",[% Improvement]-[% Improvement BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 5b57d1d8-e3dc-44df-88da-7d42102a15d7
+
+	measure Gain = [Discharge Level]-[Admit Level]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: aba5c6a3-5359-4cd3-837d-e67eee3f6fd7
+
+	measure 'Gain BM' = [Discharge Level BM]-[Admit Level BM]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ec8b2cd5-4731-46be-b85f-346fe0a16cef
+
+	measure 'Gain Delta' = IF([Report Scope]="Filtered",[Gain]-[Gain BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 929d3709-0479-4d7b-a543-668aa4318481
+
+	measure 'Discharge Level' =
+			
+			// CALCULATE(
+			//     AVERAGE(OutcomeSummary[TableDisch]),
+			//     OR(
+			//         OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Criteria] IN {"Included" ,"Started with ANA 88", "No start score"},
+			//         NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Criteria] IN {"Included"}
+			//     )
+			// )
+			
+			CALCULATE(
+			    AVERAGE(OutcomeSummary[TableDisch]),
+			    OutcomeSummary[Status]="Included"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 3bf84c2d-11e2-41b7-81ee-227199aabc6f
+
+	measure 'Discharge Level BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Discharge Level],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 578e61fc-3159-409f-ad6f-06fe45d9c2a5
+
+	measure 'Admit Level' =
+			
+			CALCULATE(
+			    AVERAGE(OutcomeSummary[EvalNEW]),
+			    OutcomeSummary[Status]="Included"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: c4ca960c-91fe-44b6-a9c8-46edcfd51e7a
+
+	measure 'Admit Level BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Admit Level],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: bb5470a8-0b8e-4ce5-adeb-46039c62115d
+
+	measure 'Total Measurements' =
+			
+			// CALCULATE(
+			//     COUNTROWS(OutcomeSummary),
+			//     OR(
+			//         OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Criteria] IN {"Included" ,"Started with ANA 88", "No start score"},
+			//         NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Criteria] IN {"Included"}
+			//     )
+			// )
+			
+			CALCULATE(
+			    [Total Measurements Recorded],
+			    OutcomeSummary[Status]="Included"
+			)
+		formatString: #,0
+		displayFolder: Outcomes
+		lineageTag: a5932dd1-21c8-403a-a991-c4d9f6e89cf4
+
+	measure 'Total Outcome Areas Unique' =
+			
+			// CALCULATE(
+			//     DISTINCTCOUNT(Dictionary[Name]),
+			//     OR(
+			//         OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Criteria] IN {"Included" ,"Started with ANA 88", "No start score"},
+			//         NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Criteria] IN {"Included"}
+			//     )
+			// )
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Dictionary[Name]),
+			    OutcomeSummary[Status]="Included"
+			)
+		formatString: 0
+		displayFolder: Outcomes
+		lineageTag: 35717f59-d6c6-478a-8650-fade06168e18
+
+	measure 'Total Outcome Areas Subtitle' = [Total Outcome Areas Unique]&" areas measured"
+		displayFolder: Outcomes
+		lineageTag: ffbf6c01-02ca-40b0-9d0a-7802a5f54ffb
+
+	measure ALOS =
+			
+			DIVIDE(
+			    [Total Days],
+			    [Total Cases]
+			)
+		formatString: #,0.0
+		displayFolder: ALOS
+		lineageTag: 630298d4-6fa8-4095-a83c-c6e6f4033dbc
+
+	measure 'ALOS BM' =
+			
+			// CALCULATE(
+			//     [ALOS],
+			//     BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			// )
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [ALOS],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0
+		displayFolder: ALOS
+		lineageTag: 3d34b86d-327c-4aa5-b48d-754baa3af1ed
+
+	measure 'ALOS Delta' =
+			
+			// [ALOS]-[ALOS BM]
+			IF([Report Scope]="Filtered",[ALOS]-[ALOS BM])
+		formatString: 0.0
+		displayFolder: ALOS
+		lineageTag: 5bddd9bd-8c53-4f48-a1c7-49a8a7fad294
+
+	measure '% Total Cases Improved' =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(StayCases,[Gain]>0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE()))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 2009c7d3-34a0-4538-aa16-e9062a9490f2
+
+	measure '% Total Cases Improved BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [% Total Cases Improved],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 402f5ea2-942d-4469-90f7-fd01c7cb7704
+
+	measure '% Total Cases Improved Delta' = IF([Report Scope]="Filtered",[% Total Cases Improved]-[% Total Cases Improved BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ec8329b4-d253-42ef-bb4a-42f6dfae30ae
+
+	measure DTC =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],DischargeDestination[Group] = "Community"),
+			    [Total Cases]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: c0c4a183-0f59-487e-b863-419b6f2a549c
+
+	measure 'DTC BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [DTC],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 45d83007-8003-4ebe-b97d-223b60a8c4c6
+
+	measure 'DTC Delta' =
+			
+			// [DTC]-[DTC BM]
+			
+			// IF(
+			//     NOT(SELECTEDVALUE(BenchmarkTable[BenchmarkSetting])="Benchmark"),
+			//     [DTC]-[DTC BM]
+			// )
+			
+			IF([Report Scope]="Filtered",[DTC]-[DTC BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 8db3087d-bd46-46ce-affa-f0e248dbba17
+
+	measure Rehosp =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(DischargeDestination,DischargeDestination[Setting] = "Hospital")),
+			    [Total Cases]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: e558747b-e8ad-4732-88c7-26c7276228bf
+
+	measure 'Rehosp BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Rehosp],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 3462e0ab-55d8-41af-b9fa-2a62d3651861
+
+	measure 'Rehosp Delta' = IF([Report Scope]="Filtered",[Rehosp]-[Rehosp BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Discharge Destination
+		lineageTag: 282d3e79-b3b2-44ef-ad36-cf1dd42741d8
+
+	measure 'Total Units' = SUM(TreatmentsDetails[Units])
+		formatString: #,0
+		displayFolder: Units
+		lineageTag: 041af93e-4596-43f7-be46-2b3b9acbf6ea
+
+	measure 'Units per Visit (pt/ot)' =
+			
+			// IF([Total Cases All Payers]>0,
+			// CALCULATE(
+			//     DIVIDE(
+			//         [Total Units],
+			//         [Total Visits]
+			//     ),
+			//     Disciplines[Discipline] IN {"PT", "OT"}
+			// ))
+			
+			CALCULATE(
+			    DIVIDE(
+			        [Total Units],
+			        [Total Visits]
+			    ),
+			    Disciplines[Discipline] IN {"PT", "OT"}
+			)
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: 53b2f234-8bb4-425b-af53-c885887b0e79
+
+	measure 'Units per Visit BM' =
+			
+			// CALCULATE(
+			//     [Units per Visit (pt/ot)],
+			//     BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			// )
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Units per Visit (pt/ot)],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: de8a866b-2505-4ec3-931f-8f946ba5fe3a
+
+	measure 'Units per Visit Delta' =
+			
+			// [Units per Visit (pt/ot)]-[Units per Visit BM]
+			IF([Report Scope]="Filtered",[Units per Visit (pt/ot)]-[Units per Visit BM])
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: 72ef3f37-c58a-43e0-831e-494f9cc6ddb8
+
+	measure 'Minutes per Case' =
+			
+			DIVIDE(
+			    [Total Minutes],
+			    [Total Cases]
+			)
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 09ca9c98-9580-4994-8ccc-86a868cd0fb7
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Minutes per Code' = AVERAGE(TreatmentsDetails[Duration])
+		displayFolder: Minutes
+		lineageTag: 09b59067-ec3b-4429-81b1-6ee518c45303
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Unit' = [Total Minutes]/[Total Units]
+		displayFolder: Minutes
+		lineageTag: d8c992c1-5536-4d67-a686-8e7550ad81ee
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Visit' =
+			
+			DIVIDE(
+			    [Total Minutes],
+			    [Total Visits]
+			)
+		displayFolder: Minutes
+		lineageTag: 7f234f4c-fab9-420d-88b0-43f471d3c32b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Week' =
+			
+			DIVIDE(
+			    [Total Minutes],
+			    [Total Days]
+			)*7
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: c69eb433-9ea3-4846-8162-e08312d65158
+
+	measure 'Minutes per Week BM' =
+			
+			// CALCULATE(
+			//     [Minutes per Week],
+			//     BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			// )
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Minutes per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 46e96f44-608f-452a-901b-29c64aa1503b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Minutes Variance' =
+			
+			STDEVX.P(
+			    KEEPFILTERS(VALUES(StayCases[PatientCase_ID])),
+			    CALCULATE([Minutes per Week])
+			)
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: d07b96eb-63ae-4cfc-9932-686dc4e7d7bf
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Total Minutes' = SUM(TreatmentsDetails[Duration])
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 9150bd80-028f-4835-b56d-4f57923a42eb
+
+	measure 'Total Days with Visits' = DISTINCTCOUNT(Treatments[CaseIDDate])
+		formatString: #,0
+		displayFolder: Visits
+		lineageTag: 3736d65f-010b-4cef-b6a1-812476178245
+
+	measure 'Total Visits' = COUNTROWS(Treatments)
+		formatString: #,0
+		displayFolder: Visits
+		lineageTag: a7244d21-36e1-4319-a650-3808c07d4b02
+
+	measure 'Visits per Discipline per Week' =
+			
+			// AVERAGEX(
+			//     FILTER(StayCases,[Total Days]>=7),
+			//     DIVIDE(
+			//         DIVIDE(
+			//             [Total Visits],
+			//             [Total Days]
+			//         )*7,
+			//         [Total Disciplines]
+			//     )
+			// )
+			
+			// AVERAGEX(
+			//     StayCases,
+			//     DIVIDE(
+			//         DIVIDE(
+			//             [Total Visits],
+			//             [Total Days]
+			//         )*7,
+			//         [Total Disciplines]
+			//     )
+			// )
+			
+			AVERAGEX(
+			    StayCases,
+			    DIVIDE(
+			        [Visits per Week],
+			        [Total Disciplines Unique]
+			    )
+			)
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: 2073f7b4-5040-4bbd-b36b-f70c5b1056e7
+
+	measure 'Visits per Discipline per Week BM' =
+			
+			// CALCULATE(
+			//     [Visits per Discipline per Week],
+			//     BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			// )
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Visits per Discipline per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: e25c035d-b5cd-4d55-812d-83c0b6aad355
+
+	measure 'Visits per Discipline per Week Delta' =
+			
+			// [Visits per Discipline per Week]-[Visits per Discipline per Week BM]
+			IF([Report Scope]="Filtered",[Visits per Discipline per Week]-[Visits per Discipline per Week BM])
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: 7813a48b-ce90-462b-ae0b-dcea35aa8371
+
+	measure '% Improvement AxisLow' =
+			
+			var range = [% Improvement BM]-[% Improvement]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MIN(0,[% Improvement])-incrementalrange
+			return IF([% Improvement]<0,calc,0)
+		displayFolder: Outcomes
+		lineageTag: 7437af67-348b-413a-a09c-94123acc108d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Improvement AxisHigh' =
+			
+			var range = [% Improvement]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MAX([% Improvement],[% Improvement BM])+incrementalrange
+			return IF([% Improvement]>[% Improvement BM]-.1,calc,[% Improvement BM])
+		displayFolder: Outcomes
+		lineageTag: 1d70399f-f6cd-42cd-be10-1b191c38ddcf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Week Percentile' =
+			
+			var myvalue = [Minutes per Week]
+			return
+			DIVIDE(
+			    CALCULATE(
+			        COUNTROWS(
+			            FILTER(
+			                StayCases,
+			                [Minutes per Week]<myvalue
+			            )
+			        ),
+			        ALLSELECTED(StayCases[PatientCase_ID]),
+			        ALL(StayCases[PatientCase_ID]),
+			        ALL(vw_UpnFacilityAccess)
+			    ),
+			    [Total Cases BM]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Minutes
+		lineageTag: 4e8e6106-3831-4209-a850-33a16d2d122e
+
+	measure 'Minutes per Week Percentile Text' =
+			
+			"Provider avg minutes = "&FORMAT([Minutes per Week],"#,###")&"; Percentile = "&FORMAT([Minutes per Week Percentile],"0%")
+		displayFolder: Minutes
+		lineageTag: 9378e808-51d2-4584-a01f-8587cc9bfccc
+
+	measure 'Total Cases' =
+			
+			var v1 = COUNTROWS(StayCases)
+			var v2 = CALCULATE(COUNTROWS(StayCases),FILTER(StayCases,[Total Tracks]>0))
+			return v2
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: 77a0d69a-1460-4d25-b7e1-774421d4d8a6
+
+	measure 'Total Cases All Payers' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    ALL(StayCases[Payer Categorization])
+			)
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: e10db99f-6d15-41b2-a2b8-31d29896fbce
+
+	measure 'Total Cases BM' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    BenchmarkTable[BenchmarkSetting]="Benchmark"
+			)
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: b43fba77-6414-4b70-bca7-d21b2523d080
+
+	measure 'Drill Button Text' =
+			
+			IF(
+			    HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),
+			    "<<Please select a single episode from the table below, and then click this button>>",
+			    "Show details for "&SELECTEDVALUE(Patients[Patient Name])
+			)
+		displayFolder: Outcomes
+		lineageTag: 20866bb4-7c4b-4705-bdff-9fddc4becd12
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Admit Level Jitter' = MIN(ABS([Admit Level] + IF(RAND()>.5,1,-1)*RAND()/500),1)
+		formatString: 0%;-0%;0%
+		displayFolder: Outcomes
+		lineageTag: 2ca55427-5fc7-4ee1-a849-722f63c414aa
+
+	measure 'Discharge Level Jitter' = MIN(ABS([Discharge Level] + IF(RAND()>.5,1,-1)*RAND()/500),1)
+		formatString: 0%;-0%;0%
+		displayFolder: Outcomes
+		lineageTag: 16b865d5-280e-4efd-a2f8-8ca5e45c590e
+
+	measure 'Admit Level (Pain)' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    Dictionary[Group]="Pain"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: f5c5913d-751b-48f1-8a36-de79f73a57c0
+
+	measure 'Discharge Level (Pain)' =
+			
+			CALCULATE(
+			    [Discharge Level],
+			    Dictionary[Group]="Pain"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: 952398a8-568a-4100-bee9-ecd7709f2445
+
+	measure '% Improvement (Pain)' =
+			
+			IF([Total Cases All Payers]>0,
+			    DIVIDE(
+			        [Discharge Level (Pain)]-[Admit Level (Pain)],
+			        [Admit Level (Pain)]
+			    )+.00001
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Pain
+		lineageTag: e5424d15-57ce-4875-ba21-d14b1f8070ad
+
+	measure '% Minutes Group Therapy' =
+			
+			DIVIDE(
+			    [Total Minutes Group Therapy],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Group Therapy
+		lineageTag: b7270072-775e-414d-870d-f9f955796237
+
+	measure '% Minutes Group Therapy Text' =
+			
+			FORMAT(
+			    [% Minutes Group Therapy]+0,
+			    "0.0%"
+			)
+			&" group minutes"
+		displayFolder: Group Therapy
+		lineageTag: 23bb5e0a-9f90-459d-93d0-480e842bce98
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Visits Group Therapy' =
+			
+			DIVIDE(
+			    [Total Visits Group Therapy],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Group Therapy
+		lineageTag: 0b055e89-10ca-4348-8df3-430284117bd5
+
+	measure '% Minutes Telehealth' =
+			
+			DIVIDE(
+			    [Total Minutes Telehealth],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Telehealth
+		lineageTag: 51642e05-f654-4bf5-9457-221a3755e662
+
+	measure '% Visits Telehealth' =
+			
+			DIVIDE(
+			    [Total Visits Telehealth],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Telehealth
+		lineageTag: 38b56051-652e-4ce2-b5a6-abae358de27e
+
+	measure '% Minutes Modalities' =
+			
+			DIVIDE(
+			    [Total Minutes Modalities],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Modalities
+		lineageTag: 150e6b1a-2b17-4259-b7c4-cc9d464f9914
+
+	measure '% Visits Modalities' =
+			
+			DIVIDE(
+			    [Total Visits Modalities],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Modalities
+		lineageTag: 980309bb-2df9-4935-a24f-b3b827b5c438
+
+	measure '% Minutes Aquatic' =
+			
+			DIVIDE(
+			    [Total Minutes Aquatic],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Aquatic
+		lineageTag: a7ed64f1-2aab-4fcf-9d1a-c6095f9ca25d
+
+	measure '% Visits Aquatic' =
+			
+			DIVIDE(
+			    [Total Visits Aquatic],
+			    [Total Visits]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Aquatic
+		lineageTag: ee74d04f-9aa0-4fbb-b5ff-dd154bd485c9
+
+	measure 'Total Units Aquatic' =
+			
+			CALCULATE(
+			    [Total Units],
+			    Service[Specialty]="Aquatic"
+			)
+		formatString: #,0
+		displayFolder: Aquatic
+		lineageTag: 20a478b4-2a06-4bb9-995d-a549db1d0537
+
+	measure 'Total Visits Aquatic' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Specialty]="Aquatic"
+			)
+		formatString: #,0
+		displayFolder: Aquatic
+		lineageTag: 09f984a6-c6d0-4514-b19d-e5238dd3bdf0
+
+	measure 'Gap: Stay to Case' =
+			
+			AVERAGEX(
+			    StayCases,
+			    DATEDIFF(RELATED(PatientStays[AdmitDate]),StayCases[TherapyStartDate],DAY)
+			)
+		displayFolder: Misc
+		lineageTag: d4ef0e71-eaa1-4cf0-9a21-bd5dbe92042c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Day 1 Evals' =
+			
+			var numerator = CALCULATE([Total Cases],FILTER(StayCases,[Gap: Stay to Case]=0))
+			var denominator = [Total Cases]
+			return DIVIDE(numerator,denominator)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Misc
+		lineageTag: fdf9e2eb-60ee-439a-ae84-1987cf722c0c
+
+	measure 'Disciplines Involved' =
+			
+			var VisitsPT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="PT")>0,"PT")
+			var VisitsOT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="OT")>0,"OT")
+			var VisitsST = IF(CALCULATE([Total Visits],Disciplines[Discipline]="ST")>0,"ST")
+			var ValuesTable = FILTER({VisitsPT, VisitsOT, VisitsST}, NOT(ISBLANK([Value])))
+			var ValuesList = CONCATENATEX(ValuesTable,[Value],"/")
+			return ValuesList
+		displayFolder: Misc
+		lineageTag: 35288c9d-f2a5-4f80-880b-b642bb83bd14
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Days' =
+			
+			// SUMX (
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     CALCULATE (
+			//         COUNTROWS (
+			//             FILTER (
+			//                 ALL('Calendar'),
+			//                 COUNTROWS (
+			//                     FILTER (
+			//                         CaseTracks,
+			//                         CaseTracks[PatientCase_ID] = MAX(StayCases[PatientCase_ID])
+			//                         && 'Calendar'[Date] >= CaseTracks[StartDate]
+			//                         && 'Calendar'[Date] <= CaseTracks[EndDate]
+			//                     )
+			//                 ) > 0
+			//             )
+			//         )
+			//     )
+			// )
+			
+			SUM(StayCases[UniqueDays])
+			
+			// SUMX(
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     [Total Unique CaseTrackDays]
+			// )
+		formatString: #,0
+		displayFolder: Misc
+		lineageTag: e577077a-991e-4e07-aa63-8f4d448220d1
+
+	measure 'Total Disciplines Unique' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Disciplines[Discipline]),
+			    FILTER(
+			        CaseTracks,
+			        [Total Visits]>0
+			    )
+			)
+		formatString: 0
+		displayFolder: Misc
+		lineageTag: 30637786-6920-4722-9f4a-0c59fc87f64c
+
+	measure 'Total Minutes Modalities' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Specialty]="Modality"
+			)
+		formatString: #,0
+		displayFolder: Modalities
+		lineageTag: bb0e3b1a-7683-40bb-ac32-a0e0e77683e6
+
+	measure 'Total Visits Modalities' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Specialty]="Modality"
+			)
+		formatString: #,0
+		displayFolder: Modalities
+		lineageTag: 0beb139e-54f6-4ba2-b9e1-fdf5d3e7c78b
+
+	measure 'Total Minutes Aquatic' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Specialty]="Aquatic"
+			)
+		formatString: #,0
+		displayFolder: Aquatic
+		lineageTag: 6596c2c5-da48-4ccf-9c49-022a36a1ced3
+
+	measure 'Total Minutes Group Therapy' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Specialty]="Group"
+			)
+		formatString: #,0
+		displayFolder: Group Therapy
+		lineageTag: a143ce6d-d146-4894-8456-e9eb63a753d9
+
+	measure 'Total Visits Group Therapy' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Specialty]="Group"
+			)
+		formatString: #,0
+		displayFolder: Group Therapy
+		lineageTag: bd74514f-6473-4201-a20d-a04be32f0c04
+
+	measure 'Total Units Modalities' =
+			
+			CALCULATE(
+			    [Total Units],
+			    Service[Specialty]="Modality"
+			)
+		formatString: #,0
+		displayFolder: Modalities
+		lineageTag: 2d661b13-a9b3-4151-915f-6970666e003b
+
+	measure 'Total Units Group Therapy' =
+			
+			CALCULATE(
+			    [Total Units],
+			    Service[Specialty]="Group"
+			)
+		formatString: #,0
+		displayFolder: Group Therapy
+		lineageTag: 85b064db-d923-4f20-941a-6b5868892ffa
+
+	measure 'Total Minutes Telehealth' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    ISBLANK(Telehealth[TxSession_ID])=FALSE()
+			)
+		formatString: #,0
+		displayFolder: Telehealth
+		lineageTag: 5d02331b-44d1-40cf-9fa5-e276e94e4884
+
+	measure 'Total Visits Telehealth' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    ISBLANK(Telehealth[TxSession_ID])=FALSE()
+			)
+		formatString: #,0
+		displayFolder: Telehealth
+		lineageTag: 5ed0f889-0c99-45cb-a165-f2b10355ace5
+
+	measure 'Total Units Telehealth' =
+			
+			CALCULATE(
+			    [Total Units],
+			    ISBLANK(Telehealth[TxSession_ID])=FALSE()
+			)
+		formatString: #,0
+		displayFolder: Telehealth
+		lineageTag: a97b255a-f73a-43f0-96b1-7877a9fdb2f6
+
+	measure 'Midpoint Level' = ([Admit Level]+[Discharge Level])/2
+		displayFolder: Outcomes
+		lineageTag: a2e4c761-c770-477a-a224-90ef31cc0895
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Visits per Case' =
+			
+			DIVIDE(
+			    [Total Visits],
+			    [Total Cases]
+			)
+		formatString: 0.0
+		displayFolder: Visits
+		lineageTag: ab38a2fc-ed64-4890-89c6-49bce949f092
+
+	measure '% Total Cases Declined' =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(StayCases,[Gain]<0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE()))
+			)
+		displayFolder: Outcomes
+		lineageTag: db0b7253-d085-481f-99e3-37b7acad4da8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Total Cases No Change' =
+			
+			DIVIDE(
+			    CALCULATE([Total Cases],FILTER(StayCases,[Gain]=0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE()))
+			)
+		displayFolder: Outcomes
+		lineageTag: 6aa17abe-5ffa-45a6-a078-6c66ed798005
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Caseload' =
+			
+			DIVIDE(
+			    [Total Days],
+			    [Total Calendar Days]
+			)
+		displayFolder: Cases
+		lineageTag: cf7a006a-84c0-4942-b315-e0fbd8dea458
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Assistant Minutes' =
+			
+			DIVIDE(
+			    CALCULATE([Total Minutes],Treatments[AssistantModifier]=TRUE()),
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Minutes
+		lineageTag: 9f0f0498-5768-4290-a52f-53f42042d5f7
+
+	measure 'Total Visits ST' = CALCULATE([Total Visits],Disciplines[Discipline]="ST")
+		displayFolder: Visits
+		lineageTag: 803ca051-dad9-454c-92be-64fcf3e086cc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rehosp Numerator' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    DischargeDestination[Setting]="Hospital"
+			)
+		formatString: #,0
+		displayFolder: Discharge Destination
+		lineageTag: 37f26861-54c1-4227-925e-6a51a308d657
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Min Level to Go Home' = .7
+		lineageTag: 28de03ef-77ac-4449-961e-74e6898953f6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Number of Outcome Areas' =
+			
+			DIVIDE(
+			    [Total Measurements],
+			    [Total Cases]
+			)
+		displayFolder: Outcomes
+		lineageTag: 86c64d8d-3eb4-4142-8cb7-938ba4f809cd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Measurements (not GG)' =
+			
+			// CALCULATE(
+			//     [Total Outcome Areas Unique],
+			//     NOT (Dictionary[Family] IN {"(a) Section GG Mobility", "(b) Section GG Self Care"})
+			// )
+			
+			CALCULATE(
+			    [Total Measurements],
+			    NOT (Dictionary[Family] IN {"(a) Section GG Mobility", "(b) Section GG Self Care"})
+			)
+		formatString: #,0
+		displayFolder: Outcomes
+		lineageTag: b22a0da4-145d-4727-b290-ef6bf066c0cb
+
+	measure 'Average Number of Outcome Areas (not GG)' =
+			
+			// v1 - includes cases with no non-GG measurements
+			// DIVIDE(
+			//     [Total Measurements (not GG)],
+			//     [Total Cases]
+			// )
+			
+			// v2 - includes only cases with at least 1 non-GG measurement
+			DIVIDE(
+			    [Total Measurements (not GG)],
+			    CALCULATE(
+			        [Total Cases],
+			        FILTER(StayCases,[Total Measurements (not GG)]>0)
+			    )
+			)
+		displayFolder: Outcomes
+		lineageTag: eb3f5743-aae8-4965-910b-2aff03656d1b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Correlation = ```
+			
+			var _linest = 
+			LINESTX(
+			    StayCases,
+			    [Gain],
+			    [Minutes per Case]
+			)
+			
+			
+			var _correl = SELECTCOLUMNS(_linest,[CoefficientOfDetermination])
+			return _correl
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 19fd416f-8921-42ae-9265-6fd742646456
+
+	measure 'Correlation 2' =
+			
+			VAR __CORRELATION_TABLE = VALUES('StayCases'[PatientCase_ID])
+			VAR __COUNT =
+				COUNTX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE([Minutes per Case] * [Gain])
+				)
+			VAR __SUM_X = SUMX(KEEPFILTERS(__CORRELATION_TABLE), CALCULATE([Minutes per Case]))
+			VAR __SUM_Y = SUMX(KEEPFILTERS(__CORRELATION_TABLE), CALCULATE([Gain]))
+			VAR __SUM_XY =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE([Minutes per Case] * [Gain] * 1.)
+				)
+			VAR __SUM_X2 =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE([Minutes per Case] ^ 2)
+				)
+			VAR __SUM_Y2 = SUMX(KEEPFILTERS(__CORRELATION_TABLE), CALCULATE([Gain] ^ 2))
+			RETURN
+				(DIVIDE(
+					__COUNT * __SUM_XY - __SUM_X * __SUM_Y * 1.,
+					SQRT(
+						(__COUNT * __SUM_X2 - __SUM_X ^ 2)
+							* (__COUNT * __SUM_Y2 - __SUM_Y ^ 2)
+					)
+				))^2
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c492d6fc-1fa6-4b3f-a75b-a2d74c8012f5
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "CorrelationCoefficient"
+				}
+
+		changedProperty = FormatString
+
+	measure '_Correlation - ALOS to Gain' = ```
+			
+			var _linest = 
+			LINESTX(
+			    StayCases,
+			    [Gain],
+			    [ALOS]
+			)
+			
+			
+			var _correl = SELECTCOLUMNS(_linest,[CoefficientOfDetermination])
+			return _correl
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 9d25f074-46cb-4eb9-9711-233cb5db7cfd
+
+	measure '_Correlation - Admit to Discharge' = ```
+			
+			var _linest = 
+			LINESTX(
+			    StayCases,
+			    [Discharge Level],
+			    [Admit Level]
+			)
+			
+			
+			var _correl = SELECTCOLUMNS(_linest,[CoefficientOfDetermination])
+			return _correl
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: ba4c33af-dca1-4252-bb89-0f0f9eabe834
+
+	measure '_Correlation - Minutes per Case to Gain' = ```
+			
+			var _linest = 
+			LINESTX(
+			    StayCases,
+			    [Gain],
+			    [Minutes per Case]
+			)
+			
+			
+			var _correl = SELECTCOLUMNS(_linest,[CoefficientOfDetermination])
+			return _correl
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 782188a3-226d-430a-8bba-ec7bdd51a8da
+
+	measure '_Correlation - Minutes per Visit to Gain per Day' = ```
+			
+			var _linest = 
+			LINESTX(
+			    StayCases,
+			    [Gain per Day],
+			    [Minutes per Visit]
+			)
+			
+			
+			var _correl = SELECTCOLUMNS(_linest,[CoefficientOfDetermination])
+			return _correl
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: dd117358-acd6-4f11-8a19-709f59907a8b
+
+	measure 'Gain per Day' =
+			
+			// AVERAGEX(
+			//     FILTER(
+			//         StayCases,
+			//         // ISBLANK([Admit Level])=FALSE() && ISBLANK([Discharge Level])=FALSE()
+			//         ISBLANK([Gain])=FALSE() && [Total Visits]>0 && ISBLANK([Total Visits])=FALSE()
+			//     ),
+			//     // [Gain]/StayCases[UniqueDays]
+			//     DIVIDE(
+			//         [Gain],
+			//         // [ALOS]
+			//         [Total Days]
+			//     )
+			// )
+			
+			DIVIDE(
+			    [Gain],
+			    [ALOS]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: 256079a2-e4c2-472d-9eb8-bd6bb7fb3ea2
+
+	measure 'Minutes per Discipline per Week' =
+			
+			AVERAGEX(
+			    StayCases,
+			    DIVIDE(
+			        DIVIDE(
+			            [Total Minutes],
+			            [Total Days]
+			        )*7,
+			        [Total Disciplines Unique]
+			    )
+			)
+		displayFolder: Minutes
+		lineageTag: 665da78d-22c3-4e62-ad0b-35e7e9d5a554
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Visits per Week' =
+			
+			DIVIDE(
+			    [Total Visits],
+			    [Total Days]
+			)*7
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: 5396f10d-927c-45d4-a969-3bcd33632dd7
+
+	measure 'Total Measurements Recorded' = COUNTROWS(OutcomeSummary)
+		formatString: #,0
+		displayFolder: Outcomes
+		lineageTag: 2c488a6e-0203-477d-8117-cf0d0889e68d
+
+	measure 'ActiveFilters: Payer' =
+			
+			// IF(
+			//     ISFILTERED('Payer Buckets'[Payer Categorization]),
+			//     CONCATENATEX(VALUES('Payer Buckets'[Payer Categorization]),'Payer Buckets'[Payer Categorization],", "),
+			//     IF(
+			//         ISFILTERED('Payer Buckets'[Payer Grouping]),
+			//         CONCATENATEX(VALUES('Payer Buckets'[Payer Grouping]),'Payer Buckets'[Payer Grouping],", "),
+			//         "All"
+			//     )
+			// )
+			
+			IF(
+			    ISFILTERED('Payer Buckets'[Payer Categorization]),
+			    CONCATENATEX(VALUES('Payer Buckets'[Payer Categorization]),'Payer Buckets'[Payer Categorization],", "),
+			    IF(
+			        ISFILTERED('Payer Buckets'[Payer Grouping]),
+			        CONCATENATEX(VALUES('Payer Buckets'[Payer Grouping]),'Payer Buckets'[Payer Grouping],", "),
+			        "All"
+			    )
+			)
+			&
+			IF(
+			    ISFILTERED('Override Payer'[Payer Grouping]),
+			    UNICHAR(13)&UNICHAR(10)&
+			    "vs "&
+			    SWITCH(
+			        SELECTEDVALUE('Override Payer'[Payer Grouping]),
+			        "(a) Medicare Part A and A-Like","All Part A",
+			        "(b) Medicare Part B and HMO B","All Part B"
+			    )
+			)
+		lineageTag: e7eaa42f-8ad2-4237-a916-977ada3bd203
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Discharge Destination' = ```
+			
+			// IF(
+			//     ISFILTERED(DischargeDestination[Setting]),
+			//     CONCATENATEX(VALUES(DischargeDestination[Setting]),DischargeDestination[Setting],", "),
+			//     IF(
+			//         ISFILTERED(DischargeDestination[Group]),
+			//         CONCATENATEX(VALUES(DischargeDestination[Group]),DischargeDestination[Group],", "),
+			//         "All"
+			//     )
+			// )
+			
+			
+			var filteredExpected = 
+			IF(
+			    ISFILTERED(StayCases[Expected Discharge Destination]),
+			    "Expected: "&CONCATENATEX(VALUES(StayCases[Expected Discharge Destination]),StayCases[Expected Discharge Destination],", ")
+			)
+			
+			var filteredActual = 
+			IF(
+			    ISFILTERED(DischargeDestination[Setting]),
+			    "Actual: "&CONCATENATEX(VALUES(DischargeDestination[Setting]),DischargeDestination[Setting],", "),
+			    IF(
+			        ISFILTERED(DischargeDestination[Group]),
+			        "Actual: "&CONCATENATEX(VALUES(DischargeDestination[Group]),DischargeDestination[Group],", ")
+			    )
+			)
+			
+			var newline = UNICHAR(13)&UNICHAR(10)
+			VAR multiline = REPT(newline,2)
+			var concatTable = FILTER({filteredExpected, filteredActual}, NOT(ISBLANK([Value])))
+			// return concatTable
+			return COALESCE(CONCATENATEX(concatTable,[Value],newline),"All")
+			```
+		lineageTag: 30ff543f-1b0f-408a-ab59-b663870d42c8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Diagnosis' = ```
+			
+			// IF(
+			//     ISFILTERED(DX_Cases[L4]),
+			//     CONCATENATEX(VALUES(DX_Cases[L4]),DX_Cases[L4],", "),
+			//     IF(
+			//         ISFILTERED(DX_Cases[L3]),
+			//         CONCATENATEX(VALUES(DX_Cases[L3]),DX_Cases[L3],", "),
+			//         IF(
+			//             ISFILTERED(DX_Cases[L2]),
+			//             CONCATENATEX(VALUES(DX_Cases[L2]),DX_Cases[L2],", "),
+			//             IF(
+			//                 ISFILTERED(DX_Cases[L1]),
+			//                 CONCATENATEX(VALUES(DX_Cases[L1]),DX_Cases[L1],", "),
+			//                 "All"
+			//             )
+			//         )
+			//     )
+			// )
+			
+			var L4filter = ISFILTERED(DX_Cases[L4])
+			var L3filter = ISFILTERED(DX_Cases[L3])
+			var L2filter = ISFILTERED(DX_Cases[L2])
+			var L1filter = ISFILTERED(DX_Cases[L1])
+			var primary = ISFILTERED(DX_Cases[Type])
+			var specificity = SWITCH(TRUE(),L4filter,4,L3filter,3,L2filter,2,L1filter,1,0)
+			var note = 
+			    SWITCH(
+			        specificity,
+			        4,CONCATENATEX(VALUES(DX_Cases[L4]),DX_Cases[L4],", "),
+			        3,CONCATENATEX(VALUES(DX_Cases[L3]),DX_Cases[L3],", "),
+			        2,CONCATENATEX(VALUES(DX_Cases[L2]),DX_Cases[L2],", "),
+			        1,CONCATENATEX(VALUES(DX_Cases[L1]),DX_Cases[L1],", "),
+			        "All"
+			    )
+			return note
+			```
+		lineageTag: e76bd4fb-6400-43f9-82a2-9673e4444f9b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Discharge Type' =
+			
+			IF(
+			    ISFILTERED(DischargeDestination[Type]),
+			    CONCATENATEX(VALUES(DischargeDestination[Type]),DischargeDestination[Type],", "),
+			    "All"
+			)
+		lineageTag: 90eea763-f824-42ed-bc64-e9140881e115
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Place of Service' =
+			
+			IF(
+			    ISFILTERED(IntakeSources[Name]),
+			    CONCATENATEX(VALUES(IntakeSources[Name]),IntakeSources[Name],", "),
+			    IF(
+			        ISFILTERED(IntakeSources[SourceType]),
+			        CONCATENATEX(VALUES(IntakeSources[SourceType]),IntakeSources[SourceType],", "),
+			        "All"
+			    )
+			)
+		lineageTag: 767eebd5-a157-4979-8d5a-8478900b3684
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: All' = ```
+			
+			var newline = UNICHAR(13)&UNICHAR(10)
+			var multiline = REPT(newline,2)
+			
+			
+			var payer = 
+			IF(ISFILTERED('Payer Buckets'[Payer Categorization]) || ISFILTERED('Payer Buckets'[Payer Grouping]),"Payer:"&newline&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED('Payer Buckets'[Payer Categorization]),CONCATENATEX(VALUES('Payer Buckets'[PCLabel]),'Payer Buckets'[PCLabel],", "),
+			    ISFILTERED('Payer Buckets'[Payer Grouping]),CONCATENATEX(VALUES('Payer Buckets'[PGLabel]),'Payer Buckets'[PGLabel],", ")
+			))
+			
+			var agerange = 
+			IF(ISFILTERED(StayCases[Age Range]),"Age Range:"&newline&
+			CONCATENATEX(VALUES(StayCases[Age Range]),StayCases[Age Range],", ")
+			)
+			
+			var diagnosis = 
+			IF(NOT(ISFILTERED(DX_Cases[L1]) || ISFILTERED(DX_Cases[L2]) || ISFILTERED(DX_Cases[L3]) || ISFILTERED(DX_Cases[L4])),BLANK(),
+			IF(ISFILTERED(DX_Cases[Type]),SELECTEDVALUE(DX_Cases[Type])&" ")&
+			"Diagnosis:"&newline&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(DX_Cases[L4]),CONCATENATEX(VALUES(DX_Cases[L4]),DX_Cases[L4],", "),
+			    ISFILTERED(DX_Cases[L3]),CONCATENATEX(VALUES(DX_Cases[L3]),DX_Cases[L3],", "),
+			    ISFILTERED(DX_Cases[L2]),CONCATENATEX(VALUES(DX_Cases[L2]),DX_Cases[L2],", "),
+			    ISFILTERED(DX_Cases[L1]),CONCATENATEX(VALUES(DX_Cases[L1]),DX_Cases[L1],", ")
+			))
+			
+			var DCtype = 
+			IF(ISFILTERED(DischargeDestination[Type]),"D/C Type"&newline&
+			CONCATENATEX(VALUES(DischargeDestination[Type]),DischargeDestination[Type],", ")
+			)
+			
+			var DCdest = 
+			IF(ISFILTERED(DischargeDestination[Setting]) || ISFILTERED(DischargeDestination[Group]),"D/C Destination"&newline&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(DischargeDestination[Setting]),CONCATENATEX(VALUES(DischargeDestination[Setting]),DischargeDestination[Setting],", "),
+			    ISFILTERED(DischargeDestination[Group]),CONCATENATEX(VALUES(DischargeDestination[Group]),DischargeDestination[Group],", ")
+			))
+			
+			var DCexpected = 
+			IF(ISFILTERED(StayCases[Expected Discharge Destination]),"Expected D/C Destination:"&newline&
+			CONCATENATEX(VALUES(StayCases[Expected Discharge Destination]),StayCases[Expected Discharge Destination],", ")
+			)
+			
+			var placeofservice = 
+			IF(ISFILTERED(IntakeSources[Name]) || ISFILTERED(IntakeSources[SourceType]),"Place of Service:"&newline&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(IntakeSources[Name]),CONCATENATEX(VALUES(IntakeSources[Name]),IntakeSources[Name],", "),
+			    ISFILTERED(IntakeSources[SourceType]),CONCATENATEX(VALUES(IntakeSources[SourceType]),IntakeSources[SourceType],", ")
+			))
+			
+			
+			var concatTable = FILTER({payer,agerange,diagnosis,DCtype,DCdest,DCexpected,placeofservice},NOT(ISBLANK([Value])))
+			
+			return COALESCE(CONCATENATEX(concatTable,[Value],multiline),"None")
+			```
+		lineageTag: b41204bb-02ef-4f3f-a782-b080312ebfff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcome 100%' = 1
+		lineageTag: 8876e302-51a2-4920-92ca-f0cc45c0d88d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Utilization Subtitle' =
+			
+			// "Boxplot shows provider values as vertical lines in context of inner (25th-75th percentiles) and outer ranges (10th-90th percentiles)"
+			"Shows inner (25th-75th) and outer (10th-90th) percentiles"&
+			IF([Report Scope]="Filtered",
+			" as well as the "&LOWER([Benchmark Reference Label])
+			)
+		lineageTag: f7d22087-dd41-4ccd-ae68-ba667056345e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Benchmark Subtitle' =
+			
+			// IF([Report Scope]="Filtered","BM = "&FORMAT([Total Cases BM],"#,###")&" D/C's")
+			// IF([Report Scope]="Filtered",[Benchmark Reference Label]&" = "&FORMAT([Total Cases BM],"#,###")&" D/C's")
+			IF([Report Scope]="Filtered",[Benchmark Reference Label]&" N = "&FORMAT([Total Cases BM],"#,###"))
+			// IF([Report Scope]="Filtered","N = "&FORMAT([Total Cases BM],"#,###"))
+		displayFolder: Cases
+		lineageTag: c493201c-99e0-4151-b0cd-8f08f98a5342
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Admit Level Delta' =
+			
+			// [Admit Level]-[Admit Level BM]
+			// IF(
+			//     NOT(SELECTEDVALUE(BenchmarkTable[BenchmarkSetting])="Benchmark"),
+			//     [Admit Level]-[Admit Level BM]
+			// )
+			
+			IF([Report Scope]="Filtered",[Admit Level]-[Admit Level BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: b09e2e4e-df76-47ad-a563-3df3f4c0546a
+
+	measure 'Discharge Level Delta' =
+			
+			// [Discharge Level]-[Discharge Level BM]
+			// IF(
+			//     NOT(SELECTEDVALUE(BenchmarkTable[BenchmarkSetting])="Benchmark"),
+			//     [Discharge Level]-[Discharge Level BM]
+			// )
+			
+			IF([Report Scope]="Filtered",[Discharge Level]-[Discharge Level BM])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: d02f863d-1104-4d2e-a83b-8232cc50d456
+
+	measure 'Outcome 150%' = 1.10
+		lineageTag: 0155494f-a6b5-4913-94fc-b44fe938854a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcome 150% + Gain' = [Outcome 150%]+[Gain]*.5
+		lineageTag: 34466ac1-cc94-41a1-998d-8aad87ae0067
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Discharge Level Label' = "D/C"
+		displayFolder: Outcomes
+		lineageTag: cf51246b-5156-469f-8ac7-ef2c8a7ec931
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcome 200%' =
+			
+			1.5
+			// MAXX(ALL(BenchmarkTable),[Outcome 150% + Gain])*1.12
+		lineageTag: 4dae9b4d-385a-46ab-99af-49ed074b920f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcome 200% + % Improvement' =
+			
+			[Outcome 200%]+MIN([% Improvement],1.5)*.4
+			// [Outcome 200%]+[% Improvement]*.4
+		lineageTag: b2002eb3-e073-469f-b28f-715ca11546c9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcome Results Axis Max' =
+			
+			[Outcome 200% + % Improvement]*1.1
+		lineageTag: 0c6dfd1b-695f-4292-b7f5-04335cbea89e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Visit' =
+			
+			// AVERAGEX(
+			//     FILTER(
+			//         StayCases,
+			//         // ISBLANK([Admit Level])=FALSE() && ISBLANK([Discharge Level])=FALSE()
+			//         ISBLANK([Gain])=FALSE()
+			//     ),
+			//     DIVIDE(
+			//         [Gain],
+			//         // [Visits per Case]
+			//         [Total Visits]
+			//     )
+			// )
+			
+			DIVIDE(
+			    [Gain],
+			    [Visits per Case]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: 9240791c-f021-4082-82d4-9e2030617353
+
+	measure Zero = 0
+		lineageTag: 9806c903-6b11-4b72-a2b0-0b06aefc5285
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Day BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Gain per Day],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: 835450a6-3af3-43c1-985d-0dada856537c
+
+	measure 'Gain per Visit BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Gain per Visit],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: f3a527fd-6eb0-48bc-b246-a99ccd896c5c
+
+	measure 'Gain per Day Delta' =
+			
+			// IF(
+			//     NOT(SELECTEDVALUE(BenchmarkTable[BenchmarkSetting])="Benchmark"),
+			//     [Gain per Day]-[Gain per Day BM]
+			// )
+			
+			IF([Report Scope]="Filtered",[Gain per Day]-[Gain per Day BM])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: 634cf6aa-634a-42f1-bb7e-7146ca7a4fc9
+
+	measure 'Gain per Visit Delta' =
+			
+			// IF(
+			//     NOT(SELECTEDVALUE(BenchmarkTable[BenchmarkSetting])="Benchmark"),
+			//     [Gain per Visit]-[Gain per Visit BM]
+			// )
+			
+			
+			IF([Report Scope]="Filtered",[Gain per Visit]-[Gain per Visit BM])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: 02580a53-103d-4692-ad7a-7f932e809e15
+
+	measure 'Total Cases %' =
+			
+			var numerator = [Total Cases]
+			var denominator = CALCULATE([Total Cases],ALLSELECTED(StayCases))
+			var ratio = DIVIDE(numerator,denominator)
+			return ratio
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Cases
+		lineageTag: a29d587f-325b-45bf-a73b-c2883946ca75
+
+	measure 'Total Cases % (improved)' =
+			
+			var numerator = [Total Cases]
+			var denominator = CALCULATE([Total Cases],ALLSELECTED(StayCases))
+			var ratio = DIVIDE(numerator,denominator)
+			return IF(SELECTEDVALUE(StayCases[Case Result])="Improved",ratio)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Cases
+		lineageTag: b02b787a-490a-44b5-9a39-dc406ef5872e
+
+	measure 'Total Cases % (not improved)' =
+			
+			var numerator = [Total Cases]
+			var denominator = CALCULATE([Total Cases],ALLSELECTED(StayCases))
+			var ratio = DIVIDE(numerator,denominator)
+			return IF(SELECTEDVALUE(StayCases[Case Result])<>"Improved",ratio)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Cases
+		lineageTag: 17d345f8-8abe-497e-9095-3c484d422d6a
+
+	measure 'Results Distribution Subtitle' =
+			
+			var casesincluded = [Total Cases] //because visual will be filtered to exclude N/A's
+			var casestotal = CALCULATE([Total Cases],REMOVEFILTERS(StayCases[Case Result]))
+			var casesexcluded = casestotal-casesincluded+0
+			return
+			"Includes "&FORMAT(casesincluded,"#,###")&" of the total "&FORMAT(casestotal,"#,###")&" discharges (excludes "&FORMAT(casesexcluded,"#,##0")&" without valid outcomes)"
+		displayFolder: Cases
+		lineageTag: 37efb285-3cdd-4d85-9faf-febb63a336c2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain Delta Color' =
+			
+			IF([Gain Delta]>0,"GREEN",
+			IF([Gain Delta]<0,"RED"
+			))
+		displayFolder: Outcomes
+		lineageTag: 9002d77b-7eeb-41b8-974f-ce9eab2ab9c8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Improvement Delta Color' =
+			
+			IF([% Improvement Delta]>0,"GREEN",
+			IF([% Improvement Delta]<0,"RED"
+			))
+		displayFolder: Outcomes
+		lineageTag: 17011399-12ee-451a-9dcf-22037c379024
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Day Delta Color' =
+			
+			IF([Gain per Day Delta]>0,"GREEN",
+			IF([Gain per Day Delta]<0,"RED"
+			))
+		displayFolder: Outcomes
+		lineageTag: dd461451-c315-4034-a27a-9b2dfcef16c6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Visit Delta Color' =
+			
+			IF([Gain per Visit Delta]>0,"GREEN",
+			IF([Gain per Visit Delta]<0,"RED"
+			))
+		displayFolder: Outcomes
+		lineageTag: ddd4e650-a0d6-4d5f-be11-483d196ea98b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: State' =
+			
+			IF(
+			    ISFILTERED(Account[BillingState]),
+			    CONCATENATEX(VALUES(Account[BillingState]),Account[BillingState],", "),
+			    "All"
+			)
+		lineageTag: 612541c1-b846-48e4-b575-b2a6fc542bbf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain Delta Image' =
+			
+			var metric = [Gain Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Good],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Bad],"")
+			)))
+		displayFolder: Outcomes
+		lineageTag: e1c35b4a-05d6-4011-8403-faf0c67acdc2
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Improvement Delta Image' =
+			
+			var metric = [% Improvement Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Good],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Bad],"")
+			)))
+		displayFolder: Outcomes
+		lineageTag: 0e5b9abf-24fc-4b3d-a25e-e2a7e6ecf80f
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Day Delta Image' =
+			
+			var metric = [Gain per Day Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Good],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Bad],"")
+			)))
+		displayFolder: Outcomes
+		lineageTag: 82fa9338-edb3-4495-ae73-ccd196e150c2
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Visit Delta Image' =
+			
+			var metric = [Gain per Visit Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Good],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Bad],"")
+			)))
+		displayFolder: Outcomes
+		lineageTag: a56a261c-c10a-4104-a5b4-3fbccf785084
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DTC Delta Image' =
+			
+			var metric = [DTC Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Good],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Bad],"")
+			)))
+		lineageTag: 5b456035-42fe-4053-9171-75f918b84661
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Rehosp Delta Image' =
+			
+			var metric = [Rehosp Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Bad],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Good],"")
+			)))
+		lineageTag: a7aeadda-6c10-425b-bb36-4b57d0becc3f
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Total Cases Improved Delta Image' =
+			
+			var metric = [% Total Cases Improved Delta]
+			return
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Outcomes Delta Image Good],""),
+			IF(metric<0,FORMAT([Outcomes Delta Image Bad],"")
+			)))
+		displayFolder: Outcomes
+		lineageTag: bf986a4c-ad3d-4645-92ea-4796952d07ae
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Patient Acuity Avg Age Delta Image' =
+			
+			var metric = [Avg Age Delta]
+			return
+			IF([Report Scope]="Filtered",
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT(SUBSTITUTE([Patient Acuity Delta Image Higher],"#9EB4C3","RED"),""),
+			IF(metric<0,FORMAT(SUBSTITUTE([Patient Acuity Delta Image Lower],"#9EB4C3","GREEN"),"")
+			))))
+		lineageTag: c6f40a9d-28c7-44cd-8f2d-692411ccfd90
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Patient Acuity Num Dx Delta Image' =
+			
+			var metric = [Average Number of Diagnoses Delta]
+			return
+			IF([Report Scope]="Filtered",
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Patient Acuity Delta Image Higher],""),
+			IF(metric<0,FORMAT([Patient Acuity Delta Image Lower],"")
+			))))
+		lineageTag: 1984dd7b-1d79-4dd2-9c9e-9d3d5b281bb4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Patient Acuity Dx Weight Delta Image' =
+			
+			var metric = [Average Diagnosis Weight Delta]
+			return
+			IF([Report Scope]="Filtered",
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Patient Acuity Delta Image Higher],""),
+			IF(metric<0,FORMAT([Patient Acuity Delta Image Lower],"")
+			))))
+		lineageTag: 9dc00cf7-c14e-469b-8ef6-7ff2edb8f52b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Patient Acuity Dx Age Delta Image' =
+			
+			var metric = [Avg Dx Age Delta]
+			return
+			IF([Report Scope]="Filtered",
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT([Patient Acuity Delta Image Higher],""),
+			IF(metric<0,FORMAT([Patient Acuity Delta Image Lower],"")
+			))))
+		lineageTag: 6075f1ea-dae1-4cd8-9172-edfc5fb2e7a2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Evals Telehealth' =
+			
+			// DIVIDE(
+			//     [Total Visits Telehealth],
+			//     [Total Visits]
+			// )
+			
+			var numerator = CALCULATE([Total Visits],Service[Type]="EVAL",ISBLANK(Telehealth[TxSession_ID])=FALSE())
+			var denominator = CALCULATE([Total Visits],Service[Type]="EVAL")
+			var ratio = DIVIDE(numerator,denominator)
+			return ratio
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Telehealth
+		lineageTag: 7b1ae91e-0727-4ad4-afa1-0d1293827eb8
+
+	measure 'Report Scope' = IF([Total Facilities]=[Total Facilities BM],"Full","Filtered")
+		lineageTag: 66dc5f19-c12b-4a50-942b-050e2912e91d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Patient Acuity Delta Image Higher' =
+			
+			"data:image/svg+xml;utf8,<svg width=""24"" height=""24"" viewBox=""0 0 24 24"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"">
+			<path d=""M7.625 11.1667L12 7M12 7L16.375 11.1667M12 7L12 17"" stroke=""#9EB4C3"" stroke-width=""2"" stroke-linecap=""round"" stroke-linejoin=""round""/>
+			</svg>"
+		lineageTag: f0504686-972b-4fd0-8c08-b73f1d9427fd
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Patient Acuity Delta Image Lower' =
+			
+			"data:image/svg+xml;utf8,<svg width=""24"" height=""24"" viewBox=""0 0 24 24"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"">
+			<path d=""M16.375 12.8333L12 17M12 17L7.625 12.8333M12 17L12 7"" stroke=""#9EB4C3"" stroke-width=""2"" stroke-linecap=""round"" stroke-linejoin=""round""/>
+			</svg>"
+		lineageTag: e7715d33-536e-434b-80e4-ae7c26fa9af6
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcomes Delta Image Good' =
+			
+			// "data:image/svg+xml;utf8,<svg width=""24"" height=""24"" viewBox=""0 0 24 24"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"">
+			// <circle cx=""12"" cy=""12"" r=""12"" fill=""#0C436A"" fill-opacity=""1.00""/>
+			// </svg>"
+			
+			
+			"data:image/svg+xml;utf8,<svg width=""24"" height=""24"" viewBox=""0 0 24 24"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"">
+			<path d=""M9.54961 18L3.84961 12.3L5.27461 10.875L9.54961 15.15L18.7246 5.97498L20.1496 7.39998L9.54961 18Z"" fill=""#1D1B20"" stroke=""#0C436A"" stroke-width=""1"" stroke-linecap=""round"" stroke-linejoin=""round""/>
+			</svg>"
+		displayFolder: Outcomes
+		lineageTag: 71bcbb90-e114-4aef-bd02-cf6a5fad0e04
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcomes Delta Image Bad' =
+			
+			// "data:image/svg+xml;utf8,<svg width=""24"" height=""24"" viewBox=""0 0 24 24"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"">
+			// <circle cx=""12"" cy=""12"" r=""12"" fill=""#9EB4C3""  fill-opacity=""1.00""/>
+			// </svg>"
+			
+			
+			"data:image/svg+xml;utf8,<svg width=""24"" height=""24"" viewBox=""0 0 24 24"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"">
+			<path d=""M18 6L6 18M6 6L18 18"" stroke=""#9EB4C3"" stroke-width=""4"" stroke-linecap=""round"" stroke-linejoin=""round""/>
+			</svg>"
+		displayFolder: Outcomes
+		lineageTag: 2e489efd-ff41-445d-aa62-46b78817ad7d
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Outcomes SVG' = ```
+			
+			
+			var canvasWidth = 774
+			var canvasHeight = 70
+			
+			var endLinePad_x = .01 //prev was .12
+			var endLinePad_y = .33 //top and bottom padding for end lines
+			
+			var progressLineColor = IF([Gain]>0,"#7fbc42","#D64550")
+			var progressLineSize = 15
+			
+			return
+			
+			//check if valid count > 0
+			IF(ISBLANK([Total Measurements]),BLANK(),
+			
+			//prefix
+			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//left end line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_x*canvasWidth&""" 
+			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
+			    stroke=""#3DB3E3"" 
+			    stroke-width=""2""
+			/>"&
+			
+			//right end line
+			"<line 
+			    x1="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
+			    stroke=""#3DB3E3"" 
+			    stroke-width=""2""
+			/>"&
+			
+			//span line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&.50*canvasHeight&""" 
+			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y2="""&.50*canvasHeight&""" 
+			    stroke=""#3DB3E3""
+			    stroke-width=""2""
+			/>"&
+			
+			//progress line
+			"<line 
+			    x1="""&[Admit Level]*canvasWidth&""" 
+			    y1="""&.5*canvasHeight&""" 
+			    x2="""&[Discharge Level]*canvasWidth&""" 
+			    y2="""&.5*canvasHeight&""" 
+			    stroke="""&progressLineColor&""" 
+			    stroke-width="""&progressLineSize&"""
+			/>"&
+			
+			//admit circle
+			"<circle 
+			    cx="""&[Admit Level]*canvasWidth&""" 
+			    cy="""&.5*canvasHeight&""" 
+			    r="""&(1-2*endLinePad_y)*canvasHeight&""" 
+			    fill=""#0C436A""
+			/>"&
+			
+			//discharge circle
+			"<circle 
+			    cx="""&[Discharge Level]*canvasWidth&""" 
+			    cy="""&.5*canvasHeight&""" 
+			    r="""&(1-2*endLinePad_y)*canvasHeight&""" 
+			    fill=""#0C436A""
+			/>"&
+			
+			//suffix
+			"</svg>"
+			
+			)
+			```
+		displayFolder: Outcomes
+		lineageTag: 601abb3b-788a-4975-b76d-06984918829f
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Discharges per Therapist' =
+			
+			DIVIDE(
+			    [Total Cases],
+			    [Total Therapists]
+			)
+		lineageTag: a2b85cf4-9c8a-4f2b-b6f5-70c58a589c8c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Benchmark Reference Label' =
+			
+			"Benchmark"
+			// "Baseline"
+			// IF(ISFILTERED('BM Chain'[Name])=FALSE(),"Aegis Avg","Chain Avg")
+			
+			// IF(ISFILTERED('Override Chain'[Name]),"Chain avg",
+			// IF(ISFILTERED('Override State'[BillingState]),SELECTEDVALUE('Override State'[BillingState])&" avg",
+			// IF(ISFILTERED('Override Type'[Type]),SELECTEDVALUE('Override Type'[Type])&" avg",
+			// "Aegis avg"
+			// )))
+		displayFolder: Cases
+		lineageTag: 3c67df62-77c3-4461-87c0-f4c26ccd8639
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Diagnosis Header' =
+			
+			// "Diagnosis"&
+			// IF(
+			//     ISFILTERED(DX_Cases[Type]),
+			//     " (primary)"
+			// )
+			
+			
+			"Diagnosis"&
+			IF(ISFILTERED(DX_Cases[Type])=FALSE(),BLANK(),
+			SWITCH(
+			    SELECTEDVALUE(DX_Cases[Type]),
+			    "Primary"," (pri)",
+			    "Secondary"," (sec)"
+			))
+		lineageTag: f6cfda3f-7c4e-4acc-959b-abcdc45cfb97
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Therapists per Discipline' =
+			
+			// AVERAGEX(
+			//     StayCases,
+			//     DIVIDE(
+			//         [Therapists per Discharge],
+			//         [Total Disciplines]
+			//     )
+			// )
+			
+			AVERAGEX(
+			    StayCases,
+			    DIVIDE(
+			        [Total Therapists],
+			        [Total Disciplines Unique]
+			    )
+			)
+		lineageTag: 8f8e930e-2ca3-4b48-8483-f1cf86b1d424
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Minutes PRN' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    FTEType[Type]="Casual"
+			)
+		formatString: #,0
+		lineageTag: e237b80f-a2ab-4fc2-877b-b5903881b816
+
+	measure '% Minutes PRN' =
+			
+			DIVIDE(
+			    [Total Minutes PRN],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 463d50fc-7907-45fb-90cb-bc4ab6b0bce3
+
+	measure 'Total Minutes All Therapists' =
+			
+			// CALCULATE(
+			//     [Total Minutes],
+			//     ALL(EmployeeBasicInfo[Therapist Name])
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes],
+			//     ALL(EmployeeBasicInfo[Therapist Name]),
+			//     ALL(Disciplines),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes]>0
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes],
+			//     ALL(EmployeeBasicInfo),
+			//     ALL(Disciplines),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes]>0
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes],
+			//     FILTER(
+			//         ALL(Treatments),
+			//         RELATED(Disciplines[Discipline])=SELECTEDVALUE(Disciplines[Discipline])
+			//     ),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes]>0
+			//     )
+			// )
+			
+			var FilteredCases = VALUES(StayCases[PatientCase_ID])
+			var FilteredDisciplines = VALUES(Disciplines[Discipline])
+			
+			return
+			CALCULATE(
+			    [Total Minutes],
+			    StayCases[PatientCase_ID] IN FilteredCases,
+			    FILTER(
+			        ALL(Treatments),
+			        RELATED(Disciplines[Discipline]) IN FilteredDisciplines
+			    )
+			)
+		formatString: #,0
+		lineageTag: 95754d9c-4545-4688-8dab-8e9811643744
+
+	measure 'Total Minutes % Delivered by Therapist' =
+			
+			DIVIDE(
+			    [Total Minutes],
+			    [Total Minutes All Therapists]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 9fde75a2-4980-4d5c-9962-a27b3bdf0715
+
+	measure 'Total Minutes Eval' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Type]="EVAL"
+			)
+		formatString: #,0
+		lineageTag: ff58530c-d9ff-4f8a-aeb4-5613dd00b636
+
+	measure 'Total Visits Eval' =
+			
+			CALCULATE(
+			    [Total Visits],
+			    Service[Type]="EVAL"
+			)
+		lineageTag: 4eabb288-447c-4f7b-9e77-bb29cac9dade
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Disciplines Added' =
+			
+			// CALCULATE(
+			//     DISTINCTCOUNT(Disciplines[Discipline]),
+			//     FILTER(
+			//         CaseTracks,
+			//         [Total Visits]>0
+			//     )
+			// )
+			
+			SUMX(
+			    StayCases,
+			    [Total Disciplines Unique]
+			)
+		formatString: #,0
+		displayFolder: Misc
+		lineageTag: d1e0fe29-9294-4dc2-a168-8247bcfe6f28
+
+	measure 'Total Minutes Eval All Therapists' =
+			
+			// CALCULATE(
+			//     [Total Minutes Eval],
+			//     ALL(EmployeeBasicInfo),
+			//     ALL(Disciplines),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes Eval]>0
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes Eval],
+			//     FILTER(
+			//         ALL(Treatments),
+			//         RELATED(Disciplines[Discipline])=SELECTEDVALUE(Disciplines[Discipline])
+			//     ),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes]>0
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes All Therapists],
+			//     Service[Type]="EVAL"
+			// )
+			
+			var FilteredCases = VALUES(StayCases[PatientCase_ID])
+			var FilteredDisciplines = VALUES(Disciplines[Discipline])
+			
+			return
+			CALCULATE(
+			    [Total Minutes Eval],
+			    StayCases[PatientCase_ID] IN FilteredCases,
+			    FILTER(
+			        ALL(Treatments),
+			        RELATED(Disciplines[Discipline]) IN FilteredDisciplines
+			    )
+			)
+		formatString: #,0
+		lineageTag: 0168226a-fb47-4107-9d46-7be2cb0ff19c
+
+	measure 'Total Minutes Eval % Delivered by Therapist' =
+			
+			DIVIDE(
+			    [Total Minutes Eval],
+			    [Total Minutes Eval All Therapists]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 47e19ca1-0022-4ebf-bc2e-dfd6649178ee
+
+	measure 'Total Minutes Treat' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[Type]="TREAT"
+			)
+		formatString: #,0
+		lineageTag: 6ab2fb6d-42f8-4982-8944-31d51163a85b
+
+	measure 'Total Minutes Treat All Therapists' =
+			
+			// CALCULATE(
+			//     [Total Minutes Treat],
+			//     ALL(EmployeeBasicInfo),
+			//     ALL(Disciplines),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes Treat]>0
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes Treat],
+			//     FILTER(
+			//         ALL(Treatments),
+			//         RELATED(Disciplines[Discipline])=SELECTEDVALUE(Disciplines[Discipline])
+			//     ),
+			//     FILTER(
+			//         StayCases,
+			//         [Total Minutes]>0
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     [Total Minutes All Therapists],
+			//     Service[Type]="TREAT"
+			// )
+			
+			var FilteredCases = VALUES(StayCases[PatientCase_ID])
+			var FilteredDisciplines = VALUES(Disciplines[Discipline])
+			
+			return
+			CALCULATE(
+			    [Total Minutes Treat],
+			    StayCases[PatientCase_ID] IN FilteredCases,
+			    FILTER(
+			        ALL(Treatments),
+			        RELATED(Disciplines[Discipline]) IN FilteredDisciplines
+			    )
+			)
+		formatString: #,0
+		lineageTag: 1a824b15-0276-4731-b6f7-245a0779e18f
+
+	measure 'Total Minutes Treat % Delivered by Therapist' =
+			
+			DIVIDE(
+			    [Total Minutes Treat],
+			    [Total Minutes Treat All Therapists]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 28b8e052-8293-421a-9c29-6550f80a441c
+
+	measure 'ActiveFilters: Age Range' =
+			
+			IF(
+			    ISFILTERED(StayCases[Age Range]),
+			    CONCATENATEX(VALUES(StayCases[Age Range]),StayCases[Age Range],", "),
+			    "All"
+			)
+		lineageTag: fb164b2d-05a2-40c9-aed1-1050dc373182
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Drill Scope' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(Employees[Person_ID]),"Therapist",
+			    ISFILTERED(StayCases[PatientCase_ID]),"Patient",
+			    BLANK()
+			)
+		lineageTag: a4f87782-0568-4243-aa7b-aa30249c43c9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Minutes Skilled Maintenance' =
+			
+			CALCULATE(
+			    [Total Minutes],
+			    Service[ServiceCode]="SkldM"
+			)
+		formatString: #,0
+		lineageTag: f20909ed-8877-40ee-b764-0149c4ac419c
+
+	measure 'Gain (Pain)' =
+			
+			CALCULATE(
+			    [Gain],
+			    Dictionary[Group]="Pain"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: 36cb16f0-2aef-4398-a6bf-afb6dfa311df
+
+	measure '% Pain Cases Improved' =
+			
+			var numerator = CALCULATE([Total Cases],FILTER(StayCases,[Gain (Pain)]>0))
+			var denominator = CALCULATE([Total Cases],FILTER(StayCases,[Admit Level (Pain)]<>1 && ISBLANK([Admit Level (Pain)])=FALSE()))
+			RETURN DIVIDE(numerator,denominator)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ef0c253f-e3f1-4792-aa6b-7169240d2fc7
+
+	measure 'Total Cases with Pain' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    FILTER(
+			        StayCases,
+			        [Admit Level (Pain)]<>1 && ISBLANK([Admit Level (Pain)])=FALSE()
+			    )
+			)
+		formatString: #,0
+		displayFolder: Cases
+		lineageTag: d30d509c-120e-4579-b4e1-7137f5b35439
+
+	measure 'Total Measurements Included %' =
+			
+			DIVIDE(
+			    [Total Measurements],
+			    [Total Measurements Recorded]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ed764c7f-b42a-47a5-8e09-ccb0f13577b1
+
+	measure '% Cases Measured' =
+			
+			// var numerator = [Total Cases]
+			// var denominator = CALCULATE([Total Cases],REMOVEFILTERS(Dictionary))
+			// RETURN DIVIDE(numerator,denominator)
+			
+			
+			var numerator = CALCULATE([Total Cases],FILTER(StayCases,NOT(ISBLANK([Total Measurements Recorded]))))
+			var denominator = CALCULATE([Total Cases],REMOVEFILTERS(Dictionary))
+			RETURN DIVIDE(numerator,denominator)
+			
+			// var numerator = CALCULATE([Total Cases],FILTER(StayCases,NOT(ISBLANK([Total Measurements]))))
+			// var denominator = CALCULATE([Total Cases],REMOVEFILTERS(Dictionary))
+			// RETURN DIVIDE(numerator,denominator)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: eb9d6dbf-695f-48ec-bec5-1e191304d31b
+
+	measure 'Total Cases % Complement' = 1-[Total Cases %]
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Cases
+		lineageTag: f25fc684-d4a5-4847-a9ae-80ee527ff73d
+
+	measure 'ActiveFilters: Override' =
+			
+			var newline = UNICHAR(13)&UNICHAR(10)
+			var multiline = REPT(newline,2)
+			
+			// var overridedivision = IF(ISFILTERED(VW_NHAegisFacilities[Division]),"Division(s): "&CONCATENATEX(VALUES(VW_NHAegisFacilities[Division]),VW_NHAegisFacilities[Division],", "))
+			var overridedivision = IF(([Total Cases]<>[Total Cases BM] || ISFILTERED(VW_NHAegisFacilities[Division])),"Division(s): "&CONCATENATEX(VALUES(VW_NHAegisFacilities[Division]),VW_NHAegisFacilities[Division],", "))
+			var overridechain = IF(ISFILTERED('Override Chain'[Name]),LEFT(SELECTEDVALUE('Override Chain'[Name]),17),"Aegis Therapies")
+			var overridetype = IF(ISFILTERED('Override Type'[Type]),"Facility Type(s): "&CONCATENATEX(VALUES('Override Type'[Type]),'Override Type'[Type],", "))
+			var overridepayer = IF(ISFILTERED('Override Payer'[Payer Grouping]),"Payer(s): "&CONCATENATEX(VALUES('Override Payer'[OPGLabel]),'Override Payer'[OPGLabel],", "))
+			var overridestate = IF(ISFILTERED('Override State'[BillingState]),"State(s): "&CONCATENATEX(VALUES('Override State'[BillingState]),'Override State'[BillingState],", "))
+			var concatTable = FILTER({overridedivision,overridechain,overridetype,overridepayer,overridestate},NOT(ISBLANK([Value])))
+			return CONCATENATEX(concatTable,[Value],newline)
+		lineageTag: 84aa1836-d8ee-4bb0-a2cd-3adaaf948954
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: D/C Status' = ```
+			
+			var newline = UNICHAR(13)&UNICHAR(10)
+			var multiline = REPT(newline,2)
+			
+			var DCtype = 
+			IF(ISFILTERED(DischargeDestination[Type]),"Type:"&" "&
+			CONCATENATEX(VALUES(DischargeDestination[Type]),DischargeDestination[Type],", ")
+			)
+			
+			var DCexpected = 
+			IF(ISFILTERED(StayCases[Expected Discharge Destination]),"Expected:"&" "&
+			CONCATENATEX(VALUES(StayCases[Expected Discharge Destination]),StayCases[Expected Discharge Destination],", ")
+			)
+			
+			var DCdest = 
+			IF(ISFILTERED(DischargeDestination[Setting]) || ISFILTERED(DischargeDestination[Group]),"Actual: "&" "&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(DischargeDestination[Setting]),CONCATENATEX(VALUES(DischargeDestination[Setting]),DischargeDestination[Setting],", "),
+			    ISFILTERED(DischargeDestination[Group]),CONCATENATEX(VALUES(DischargeDestination[Group]),DischargeDestination[Group],", ")
+			))
+			
+			var concatTable = FILTER({DCtype,DCexpected,DCdest},NOT(ISBLANK([Value])))
+			
+			return COALESCE(CONCATENATEX(concatTable,[Value],newline),"All")
+			```
+		lineageTag: b8921e2b-f799-4a28-ad4a-daafa247d3b7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Patient' = ```
+			
+			var newline = UNICHAR(13)&UNICHAR(10)
+			var multiline = REPT(newline,2)
+			
+			var payer = 
+			IF(
+			    ISFILTERED('Payer Buckets'[Payer Categorization]) || ISFILTERED('Payer Buckets'[Payer Grouping]) || ISFILTERED(Payers[Name]),
+			    "Payer:" & " " &
+			    // Add categorization or grouping label
+			    SWITCH(
+			        TRUE(),
+			        ISFILTERED('Payer Buckets'[Payer Categorization]),
+			            CONCATENATEX(VALUES('Payer Buckets'[PCLabel]), 'Payer Buckets'[PCLabel], ", "),
+			        ISFILTERED('Payer Buckets'[Payer Grouping]),
+			            CONCATENATEX(VALUES('Payer Buckets'[PGLabel]), 'Payer Buckets'[PGLabel], ", ")
+			    ) &
+			    // Add separator if both payer segment and name are filtered
+			    IF(
+			        (ISFILTERED('Payer Buckets'[Payer Categorization]) || ISFILTERED('Payer Buckets'[Payer Grouping])) 
+			        && ISFILTERED(Payers[Name]),
+			        " | ",
+			        ""
+			    ) &
+			    // Append payer name if filtered
+			    IF(
+			        ISFILTERED(Payers[Name]),
+			        CONCATENATEX(VALUES(Payers[Name]), Payers[Name], ", ")
+			    )
+			)
+			
+			
+			var agerange = 
+			IF(ISFILTERED(StayCases[Age Range]),"Age Range:"&" "&
+			CONCATENATEX(VALUES(StayCases[Age Range]),StayCases[Age Range],", ")
+			)
+			
+			var placeofresidence = 
+			IF(ISFILTERED(IntakeSources[Name]) || ISFILTERED(IntakeSources[SourceType]),"Place of Residence:"&" "&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(IntakeSources[Name]),CONCATENATEX(VALUES(IntakeSources[Abbrev]),IntakeSources[Abbrev],", "),
+			    ISFILTERED(IntakeSources[SourceType]),CONCATENATEX(VALUES(IntakeSources[SourceType]),IntakeSources[SourceType],", ")
+			))
+			
+			var diagnosis = 
+			IF(NOT(ISFILTERED(DX_Cases[L1]) || ISFILTERED(DX_Cases[L2]) || ISFILTERED(DX_Cases[L3]) || ISFILTERED(DX_Cases[L4])),BLANK(),
+			IF(ISFILTERED(DX_Cases[Type]),SELECTEDVALUE(DX_Cases[Type])&" ")&
+			"Diagnosis:"&newline&
+			SWITCH(
+			    TRUE(),
+			    ISFILTERED(DX_Cases[L4]),CONCATENATEX(VALUES(DX_Cases[L4]),DX_Cases[L4],", "),
+			    ISFILTERED(DX_Cases[L3]),CONCATENATEX(VALUES(DX_Cases[L3]),DX_Cases[L3],", "),
+			    ISFILTERED(DX_Cases[L2]),CONCATENATEX(VALUES(DX_Cases[L2]),DX_Cases[L2],", "),
+			    ISFILTERED(DX_Cases[L1]),CONCATENATEX(VALUES(DX_Cases[L1]),DX_Cases[L1],", ")
+			))
+			
+			var concatTableShort = FILTER({payer,agerange,placeofresidence},NOT(ISBLANK([Value])))
+			var concatTableLong = FILTER({diagnosis},NOT(ISBLANK([Value])))
+			
+			var stringShort = CONCATENATEX(concatTableShort,[Value],newline)
+			var stringLong = CONCATENATEX(concatTableLong,[Value],multiline)
+			var stringJoined = FILTER({stringShort,stringLong},NOT(ISBLANK([Value])))
+			
+			
+			return COALESCE(CONCATENATEX(stringJoined,[Value],multiline),"All")
+			```
+		lineageTag: 5d05171c-2c72-4b67-83b7-37d583006310
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ActiveFilters: Test' =
+			
+			var pcat = IF(ISFILTERED('Payer Buckets'[Payer Categorization]),"Cat")
+			var pgroup = IF(ISFILTERED('Payer Buckets'[Payer Grouping]),"Group")
+			var ogroup = IF(ISFILTERED('Override Payer'[Payer Grouping]),"Override")
+			
+			var pvalues = FILTER({pcat,pgroup,ogroup},ISBLANK([Value])=FALSE())
+			var concat = CONCATENATEX(pvalues,[Value],", ")
+			return concat
+		lineageTag: 139734ac-627f-4634-aa70-3b1387dfdbb3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Admit Level (all)' = AVERAGE(OutcomeSummary[EvalNEW])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: ea785402-23d5-4988-ba08-00b04836e2c5
+
+	measure 'Discharge Level (all)' = AVERAGE(OutcomeSummary[TableDisch])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Outcomes
+		lineageTag: a09a7a25-c184-41e0-8ff1-af53632962f3
+
+	measure 'Selected Story' =
+			
+			// SELECTEDVALUE(OutcomeSummary[Story])
+			IF(
+			    DISTINCTCOUNT(Dictionary[Name])=1 && ISINSCOPE(Dictionary[Name]),
+			    FIRSTNONBLANK(OutcomeSummary[Story],1)
+			)
+		displayFolder: Outcomes
+		lineageTag: 182c9a61-e27b-4423-b9d5-4bf317f8a226
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Measurements Recorded Label' =
+			
+			// FORMAT([Total Measurements Recorded],"#,##0")&" values"
+			
+			// var numerator = [Total Cases]
+			// var denominator = CALCULATE([Total Cases],ALLSELECTED(StayCases))
+			// var ratio = DIVIDE(numerator,denominator)
+			// return ratio
+			
+			var numerator = [Total Measurements Recorded]
+			var denominator = CALCULATE([Total Measurements Recorded],ALLSELECTED(OutcomeSummary))
+			var ratio = DIVIDE(numerator,denominator)
+			
+			return
+			FORMAT([Total Measurements Recorded],"#,##0")&" ("&FORMAT(ratio,"0.0%")&")"
+		displayFolder: Outcomes
+		lineageTag: 3becc123-0e4f-49c7-9893-fcce179f0da0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Minutes Skilled Maintenance' =
+			
+			DIVIDE(
+			    [Total Minutes Skilled Maintenance],
+			    [Total Minutes]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: fa46efaf-5c1d-41e7-8e6a-52dc2fb3b758
+
+	measure 'Discharge Level Delta Text' =
+			
+			// "∆: "&FORMAT([Discharge Level Delta],"0.0%")
+			IF([Report Scope]="Filtered","∆: "&FORMAT([Discharge Level Delta],"0.0%"))
+		displayFolder: Outcomes
+		lineageTag: d365afa1-3e6b-4e64-849e-99c62bfb23cb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Admit Level Delta Text' =
+			
+			// "∆:  "&FORMAT([Admit Level Delta],"0.0%")
+			IF([Report Scope]="Filtered","∆:  "&FORMAT([Admit Level Delta],"0.0%"))
+		displayFolder: Outcomes
+		lineageTag: a729d058-7ca7-46aa-9269-bd053a6fd935
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Minutes per Week Delta' =
+			
+			IF([Report Scope]="Filtered",[Minutes per Week]-[Minutes per Week BM])
+		formatString: 0
+		displayFolder: Minutes
+		lineageTag: 082cb2c2-0ad0-48cc-aff9-5104e6e185d1
+
+	measure 'Gain per Hour' =
+			
+			// DIVIDE(
+			//     [Gain],
+			//     [Visits per Case]
+			// )
+			
+			DIVIDE(
+			    [Gain],
+			    [Minutes per Case]/60
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: f039ea75-24da-45be-a07e-616636b845af
+
+	measure 'Visits per Case BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Visits per Case],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		displayFolder: Visits
+		lineageTag: 3ddf0b87-4597-468d-8ca6-c2105ae2ce5b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Visits per Case Delta' =
+			
+			IF([Report Scope]="Filtered",[Visits per Case]-[Visits per Case BM])
+		displayFolder: Visits
+		lineageTag: a960c69c-0468-461e-9174-53963866865d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cases with Outcomes' =
+			
+			CALCULATE(
+			    [Total Cases],
+			    FILTER(
+			        StayCases,
+			        [Total Measurements]>0
+			    )
+			)
+		displayFolder: Cases
+		lineageTag: 615f7fd3-41a8-4018-a306-5e4b2689285e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Measurements Recorded Text' =
+			
+			FORMAT([Total Measurements Recorded],"#,##0")&" total measurements from other exclusions"
+		displayFolder: Outcomes
+		lineageTag: e74ffaa3-949d-4dc7-ae1b-ef666cecc73e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Measurements Remove Filters' =
+			
+			CALCULATE(
+			    [Total Measurements Recorded],
+			    ALL(OutcomeSummary[Criteria Start]),
+			    ALL(OutcomeSummary[Criteria End]),
+			    ALL(OutcomeSummary[Story])
+			)
+		displayFolder: Outcomes
+		lineageTag: 744e8907-30ae-4876-8379-b467373c8025
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain per Hour BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Gain per Hour],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Outcomes
+		lineageTag: 8b1303fd-bc8f-4c16-af90-6edec8d8a984
+
+	measure 'Visits per Week BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Visits per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: a7661c68-51e0-40e2-96dc-93cf36db8593
+
+	measure 'Minutes per Week (part a)' =
+			
+			CALCULATE(
+			    [Minutes per Week],
+			    'Payer Buckets'[Payer Grouping]="(A) Medicare Part A and A-Like"
+			)
+		formatString: #,0
+		displayFolder: Minutes
+		lineageTag: 90e95855-c1c8-4228-a2b8-589d9d4e27ce
+
+	partition MeasureTable = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

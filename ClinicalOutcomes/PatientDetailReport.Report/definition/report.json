@@ -1,0 +1,12 @@
+{
+  "layoutOptimization": 0,
+  "publicCustomVisuals": [],
+  "resourcePackages": [],
+  "settings": {
+    "defaultDrillFilterOtherVisuals": true,
+    "useDefaultAggregateDisplayName": true,
+    "useEnhancedTooltips": true
+  },
+  "objects": {},
+  "filters": "[]"
+}

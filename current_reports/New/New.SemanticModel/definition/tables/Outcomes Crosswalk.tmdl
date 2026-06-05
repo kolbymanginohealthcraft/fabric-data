@@ -1,0 +1,69 @@
+table 'Outcomes Crosswalk'
+	lineageTag: 2b0d15d8-338a-4d84-8cc8-a20229f6021f
+
+	column LibraryItem_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 9cc2937c-a032-4c1f-9f06-e30cfd5f4c18
+		summarizeBy: none
+		sourceColumn: LibraryItem_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Family
+		dataType: string
+		lineageTag: 7d8e7c72-0a39-4c97-b76c-7d417876b322
+		summarizeBy: none
+		sourceColumn: Family
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: c6128689-2768-4a99-b28f-928a3e5aedad
+		summarizeBy: none
+		sourceColumn: Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: 6fd047cb-dfeb-4fb8-89b1-ae08853bbe55
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column RequiredFor
+		dataType: string
+		lineageTag: f037e315-486a-403b-a3d7-ac74d091468d
+		summarizeBy: none
+		sourceColumn: RequiredFor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Outcomes Crosswalk' = m
+		mode: import
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://aegis.sharepoint.com/sites/ITPowerBiFiles/Shared%20Documents/Outcomes/Outcomes%20Crosswalk.xlsx"), null, true),
+				    Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"LibraryItem_ID", Int64.Type}, {"Family", type text}, {"Name", type text}, {"RequiredFor", type text}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

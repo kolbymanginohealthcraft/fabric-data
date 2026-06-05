@@ -1,0 +1,195 @@
+table CaseTracks
+	lineageTag: 2f70d1c5-9fb4-4d9d-941b-5ce3ae7e833e
+
+	measure 'Total Tracks' = COUNTROWS(CaseTracks)
+		formatString: #,0
+		lineageTag: 1ea16cd9-2277-418c-9247-407e5b7127e4
+
+	measure 'Min Track Start' = MIN(CaseTracks[StartDate])
+		formatString: Short Date
+		lineageTag: 8c853bd8-baac-4971-9553-54f573b0b2f6
+
+	measure 'Max Track End' = MAX(CaseTracks[EndDate])
+		formatString: Short Date
+		lineageTag: 0b208edd-95a4-4fde-aa15-820d858f21e4
+
+	measure 'Track Duration' =
+			
+			DATEDIFF(
+			    SELECTEDVALUE(CaseTracks[StartDate])-1,
+			    SELECTEDVALUE(CaseTracks[EndDate]),
+			    DAY
+			)
+		lineageTag: 10b54b7b-2897-4b99-95a2-f27fa591f12a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Track Start' = SELECTEDVALUE(CaseTracks[StartDate])
+		lineageTag: 31431a88-e9e7-48c4-9a60-67cba3d2b128
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TxTrack_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: f709a6a9-1ecc-49d3-80f7-444932be70ec
+		summarizeBy: none
+		sourceColumn: TxTrack_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PatientCase_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 17432cc1-d58a-4ebf-9b8f-a2707eda26c1
+		summarizeBy: none
+		sourceColumn: PatientCase_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discipline
+		dataType: string
+		isHidden
+		lineageTag: 84244e05-f26e-48a8-82f3-6eae2f11ae37
+		summarizeBy: none
+		sourceColumn: Discipline
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 8a906e0f-f580-4e1d-ad13-9f106f4d5587
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		variation Variation
+			isDefault
+			relationship: f3681b27-4766-48b5-889c-845f3aefb9be
+			defaultHierarchy: LocalDateTable_3002af17-beee-4a55-b8e2-18c5467ab6fc.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EndDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: b1bfb695-b01d-4f69-9965-be761954bea4
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		variation Variation
+			isDefault
+			relationship: 5daad277-a70e-46c2-b29d-f492aa670699
+			defaultHierarchy: LocalDateTable_6f94c7d5-e0f8-4b39-9777-afd8b1b9f279.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Evaluating Therapist' =
+			
+			CALCULATE(
+			    FIRSTNONBLANK(Employees[Name],1),
+			    Service[Type]="Eval"
+			)
+		lineageTag: 848867f7-6e2d-4485-8d78-cdc7284719a8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Evaluation Method' =
+			
+			// CALCULATE(
+			//     FIRSTNONBLANK(Employees[Name],1),
+			//     Service[Type]="Eval"
+			// )
+			
+			IF(
+			    CALCULATE(MIN(Treatments[LaborDate]))=CALCULATE(MIN(Treatments[LaborDate]),ISBLANK(Telehealth[TxSession_ID])=FALSE()),
+			    "Telehealth",
+			    "In-Person"
+			)
+			
+			// CALCULATE(MIN(Treatments[LaborDate]))
+			
+			// CALCULATE(MIN(Treatments[LaborDate]),ISBLANK(Telehealth[TxSession_ID])=FALSE())
+		lineageTag: 5c1cd6a9-99b4-4dff-aa0f-2973eb181770
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Evaluating Therapist FTE Type' =
+			
+			CALCULATE(
+			    FIRSTNONBLANK(FTEType[Type],1),
+			    Service[Type]="Eval"
+			)
+		lineageTag: a10f132b-0863-41e5-8d0f-2d914a6a56c3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Admit Level: Walk 10 ft' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    Dictionary[Name] = "I. Walk 10 feet"
+			)
+		lineageTag: 44545570-b036-405f-9011-993abc0b7481
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Admit Level: Gait Speed' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    Dictionary[Name] = "4MWT Gait Speed Test"
+			)
+		lineageTag: 1124b76f-684d-4a87-9029-b4daf2e22c15
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column UsesRequiredMeasure =
+			
+			SWITCH(
+			    CaseTracks[Discipline],
+			    "PT",ISBLANK(CALCULATE([Admit Level],Dictionary[RequiredFor]="PT"))=FALSE(),
+			    "OT",ISBLANK(CALCULATE([Admit Level],Dictionary[RequiredFor]="OT"))=FALSE(),
+			    BLANK()
+			)
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a9c13d2d-374f-4296-b8b9-e673ab950af4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CaseTracks = m
+		mode: directQuery
+		queryGroup: Patient
+		source =
+				let
+				    Source = dbo_vw_CaseTracks,
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"StartDate", type date}, {"EndDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

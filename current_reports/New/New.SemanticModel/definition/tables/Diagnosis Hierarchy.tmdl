@@ -1,0 +1,93 @@
+table 'Diagnosis Hierarchy'
+	lineageTag: 2ba5eb0b-2dba-4d9a-9963-0232bce43f4f
+
+	measure 'Diagnosis Hierarchy Unique Values' =
+			
+			// SWITCH(
+			//     MIN('Diagnosis Hierarchy'[Diagnosis Hierarchy]),
+			//     "L1",FORMAT(DISTINCTCOUNT(DiagnosisCode[L1]),"#,##0")&" distinct values",
+			//     "L2",FORMAT(DISTINCTCOUNT(DiagnosisCode[L2]),"#,##0")&" distinct values",
+			//     "L3",FORMAT(DISTINCTCOUNT(DiagnosisCode[L3]),"#,##0")&" distinct values",
+			//     "L4",FORMAT(DISTINCTCOUNT(DiagnosisCode[L4]),"#,##0")&" distinct values",
+			//     BLANK()
+			// )
+			
+			FORMAT(
+			    SWITCH(
+			        MIN('Diagnosis Hierarchy'[Diagnosis Hierarchy]),
+			        "L1",DISTINCTCOUNT(DiagnosisCode[L1]),
+			        "L2",DISTINCTCOUNT(DiagnosisCode[L2]),
+			        "L3",DISTINCTCOUNT(DiagnosisCode[L3]),
+			        "L4",DISTINCTCOUNT(DiagnosisCode[L4]),
+			        BLANK()
+			    ),
+			    "#,##0"
+			)
+			&" distinct values"
+		formatString: #,0
+		lineageTag: 7f3f0360-d987-4ec5-8fab-147dead0b784
+
+	column 'Diagnosis Hierarchy'
+		lineageTag: 1ba53d6b-7be3-47fd-be4f-f3f5d1e50bcd
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Diagnosis Hierarchy Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Diagnosis Hierarchy Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Diagnosis Hierarchy Fields'
+		isHidden
+		lineageTag: 65a24824-4ef2-4cd7-871e-5833d7e84b44
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Diagnosis Hierarchy Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Diagnosis Hierarchy Order'
+		isHidden
+		formatString: 0
+		lineageTag: 4c90b8ef-b4dc-4b97-937c-d563b4983183
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Diagnosis Hierarchy Selection' =
+			
+			// 'Diagnosis Hierarchy'[Diagnosis Hierarchy]
+			
+			SWITCH(
+			    'Diagnosis Hierarchy'[Diagnosis Hierarchy],
+			    "L1","Dx Level 1 (most broad)",
+			    "L2","Dx Level 2",
+			    "L3","Dx Level 3",
+			    "L4","Dx Level 4 (most granular)",
+			    BLANK()
+			)
+		lineageTag: d274c04a-917a-4478-89f4-915f9b15a4e1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Diagnosis Hierarchy' = calculated
+		mode: import
+		source =
+				{
+				    ("L1", NAMEOF('DX_Cases'[L1]), 0),
+				    ("L2", NAMEOF('DX_Cases'[L2]), 1),
+				    ("L3", NAMEOF('DX_Cases'[L3]), 2),
+				    ("L4", NAMEOF('DX_Cases'[L4]), 3)
+				}
+
+	annotation PBI_Id = 805efd83c9e8400ead0729166ff61977
+

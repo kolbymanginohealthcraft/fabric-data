@@ -62,18 +62,12 @@ table Facility
 		summarizeBy: none
 		sourceColumn: AreaName
 
-	column PrimaryHealthcareSetting
-		dataType: string
-		lineageTag: da5d976a-07c2-40f1-a3be-fd9cfdc022c3
-		summarizeBy: none
-		sourceColumn: PrimaryHealthcareSetting
-
 	partition Facility = m
 		mode: import
 		source =
 				let
-					Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "BINetHealthPatientLakehouse"),
-					Data = Value.NativeQuery(Source, "SELECT f.Facility_ID, f.Name AS FacilityName, f.FacilityCode, f.SiteType, f.PrimaryHealthcareSetting, fh.DivisionName, fh.RegionName, fh.AreaName FROM PatientInfo.Facility f LEFT JOIN BINetHealthGeneralLakehouse.FacilityInfo.FacilityHierarchy fh ON f.Facility_ID = fh.Facility_ID WHERE fh.DivisionCode IN ('8450', '5500', '6500')", null, [EnableFolding=true])
+					Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-vox2z5x5nsnuri4qviabf7xo3i.datawarehouse.fabric.microsoft.com", "Aegis_Core_Silver_Lakehouse"),
+					Data = Value.NativeQuery(Source, "SELECT f.NetHealthId AS Facility_ID, f.Name AS FacilityName, f.FacilityNumber AS FacilityCode, f.SiteType, fh.RegionName AS DivisionName, fh.AreaName AS RegionName, fh.DistrictName AS AreaName FROM dbo.facility f LEFT JOIN dbo.facilityhierarchy fh ON f.FacilityNumber = fh.FacilityNumber WHERE fh.RegionNumber IN ('08450', '05500', '06500')", null, [EnableFolding=true])
 				in
 					Data
 

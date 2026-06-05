@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "3db7338936c2bacaa3ad",
+  "displayName": "Duplicate of Home",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 960,
+  "filterConfig": {
+    "filterSortOrder": "Custom"
+  },
+  "visibility": "HiddenInViewMode",
+  "type": "Drillthrough"
+}

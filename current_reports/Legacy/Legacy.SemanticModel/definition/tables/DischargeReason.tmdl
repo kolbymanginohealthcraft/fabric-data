@@ -1,0 +1,129 @@
+table DischargeReason
+	lineageTag: 4ef6a34f-883c-4bb7-b4d1-7a02bf4f74a8
+
+	column Lookup_ID
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: 586325b0-4444-4371-8162-d82b5561582d
+		summarizeBy: none
+		sourceColumn: Lookup_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descrip
+		dataType: string
+		lineageTag: b3cd220c-48ed-42dc-9ebe-b20b76655296
+		summarizeBy: none
+		sourceColumn: Descrip
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type =
+			
+			IF(
+			    DischargeReason[Lookup_ID] IN {464, 465, 466, 467, 469, 480, 1544, 1546, 1548, 1553, 1554, 1557},
+			    "Planned","Unplanned"
+			)
+		lineageTag: f6e8ed53-8db2-477c-b869-d07780b68c75
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Updated
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 602bdd6a-72a8-4be3-bcb3-132652ff8e2f
+		summarizeBy: none
+		sourceColumn: Updated
+
+		variation Variation
+			isDefault
+			relationship: 8cfc0eae-44fc-46cd-9689-198e8182d0d9
+			defaultHierarchy: LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 93fe15c0-4974-4493-981b-d5508568eddd
+		summarizeBy: none
+		sourceColumn: FromDate
+
+		variation Variation
+			isDefault
+			relationship: 2ff96930-0909-4267-b71c-a1b86578ceac
+			defaultHierarchy: LocalDateTable_78295776-baa8-46db-9442-10c00803b1be.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThruDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d80723fc-255d-4158-bae0-92164f5db4ab
+		summarizeBy: none
+		sourceColumn: ThruDate
+
+		variation Variation
+			isDefault
+			relationship: 7e006a92-f4c9-4f9a-939c-bb2101db5119
+			defaultHierarchy: LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplaySequence
+		dataType: int64
+		formatString: 0
+		lineageTag: b77d57c9-be22-4d8b-bf6c-a6dbc5462f4a
+		summarizeBy: sum
+		sourceColumn: DisplaySequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSystem
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 942dc594-4344-4e8a-b811-27c826e795f1
+		summarizeBy: none
+		sourceColumn: IsSystem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedBy
+		dataType: string
+		lineageTag: e02050bc-b24c-4dbe-abe4-c0ec8ec9e60c
+		summarizeBy: none
+		sourceColumn: ModifiedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCommon
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 85ba93b2-c904-47cf-bd3a-a39b751563d8
+		summarizeBy: none
+		sourceColumn: IsCommon
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DischargeReason = m
+		mode: import
+		queryGroup: Discharge
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
+				    Lookup_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Lookup",version=""]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(Lookup_, each ([Type] = "CASEEND   ")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type", "Abbrev", "Category"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

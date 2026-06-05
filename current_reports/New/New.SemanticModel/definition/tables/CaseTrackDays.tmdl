@@ -1,0 +1,79 @@
+table CaseTrackDays
+	lineageTag: 9eb2e72f-b42c-403d-b292-a83e6ddc3b94
+
+	measure 'Total Unique CaseTrackDays' =
+			
+			DISTINCTCOUNT(CaseTrackDays[TrackDate])
+		formatString: #,0
+		lineageTag: 9a7cdb3e-ed38-4abe-8427-ac9fd277b5f5
+
+	column TxTrack_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: df7998c6-1390-4b9c-a07d-a44e9712cd99
+		summarizeBy: none
+		sourceColumn: TxTrack_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TrackDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: e2ce5a37-075f-449f-b847-b051d6c514f0
+		summarizeBy: none
+		sourceColumn: TrackDate
+
+		variation Variation
+			isDefault
+			relationship: 3a9cd86e-0493-4472-aa26-80ba952ba37b
+			defaultHierarchy: LocalDateTable_a4cc8487-4eb6-4592-aecd-29b228020808.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition CaseTrackDays = m
+		mode: import
+		queryGroup: Patient
+		source =
+				// let
+				//     Source = PowerPlatform.Dataflows(null),
+				//     Workspaces = Source{[Id="Workspaces"]}[Data],
+				//     #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				//     #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
+				//     CaseTracks_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="CaseTracks",version=""]}[Data],
+				//     #"Changed Type" = Table.TransformColumnTypes(CaseTracks_,{{"StartDate", type date}, {"EndDate", type date}}),
+				//     #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [EndDate] <> null and [EndDate] <> "" and [EndDate] >= #date(2022, 1, 1)),
+				//     #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"TxTrack_ID", "StartDate", "EndDate"}),
+				//     #"Added Custom" = Table.AddColumn(#"Removed Other Columns", "ListOfDates", each List.Dates([StartDate], Duration.Days([EndDate]-[StartDate])+1, #duration(1, 0, 0, 0))),
+				//     #"Expanded ListOfDates" = Table.ExpandListColumn(#"Added Custom", "ListOfDates"),
+				//     #"Removed Columns" = Table.RemoveColumns(#"Expanded ListOfDates",{"StartDate", "EndDate"}),
+				//     #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"ListOfDates", "TrackDate"}}),
+				//     #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"TrackDate", type date}})
+				// in
+				//     #"Changed Type1"
+				
+				let
+				    Source = CaseTracks,
+				    #"Removed Other Columns" = Table.SelectColumns(CaseTracks,{"TxTrack_ID", "StartDate", "EndDate"}),
+				    #"Added Custom" = Table.AddColumn(
+				    #"Removed Other Columns",
+				    "ListOfDates",
+				    each
+				        let
+				            actualEndDate = if [EndDate] = null then Date.From(DateTime.LocalNow()) else [EndDate],
+				            daysCount = Duration.Days(actualEndDate - [StartDate]) + 1
+				        in
+				            List.Dates([StartDate], daysCount, #duration(1, 0, 0, 0))
+				),
+				    #"Expanded ListOfDates" = Table.ExpandListColumn(#"Added Custom", "ListOfDates"),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded ListOfDates",{"StartDate", "EndDate"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"ListOfDates", "TrackDate"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"TrackDate", type date}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,24 @@
+table Tech
+	lineageTag: c593e078-30bf-4d51-8863-85455d258daf
+
+	column ID
+		dataType: string
+		lineageTag: 6a37a8aa-f993-4c57-a4bb-268c599ffa29
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Tech = m
+		mode: import
+		queryGroup: Places
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("RdNBsgMhCATQu2T9FwpCw1lSuf81vqnQPbtXjo2K4/v9Wmaw1+fvyhM1qhid4hh2hPSMNZUmaV5CUgIupfR8Vb1ao16TWKt/Y70skqoaRVLZMUL1qHyy23Ky26fylXMM1lRTZakd/E7Ztn2+mvUe+Zz8ChrDM5ZSSaySB6PyLZnkUkrM1lmSsofZrkn45tnc9pFmf34/j85h4qSESQRv5qstGcXeX82JwnZSxqxx92GqZ8WsP2quexbnwVJiFXDPUcZEaaw357Wy3dPT3PyvUn1J9SUPb+FeUUlNFaukSezLFbPgLVxNFWwzySn+p/cFNNVMeExPcWJ2iuDZEOwuwjUGqfSV+7syiWtEax47dMXVcrHebRHlUkjpkrJ8H1cp8UTJ/wXguwQ260EdAu8X0Brg2wfUqzJI3LPeFvSirkLSvMM16tvxzz8=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [ID = _t])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

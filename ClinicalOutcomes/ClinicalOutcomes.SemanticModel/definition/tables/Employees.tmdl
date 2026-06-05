@@ -1,0 +1,143 @@
+table Employees
+	lineageTag: 05807a58-3a85-42cc-9afe-f00852e0d42a
+
+	measure 'Total Therapists' = COUNTROWS(Employees)
+		formatString: #,0
+		lineageTag: 1f9fc776-56d6-44f6-8f0c-0a025d3f04f8
+
+	measure 'Therapist List' =
+			
+			// IF(HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),BLANK(),
+			//     IF(
+			//         ISINSCOPE(Service[Type]),
+			//         CONCATENATEX(
+			//             FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
+			//             Treatments[TherapistLabel],
+			//             ", ",
+			//             [Total Minutes],
+			//             DESC
+			//         )
+			//     )
+			// )
+			
+			
+			
+			
+			CONCATENATEX(
+			    FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
+			    Treatments[TherapistLabel],
+			    ", ",
+			    [Total Minutes],
+			    DESC
+			)
+		lineageTag: 79f2b150-bd2f-4e87-9ed5-e6cb801ae347
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Therapist List 2' =
+			
+			// var evalTable = SUMMARIZE(FILTER(TreatmentsDetails,RELATED(Service[Type])="Eval"),Treatments[TherapistLabel],"Minutes",[Total Minutes])
+			// var evalList = CONCATENATEX(evalTable,Treatments[TherapistLabel],", ",[Minutes],DESC)
+			
+			// var treatTable = SUMMARIZE(FILTER(TreatmentsDetails,RELATED(Service[Type])="Treat"),Treatments[TherapistLabel],"Minutes",[Total Minutes])
+			// var treatList = CONCATENATEX(treatTable,Treatments[TherapistLabel],", ",[Minutes],DESC)
+			
+			// return
+			// "𝗘𝘃𝗮𝗹: "&evalList&"; 𝗧𝗿𝗲𝗮𝘁: "&treatList
+			
+			
+			
+			var evalTable = SUMMARIZE(FILTER(TreatmentsDetails,RELATED(Service[Type])="Eval"),Treatments[TherapistLabel],"Minutes",[Total Minutes])
+			var evalList = CONCATENATEX(evalTable,Treatments[TherapistLabel],", ",[Minutes],DESC)
+			
+			var treatTable = SUMMARIZE(FILTER(TreatmentsDetails,RELATED(Service[Type])="Treat"),Treatments[TherapistLabel],"Minutes",[Total Minutes])
+			var treatList = CONCATENATEX(treatTable,Treatments[TherapistLabel],", ",[Minutes],DESC)
+			
+			return
+			IF([Total Minutes]=0,BLANK(),
+			"𝗘𝘃𝗮𝗹: "&evalList&"; 𝗧𝗿𝗲𝗮𝘁: "&treatList
+			)
+		lineageTag: dc760bd6-b1a7-47a5-bd62-bb8181ba4e05
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Person_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: a0756802-bb89-4737-b448-7e513eb79d97
+		summarizeBy: none
+		sourceColumn: Person_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 86701224-536a-43d0-8b73-3e97d6b27c2b
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column StaffTitle
+		dataType: string
+		lineageTag: df851b25-78b4-461a-81f3-499c4decb1c2
+		summarizeBy: none
+		sourceColumn: StaffTitle
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Short Name'
+		dataType: string
+		lineageTag: 34d10083-98dc-46b6-99de-b75b36b41c9e
+		summarizeBy: none
+		sourceColumn: Short Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsInactive
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f1bab88e-f77b-4ecc-af64-6c779cb89784
+		summarizeBy: none
+		sourceColumn: IsInactive
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupervisorPerson_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: fc547dc3-889c-45dd-bbc2-1576f600a20b
+		summarizeBy: none
+		sourceColumn: SupervisorPerson_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Taxonomy_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3cfb98a8-9e0a-4380-9fd2-2be0202cd34b
+		summarizeBy: none
+		sourceColumn: Taxonomy_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Employees = m
+		mode: directQuery
+		queryGroup: People
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"e467353e-471f-4f3e-9ccf-6ecfb20b7f0a" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="e467353e-471f-4f3e-9ccf-6ecfb20b7f0a"]}[Data],
+				    Employees_ = #"e467353e-471f-4f3e-9ccf-6ecfb20b7f0a"{[entity="Employees",version=""]}[Data],
+				    #"Added Custom Column" = Table.AddColumn(Employees_, "Short Name", each Text.Combine({Text.Start([FirstName], 1), " ", [LastName]}), type text),
+				    #"Merged Columns" = Table.CombineColumns(#"Added Custom Column",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name")
+				in
+				    #"Merged Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

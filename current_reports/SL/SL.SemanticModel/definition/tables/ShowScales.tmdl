@@ -1,0 +1,108 @@
+table ShowScales
+	lineageTag: 5333fcfb-9013-455c-bf6a-575d714fc464
+
+	measure 'Total Points' = SELECTEDVALUE(ShowScales[Points])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f99dfa32-a81e-46e4-b9de-0ccedf341e0a
+
+	measure 'Total Count ADMIT' = SUM(ShowScales[CountADMIT])
+		formatString: #,0
+		lineageTag: 768065b6-5fd9-464d-a5fc-796cdffba163
+
+	measure 'Total Count DISCH' = SUM(ShowScales[CountDISCH])
+		formatString: #,0
+		lineageTag: 1e613443-d387-43d0-892a-7e1636adc726
+
+	column 'Scale Name'
+		lineageTag: 851f64da-5d1c-4bcb-a3f6-c57983cd0f1b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Outcomes Custom Scales[Scale Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Response Description'
+		lineageTag: 06c2a3ce-b409-4ac7-bc65-0ececaf0274f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Outcomes Custom Scales[Response Description]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountADMIT
+		formatString: 0
+		lineageTag: 9dfb81b0-5250-4df1-98fd-10c513b41b09
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [CountADMIT]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountDISCH
+		formatString: 0
+		lineageTag: a96f43e3-58e3-475f-a43a-cb3b272320f3
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [CountDISCH]
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryItem_ID
+		formatString: 0
+		lineageTag: 88fc8f29-f46f-4ce7-a433-b0a9f812a68f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Assessments[LibraryItem_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryScaleValue_ID
+		formatString: 0
+		lineageTag: 07e72e9b-29e8-4501-b914-75abd774a48c
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: Assessments[LibraryScaleValue_ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Points
+		lineageTag: e386557c-ff34-49c3-a1b2-5cbc8c6f1d0a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Points]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition ShowScales = calculated
+		mode: import
+		source =
+				
+				// SUMMARIZE(
+				//     Assessments,
+				//     Assessments[LibraryItem_ID],
+				//     Assessments[LibraryScaleValue_ID],
+				//     'Outcomes Custom Scales'[Scale Name],
+				//     'Outcomes Custom Scales'[Response Description],
+				//     'Outcomes Custom Scales'[Points],
+				//     "CountADMIT",CALCULATE([Total Assessments],Documents[DocumentType]="ADMIT"),
+				//     "CountDISCH",CALCULATE([Total Assessments],Documents[DocumentType]="DISCH")
+				// )
+				
+				FILTER(
+				    SUMMARIZE(
+				        Assessments,
+				        Assessments[LibraryItem_ID],
+				        Assessments[LibraryScaleValue_ID],
+				        'Outcomes Custom Scales'[Scale Name],
+				        'Outcomes Custom Scales'[Response Description],
+				        "Points",SELECTEDVALUE('Outcomes Custom Scales'[Points])+0,
+				        "CountADMIT",CALCULATE([Total Assessments],Documents[DocumentType]="ADMIT"),
+				        "CountDISCH",CALCULATE([Total Assessments],Documents[DocumentType]="DISCH")
+				    ),
+				    NOT(ISBLANK('Outcomes Custom Scales'[Scale Name])) && NOT(ISBLANK('Outcomes Custom Scales'[Response Description]))
+				)
+
+	annotation PBI_Id = 0b80c7faea87435b8623b908c0448621
+

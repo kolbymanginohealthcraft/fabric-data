@@ -1,0 +1,123 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Provider
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Patient
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup Payer
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Outcomes
+
+	annotation PBI_QueryGroupOrder = 3
+
+queryGroup Visits
+
+	annotation PBI_QueryGroupOrder = 4
+
+queryGroup Procedures
+
+	annotation PBI_QueryGroupOrder = 5
+
+queryGroup Discharge
+
+	annotation PBI_QueryGroupOrder = 6
+
+queryGroup Diagnoses
+
+	annotation PBI_QueryGroupOrder = 7
+
+queryGroup PDPM
+
+	annotation PBI_QueryGroupOrder = 8
+
+queryGroup Fabric
+
+	annotation PBI_QueryGroupOrder = 9
+
+annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Assessments","Outcomes Crosswalk","Outcomes Custom Scales","Aegis Contract","Account","Chain","Dictionary","Outcome Families","Treatments","TreatmentsDetails","Disciplines","Service","Basis","DischargeReason","Diagnosis","DiagnosisCode","Telehealth","MeasureTable","DestinationPage","IntakeSources","vw_UpnFacilityAccess","Employees","Physician","CustomerGroups","Tech","VW_NHAegisFacilities","StartDate","dbo_vw_Treatments","dbo vw_AllEvalsAndDischargesLight","dbo vw_AllEvalsAndDischargesLight_Items","dbo_vw_CaseTracks","dbo_vw_PatientStays","dbo_vw_StayCases","dbo_vw_Diagnosis"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["CalcGroup","DevMode"]
+
+ref table Patients
+ref table DateTableTemplate_96417d08-d452-4611-b357-0bc993a363ff
+ref table LocalDateTable_9bc26b25-74b4-4e14-8773-0a07d627b7ca
+ref table PatientStays
+ref table LocalDateTable_9c24de53-d4f5-49d1-8e5b-244c6b3313c7
+ref table LocalDateTable_d3bfd21e-b0d5-4dc1-97fb-5b07e40b03f7
+ref table StayCases
+ref table LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f
+ref table CaseTracks
+ref table LocalDateTable_febca194-1226-4e46-8c16-e69576d74576
+ref table LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02
+ref table vw_PatientPayers
+ref table LocalDateTable_1c98cca9-db74-4ee3-8e9e-525fea56a746
+ref table LocalDateTable_f6c84e34-63a3-49c8-ac32-44e682e3d83f
+ref table Payers
+ref table Documents
+ref table Assessments
+ref table DischargeDestination
+ref table 'Aegis Contract'
+ref table LocalDateTable_b0f9cf32-cf9c-4acc-985b-f581e31434b5
+ref table LocalDateTable_205b2385-f9af-4492-9cc1-35c0722139d2
+ref table Account
+ref table Chain
+ref table 'Outcomes Crosswalk'
+ref table 'Outcomes Custom Scales'
+ref table OutcomeSummary
+ref table Dictionary
+ref table Calendar
+ref table Treatments
+ref table LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86
+ref table TreatmentsDetails
+ref table Disciplines
+ref table Service
+ref table Basis
+ref table DischargeReason
+ref table Diagnosis
+ref table DiagnosisCode
+ref table 'Outcome Families'
+ref table 'Outcomes Breakdown'
+ref table Telehealth
+ref table MeasureTable
+ref table vw_UpnFacilityAccess
+ref table ContextTable
+ref table 'Payer Buckets'
+ref table JitterTable
+ref table BenchmarkTable
+ref table Employees
+ref table Physician
+ref table CustomerGroups
+ref table DestinationPage
+ref table CaseInclusionTable
+ref table Tech
+ref table IntakeSources
+ref table VW_NHAegisFacilities
+ref table StartDate
+ref table LocalDateTable_a147cf5b-5bb2-4950-a4dc-61dd79482dc5
+ref table LocalDateTable_3b96babf-d434-4c07-8548-6938c833e58b
+ref table LocalDateTable_ada72ba5-f1f9-4dac-8d65-96b32c0b9be1
+ref table LocalDateTable_f9044e3b-1e67-437d-af0f-ee70459ae0ce
+ref table LocalDateTable_1c2f340d-30a8-4014-98fc-66609f14acc5
+ref table LocalDateTable_78295776-baa8-46db-9442-10c00803b1be
+ref table LocalDateTable_ca0bb5f7-98f9-4435-b601-eff364d04ce9
+ref table LocalDateTable_5e8b28a8-e94d-4a39-a42f-56ce200c8052
+ref table LocalDateTable_932d55de-d265-4481-9293-721332596c5f
+
+ref cultureInfo en-US
+

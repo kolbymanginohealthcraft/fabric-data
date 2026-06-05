@@ -1,0 +1,16 @@
+EVALUATE
+SELECTCOLUMNS(
+    INFO.VIEW.RELATIONSHIPS(),
+    "Relationship", [Relationship],
+    "IsActive", [IsActive],
+    "FromTable", [FromTable],
+    "FromColumn", [FromColumn],
+    "FromCardinality", [FromCardinality],
+    "ToTable", [ToTable],
+    "ToColumn", [ToColumn],
+    "ToCardinality", [ToCardinality],
+    "CrossFilteringBehavior", [CrossFilteringBehavior],
+    "SecurityFilteringBehavior", [SecurityFilteringBehavior],
+    "RelyOnReferentialIntegrity", [RelyOnReferentialIntegrity],
+    "State", [State]
+)

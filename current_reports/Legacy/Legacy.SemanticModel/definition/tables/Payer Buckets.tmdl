@@ -1,0 +1,38 @@
+table 'Payer Buckets'
+	lineageTag: 52c30171-1c79-41ee-b8c6-33e4f6d7aaa8
+
+	column 'Payer Categorization'
+		lineageTag: d3400b94-9ff1-42ad-bb5b-5977cb9a8a44
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: StayCases[Payer Categorization]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payer Grouping'
+		lineageTag: d0506cda-081d-4fa1-8b39-b0abfbff30c0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Payer Grouping]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Payer Buckets' = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    ALLNOBLANKROW(StayCases[Payer Categorization]),
+				    "Payer Grouping",
+				    SWITCH(
+				        StayCases[Payer Categorization],
+				        "(1) Medicare A","(a) Medicare Part A and A-Like",
+				        "(2) Managed A","(a) Medicare Part A and A-Like",
+				        "(3) Medicare B","(b) Medicare Part B and HMO B",
+				        "(4) Managed B","(b) Medicare Part B and HMO B",
+				        "(c) Other"
+				    )
+				)
+
+	annotation PBI_Id = 499e7d0de5bc46dcadaef634cc3d00cd
+

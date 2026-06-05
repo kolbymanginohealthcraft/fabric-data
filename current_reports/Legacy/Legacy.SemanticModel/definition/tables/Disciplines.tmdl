@@ -1,0 +1,35 @@
+table Disciplines
+	lineageTag: efca7f91-0da9-4b28-9a39-6498128b0585
+
+	column Discipline
+		dataType: string
+		isHidden
+		lineageTag: bcaef356-699d-41b0-8b91-d32d9404bdcc
+		summarizeBy: none
+		sourceColumn: Discipline
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ordered Discipline'
+		dataType: string
+		lineageTag: 1eabef4a-f372-485a-82b7-1386233f2ca3
+		summarizeBy: none
+		sourceColumn: Ordered Discipline
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Disciplines = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WCghR0lHSSNRUADJidaKV/MH8JE0Ffwg/GMxP1lQAMmJjAQ==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Discipline = _t, #"Ordered Discipline" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Discipline", type text}, {"Ordered Discipline", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,49 @@
+table vw_UpnFacilityAccess
+	lineageTag: f8ac5f42-43bf-4bc4-80e1-a58bdab7b0f4
+
+	column FacilityId
+		dataType: string
+		lineageTag: f18154b0-224c-4b75-af49-7fc1844f7f40
+		summarizeBy: none
+		sourceColumn: FacilityId
+
+		annotation SummarizationSetBy = Automatic
+
+	column UPN
+		dataType: string
+		lineageTag: 1aa526e7-5e68-468b-bc14-f47260b9a39e
+		summarizeBy: none
+		sourceColumn: UPN
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_UpnFacilityAccess = m
+		mode: directQuery
+		queryGroup: People
+		source =
+				let
+				    //UPN table
+				    UPN_Source = dbo_vw_UpnFacilityAccess,
+				    Contracts_Table = Salesforce_Aegis_Contract,
+				    Contracts_RemovedOtherColumns = Table.SelectColumns(Contracts_Table,{"Contract_Number__c"}),
+				    Contracts_RenamedColumns = Table.RenameColumns(Contracts_RemovedOtherColumns,{{"Contract_Number__c", "FacilityId"}}),
+				    Contracts_AddedCustom = Table.AddColumn(Contracts_RenamedColumns, "UPN", each "kolby.mangino@healthcraftcreative.com;sara.mcolvin@healthcraftcreative.com;mark.besch@aegistherapies.com;brad.miller@aegistherapies.com;dawn.greaves@aegistherapies.com;jaclyn.warshauer@aegistherapies.com;jason.buss@aegistherapies.com"),
+				    Contracts_SplitColumnbyDelimiter = Table.SplitColumn(Contracts_AddedCustom, "UPN", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"UPN.1", "UPN.2", "UPN.3", "UPN.4", "UPN.5", "UPN.6", "UPN.7"}),
+				    Contracts_UnpivotedOtherColumns = Table.UnpivotOtherColumns(Contracts_SplitColumnbyDelimiter, {"FacilityId"}, "Attribute", "Value"),
+				    Contracts_RemovedColumns = Table.RemoveColumns(Contracts_UnpivotedOtherColumns,{"Attribute"}),
+				    Contracts_RenamedColumns2 = Table.RenameColumns(Contracts_RemovedColumns,{{"Value", "UPN"}}),
+				
+				    //Combine
+				    Combine_Append = Table.Combine({UPN_Source, Contracts_RenamedColumns2}),
+				    Combine_TrimmedText = Table.TransformColumns(Combine_Append,{{"FacilityId", Text.Trim, type text}}),
+				    Combine_AddedPrefix = Table.TransformColumns(Combine_TrimmedText, {{"FacilityId", each "000" & _, type text}}),
+				    Combine_ExtractedLastCharacters = Table.TransformColumns(Combine_AddedPrefix, {{"FacilityId", each Text.End(_, 5), type text}}),
+				    Combine_LowercasedText = Table.TransformColumns(Combine_ExtractedLastCharacters,{{"UPN", Text.Lower, type text}}),
+				    Combine_RemovedDuplicates = Table.Distinct(Combine_LowercasedText)
+				in
+				    Combine_RemovedDuplicates
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
