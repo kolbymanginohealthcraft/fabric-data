@@ -10,12 +10,16 @@ databases.json
 # PBIP local user settings — nested-path match (the line above only matches top-level)
 **/.pbi/localSettings.json
 
-# Patient-level data extracts — PHI, never commit
+# Patient-/therapist-level data extracts — never commit (PHI / large / generated)
 outcomes-summary.csv
+outcomes-core.csv
 track-cohort-dimensions.csv
+therapist-attribution.csv
+library-dim.csv
+facility-dim.csv
 
 # Generated / debug artifacts
-queries/.rendered.sql
+queries/.rendered*.sql
 queries/.pull.log
 queries/.debug-render.js
 
