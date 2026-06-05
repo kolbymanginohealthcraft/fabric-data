@@ -1,4 +1,7 @@
 {
+    "git.ignoredRepositories": [
+        "PeopleDashboard"
+    ],
     "chat.agentSkillsLocations": {
         ".github/skills": true,
         ".agents/skills": true,
