@@ -1,38 +1,131 @@
-# Migration Crosswalk — Legacy Sources → Fabric Lakehouses
+# Migration Crosswalk — Legacy Sources → Fabric Medallion
 
-Maps every legacy ClinicalOutcomes table (and its data origin) to the canonical
-Fabric lakehouse table that the **NewModel** should ultimately bind to.
+Maps every legacy ClinicalOutcomes table (and its data origin) to the Fabric
+table the **NewModel** should bind to. Updated **2026-06-05** after verifying the
+new medallion workspaces end-to-end (see `memory/project_fabric_medallion.md`).
 
-**Lakehouse host:** `aegisdataprod` (Fabric warehouse endpoint
-`asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com`)
+## Status (2026-06-05) — supersedes the 2026-04-28 "interim/don't-use-yet" caveat
 
-## Important caveat (from Scott, 2026-04-28)
+Scott's medallion stack is now real, populated, and fresh. The earlier warning
+that "the tables below are a band-aid and will change" is **resolved for the
+NetHealth core**: the source data now lives in **Bronze** (raw, near-real-time
+mirror) and **Silver** (conformed). What has **not** happened yet is the
+**consumer repoint** — the `queries/` scripts and every semantic model
+(`ClinicalOutcomes/`, all `current_reports/`, and most of `NewModel/`) still read
+the **retiring `aegisdataprod`** lakehouses / `AegisPreImplementationLakehouse`.
+Data is ready; the rebinding work is what remains.
 
-> "I've done some more work. I'm not ready yet for you to start using it quite
-> yet. I learned what I setup was kind of a band-aid on what we use to do. I'm
-> creating new data sets to build our reports on… I plan on not keeping the
-> stuff below around long."
+- 🟢 **Bronze** (`NetHealth_Bronze_Lakehouse`) — full source mirror, current to the hour.
+- 🟢 **Silver** (`Aegis_Core_Silver_Lakehouse`) — conformed activity/labor/org, fresh through prior day.
+- 🟡 **Silver patient spine** (`patientstay`/`patientcase`/`track`) — populated but **skeletal** (keys only, no attributes yet).
+- 🔴 **Gold** — **empty** (no lakehouses/warehouses). Nothing to bind to yet.
+- 🔴 **`LibraryItem` / `LibraryScaleValue`** — the **only source data with no Fabric home**; still only on `aegisdataprod`. See blocker section.
 
-Scott's current Fabric tables are **interim**. He is rebuilding the core data
-pipeline (starting with employee info, facility info, hierarchy), and the
-destinations below will change. Confirmed staleness on the interim tables:
+## Endpoints (SQL analytics endpoints; one host per workspace)
 
-| Table | Stopped receiving data |
+Wired into `databases.json` (gitignored) under the listed aliases.
+
+| Alias | Workspace | Database | Endpoint host | Status |
+|---|---|---|---|---|
+| `general` | aegisdataprod | `BINetHealthGeneralLakehouse` | `…-7etkehckn7cejnmv5wbgoctzfe…` | 🔴 RETIRING |
+| `patient` | aegisdataprod | `BINetHealthPatientLakehouse` | `…-7etkehckn7cejnmv5wbgoctzfe…` | 🔴 RETIRING |
+| `security` | aegisdataprod | `BIUserSecurityLakehouse` | `…-7etkehckn7cejnmv5wbgoctzfe…` | 🔴 RETIRING |
+| `bronze` | Fabric - Bronze | `NetHealth_Bronze_Lakehouse` | `…-4wksxtle6exu7ne42rpqmph27i…` | 🟢 raw mirror |
+| `bronze-workday` | Fabric - Bronze | `WorkDay_Bronze_Lakehouse` | `…-4wksxtle6exu7ne42rpqmph27i…` | 🟢 HR/labor |
+| `silver` | Fabric - Silver | `Aegis_Core_Silver_Lakehouse` | `…-vox2z5x5nsnuri4qviabf7xo3i…` | 🟢 conformed |
+| `silver-wh` | Fabric - Silver Warehouses | `A_SilverWarehousesLakehouse` | `…-4t6nxoxhgn6uthipsbsfog6dxu…` | 🟢 |
+| — | Fabric - Gold | *(none)* | — | 🔴 empty |
+
+All hosts share the prefix `asot7hu5ofuezkzklqea75om6i-`. DocAudit and Salesforce
+workspaces exist too but are **out of scope** for this migration.
+
+## Which layer to bind to
+
+1. **Prefer Silver** (`silver`) where a conformed table exists — it's cleaner and
+   the dirty source values are resolved. Conformed + fresh today: `treatmentsession`,
+   `treatmentminute`, `labor`, `workday_nonworkhours`, `employee`, and the org spine
+   `region`/`area`/`district`/`facility`/`facilityhierarchy`, `service`.
+2. **Fall back to Bronze** (`bronze`) for anything Silver doesn't conform yet —
+   notably the **clinical documentation** (`TxDocument`, `TxDocumentItem`, `TxDiagnosis`)
+   and the **full patient episode spine with attributes** (`PatientCase`, `Stay`,
+   `TxTrack`, `Resident`, `ResidentInfo`), plus `Payer*`, `Lookup`, `IntakeSource`,
+   `DiagnosisCode`, and the `Billing.*` schema. Bronze is raw → **filter defensively**
+   (e.g. `TxDocument` has a bad future `CompletedDate` of 2051-07-24).
+3. **Cross-host caveat:** Bronze and Silver are on **different endpoint hosts**, so a
+   single `Value.NativeQuery` **cannot join across them**. Source each table from one
+   layer, or split into separate model partitions and relate in the model. (Silver
+   already co-locates `facility` + `facilityhierarchy`, so facility/org joins stay
+   single-query.)
+
+## The one source-data blocker: `LibraryItem` / `LibraryScaleValue`
+
+Confirmed absent from **all** of `bronze`/`silver`/`silver-wh` (searched every
+`COLUMNS` entry for Library/Scale/Outcome). `TxDocumentItem` carries the FK IDs
+(`LibraryItem_ID`, `LibraryScaleValue_ID`) but the reference tables — which give
+`VersionName` (OP/GP library detection) and the scale catalog — exist only on
+`aegisdataprod.BINetHealthPatientLakehouse.NetHealthDocumentation.*`
+(used in [outcomes-summary.sql:59-60](queries/outcomes-summary.sql#L59-L60),
+[episode-view.sql:207-225](queries/episode-view.sql#L207-L225),
+[pull-track-dimensions.js:69](queries/pull-track-dimensions.js#L69)).
+These are low-churn reference tables, but they need a Fabric home before
+aegisdataprod can be fully retired. **→ Scott's ingestion list.**
+(Distinct from the CSV-injected `Outcomes Crosswalk` / `Custom Scales`, which are
+business mappings keyed *by* these IDs and already off aegisdataprod.)
+
+## Division segmentation & hierarchy level-shift (verified)
+
+The model's `DivisionCode` (8450 Contract Rehab / 5500 Senior Living / 6500 HAP /
+5555 Closed) was a **curated field** in the old `GeneralLakehouse.FacilityHierarchy`
+and does **not** exist as a named column anywhere in the medallion. It is recoverable:
+old `DivisionCode` = Silver **`facilityhierarchy.RegionNumber`** (zero-padded, e.g.
+`'08450'`). The NetHealth-native hierarchy is labeled **one level deeper** than the old
+curated one (verified value-for-value):
+
+| Old (aegisdataprod curated) | Silver (`facilityhierarchy`) |
 |---|---|
-| `BINetHealthPatientLakehouse.DailyInfo.Treatments` | 2026-02-26 |
-| `BINetHealthPatientLakehouse.PatientInfo.TxSession` | 2026-03-30 |
+| `DivisionName` (8450/5500/6500…) | `RegionName` / `RegionNumber` |
+| `RegionName` | `AreaName` / `AreaNumber` |
+| `AreaName` | `DistrictName` / `DistrictNumber` |
 
-Continue using these sources for now; expect rebinding when Scott's new
-datasets land. Provide him as much detail as possible about what each report
-actually consumes so he can shape the new datasets correctly.
+The old `DivisionName` was already code-prefixed (`"8450 - Region 3"`), so the
+mapping is 1:1 — no friendly-name lookup required. Filter live divisions with
+`RegionNumber IN ('08450','05500','06500')`.
+
+## Facility repoint — DONE (the proven pattern)
+
+[NewModel/…/Facility.tmdl](NewModel/ClinicalOutcomes.SemanticModel/definition/tables/Facility.tmdl)
+is repointed off aegisdataprod to **Silver**, verified value-for-value (1,126
+division-scoped facilities). Final mapping:
+
+| Model column | ← Silver |
+|---|---|
+| `Facility_ID` | `facility.NetHealthId` |
+| `FacilityName` | `facility.Name` |
+| `FacilityCode` | `facility.FacilityNumber` |
+| `SiteType` | `facility.SiteType` |
+| `DivisionName` | `facilityhierarchy.RegionName` |
+| `RegionName` | `facilityhierarchy.AreaName` |
+| `AreaName` | `facilityhierarchy.DistrictName` |
+| ~~`PrimaryHealthcareSetting`~~ | dropped (no clean Silver source; nothing consumed it) |
+
+**Repoint method (reusable for every table below):** find the Silver-conformed
+table → map columns watching for **key-type changes** (int `Facility_ID` →
+varchar `FacilityNumber`) and **hierarchy level-shifts** → reconcile counts
+old-vs-new (`queries/reconcile-facility.js`, dual-pool now works after the
+`fabric-query.js` ConnectionPool fix) → expect Silver to be *fresher* (the
+old-vs-new count delta on Facility was entirely closed/added facilities).
 
 ---
 
-## Workspace GUIDs (legacy dataflows)
+## How to read the Lane tables below
 
-The legacy ClinicalOutcomes model and the four `current_reports/` models
-reference these dataflow workspaces. Friendly names not stored in TMDL —
-listed only as inferred from table usage.
+The "Fabric destination" columns name the **canonical NetHealth table**. Translate
+each to the medallion using the layer rule above: NetHealth `PatientInfo.*` /
+`NetHealthDocumentation.*` / lookups now resolve to **Bronze `…_Bronze_Lakehouse.dbo.*`**
+(same table names, raw mirror) or to a **Silver conformed table** where one exists.
+The mappings themselves are still accurate as legacy→NetHealth references.
+
+## Workspace GUIDs (legacy dataflows)
 
 | `workspaceId` | Inferred role |
 |---|---|
@@ -43,73 +136,67 @@ listed only as inferred from table usage.
 | `60c237c9-bec9-41af-bf9e-6afa43a264e9` | Used by current_reports models only |
 | `db9e762e-b1da-4705-8c3b-315fa4c4647c` | Used by current_reports models only |
 
+New medallion workspace GUIDs: Bronze `cd2b95e5-f164-4f2f-b49c-d45f063cfafa`,
+Silver `f6acafab-6cfd-489b-a390-aa0012feeeda`, Gold `8686c794-385c-439c-b210-6d976e9cf3a8`,
+Silver Warehouses `badbfce4-33e7-497d-9d0f-9064571bc3bd`.
+
 ---
 
-## Lane A — Legacy dataflow → Fabric lakehouse
+## Lane A — Legacy dataflow → NetHealth canonical (rebind to Bronze/Silver)
 
-Tables whose legacy partition reads `PowerPlatform.Dataflows(null)`. These
-must be rebound to direct lakehouse SQL in the NewModel.
+Tables whose legacy partition reads `PowerPlatform.Dataflows(null)`.
 
-| Legacy table | Dataflow entity | Fabric destination | Refresh |
+| Legacy table | Dataflow entity | NetHealth canonical | Medallion target |
 |---|---|---|---|
-| Employees | `Employees` | `BINetHealthGeneralLakehouse.Employees.Employees` | Live |
-| EmployeeBasicInfo | `EmployeeBasicInfo` | `BIUserSecurityLakehouse.EmployeeBasicInfo.EmployeeBasicInfo` | Midnight |
-| (no legacy table) | — | `BINetHealthGeneralLakehouse.Employees.EmployeeUserNames` | Live |
-| (no legacy table) | — | `BIUserSecurityLakehouse.EmployeeBasicInfo.EmployeeUserNames` | Midnight |
-| DiagnosisCode | `DiagnosisCode` | `BINetHealthPatientLakehouse.NetHealthDocumentation.DiagnosisCode` | Live (direct access, no filter) |
-| (joined in DiagnosisCode M) | `DiagnosisCategory` | `BINetHealthPatientLakehouse.NetHealthDocumentation.DiagnosisCategory` | Live |
-| DischargeReason | `Lookup` (filter `Type='CASEEND'`) | `BINetHealthGeneralLakehouse.Lookups.Lookup` WHERE `Type='CASEEND'` | Live |
-| DischargeDestination | `Lookup` (filter `Type='DISCHRGTO'`) | `BINetHealthGeneralLakehouse.Lookups.Lookup` WHERE `Type='DISCHRGTO'` | Live |
-| IntakeSources | `IntakeSources` | `BINetHealthGeneralLakehouse.Lookups.IntakeSource` | Live |
-| LibraryItem | `LibraryItem` | `BINetHealthPatientLakehouse.NetHealthDocumentation.LibraryItem` | Live |
-| LibraryScaleValue | `LibraryScaleValue` | `BINetHealthPatientLakehouse.NetHealthDocumentation.LibraryScaleValue` | Live |
-| Patients | `Patients` | `BINetHealthPatientLakehouse.PatientInfo.Resident` ⨝ `PatientInfo.ResidentInfo` (`IsCurrent=1`) | Live |
-| Payers | `Payers` | `BINetHealthPatientLakehouse.PayerInfo.Payer` | Live |
-| Physician | `Physician` | `BINetHealthGeneralLakehouse.Lookups.Physician` | Live |
-| Service | `Service` | `BINetHealthGeneralLakehouse.Lookups.Service` | Live |
-| VW_NHAegisFacilities | `VW_NHAegisFacilities` | `BINetHealthGeneralLakehouse.FacilityInfo.NHAegisFacilities` *(name shortened — no `VW_` prefix)* | Midnight |
-| (no legacy table) | — | `BINetHealthGeneralLakehouse.FacilityInfo.NHAegisHierarchy` *(rename of `VW_NHAegisHierarchy`)* | Midnight |
-| vw_PatientPayers | `vw_PatientPayers` | **Open question — see below.** Scott points to `BINetHealthPatientLakehouse.Reports.PatientPayers` (Midnight); a direct-read alternative `BINetHealthPatientLakehouse.PayerInfo.PatientPayers` also exists. [episode-view.sql:151-152](queries/episode-view.sql#L151-L152) currently uses `PayerInfo.PatientPayers` (presumably for live data) | Midnight (Reports) / Live (PayerInfo) |
-| vw_UpnFacilityAccess | `Vw_UpnFacilityAccess` | `BIUserSecurityLakehouse.UpnAccess.UserAccess` *(renamed)* | Midnight |
-| PatientScreens | `PatientScreens` | **Open** — no direct match in `aegisdataprod` lakehouses; was a pre-aggregated dataflow |
-| Telehealth | `BillingInfo` | **Open** — billing dataflow not addressed in Scott's notes |
+| Employees | `Employees` | `…General.Employees.Employees` | 🟢 **Silver `dbo.employee`** (rich: UPN, JobCode, Discipline, Supervisor) |
+| EmployeeBasicInfo | `EmployeeBasicInfo` | `…Security.EmployeeBasicInfo` | 🟡 Silver `dbo.employee` likely covers; security/UPN-access replacement **unverified** |
+| DiagnosisCode | `DiagnosisCode` | `…Patient.NetHealthDocumentation.DiagnosisCode` | 🟢 Bronze `dbo.DiagnosisCode` |
+| DischargeReason | `Lookup` (`Type='CASEEND'`) | `…General.Lookups.Lookup` | 🟢 Bronze `dbo.Lookup` WHERE `Type='CASEEND'` |
+| DischargeDestination | `Lookup` (`Type='DISCHRGTO'`) | `…General.Lookups.Lookup` | 🟢 Bronze `dbo.Lookup` WHERE `Type='DISCHRGTO'` |
+| IntakeSources | `IntakeSources` | `…General.Lookups.IntakeSource` | 🟢 Bronze `dbo.IntakeSource` |
+| LibraryItem | `LibraryItem` | `…Patient.NetHealthDocumentation.LibraryItem` | 🔴 **No medallion home — still aegisdataprod only.** Blocker. |
+| LibraryScaleValue | `LibraryScaleValue` | `…Patient.NetHealthDocumentation.LibraryScaleValue` | 🔴 **No medallion home — still aegisdataprod only.** Blocker. |
+| Patients | `Patients` | `…Patient.PatientInfo.Resident` ⨝ `ResidentInfo` | 🟢 Bronze `dbo.Resident` ⨝ `dbo.ResidentInfo` |
+| Payers | `Payers` | `…Patient.PayerInfo.Payer` | 🟢 Bronze `dbo.Payer` (+ `PayerType`, `PayerPayerType`) |
+| Physician | `Physician` | `…General.Lookups.Physician` | 🟢 Bronze `dbo.Physician` |
+| Service | `Service` | `…General.Lookups.Service` | 🟢 Bronze `dbo.Service` / Silver `dbo.service` |
+| VW_NHAegisFacilities | `VW_NHAegisFacilities` | `…General.FacilityInfo.NHAegisFacilities` | 🟢 Silver `dbo.facility` (**Facility repoint done** — see above) |
+| (hierarchy) | — | `…General.FacilityInfo.NHAegisHierarchy` | 🟢 Silver `dbo.facilityhierarchy` (**level-shift** — see above) |
+| vw_PatientPayers | `vw_PatientPayers` | `…Patient.PayerInfo.PatientPayers` / `Reports.PatientPayers` | 🟢 Bronze `dbo.` payer linkage (`ResidentPayer*`, `CasePayerSet`) |
+| vw_UpnFacilityAccess | `Vw_UpnFacilityAccess` | `…Security.UpnAccess.UserAccess` | 🟡 security/UPN-access medallion replacement **unverified** |
+| PatientScreens | `PatientScreens` | — | 🔴 **Open** — pre-aggregated dataflow, no base-table equivalent found |
+| Telehealth | `BillingInfo` | — | 🟢 Bronze **`Billing.*` schema** (AR*/Payer*/CustomerStay) — was an open item |
 
----
+## Lane B — Was on the `AegisPreImplementationLakehouse` band-aid
 
-## Lane B — Already on Fabric (legacy already migrated, but to a band-aid lakehouse)
+Legacy M reads `Sql.Database(…,"AegisPreImplementationLakehouse")` via
+[expressions.tmdl](ClinicalOutcomes/ClinicalOutcomes.SemanticModel/definition/expressions.tmdl).
+The NewModel should bypass that lakehouse entirely.
 
-Tables whose legacy M reads `Sql.Database(...,"AegisPreImplementationLakehouse")`
-via shared expressions in [expressions.tmdl](ClinicalOutcomes/ClinicalOutcomes.SemanticModel/definition/expressions.tmdl).
-These point at `dbo.dbo_vw_*` views in `AegisPreImplementationLakehouse` — Scott's
-band-aid layer. The NewModel should bypass that lakehouse and bind to canonical
-`BINetHealth*Lakehouse` tables directly.
-
-| Legacy table | Phase 1 source (band-aid, current legacy bind) | Phase 2 canonical destination | Refresh / notes |
-|---|---|---|---|
-| PatientStays | `AegisPreImpl.dbo.dbo_vw_PatientStays` | `BINetHealthPatientLakehouse.PatientInfo.Stay` ⨝ `Resident` ⨝ `ResidentInfo` ⨝ `Facility` | Live (PatientInfo direct access, no filter) |
-| StayCases | `AegisPreImpl.dbo.dbo_vw_StayCases` | `BINetHealthPatientLakehouse.PatientInfo.PatientCase` ⨝ `Stay` — already in [case-view.sql](queries/case-view.sql) | Live |
-| CaseTracks | `AegisPreImpl.dbo.dbo_vw_CaseTracks` | `BINetHealthPatientLakehouse.PatientInfo.TxTrack` | Live |
-| Documents | `AegisPreImpl.dbo.vw_AllEvalsAndDischargesLight` | `BINetHealthPatientLakehouse.NetHealthDocumentation.TxDocument` filtered to `DocumentType IN ('EVAL','DISCH')`. Scott confirmed the legacy convenience view is gone — rebuild the joins. | Live |
-| Assessments | `AegisPreImpl.dbo.vw_AllEvalsAndDischargesLight_Items` ⨝ `Outcomes Crosswalk` | `BINetHealthPatientLakehouse.NetHealthDocumentation.TxDocumentItem` ⨝ `LibraryItem` ⨝ Crosswalk — already in [outcomes-summary.sql](queries/outcomes-summary.sql) | Live |
-| ExpectedDischargeDestination | `AegisPreImpl.dbo.vw_AllEvalsAndDischargesLight_Items` (`LibraryItem_ID=7614`) | `TxDocumentItem` WHERE `LibraryItem_ID=7614` — already in [episode-view.sql:202-205](queries/episode-view.sql#L202-L205) | Live |
-| PriorLivingEnvironment | `AegisPreImpl.dbo.vw_AllEvalsAndDischargesLight_Items` (`LibraryItem_ID=7857`) | `TxDocumentItem` WHERE `LibraryItem_ID=7857` — already in [episode-view.sql:219-222](queries/episode-view.sql#L219-L222) | Live |
-| Treatments / TreatmentsDetails | `AegisPreImpl.dbo.dbo_vw_Treatments` | `BINetHealthPatientLakehouse.DailyInfo.Treatments` — already in [treatments.sql](queries/treatments.sql) | Hourly (16th min), **last 3 years filter**. **STALE: stopped getting data 2026-02-26** |
-| Diagnosis | `AegisPreImpl.dbo.dbo_vw_Diagnosis` | `BINetHealthPatientLakehouse.NetHealthDocumentation.TxDiagnosis` | Live |
-| HCC | `AegisPreImpl.dbo.ICD_10_CM_Mappings` | **Open** — not in Scott's destinations list; stays on AegisPreImpl unless promoted |
-| Weights | `AegisPreImpl.dbo.csv_C2824T2n` (CSV-loaded) | **Open** — not promoted; stays on AegisPreImpl |
-| FTEType | `AegisPreImpl.dbo.excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster` | **Open** — Excel roster, not promoted |
-| Outcomes Crosswalk | SharePoint Excel via `Web.Contents` (also `AegisPreImpl.dbo.excelOutcomesCrosswalk` shadow) | **Open — Phase 2 plan in [outcomes-summary.sql:25-26](queries/outcomes-summary.sql#L25-L26).** Currently injected as VALUES CTE by [pull-outcomes.js](queries/pull-outcomes.js). Needs canonical Fabric table. |
-| Outcomes Custom Scales | SharePoint Excel / `AegisPreImpl.dbo.excelOutcomesCustomScales` | **Open** — same story as Crosswalk |
-| Aegis Contract | `AegisPreImpl.dbo.Salesforce_Aegis_Contract` | **Open** — Salesforce, not promoted |
-| Account / Chain | `AegisPreImpl.dbo.Salesforce_Account` | **Open** — Salesforce, not promoted |
-| Peer Group | SharePoint Excel `Job Code to Peer Group.xlsx` | **Open** — never made it to Fabric |
-| Perspectives (UPN-based) | `AegisPreImpl.dbo.dbo_vw_UpnFacilityAccess` ⨝ `Salesforce_Aegis_Contract` | `BIUserSecurityLakehouse.UpnAccess.UserAccess` (UPN side); Salesforce side still open | Midnight (UPN) |
-
----
+| Legacy table | Band-aid source | Medallion target |
+|---|---|---|
+| PatientStays | `dbo_vw_PatientStays` | 🟢 Bronze `dbo.Stay` ⨝ `Resident` ⨝ `ResidentInfo` ⨝ `Facility` (full attrs: AdmitDate/DischargeDate/IsCurrent…) |
+| StayCases | `dbo_vw_StayCases` | 🟢 Bronze `dbo.PatientCase` ⨝ `Stay` (the "case" table; has StartDate/EndDate/EndReason_ID) |
+| CaseTracks | `dbo_vw_CaseTracks` | 🟢 Bronze `dbo.TxTrack` (Discipline, StartDate, EndDate, **`IsUnplannedDischarge`**, EndReason_ID) |
+| Documents | `vw_AllEvalsAndDischargesLight` | 🟢 Bronze `dbo.TxDocument` WHERE `DocumentType IN ('EVAL','DISCH')` |
+| Assessments | `…Light_Items` ⨝ Crosswalk | 🟢 Bronze `dbo.TxDocumentItem` ⨝ Crosswalk (LibraryItem still aegisdataprod — blocker) |
+| ExpectedDischargeDestination | `…Light_Items` (`LibraryItem_ID=7614`) | 🟢 Bronze `dbo.TxDocumentItem` WHERE `LibraryItem_ID=7614` |
+| PriorLivingEnvironment | `…Light_Items` (`LibraryItem_ID=7857`) | 🟢 Bronze `dbo.TxDocumentItem` WHERE `LibraryItem_ID=7857` |
+| Treatments / Details | `dbo_vw_Treatments` | 🟢 **Silver `dbo.treatmentminute`** (was STALE on aegisdataprod after 2026-02-26; **fresh in Silver**) |
+| (sessions) | — | 🟢 **Silver `dbo.treatmentsession`** (was STALE `TxSession` after 2026-03-30; **fresh in Silver**) |
+| Diagnosis | `dbo_vw_Diagnosis` | 🟢 Bronze `dbo.TxDiagnosis` |
+| Perspectives (UPN) | `dbo_vw_UpnFacilityAccess` ⨝ Salesforce | 🟡 UPN side unverified; Salesforce side → `SalesforceLakehouse` (out of scope) |
+| HCC | `ICD_10_CM_Mappings` | 🔴 **Open** — not promoted; stays on AegisPreImpl unless ingested |
+| Weights | `csv_C2824T2n` | 🔴 **Open** — CSV, not promoted |
+| FTEType | `excel_…_WD_Roster` | 🟡 partly covered by Silver `dbo.employee` + WorkDay bronze; confirm |
+| Outcomes Crosswalk | SharePoint Excel | ⚪ CSV-injected today ([pull-outcomes.js](queries/pull-outcomes.js)); wants a canonical Fabric table eventually |
+| Outcomes Custom Scales | SharePoint Excel | ⚪ same as Crosswalk |
+| Aegis Contract / Account / Chain | `Salesforce_*` | 🟡 → `SalesforceLakehouse` (separate workspace, **out of scope**) |
+| Peer Group | `Job Code to Peer Group.xlsx` | 🔴 **Open** — never ingested to Fabric |
 
 ## Lane C — Pure calc / parameter / static (no source migration)
 
-Port DAX or inline JSON verbatim; no upstream binding required.
+Port DAX/JSON verbatim; no upstream binding.
 
 `Calendar`, `Calendar Parameter`, `OutcomeSummary`, `Outcomes Breakdown`,
 `DX_Cases`, `Diagnosis Hierarchy`, `Override Chain`, `Override Payer`,
@@ -122,40 +209,23 @@ Port DAX or inline JSON verbatim; no upstream binding required.
 
 ---
 
-## Other Fabric tables Scott surfaced (not in legacy crosswalk)
+## Labor / Lake Clocker — rebuilt (was "needs rebuild")
 
-Listed for awareness — these are now available in Fabric and may be useful for
-the people dashboard, additional reports, or replacing band-aids:
+🟢 Now in **Silver `dbo.labor`** (+ `dbo.workday_nonworkhours` for PTO/non-productive),
+fed by a real WorkDay source. The prior "Labor / Lake Clocker needs to be rebuilt"
+item is resolved.
 
-| Table | Refresh |
-|---|---|
-| `BINetHealthGeneralLakehouse.Lookups.BillDateLookup` | Live |
-| `BINetHealthGeneralLakehouse.FacilityInfo.FacilityTags` | Live |
-| `BINetHealthPatientLakehouse.NonCareCharge.NonCareCharge` | Live |
-| `BINetHealthPatientLakehouse.NonCareCharge.NonCareChargeItem` | Live |
-| `BINetHealthPatientLakehouse.PatientPDPM.*` | Live |
-| `BINetHealthPatientLakehouse.Reports.TherapyCensus` | Midnight |
-| `BINetHealthPatientLakehouse.Reports.ReportMissingPayor` | Midnight |
+## Open items / discussion with Scott (updated 2026-06-05)
 
----
+**Resolved this session:** Treatments/TxSession freshness (fresh in Silver) ·
+Telehealth/billing (Bronze `Billing.*`) · Labor/Lake Clocker (Silver) · Salesforce
+(own lakehouse) · planned/unplanned discharge (`TxTrack.IsUnplannedDischarge`) ·
+Division segmentation (Silver `RegionNumber`).
 
-## Did not move (Scott explicitly flagged)
-
-- `Vw_ReportDailyInfo`, `Vw_ReportDailyInfo_Facility`,
-  `Vw_ReportDailyInfo_MedBByWeekAggregation`, `Vw_ReportDailyInfo_Patient`
-- `Net Health Documentation Extended – Patient Outcomes` (replaced by direct
-  `NetHealthDocumentation.*` access)
-- `Nightly SP Data`
-- `Labor / Lake Clocker` — needs to be rebuilt in Fabric
-
----
-
-## Open items / discussion needed with Scott
-
-1. **`vw_PatientPayers` destination** — Reports (midnight) vs PayerInfo (live). Pick deliberately based on consumer freshness needs.
-2. **AegisPreImpl tail** — HCC mappings, Weights CSV, FTE roster, Outcomes Crosswalk, Outcomes Custom Scales, Salesforce Account/Contract. Will any of these be promoted to canonical Fabric tables, or stay on the band-aid lakehouse?
-3. **`Telehealth.BillingInfo`** — separate billing dataflow; what's the Fabric replacement?
-4. **`PatientScreens`** — pre-aggregated dataflow with no obvious base-table equivalent.
-5. **`Peer Group`** xlsx — needs to be ingested to Fabric before NewModel can drop SharePoint.
-6. **Treatments freshness** — `DailyInfo.Treatments` shows no data after 2026-02-26 despite "Hourly" cadence. Is this expected during Scott's rework, or a pipeline break?
-7. **TxSession freshness** — `PatientInfo.TxSession` shows no data after 2026-03-30 despite "Live" classification. Same question.
+**Still open:**
+1. **`LibraryItem` / `LibraryScaleValue`** — sole source data with no Fabric home. Top ask.
+2. **Security / UPN access** (`UpnAccess.UserAccess`, `EmployeeBasicInfo`) — medallion replacement not yet verified (we scanned Bronze/Silver/Gold/SilverWH only).
+3. **Silver patient spine attributes** — `patientstay`/`patientcase`/`track` are keys-only in Silver; until enriched, episode-level reporting sources from Bronze.
+4. **`PatientScreens`** — pre-aggregated dataflow, no base-table equivalent.
+5. **`Peer Group` xlsx, HCC mappings, Weights CSV, FTE roster** — confirm whether promoted to Fabric or stay on AegisPreImpl.
+6. **Consumer repoint** — no script or model (beyond `Facility.tmdl`) has been rebound yet. That's the bulk of remaining migration work.
