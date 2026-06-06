@@ -58,7 +58,7 @@ def main() -> None:
     fac = pd.read_csv(REPO / "facility-dim.csv", dtype={"DivisionCode": str})
     cw = pd.read_csv(REPO / "Outcomes Crosswalk.csv")[["LibraryItem_ID", "RequiredFor"]]
     att = pd.read_csv(REPO / "therapist-attribution.csv",
-                      usecols=["TxTrack_ID", "Total_Minutes"])
+                      usecols=["TxTrack_ID", "Total_Treatment_Minutes"])
 
     print(f"track-base: {len(base):,} | track-outcomes: {len(oc):,}")
 
@@ -100,8 +100,8 @@ def main() -> None:
     df["ServiceLine"] = df["DivisionCode"].map(SERVICE_LINE).fillna("Other")
     df["PoR"] = df["Residence"].map(POR_BUCKET).fillna("Other")
 
-    # hours (Gain per hour)
-    mins = att.groupby("TxTrack_ID")["Total_Minutes"].sum().rename("track_minutes")
+    # hours (Gain per hour) = treatment hours (eval minutes excluded)
+    mins = att.groupby("TxTrack_ID")["Total_Treatment_Minutes"].sum().rename("track_minutes")
     df = df.merge(mins, on="TxTrack_ID", how="left")
     df["hours"] = df["track_minutes"] / 60.0
 

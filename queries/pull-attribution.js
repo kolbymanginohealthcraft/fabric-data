@@ -44,7 +44,12 @@ function toCsv(rows) {
   return lines.join("\n") + "\n";
 }
 
-const SQL = `
+// EVAL services (Bronze): Service[Type]='Eval' iff Description contains 'eval' (mirrors the
+// PBI model's M derivation). Treatment minutes = Duration on NON-eval services. ServiceId in
+// silver.treatmentminute is the same ID space as bronze.Service.Service_ID.
+const EVAL_IDS_SQL = `SELECT Service_ID FROM dbo.Service WHERE LOWER(Description) LIKE '%eval%'`;
+
+const SQL = (evalIds) => `
 WITH track_window AS (
     -- Tracks whose most recent session is within the window.
     SELECT TrackId
@@ -56,7 +61,9 @@ SELECT
     s.TrackId                    AS TxTrack_ID,
     m.PersonId                   AS Person_ID,
     COUNT(DISTINCT m.SessionId)  AS Total_Visits,
-    SUM(m.Duration)              AS Total_Minutes
+    SUM(m.Duration)              AS Total_Minutes,
+    SUM(CASE WHEN m.ServiceId NOT IN (${evalIds}) THEN m.Duration ELSE 0 END)
+                                 AS Total_Treatment_Minutes
 FROM dbo.treatmentminute m
 JOIN dbo.treatmentsession s ON s.NetHealthId = m.SessionId
 JOIN track_window tw        ON tw.TrackId = s.TrackId
@@ -67,7 +74,12 @@ ORDER BY s.TrackId, m.PersonId
 
 (async () => {
   const { years, outPath } = parseArgs();
-  const sql = SQL.replace("@YEARS", `-${years}`);
+  // 1) eval Service_IDs from Bronze (separate pool / host)
+  const ev = await query(EVAL_IDS_SQL, "bronze");
+  const evalIds = ev.recordset.map((r) => r.Service_ID).join(",") || "-1";
+  console.error(`eval services excluded from treatment minutes: ${ev.recordset.length}`);
+  // 2) attribution from Silver, treatment minutes = non-eval Duration
+  const sql = SQL(evalIds).replace("@YEARS", `-${years}`);
   console.error(`Running attribution pull: tracks active in last ${years} year(s) → ${outPath}`);
   const t0 = Date.now();
   const result = await query(sql, "silver");

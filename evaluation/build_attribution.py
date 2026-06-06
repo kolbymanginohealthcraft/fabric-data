@@ -55,13 +55,14 @@ def main() -> None:
     reg["Weight"] = 1.0
     reg = reg[["TxTrack_ID", "Person_ID", "Role", "Weight"]]
 
-    # --- Assistant: minute share of track total minutes ---
-    tot = att.groupby("TxTrack_ID")["Total_Minutes"].sum().rename("TrackMin")
+    # --- Assistant: share of track total TREATMENT minutes (eval minutes excluded) ---
+    tot = att.groupby("TxTrack_ID")["Total_Treatment_Minutes"].sum().rename("TrackMin")
     a = att.merge(tot, on="TxTrack_ID")
     a["Role"] = a["Person_ID"].map(role)
     asst = a[a["Role"] == "Assistant"].copy()
-    asst["Weight"] = asst["Total_Minutes"] / asst["TrackMin"]
-    asst = asst[asst["TrackMin"] > 0][["TxTrack_ID", "Person_ID", "Role", "Weight"]]
+    asst = asst[asst["TrackMin"] > 0].copy()   # drop eval-only tracks (0 treatment min)
+    asst["Weight"] = asst["Total_Treatment_Minutes"] / asst["TrackMin"]
+    asst = asst[["TxTrack_ID", "Person_ID", "Role", "Weight"]]
 
     out = pd.concat([reg, asst], ignore_index=True)
     out.to_csv(REPO / "contributions.csv", index=False)
