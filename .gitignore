@@ -24,6 +24,7 @@ outcome-percentiles.csv
 therapist-ratings.csv
 library-dim.csv
 facility-dim.csv
+employee-dim.csv
 
 # Generated / debug artifacts
 queries/.rendered*.sql
