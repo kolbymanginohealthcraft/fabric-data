@@ -1,6 +1,10 @@
 node_modules/
 .env
 
+# Python
+__pycache__/
+*.pyc
+
 # Nested standalone repo, kept locally for agent context only.
 # Has its own git/GitHub (kolbymanginohealthcraft/people-dashboard) — do not track here.
 PeopleDashboard/
@@ -13,8 +17,11 @@ databases.json
 # Patient-/therapist-level data extracts — never commit (PHI / large / generated)
 outcomes-summary.csv
 outcomes-core.csv
+outcomes-cohort.csv
 track-cohort-dimensions.csv
 therapist-attribution.csv
+outcome-percentiles.csv
+therapist-ratings.csv
 library-dim.csv
 facility-dim.csv
 
