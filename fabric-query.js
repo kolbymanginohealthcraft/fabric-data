@@ -1,28 +1,23 @@
 const sql = require("mssql");
-const { DeviceCodeCredential, useIdentityPlugin } = require("@azure/identity");
+const { AzureCliCredential } = require("@azure/identity");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 
 const databases = require("./databases.json");
 
-// Enable persistent token cache so you only authenticate once
-try {
-  const { cachePersistencePlugin } = require("@azure/identity-cache-persistence");
-  useIdentityPlugin(cachePersistencePlugin);
-} catch {
-  // Plugin not installed — tokens still cache in-memory for this process
-}
-
-const credential = new DeviceCodeCredential({
+// Auth delegates to the Azure CLI's own on-disk token cache (~/.azure).
+// You run `az login` ONCE; the CLI keeps a refresh token (~90 days of
+// inactivity) and silently mints new access tokens. No device-code prompt
+// per run. Do NOT switch back to DeviceCodeCredential — that caches only in
+// process memory, so every fresh `node` invocation re-prompts.
+//   processTimeoutInMs: az.cmd serializes around its cache and the default
+//   10s subprocess timeout can trip under concurrent token requests; 30s is
+//   a safe margin. The on-disk cache below means az is spawned at most once
+//   per scope per hour anyway.
+const credential = new AzureCliCredential({
   tenantId: process.env.AZURE_TENANT_ID,
-  userPromptCallback: (info) => {
-    console.error(info.message);
-  },
-  tokenCachePersistenceOptions: {
-    enabled: true,
-    name: "fabric-data",
-  },
+  processTimeoutInMs: 30000,
 });
 
 const TOKEN_CACHE_FILE = path.join(__dirname, ".token-cache.json");
