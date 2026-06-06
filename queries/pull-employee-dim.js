@@ -44,7 +44,13 @@ SELECT
     Discipline,
     JobCode,
     JobTitle,
-    Status
+    Status,
+    LOWER(UserPrincipalName)  AS UPN,
+    Username,
+    EmployeeNumber,
+    HomeLocation,
+    SupervisorIdentifier,
+    SupervisorIdentifierType
 FROM dbo.employee
 WHERE NetHealthId IS NOT NULL
 `;

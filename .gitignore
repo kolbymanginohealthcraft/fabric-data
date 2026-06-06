@@ -36,3 +36,11 @@ queries/.debug-render.js
 
 # Compiled Power BI binaries — huge, may embed imported data (PHI). Keep PBIP text format only.
 *.pbix
+
+# track-grain rebuild (regenerable)
+track-base.csv
+track-outcomes.csv
+eval-author.csv
+tracks.csv
+contributions.csv
+therapist-metrics.csv
