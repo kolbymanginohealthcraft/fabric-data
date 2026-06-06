@@ -81,10 +81,10 @@ def main() -> None:
     tracks["uses_required"] = tracks["uses_required"].astype(float)
     tracks["_validden"] = tracks["n_valid_good"].fillna(0) + tracks["n_invalid"].fillna(0)
 
-    # in-scope payer universe
-    tracks = tracks[tracks["Stay"].isin(["Short", "Long"])].copy()
+    # Universe rule: stay-SPLIT metrics filter to their payer bucket (Short / Long); NON-split
+    # metrics use ALL tracks (every payer). So no global payer filter here.
     ct = contrib.merge(tracks, on="TxTrack_ID", how="inner")
-    print(f"in-scope tracks: {tracks['TxTrack_ID'].nunique():,} | contribution rows: {len(ct):,}")
+    print(f"all tracks: {tracks['TxTrack_ID'].nunique():,} | contribution rows: {len(ct):,}")
 
     rows = []
     for name, num, den, split, qual, cohort in METRICS:
