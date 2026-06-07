@@ -21,7 +21,7 @@ const { query, closeAll } = require("../fabric-query");
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  let outPath = path.join(__dirname, "..", "library-dim.csv");
+  let outPath = path.join(__dirname, "..", "data", "library-dim.csv");
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--out" && args[i + 1]) outPath = args[++i];
   }

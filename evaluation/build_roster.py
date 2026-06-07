@@ -19,6 +19,7 @@ from evaluation.build_attribution import (
 )
 
 REPO = Path(__file__).resolve().parent.parent
+DATA = REPO / "data"
 REGION_DIV = {"08450": "Contract Rehab", "05500": "Senior Living",
               "06500": "HAP", "05555": "Closed"}
 
@@ -39,18 +40,18 @@ def home_type(home, M: dict) -> str:
 
 
 def main() -> None:
-    emp = pd.read_csv(REPO / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
+    emp = pd.read_csv(DATA / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
     emp["Person_ID"] = emp["Person_ID"].astype(int)
     emp["JobCode_int"] = pd.to_numeric(emp["JobCode"], errors="coerce")
     emp["home"] = emp["HomeLocation"].str.zfill(5)
     emp["Role"] = [role_of(jc, d, t)
                    for jc, d, t in zip(emp["JobCode"], emp["Discipline"], emp["JobTitle"])]
 
-    contrib = pd.read_csv(REPO / "contributions.csv")
-    tracks = pd.read_csv(REPO / "tracks.csv", usecols=["TxTrack_ID", "Facility_ID", "ServiceLine"])
-    metrics = pd.read_csv(REPO / "therapist-metrics.csv", usecols=["Person_ID"])
-    hier = pd.read_csv(REPO / "facility-hier.csv", dtype=str)
-    fac = pd.read_csv(REPO / "facility-dim.csv")
+    contrib = pd.read_csv(DATA / "contributions.csv")
+    tracks = pd.read_csv(DATA / "tracks.csv", usecols=["TxTrack_ID", "Facility_ID", "ServiceLine"])
+    metrics = pd.read_csv(DATA / "therapist-metrics.csv", usecols=["Person_ID"])
+    hier = pd.read_csv(DATA / "facility-hier.csv", dtype=str)
+    fac = pd.read_csv(DATA / "facility-dim.csv")
     fac["code"] = fac["FacilityName"].str.extract(r"^\s*(\d+)")[0].str.zfill(5)
 
     scored = set(metrics["Person_ID"].unique())
@@ -141,7 +142,7 @@ def main() -> None:
 
     out = pd.DataFrame(rows).sort_values(["ScorecardGroup", "Role", "FullName"])
     try:
-        out.to_csv(REPO / "employee-roster.csv", index=False, encoding="utf-8-sig")
+        out.to_csv(DATA / "employee-roster.csv", index=False, encoding="utf-8-sig")
     except PermissionError:
         raise SystemExit("employee-roster.csv is open (Excel?) - close it and re-run.")
 

@@ -20,6 +20,7 @@ import re
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
+DATA = REPO / "data"
 
 DOR_CODES = {8213, 8214, 8218, 8219, 8224}             # Contract Rehab mgrs - PARKED (not scored yet)
 SL_AREA_MGR_CODES = {8221, 8223, 9206}                 # Senior Living area managers - scored
@@ -160,7 +161,7 @@ def manager_territory(emp: pd.DataFrame, hier: pd.DataFrame) -> dict:
 
 
 def main() -> None:
-    emp = pd.read_csv(REPO / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
+    emp = pd.read_csv(DATA / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
     emp["Person_ID"] = emp["Person_ID"].astype(int)
     emp["JobCode_int"] = pd.to_numeric(emp["JobCode"], errors="coerce")
     emp["home"] = emp["HomeLocation"].str.zfill(5)
@@ -168,7 +169,7 @@ def main() -> None:
     role = emp.set_index("Person_ID")["Role"].to_dict()
 
     # ---- Registered: eval author, weight 1.0 ----
-    ea = pd.read_csv(REPO / "eval-author.csv").dropna(subset=["AuthorPerson_ID"])
+    ea = pd.read_csv(DATA / "eval-author.csv").dropna(subset=["AuthorPerson_ID"])
     ea["AuthorPerson_ID"] = ea["AuthorPerson_ID"].astype(int)
     ea["Role"] = ea["AuthorPerson_ID"].map(role)
     reg = ea[ea["Role"] == "Registered"].rename(columns={"AuthorPerson_ID": "Person_ID"}).copy()
@@ -176,7 +177,7 @@ def main() -> None:
     reg = reg[["TxTrack_ID", "Person_ID", "Role", "Weight"]]
 
     # ---- Assistant: treatment-minute share ----
-    att = pd.read_csv(REPO / "therapist-attribution.csv")
+    att = pd.read_csv(DATA / "therapist-attribution.csv")
     tot = att.groupby("TxTrack_ID")["Total_Treatment_Minutes"].sum().rename("TrackMin")
     a = att.merge(tot, on="TxTrack_ID")
     a["Role"] = a["Person_ID"].map(role)
@@ -185,12 +186,12 @@ def main() -> None:
     asst = asst[["TxTrack_ID", "Person_ID", "Role", "Weight"]]
 
     # ---- Manager (SL Area Mgr): full credit for every track in their building set ----
-    tracks = pd.read_csv(REPO / "tracks.csv", usecols=["TxTrack_ID", "Facility_ID"])
-    fac = pd.read_csv(REPO / "facility-dim.csv")
+    tracks = pd.read_csv(DATA / "tracks.csv", usecols=["TxTrack_ID", "Facility_ID"])
+    fac = pd.read_csv(DATA / "facility-dim.csv")
     fac["code"] = fac["FacilityName"].str.extract(r"^\s*(\d+)")[0].str.zfill(5)
     code2fid = fac.dropna(subset=["code"]).groupby("code")["Facility_ID"].apply(set).to_dict()
 
-    hier = pd.read_csv(REPO / "facility-hier.csv", dtype=str)
+    hier = pd.read_csv(DATA / "facility-hier.csv", dtype=str)
     bmap = manager_territory(emp, hier)
     mgr_rows = []
     for pid, codes in bmap.items():
@@ -203,7 +204,7 @@ def main() -> None:
     mgr = pd.DataFrame(mgr_rows, columns=["TxTrack_ID", "Person_ID", "Role", "Weight"])
 
     out = pd.concat([reg, asst, mgr], ignore_index=True)
-    out.to_csv(REPO / "contributions.csv", index=False)
+    out.to_csv(DATA / "contributions.csv", index=False)
 
     print("employee roles: " + ", ".join(f"{k}={v}" for k, v in emp["Role"].value_counts().items()))
     print(f"\ncontributions: {len(out):,}")
@@ -214,7 +215,7 @@ def main() -> None:
         print(f"manager building tracks: median {per_mgr.median():.0f}, max {per_mgr.max()}, "
               f"buildings/mgr median {pd.Series([len(v) for v in bmap.values() if v]).median():.0f}")
     print(f"distinct people credited: {out['Person_ID'].nunique():,}")
-    print(f"\nWrote {REPO / 'contributions.csv'}")
+    print(f"\nWrote {DATA / 'contributions.csv'}")
 
 
 if __name__ == "__main__":

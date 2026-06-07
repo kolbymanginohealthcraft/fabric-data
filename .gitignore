@@ -14,17 +14,11 @@ databases.json
 # PBIP local user settings — nested-path match (the line above only matches top-level)
 **/.pbi/localSettings.json
 
-# Patient-/therapist-level data extracts — never commit (PHI / large / generated)
-outcomes-summary.csv
-outcomes-core.csv
-outcomes-cohort.csv
-track-cohort-dimensions.csv
-therapist-attribution.csv
-outcome-percentiles.csv
-therapist-ratings.csv
-library-dim.csv
-facility-dim.csv
-employee-dim.csv
+# All data lives in data/ — never commit generated/PHI CSVs. Ignore every CSV under data/
+# EXCEPT the two tracked SharePoint inputs (crosswalk + custom scales).
+data/*.csv
+!data/Outcomes Crosswalk.csv
+!data/Outcomes Custom Scales.csv
 
 # Generated / debug artifacts
 queries/.rendered*.sql
@@ -36,14 +30,3 @@ queries/.debug-render.js
 
 # Compiled Power BI binaries — huge, may embed imported data (PHI). Keep PBIP text format only.
 *.pbix
-
-# track-grain rebuild (regenerable)
-track-base.csv
-track-outcomes.csv
-eval-author.csv
-tracks.csv
-contributions.csv
-therapist-metrics.csv
-facility-hier.csv
-employee-roster.csv
-therapist-scorecard-feed.csv

@@ -12,7 +12,7 @@ SELECT
     DistrictNumber, DistrictName, AreaNumber, AreaName, RegionNumber, RegionName, Closed
 FROM dbo.facilityhierarchy`;
 (async () => {
-  const out = path.join(__dirname, "..", "facility-hier.csv");
+  const out = path.join(__dirname, "..", "data", "facility-hier.csv");
   const r = await query(SQL, "silver");
   console.error(`facility-hier rows: ${r.recordset.length}`);
   fs.writeFileSync(out, toCsv(r.recordset));

@@ -23,7 +23,7 @@ const { query, closeAll } = require("../fabric-query");
 function parseArgs() {
   const args = process.argv.slice(2);
   let years = 1;
-  let outPath = path.join(__dirname, "..", "therapist-attribution.csv");
+  let outPath = path.join(__dirname, "..", "data", "therapist-attribution.csv");
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--years" && args[i + 1]) years = parseInt(args[++i], 10);
     else if (args[i] === "--out" && args[i + 1]) outPath = args[++i];

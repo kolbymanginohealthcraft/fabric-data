@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
+DATA = REPO / "data"
 FULL_COHORT = ["Discipline", "DomLibrary", "PoR"]
 DISCH_COHORT = ["Discipline", "PoR"]            # no-outcome tracks have no library
 
@@ -74,8 +75,8 @@ METRICS = [
 
 
 def main() -> None:
-    tracks = pd.read_csv(REPO / "tracks.csv")
-    contrib = pd.read_csv(REPO / "contributions.csv")
+    tracks = pd.read_csv(DATA / "tracks.csv")
+    contrib = pd.read_csv(DATA / "contributions.csv")
     tracks["improved"] = tracks["improved"].astype("float")
     tracks["has_outcome"] = tracks["has_outcome"].astype(float)
     tracks["uses_required"] = tracks["uses_required"].astype(float)
@@ -108,7 +109,7 @@ def main() -> None:
 
     out = pd.concat(rows, ignore_index=True)
     out = out[["Person_ID", "Metric", "Stay", "Raw", "Weighted", "Percentile"]]
-    out.to_csv(REPO / "therapist-metrics.csv", index=False)
+    out.to_csv(DATA / "therapist-metrics.csv", index=False)
 
     print(f"\noutput rows: {len(out):,} | therapists: {out['Person_ID'].nunique():,}")
     print("\nrows per metric/stay:")
@@ -117,7 +118,7 @@ def main() -> None:
     print(out.groupby("Metric")["Percentile"].mean().round(3).to_string())
     print("\nWeighted means per metric:")
     print(out.groupby(["Metric", "Stay"])["Weighted"].mean().round(3).to_string())
-    print(f"\nWrote {REPO / 'therapist-metrics.csv'}")
+    print(f"\nWrote {DATA / 'therapist-metrics.csv'}")
 
 
 if __name__ == "__main__":

@@ -7,13 +7,13 @@ const path = require("path");
 const { query, closeAll } = require("../fabric-query");
 
 const REPO_ROOT = path.join(__dirname, "..");
-const CROSSWALK_CSV = path.join(REPO_ROOT, "Outcomes Crosswalk.csv");
-const SCALES_CSV    = path.join(REPO_ROOT, "Outcomes Custom Scales.csv");
+const CROSSWALK_CSV = path.join(REPO_ROOT, "data", "Outcomes Crosswalk.csv");
+const SCALES_CSV    = path.join(REPO_ROOT, "data", "Outcomes Custom Scales.csv");
 const SQL_TEMPLATE  = path.join(__dirname, "track-outcomes.sql");
 
 function parseArgs() {
   const a = process.argv.slice(2);
-  let years = 1, out = path.join(REPO_ROOT, "track-outcomes.csv");
+  let years = 1, out = path.join(REPO_ROOT, "data", "track-outcomes.csv");
   for (let i = 0; i < a.length; i++) {
     if (a[i] === "--years" && a[i + 1]) years = parseInt(a[++i], 10);
     else if (a[i] === "--out" && a[i + 1]) out = a[++i];

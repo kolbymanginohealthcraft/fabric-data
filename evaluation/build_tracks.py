@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
+DATA = REPO / "data"
 
 GG_FAMILIES = {"(a) Section GG Mobility", "(b) Section GG Self Care"}
 GG_ANA = ("15102", "15103", "15104", "15105")  # GG N/A-at-eval codes -> start 0
@@ -52,12 +53,12 @@ def derive_outcome_flags(o: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    base = pd.read_csv(REPO / "track-base.csv")
-    oc = pd.read_csv(REPO / "track-outcomes.csv", low_memory=False)
-    lib = pd.read_csv(REPO / "library-dim.csv")[["LibraryItem_ID", "Library"]]
-    fac = pd.read_csv(REPO / "facility-dim.csv", dtype={"DivisionCode": str})
-    cw = pd.read_csv(REPO / "Outcomes Crosswalk.csv")[["LibraryItem_ID", "RequiredFor"]]
-    att = pd.read_csv(REPO / "therapist-attribution.csv",
+    base = pd.read_csv(DATA / "track-base.csv")
+    oc = pd.read_csv(DATA / "track-outcomes.csv", low_memory=False)
+    lib = pd.read_csv(DATA / "library-dim.csv")[["LibraryItem_ID", "Library"]]
+    fac = pd.read_csv(DATA / "facility-dim.csv", dtype={"DivisionCode": str})
+    cw = pd.read_csv(DATA / "Outcomes Crosswalk.csv")[["LibraryItem_ID", "RequiredFor"]]
+    att = pd.read_csv(DATA / "therapist-attribution.csv",
                       usecols=["TxTrack_ID", "Total_Treatment_Minutes"])
 
     print(f"track-base: {len(base):,} | track-outcomes: {len(oc):,}")
@@ -108,7 +109,7 @@ def main() -> None:
     # cohort = Discipline x DomLibrary x PoR
     df["Cohort"] = df["Discipline"] + " | " + df["DomLibrary"].fillna("?") + " | " + df["PoR"]
 
-    out = REPO / "tracks.csv"
+    out = DATA / "tracks.csv"
     df.to_csv(out, index=False)
 
     # ---- profile ----

@@ -9,7 +9,7 @@ const { query, closeAll } = require("../fabric-query");
 
 function parseArgs() {
   const a = process.argv.slice(2);
-  let years = 1, out = path.join(__dirname, "..", "eval-author.csv");
+  let years = 1, out = path.join(__dirname, "..", "data", "eval-author.csv");
   for (let i = 0; i < a.length; i++) {
     if (a[i] === "--years" && a[i + 1]) years = parseInt(a[++i], 10);
     else if (a[i] === "--out" && a[i + 1]) out = a[++i];
