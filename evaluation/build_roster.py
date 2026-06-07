@@ -28,7 +28,8 @@ def main() -> None:
     emp["Person_ID"] = emp["Person_ID"].astype(int)
     emp["JobCode_int"] = pd.to_numeric(emp["JobCode"], errors="coerce")
     emp["home"] = emp["HomeLocation"].str.zfill(5)
-    emp["Role"] = [role_of(jc, d) for jc, d in zip(emp["JobCode"], emp["Discipline"])]
+    emp["Role"] = [role_of(jc, d, t)
+                   for jc, d, t in zip(emp["JobCode"], emp["Discipline"], emp["JobTitle"])]
 
     contrib = pd.read_csv(REPO / "contributions.csv")
     tracks = pd.read_csv(REPO / "tracks.csv", usecols=["TxTrack_ID", "Facility_ID", "ServiceLine"])
@@ -75,11 +76,14 @@ def main() -> None:
         insc = dset & {"Contract Rehab", "Senior Living"}
         # scorecard group + template + attribution rule
         if role == "Manager":
-            if r["JobCode_int"] in SL_AREA_MGR_CODES:
+            jc = r["JobCode_int"]
+            if jc in SL_AREA_MGR_CODES:
                 if r["Status"] == "Terminated":
                     return "SL Area Manager (terminated-excluded)", "-", "Excluded (terminated)"
                 return "SL Area Manager", "B", "Building credit: 1.0 for every track in territory"
-            return "CR Manager / DOR (PARKED)", "-", "Parked - no credit yet"
+            if jc in DOR_CODES:
+                return "CR Manager / DOR (PARKED)", "-", "Parked - no credit yet"
+            return "Leadership (PARKED, above DOR/Area)", "-", "Parked - higher-tier manager, no credit yet"
         if role in ("Registered", "Assistant"):
             base = ("Eval-author: full credit (1.0) for tracks they authored the EVAL on"
                     if role == "Registered"
@@ -120,7 +124,10 @@ def main() -> None:
         rows.append(rec)
 
     out = pd.DataFrame(rows).sort_values(["ScorecardGroup", "Role", "FullName"])
-    out.to_csv(REPO / "employee-roster.csv", index=False, encoding="utf-8-sig")
+    try:
+        out.to_csv(REPO / "employee-roster.csv", index=False, encoding="utf-8-sig")
+    except PermissionError:
+        raise SystemExit("employee-roster.csv is open (Excel?) — close it and re-run.")
 
     print(f"employees: {len(out):,}  -> employee-roster.csv")
     print("\n=== ScorecardGroup distribution ===")

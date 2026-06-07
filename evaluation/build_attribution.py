@@ -16,24 +16,36 @@ Run from repo root:  python -m evaluation.build_attribution
 """
 from __future__ import annotations
 from pathlib import Path
+import re
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
 
 DOR_CODES = {8213, 8214, 8218, 8219, 8224}             # Contract Rehab mgrs - PARKED (not scored yet)
 SL_AREA_MGR_CODES = {8221, 8223, 9206}                 # Senior Living area managers - scored
-MANAGER_CODES = DOR_CODES | SL_AREA_MGR_CODES          # all excluded from clinical credit
+MANAGER_CODES = DOR_CODES | SL_AREA_MGR_CODES          # therapy managers (code-identified)
 SCORED_MANAGER_CODES = SL_AREA_MGR_CODES               # UN-PARK CR: add DOR_CODES here (+ Template A)
 REGISTERED_DISC = {"PT", "OT", "ST", "SLP", "CF-SLP", "CFY"}
 ASSISTANT_DISC = {"PTA", "COTA", "OTA"}
 
+# Leadership ABOVE the DOR/Area tier (Regional Director, VP, Chief, President, Sr Director,
+# Regional Clinical Director, etc.) — detected by TITLE since their codes are scattered
+# (756/868/2925/8211/8215/8222/...). PARKED: role=Manager, excluded from clinical credit, no
+# scorecard yet (not in SCORED_MANAGER_CODES). Per the org-chart principle, higher manager =
+# bigger territory; when un-parked they'd map to a region ledger via the same territory_codes rule.
+_LEADERSHIP_TITLE = re.compile(r"regional|vice president|\bvp\b|chief|president|senior director|area director", re.I)
+_NOT_LEADERSHIP = re.compile(r"program manager|director of rehab|area manager", re.I)  # already handled by code
 
-def role_of(jobcode, discipline) -> str:
+
+def role_of(jobcode, discipline, jobtitle="") -> str:
     try:
         if int(jobcode) in MANAGER_CODES:
             return "Manager"
     except (ValueError, TypeError):
         pass
+    jt = jobtitle if isinstance(jobtitle, str) else ""
+    if _LEADERSHIP_TITLE.search(jt) and not _NOT_LEADERSHIP.search(jt):
+        return "Manager"                                # leadership tier - parked
     if discipline in REGISTERED_DISC:
         return "Registered"
     if discipline in ASSISTANT_DISC:
@@ -152,7 +164,7 @@ def main() -> None:
     emp["Person_ID"] = emp["Person_ID"].astype(int)
     emp["JobCode_int"] = pd.to_numeric(emp["JobCode"], errors="coerce")
     emp["home"] = emp["HomeLocation"].str.zfill(5)
-    emp["Role"] = [role_of(jc, d) for jc, d in zip(emp["JobCode"], emp["Discipline"])]
+    emp["Role"] = [role_of(jc, d, t) for jc, d, t in zip(emp["JobCode"], emp["Discipline"], emp["JobTitle"])]
     role = emp.set_index("Person_ID")["Role"].to_dict()
 
     # ---- Registered: eval author, weight 1.0 ----
