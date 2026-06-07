@@ -81,10 +81,17 @@ def main() -> None:
     tracks["uses_required"] = tracks["uses_required"].astype(float)
     tracks["_validden"] = tracks["n_valid_good"].fillna(0) + tracks["n_invalid"].fillna(0)
 
+    # In-scope DIVISIONS only: Contract Rehab + Senior Living. HAP (a therapy-management model),
+    # Closed (retired facilities), and Other (unmapped) are out of scope — exclude them from BOTH
+    # the metrics and the cohort comparison pools (restores the A2 Closed/Other exclusion that the
+    # track-grain rewrite dropped, and honors "HAP is not part of this").
+    IN_SCOPE_SERVICELINES = {"Contract Rehab", "Senior Living"}
+    tracks = tracks[tracks["ServiceLine"].isin(IN_SCOPE_SERVICELINES)].copy()
+
     # Universe rule: stay-SPLIT metrics filter to their payer bucket (Short / Long); NON-split
-    # metrics use ALL tracks (every payer). So no global payer filter here.
+    # metrics use ALL payers (within in-scope divisions). So no global payer filter here.
     ct = contrib.merge(tracks, on="TxTrack_ID", how="inner")
-    print(f"all tracks: {tracks['TxTrack_ID'].nunique():,} | contribution rows: {len(ct):,}")
+    print(f"in-scope tracks (CR+SL): {tracks['TxTrack_ID'].nunique():,} | contribution rows: {len(ct):,}")
 
     rows = []
     for name, num, den, split, qual, cohort in METRICS:
