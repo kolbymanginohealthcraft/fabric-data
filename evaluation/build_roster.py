@@ -23,6 +23,21 @@ REGION_DIV = {"08450": "Contract Rehab", "05500": "Senior Living",
               "06500": "HAP", "05555": "Closed"}
 
 
+def home_type(home, M: dict) -> str:
+    """What the HomeLocation value IS in the hierarchy (the 'grain' that sets a manager's level)."""
+    if home in M["closed"]:
+        return "Closed sentinel"
+    if home in M["fac2dist"]:
+        return "Building (facility)"
+    if home in M["dist_ledgers"]:
+        return "District ledger"
+    if home in M["area_ledgers"]:
+        return "Area ledger"
+    if home in M["region_ledgers"]:
+        return "Region ledger"
+    return "Unmapped"
+
+
 def main() -> None:
     emp = pd.read_csv(REPO / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
     emp["Person_ID"] = emp["Person_ID"].astype(int)
@@ -108,6 +123,7 @@ def main() -> None:
             "Discipline": r["Discipline"], "JobCode": r["JobCode"], "JobTitle": r["JobTitle"],
             "Status": r["Status"], "HomeLocation": r["HomeLocation"],
             "HomeDivision": REGION_DIV.get(code2region.get(r["home"], r["home"]), ""),
+            "HomeLocationType": home_type(r["home"], M),
             "Role": r["Role"], "ScorecardGroup": grp, "Template": tmpl,
             "AttributionRule": rule,
             "Scored": "Y" if r["Person_ID"] in scored else "N",
@@ -127,7 +143,7 @@ def main() -> None:
     try:
         out.to_csv(REPO / "employee-roster.csv", index=False, encoding="utf-8-sig")
     except PermissionError:
-        raise SystemExit("employee-roster.csv is open (Excel?) — close it and re-run.")
+        raise SystemExit("employee-roster.csv is open (Excel?) - close it and re-run.")
 
     print(f"employees: {len(out):,}  -> employee-roster.csv")
     print("\n=== ScorecardGroup distribution ===")
