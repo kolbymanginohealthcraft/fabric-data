@@ -83,6 +83,16 @@ def build_ledger_maps(hier: pd.DataFrame) -> dict:
     for c in ("code", "DistrictNumber", "AreaNumber", "RegionNumber"):
         hier[c] = hier[c].astype(str).str.zfill(5)
     closed = set(hier.loc[hier["DistrictName"].fillna("").str.contains("Closed"), "DistrictNumber"])
+    # territory_codes() disambiguates a HomeLocation by which column it appears in, which is only
+    # safe while facility codes and ledger numbers stay disjoint. Warn loudly if data drift breaks
+    # that (the '05555' Closed sentinel legitimately appears at every level, so it's exempted).
+    fac, dist = set(hier["code"]), set(hier["DistrictNumber"])
+    area, region = set(hier["AreaNumber"]), set(hier["RegionNumber"])
+    collisions = ((fac & dist) | (fac & area) | (fac & region)
+                  | (dist & area) | (dist & region) | (area & region)) - closed
+    if collisions:
+        print(f"WARNING: facility/ledger number-space collision(s) {sorted(collisions)} — "
+              f"territory_codes() level inference may be wrong; revisit detection.")
     return {
         "fac2dist": hier.set_index("code")["DistrictNumber"].to_dict(),
         "dist2codes": hier.groupby("DistrictNumber")["code"].apply(set).to_dict(),
@@ -102,11 +112,13 @@ def territory_codes(home, M: dict):
       - home is a BUILDING (facility code)  -> its DISTRICT ledger's facilities
       - home IS a district / area / region ledger -> that ledger's facilities
     Returns (level, codes); (None, None) if home maps nowhere (caller falls back to org chart)."""
+    if home in M["closed"]:                                     # '05555' Closed sentinel at any level
+        return (None, None)                                     # -> org-chart fallback, never the Closed bucket
     if home in M["fac2dist"]:                                   # building -> its district ledger
         d = M["fac2dist"][home]
         if d not in M["closed"]:
             return ("district", M["dist2codes"].get(d, set()))
-    if home in M["dist_ledgers"] and home not in M["closed"]:   # home IS a district ledger
+    if home in M["dist_ledgers"]:                               # home IS a district ledger
         return ("district", M["dist2codes"].get(home, set()))
     if home in M["area_ledgers"]:                               # home IS an area ledger
         return ("area", M["area2codes"].get(home, set()))
