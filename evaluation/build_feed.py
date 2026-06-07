@@ -22,6 +22,15 @@ SCORING_VERSION = "1.0.0"
 
 def main() -> None:
     m = pd.read_csv(DATA / "therapist-metrics.csv")
+    # fold in the satisfaction domain (Advocacy Score, Response Rate), same long schema
+    sat_path = DATA / "satisfaction-feed.csv"
+    if sat_path.exists():
+        sat = pd.read_csv(sat_path, usecols=["Person_ID", "Metric", "Stay", "Raw", "Weighted", "Percentile"])
+        m = pd.concat([m, sat], ignore_index=True)
+        print(f"folded satisfaction-feed: +{len(sat):,} rows ({sat['Person_ID'].nunique():,} therapists)")
+    else:
+        print("NOTE: satisfaction-feed.csv not found — feed will be clinical-only "
+              "(run: python -m evaluation.build_satisfaction_feed)")
     roster = pd.read_csv(DATA / "employee-roster.csv",
                          usecols=["Person_ID", "FullName", "Discipline", "Role",
                                   "ScorecardGroup", "Template"])
