@@ -20,9 +20,10 @@ import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
 
-DOR_CODES = {8213, 8214, 8218, 8219, 8224}
-SL_AREA_MGR_CODES = {8221, 8223, 9206}
+DOR_CODES = {8213, 8214, 8218, 8219, 8224}             # Contract Rehab mgrs - PARKED (not scored yet)
+SL_AREA_MGR_CODES = {8221, 8223, 9206}                 # Senior Living area managers - scored
 MANAGER_CODES = DOR_CODES | SL_AREA_MGR_CODES          # all excluded from clinical credit
+SCORED_MANAGER_CODES = SL_AREA_MGR_CODES               # UN-PARK CR: add DOR_CODES here (+ Template A)
 REGISTERED_DISC = {"PT", "OT", "ST", "SLP", "CF-SLP", "CFY"}
 ASSISTANT_DISC = {"PTA", "COTA", "OTA"}
 
@@ -76,34 +77,60 @@ def _orgchart_territory(emp: pd.DataFrame) -> dict:
     return out
 
 
-def manager_territory(emp: pd.DataFrame, hier: pd.DataFrame) -> dict:
-    """NON-TERMINATED SL Area Mgr Person_ID -> territory facility codes (DISTRICT-based).
-    home -> its district's facilities; if home is itself an AREA code -> that area's districts'
-    facilities; else org-chart fallback. (Territory is district-level; the job-title word "area"
-    is NOT the hierarchy Area column.)"""
+def build_ledger_maps(hier: pd.DataFrame) -> dict:
+    """Lookups over the facility hierarchy (the 'ledgers' = District/Area/Region nodes)."""
     hier = hier.copy()
-    for c in ("code", "DistrictNumber", "AreaNumber"):
+    for c in ("code", "DistrictNumber", "AreaNumber", "RegionNumber"):
         hier[c] = hier[c].astype(str).str.zfill(5)
     closed = set(hier.loc[hier["DistrictName"].fillna("").str.contains("Closed"), "DistrictNumber"])
-    code2dist = hier.set_index("code")["DistrictNumber"].to_dict()
-    dist2codes = hier.groupby("DistrictNumber")["code"].apply(set).to_dict()
-    area2codes = hier.groupby("AreaNumber")["code"].apply(set).to_dict()
-    areacodes = set(hier["AreaNumber"])
+    return {
+        "fac2dist": hier.set_index("code")["DistrictNumber"].to_dict(),
+        "dist2codes": hier.groupby("DistrictNumber")["code"].apply(set).to_dict(),
+        "area2codes": hier.groupby("AreaNumber")["code"].apply(set).to_dict(),
+        "region2codes": hier.groupby("RegionNumber")["code"].apply(set).to_dict(),
+        "dist_ledgers": set(hier["DistrictNumber"]),
+        "area_ledgers": set(hier["AreaNumber"]),
+        "region_ledgers": set(hier["RegionNumber"]),
+        "closed": closed,
+    }
 
+
+def territory_codes(home, M: dict):
+    """SHARED territory rule, reused for SL Area Mgrs now and Contract Rehab DORs when un-parked.
+    Map a manager's HomeLocation to the hierarchy node it represents, return all facility codes
+    under that node. The home's GRAIN sets the level:
+      - home is a BUILDING (facility code)  -> its DISTRICT ledger's facilities
+      - home IS a district / area / region ledger -> that ledger's facilities
+    Returns (level, codes); (None, None) if home maps nowhere (caller falls back to org chart)."""
+    if home in M["fac2dist"]:                                   # building -> its district ledger
+        d = M["fac2dist"][home]
+        if d not in M["closed"]:
+            return ("district", M["dist2codes"].get(d, set()))
+    if home in M["dist_ledgers"] and home not in M["closed"]:   # home IS a district ledger
+        return ("district", M["dist2codes"].get(home, set()))
+    if home in M["area_ledgers"]:                               # home IS an area ledger
+        return ("area", M["area2codes"].get(home, set()))
+    if home in M["region_ledgers"]:                             # home IS a region ledger
+        return ("region", M["region2codes"].get(home, set()))
+    return (None, None)
+
+
+def manager_territory(emp: pd.DataFrame, hier: pd.DataFrame) -> dict:
+    """Non-terminated managers in SCORED_MANAGER_CODES -> territory facility codes, via the shared
+    territory_codes() ledger rule; org-chart fallback for homes that map to no ledger. CR DORs are
+    excluded only by SCORED_MANAGER_CODES today — the rule itself is identical for them."""
+    M = build_ledger_maps(hier)
     org = _orgchart_territory(emp)
     home = emp.set_index("Person_ID")["home"].to_dict()
-    nt = emp[(emp["JobCode_int"].isin(SL_AREA_MGR_CODES)) & (emp["Status"] != "Terminated")]
+    nt = emp[(emp["JobCode_int"].isin(SCORED_MANAGER_CODES)) & (emp["Status"] != "Terminated")]
 
-    out, src = {}, {"district": 0, "area": 0, "orgchart": 0}
+    out, src = {}, {}
     for pid in nt["Person_ID"]:
-        h = home.get(pid)
-        d = code2dist.get(h)
-        if d and d not in closed:
-            out[pid] = dist2codes.get(d, set()); src["district"] += 1
-        elif h in areacodes:
-            out[pid] = area2codes.get(h, set()); src["area"] += 1
-        else:
-            out[pid] = org.get(pid, set()); src["orgchart"] += 1
+        level, codes = territory_codes(home.get(pid), M)
+        if codes is None:
+            level, codes = "orgchart(fallback)", org.get(pid, set())
+        src[level] = src.get(level, 0) + 1
+        out[pid] = codes
     print(f"manager territory source: {src}")
     return out
 
