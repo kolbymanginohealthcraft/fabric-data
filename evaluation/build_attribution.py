@@ -40,9 +40,8 @@ def role_of(jobcode, discipline) -> str:
     return "Excluded"
 
 
-def manager_buildings(emp: pd.DataFrame) -> dict:
-    """SL Area Manager Person_ID -> set of building facility codes (own + direct reports')."""
-    # resolve each employee's supervisor Person_ID via the two edge types
+def _orgchart_territory(emp: pd.DataFrame) -> dict:
+    """Fallback: Person_ID -> set of facility codes via transitive supervised sub-tree."""
     by_empnum = emp.dropna(subset=["EmployeeNumber"]).drop_duplicates("EmployeeNumber") \
                    .set_index("EmployeeNumber")["Person_ID"].to_dict()
     by_user = emp.dropna(subset=["Username"]).drop_duplicates("Username") \
@@ -52,18 +51,11 @@ def manager_buildings(emp: pd.DataFrame) -> dict:
         sid, typ = row["SupervisorIdentifier"], row["SupervisorIdentifierType"]
         if pd.isna(sid):
             return None
-        if typ == "EmployeeNumber":
-            return by_empnum.get(str(sid))
-        if typ == "UserName":
-            return by_user.get(str(sid))
-        return None
+        return by_empnum.get(str(sid)) if typ == "EmployeeNumber" else by_user.get(str(sid))
 
     emp = emp.copy()
     emp["sup_pid"] = emp.apply(resolve, axis=1)
     home = emp.set_index("Person_ID")["home"].to_dict()
-
-    # children map -> transitive descendants (a manager's territory is the WHOLE sub-tree,
-    # so an Area Mgr over DORs also gets the line therapists below those DORs).
     children: dict = {}
     for pid, sup in zip(emp["Person_ID"], emp["sup_pid"]):
         if pd.notna(sup):
@@ -74,16 +66,45 @@ def manager_buildings(emp: pd.DataFrame) -> dict:
         while stack:
             for c in children.get(stack.pop(), []):
                 if c not in seen:
-                    seen.add(c)
-                    stack.append(c)
+                    seen.add(c); stack.append(c)
         return seen
 
-    mgrs = emp[emp["JobCode_int"].isin(SL_AREA_MGR_CODES)]
     out = {}
-    for pid in mgrs["Person_ID"]:
-        people = descendants(pid) | {pid}          # whole sub-tree incl. self
-        bset = {home.get(p) for p in people}
+    for pid in emp.loc[emp["JobCode_int"].isin(SL_AREA_MGR_CODES), "Person_ID"]:
+        bset = {home.get(p) for p in descendants(pid) | {pid}}
         out[pid] = {b for b in bset if b and pd.notna(b) and b not in ("00000", "00001")}
+    return out
+
+
+def manager_territory(emp: pd.DataFrame, hier: pd.DataFrame) -> dict:
+    """NON-TERMINATED SL Area Mgr Person_ID -> territory facility codes (DISTRICT-based).
+    home -> its district's facilities; if home is itself an AREA code -> that area's districts'
+    facilities; else org-chart fallback. (Territory is district-level; the job-title word "area"
+    is NOT the hierarchy Area column.)"""
+    hier = hier.copy()
+    for c in ("code", "DistrictNumber", "AreaNumber"):
+        hier[c] = hier[c].astype(str).str.zfill(5)
+    closed = set(hier.loc[hier["DistrictName"].fillna("").str.contains("Closed"), "DistrictNumber"])
+    code2dist = hier.set_index("code")["DistrictNumber"].to_dict()
+    dist2codes = hier.groupby("DistrictNumber")["code"].apply(set).to_dict()
+    area2codes = hier.groupby("AreaNumber")["code"].apply(set).to_dict()
+    areacodes = set(hier["AreaNumber"])
+
+    org = _orgchart_territory(emp)
+    home = emp.set_index("Person_ID")["home"].to_dict()
+    nt = emp[(emp["JobCode_int"].isin(SL_AREA_MGR_CODES)) & (emp["Status"] != "Terminated")]
+
+    out, src = {}, {"district": 0, "area": 0, "orgchart": 0}
+    for pid in nt["Person_ID"]:
+        h = home.get(pid)
+        d = code2dist.get(h)
+        if d and d not in closed:
+            out[pid] = dist2codes.get(d, set()); src["district"] += 1
+        elif h in areacodes:
+            out[pid] = area2codes.get(h, set()); src["area"] += 1
+        else:
+            out[pid] = org.get(pid, set()); src["orgchart"] += 1
+    print(f"manager territory source: {src}")
     return out
 
 
@@ -118,7 +139,8 @@ def main() -> None:
     fac["code"] = fac["FacilityName"].str.extract(r"^\s*(\d+)")[0].str.zfill(5)
     code2fid = fac.dropna(subset=["code"]).groupby("code")["Facility_ID"].apply(set).to_dict()
 
-    bmap = manager_buildings(emp)
+    hier = pd.read_csv(REPO / "facility-hier.csv", dtype=str)
+    bmap = manager_territory(emp, hier)
     mgr_rows = []
     for pid, codes in bmap.items():
         fids = set().union(*[code2fid.get(c, set()) for c in codes]) if codes else set()
