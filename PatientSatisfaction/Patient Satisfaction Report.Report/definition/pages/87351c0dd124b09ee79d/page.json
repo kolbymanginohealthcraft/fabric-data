@@ -1,0 +1,90 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "87351c0dd124b09ee79d",
+  "displayName": "Comments",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 960,
+  "visualInteractions": [
+    {
+      "source": "93466d087a6680e2fc04",
+      "target": "570fe62f4c9b24efb38d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "bb9b6385f075ec5147d3",
+      "target": "570fe62f4c9b24efb38d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "41f83e58359360e4b919",
+      "target": "570fe62f4c9b24efb38d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "9282ff565a1119e21b47",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "1ad42dea80fca6b001a7",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "12ede1417641371e83f7",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "8d3c56eb52fac3814abd",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "53bd2101a34e45cc7da3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "756bf5b8f28eb38efd31",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "a6d68635da51c5dc29a2",
+      "type": "DataFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "2b0339cbf8038b39c2bd",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "d87641c2efc0d482b60b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "f52310a55060aee83371",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "b04daa44a986a1e627eb",
+      "type": "NoFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "7f140dece28083060d2e",
+      "type": "DataFilter"
+    },
+    {
+      "source": "570fe62f4c9b24efb38d",
+      "target": "bb9b6385f075ec5147d3",
+      "type": "NoFilter"
+    }
+  ]
+}

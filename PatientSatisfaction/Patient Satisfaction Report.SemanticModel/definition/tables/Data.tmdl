@@ -1,0 +1,432 @@
+table Data
+	isHidden
+	lineageTag: 9a572c11-df89-4f97-8583-90d2a4c9493e
+
+	column Timestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c28b9c82-b159-4245-a94c-c127f4ab840e
+		summarizeBy: none
+		sourceColumn: Timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Person completing the form'
+		dataType: string
+		isHidden
+		lineageTag: ff150b5f-3564-40d8-a2bd-db2443ed0f24
+		summarizeBy: none
+		sourceColumn: Person completing the form
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These questions relate to your overall facility experience: [How would you rate the facility overall ?]'
+		dataType: string
+		isHidden
+		lineageTag: 0941f933-1233-4a85-b4d4-3998f085d404
+		summarizeBy: none
+		sourceColumn: These questions relate to your overall facility experience: [How would you rate the facility overall ?]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These questions relate to your overall facility experience: [How would you rate the care you received?]'
+		dataType: string
+		isHidden
+		lineageTag: 866a0442-3a98-4f2a-b349-16218544adbe
+		summarizeBy: none
+		sourceColumn: These questions relate to your overall facility experience: [How would you rate the care you received?]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These questions relate to your overall facility experience: [How would you rate how well your discharge needs were met]'
+		dataType: string
+		isHidden
+		lineageTag: 79f06ba3-2115-4f5b-ae40-67aa81457bfb
+		summarizeBy: none
+		sourceColumn: These questions relate to your overall facility experience: [How would you rate how well your discharge needs were met]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These Questions relate to your overall care experience [How often were your needs met timely?]'
+		dataType: string
+		isHidden
+		lineageTag: cb913c58-4335-4fe7-bdd0-58ceacf7b926
+		summarizeBy: none
+		sourceColumn: These Questions relate to your overall care experience [How often were your needs met timely?]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These Questions relate to your overall care experience [During your stay, how often was your pain well controlled?]'
+		dataType: string
+		isHidden
+		lineageTag: 1776372e-4967-4819-a771-87200bf51a97
+		summarizeBy: none
+		sourceColumn: These Questions relate to your overall care experience [During your stay, how often was your pain well controlled?]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Did you receive therapy services?'
+		dataType: string
+		isHidden
+		lineageTag: ff83b752-3ab5-41ce-9902-0cd0a850c3e3
+		summarizeBy: none
+		sourceColumn: Did you receive therapy services?
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These questions relate to your overall rehab experience: [I would use these therapy services again or recommend these services if someone I know needed care.]'
+		dataType: string
+		isHidden
+		lineageTag: 60aeb35a-dd6e-42a1-b6d0-36ff04a6837e
+		summarizeBy: none
+		sourceColumn: These questions relate to your overall rehab experience: [I would use these therapy services again or recommend these services if someone I know needed care.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These questions relate to your overall rehab experience: [The therapy received resulted in a positive outcome.]'
+		dataType: string
+		isHidden
+		lineageTag: 79697972-ec64-4fcd-b20f-9dd1ec44e4c5
+		summarizeBy: none
+		sourceColumn: These questions relate to your overall rehab experience: [The therapy received resulted in a positive outcome.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'These questions relate to your overall rehab experience: [Overall, the quality of therapy services received was satisfactory.]'
+		dataType: string
+		isHidden
+		lineageTag: a5cdd0fe-b8b5-4997-974c-13d530f996d2
+		summarizeBy: none
+		sourceColumn: These questions relate to your overall rehab experience: [Overall, the quality of therapy services received was satisfactory.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Did you receive Occupational Therapy ?'
+		dataType: string
+		isHidden
+		lineageTag: 2c4615ab-4a7a-4c0f-9feb-cd3bbc56d7dd
+		summarizeBy: none
+		sourceColumn: Did you receive Occupational Therapy ?
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Occupational Therapy [The therapist(s) had a kind and caring attitude.]'
+		dataType: string
+		isHidden
+		lineageTag: 4353d9b9-bc23-4e3f-b76a-1991b1471df0
+		summarizeBy: none
+		sourceColumn: Occupational Therapy [The therapist(s) had a kind and caring attitude.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Occupational Therapy [The therapist(s) was responsive to the patient’s needs.]'
+		dataType: string
+		isHidden
+		lineageTag: efde2cf9-60a7-4b14-b062-fe7dc7d125d2
+		summarizeBy: none
+		sourceColumn: Occupational Therapy [The therapist(s) was responsive to the patient’s needs.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Occupational Therapy [The therapist(s) explained the treatments and goals so they were understandable.]'
+		dataType: string
+		isHidden
+		lineageTag: 7d876a95-dda4-462d-b406-e0abc80d68a8
+		summarizeBy: none
+		sourceColumn: Occupational Therapy [The therapist(s) explained the treatments and goals so they were understandable.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Occupational Therapy [Progress was made as a result of this therapy.]'
+		dataType: string
+		isHidden
+		lineageTag: ff6f5a46-e3f7-4b78-a3d8-a0ba3a33c24b
+		summarizeBy: none
+		sourceColumn: Occupational Therapy [Progress was made as a result of this therapy.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Did you receive Physical Therapy?'
+		dataType: string
+		isHidden
+		lineageTag: 9a84ef0a-30e9-4d8f-8621-2a158110efbc
+		summarizeBy: none
+		sourceColumn: Did you receive Physical Therapy?
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Therapy [The therapist(s) had a kind and caring attitude.]'
+		dataType: string
+		isHidden
+		lineageTag: 20f895d1-43ad-457d-9b74-db0f763caf34
+		summarizeBy: none
+		sourceColumn: Physical Therapy [The therapist(s) had a kind and caring attitude.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Therapy [The therapist(s) was responsive to the patient’s needs.]'
+		dataType: string
+		isHidden
+		lineageTag: a9cc9bd9-a751-4384-8026-36bf4a94e239
+		summarizeBy: none
+		sourceColumn: Physical Therapy [The therapist(s) was responsive to the patient’s needs.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Therapy [The therapist(s) explained the treatments and goals so they were understandable.]'
+		dataType: string
+		isHidden
+		lineageTag: 7c5be255-75c5-4163-aa2f-6ec834835e75
+		summarizeBy: none
+		sourceColumn: Physical Therapy [The therapist(s) explained the treatments and goals so they were understandable.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Therapy [Progress was made as a result of this therapy.]'
+		dataType: string
+		isHidden
+		lineageTag: a118f9e6-1220-4b8a-b7fe-60ecf9d090d8
+		summarizeBy: none
+		sourceColumn: Physical Therapy [Progress was made as a result of this therapy.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Did you receive Speech Therapy?'
+		dataType: string
+		isHidden
+		lineageTag: 5e803c01-fa77-45fa-8b0c-59824955935f
+		summarizeBy: none
+		sourceColumn: Did you receive Speech Therapy?
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Speech Therapy [The therapist(s) had a kind and caring attitude.]'
+		dataType: string
+		isHidden
+		lineageTag: 056881ce-e541-4944-9b1f-90cc0e18d2af
+		summarizeBy: none
+		sourceColumn: Speech Therapy [The therapist(s) had a kind and caring attitude.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Speech Therapy [The therapist(s) was responsive to the patient’s needs.]'
+		dataType: string
+		isHidden
+		lineageTag: 0e7ae9b7-6d13-4cd3-9382-6bc87592ed28
+		summarizeBy: none
+		sourceColumn: Speech Therapy [The therapist(s) was responsive to the patient’s needs.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Speech Therapy [The therapist(s) explained the treatments and goals so they were understandable.]'
+		dataType: string
+		isHidden
+		lineageTag: cb66a451-4343-413b-acf1-4cb532a76315
+		summarizeBy: none
+		sourceColumn: Speech Therapy [The therapist(s) explained the treatments and goals so they were understandable.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Speech Therapy [Progress was made as a result of this therapy.]'
+		dataType: string
+		isHidden
+		lineageTag: 3f41831d-22a5-4756-ad60-0d60c4c7cda6
+		summarizeBy: none
+		sourceColumn: Speech Therapy [Progress was made as a result of this therapy.]
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Facility
+		dataType: string
+		isHidden
+		lineageTag: 18a82a75-5159-4135-9504-1827700693e2
+		summarizeBy: none
+		sourceColumn: Facility
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Please share any comments you might have about your experience with therapy, or staff members who you would like to recognize.'
+		dataType: string
+		isHidden
+		lineageTag: 111a861e-cce6-4a88-9edb-3fe87d240548
+		summarizeBy: none
+		sourceColumn: Please share any comments you might have about your experience with therapy, or staff members who you would like to recognize.
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Please share any comments you might have about your experience with facility, or staff members who you would like to recognize.'
+		dataType: string
+		isHidden
+		lineageTag: ac663caa-c10b-49ec-99ba-2dc6e9c80ca9
+		summarizeBy: none
+		sourceColumn: Please share any comments you might have about your experience with facility, or staff members who you would like to recognize.
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SurveyID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9b8aeb44-676e-4c46-921a-73a979f818c2
+		summarizeBy: count
+		sourceColumn: SurveyID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Please share any comments you might have about your experience with us, or staff members who you would like to recognize.'
+		dataType: string
+		lineageTag: 6dfa8864-d98d-42f0-812c-e9b5d3b9d130
+		summarizeBy: none
+		sourceColumn: Please share any comments you might have about your experience with us, or staff members who you would like to recognize.
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'I would use these therapy services again or recommend these services if someone I know needed care.'
+		dataType: string
+		lineageTag: e023f3ed-b461-4164-8c31-f1546680c568
+		summarizeBy: none
+		sourceColumn: I would use these therapy services again or recommend these services if someone I know needed care.
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'I would use these therapy services again or recommend these services if someone I know needed care._1'
+		dataType: string
+		lineageTag: 9d6867a2-113e-4216-b830-e71f206b43c6
+		summarizeBy: none
+		sourceColumn: I would use these therapy services again or recommend these services if someone I know needed care._1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column32
+		dataType: string
+		lineageTag: 066d1d18-80a1-492d-af06-c4efda3217c2
+		summarizeBy: none
+		sourceColumn: Column32
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column33
+		dataType: string
+		lineageTag: 88c30a06-d134-4b35-b57d-d868783fd532
+		summarizeBy: none
+		sourceColumn: Column33
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column34
+		dataType: string
+		lineageTag: a115480b-6fb6-478a-8481-88be0e3581b8
+		summarizeBy: none
+		sourceColumn: Column34
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column35
+		dataType: string
+		lineageTag: 2e1e1d9e-2bb0-4ae4-ab1c-e9fffddc7233
+		summarizeBy: none
+		sourceColumn: Column35
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column36
+		dataType: string
+		lineageTag: 2e18d083-47a7-4c66-9d19-67870fd1d203
+		summarizeBy: none
+		sourceColumn: Column36
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Data = m
+		mode: import
+		queryGroup: Survey
+		source =
+				let
+				    //Main
+				    Main_File = "https://aegis-my.sharepoint.com/personal/brad_miller_aegistherapies_com/Documents/Patient%20Satisfaction%20Survey.xlsx",
+				    Main_Source = Excel.Workbook(Web.Contents(Main_File), null, true){[Item="Sheet1",Kind="Sheet"]}[Data],
+				    Main_PromotedHeaders = Table.PromoteHeaders(Main_Source, [PromoteAllScalars=true]),
+				    Main_RemovedColumns = Table.RemoveColumns(Main_PromotedHeaders,{"Column24", "Column25", "Column26", "Column27", "Column28"}),
+				
+				
+				    //Ohana
+				    Ohana_File = "https://aegis-my.sharepoint.com/personal/brad_miller_aegistherapies_com/Documents/Ohana%20Survey.xlsx",
+				    Ohana_Source = Excel.Workbook(Web.Contents(Ohana_File), null, true){[Item="Sheet1",Kind="Sheet"]}[Data],
+				    Ohana_PromotedHeaders = Table.PromoteHeaders(Ohana_Source, [PromoteAllScalars=true]),
+				    Ohana_RenamedColumns = Table.RenameColumns(Ohana_PromotedHeaders,{{"Aegis Facility Number", "Facility"}}),
+				
+				    //Combine
+				    Combine_Append = Table.Combine({Main_RemovedColumns,Ohana_RenamedColumns}),
+				    #"Added Index" = Table.AddIndexColumn(Combine_Append, "SurveyID", 1, 1, Int64.Type),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Index",{{"Timestamp", type datetime}}),
+				    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type", {"Timestamp"})
+				in
+				    #"Removed Errors"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

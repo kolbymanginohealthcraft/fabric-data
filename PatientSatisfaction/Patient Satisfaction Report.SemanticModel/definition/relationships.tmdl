@@ -1,0 +1,103 @@
+relationship AutoDetected_ac62273f-64ab-4bde-835c-a0e2be46d7ea
+	crossFilteringBehavior: bothDirections
+	fromColumn: Sentiments.SurveyID
+	toColumn: Surveys.SurveyID
+
+relationship AutoDetected_38b55ff4-51e6-42ae-b9a6-39d88572c88e
+	crossFilteringBehavior: bothDirections
+	fromColumn: Sentiments.Question
+	toColumn: Dictionary.Question
+
+relationship AutoDetected_36b77c2a-034c-48b2-ae29-6ce087cde0ff
+	fromColumn: Sentiments.Sentiment
+	toColumn: Scoring.Sentiment
+
+relationship AutoDetected_9d1304ac-53c5-457a-bb90-f95b66d4f833
+	crossFilteringBehavior: bothDirections
+	fromColumn: Dictionary.Discipline
+	toColumn: Disciplines.Discipline
+
+relationship 881f2e60-afe7-400a-b087-22c8635807e6
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Aegis Contract'.Account__c
+	toColumn: Account.Id
+
+relationship a9745bf6-799a-4002-ad2a-1439249234f4
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Aegis Contract'.Chain_Account__c
+	toColumn: Chain.Id
+
+relationship b80c2b29-b821-4079-95f9-1426c4f13e73
+	crossFilteringBehavior: bothDirections
+	fromColumn: Surveys.Respondent
+	toColumn: Respondent.Type
+
+relationship 5180e4b4-e59a-4e49-994a-2a2904bc922f
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_UpnFacilityAccess.FacilityId
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship 6fbe3753-0ab0-420a-ae40-facafa8182a8
+	fromColumn: Surveys.Facility
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship 0586b230-5f18-4421-b9ef-6141b96f137d
+	crossFilteringBehavior: bothDirections
+	fromColumn: Scoring.Type
+	toColumn: ScoringType.Type
+
+relationship AutoDetected_414016f9-e8d4-4ac2-8a10-f39abcf0c390
+	crossFilteringBehavior: bothDirections
+	fromColumn: Comments.SurveyID
+	toColumn: Surveys.SurveyID
+
+relationship aee04b66-0e93-c82a-2cff-681cf67181fb
+	crossFilteringBehavior: bothDirections
+	fromColumn: Account.CCN__c
+	toColumn: CustomerGroups.CCN
+
+relationship AutoDetected_83e6e8af-0e82-4c9a-b910-722c375ca6c3
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.Stay_ID
+	toColumn: PatientStays.Stay_ID
+
+relationship AutoDetected_bda4b6a5-f836-4e5d-b3a5-293301101148
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientStays.PatientID
+	toColumn: Patients.PatientID
+
+relationship 5ce6553b-9193-6e9e-fed1-898f7d7647f1
+	crossFilteringBehavior: bothDirections
+	fromColumn: Patients.Facility
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship 8e7535ae-ec05-73d7-3702-ecb41e2d7e73
+	fromColumn: StayCases.EndReason_ID
+	toColumn: DischargeReason.Lookup_ID
+
+relationship ac03d58a-8bd3-2d2a-b010-53a73796f44e
+	isActive: false
+	fromColumn: StayCases.TherapyEndDate
+	toColumn: Calendar.Date
+
+relationship dd345e19-e115-bac5-a08e-ed9e0f5d830d
+	fromColumn: Surveys.SurveyDate
+	toColumn: Calendar.Date
+
+relationship 50c70093-1075-841b-adba-514f95307d5f
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: VW_NHAegisFacilities.FacilityId
+	toColumn: 'Aegis Contract'.Contract_Number__c
+
+relationship e741baa2-1169-a97d-471c-a18e9c2e2b5c
+	fromColumn: StayCases.DischargedTo_ID
+	toColumn: DischargeDestination.Lookup_ID
+
+relationship AutoDetected_d021d557-20d8-46b5-9927-76c19d637cae
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: DischargeReason.DisplaySequence
+	toColumn: DischargeDestination.DisplaySequence
+

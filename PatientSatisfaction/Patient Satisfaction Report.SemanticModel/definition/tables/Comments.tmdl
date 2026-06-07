@@ -1,0 +1,55 @@
+table Comments
+	lineageTag: a0a11d81-4761-4273-b0ef-37e327fc886c
+
+	measure 'Total Comments' = COUNTROWS(Comments)
+		formatString: #,0
+		lineageTag: a5adfaff-b0b2-40c3-9256-f3ca40be6b0f
+
+	column SurveyID
+		dataType: int64
+		formatString: 0
+		lineageTag: 1907caa9-f17a-4174-8da3-68a9ebce2346
+		summarizeBy: none
+		sourceColumn: SurveyID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 2e4a7a06-5ac7-4f71-a248-2d994c7135fa
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Text
+		dataType: string
+		lineageTag: bc1b479c-2439-49d1-8ec5-8453c1610e59
+		summarizeBy: none
+		sourceColumn: Text
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Comments = m
+		mode: import
+		queryGroup: Survey
+		source =
+				let
+				    Source = Data,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Please share any comments you might have about your experience with us, or staff members who you would like to recognize.", "Please share any comments you might have about your experience with therapy, or staff members who you would like to recognize.", "Please share any comments you might have about your experience with facility, or staff members who you would like to recognize.", "SurveyID"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Please share any comments you might have about your experience with therapy, or staff members who you would like to recognize.", "Rehab"}, {"Please share any comments you might have about your experience with facility, or staff members who you would like to recognize.", "Facility"}, {"Please share any comments you might have about your experience with us, or staff members who you would like to recognize.", "Rehab2"}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"SurveyID"}, "Attribute", "Value"),
+				    #"Replaced Value" = Table.ReplaceValue(#"Unpivoted Other Columns","Rehab2","Rehab",Replacer.ReplaceText,{"Attribute"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Replaced Value",{{"Attribute", "Type"}, {"Value", "Text"}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns1", each [Text] <> null and [Text] <> ""),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Rows",{{"Text", type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type", "Length", each Text.Length([Text])),
+				    #"Filtered Rows1" = Table.SelectRows(#"Added Custom", each [Length] > 2),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows1",{"Length"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

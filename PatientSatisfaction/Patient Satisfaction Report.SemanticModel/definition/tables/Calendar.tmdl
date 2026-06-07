@@ -1,0 +1,143 @@
+table Calendar
+	lineageTag: 5177e8fd-0f7c-4cd6-9008-d19cdfffa1e0
+	dataCategory: Time
+
+	measure 'Today''s Date' = TODAY()
+		formatString: Short Date
+		lineageTag: e94ea8c3-fdb0-4eb8-887f-261753a91ecb
+
+	measure Timeframe =
+			
+			FORMAT(MIN('Calendar'[Date]),"mm/dd/yyyy")&" - "&FORMAT(MAX('Calendar'[Date]),"mm/dd/yyyy")
+		lineageTag: fac85b80-0127-4c1b-8bff-745704dc0d07
+
+	measure 'Timeframe Updated at' =
+			
+			// "Data available through "&FORMAT(MAX('Calendar'[Date]),"mm/dd/yyyy")
+			"Data available through "&
+			FORMAT(
+			    MAXX(
+			        ALL('Calendar'[Date]),
+			        'Calendar'[Date]
+			    ),
+			    "mm/dd/yyyy"
+			)
+		lineageTag: 636fc35b-675d-41e3-bfae-d72763585a2c
+
+	column Date
+		isKey
+		formatString: Short Date
+		lineageTag: 4a99b845-6442-4c23-8d43-108f4fecb12b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: c011f91a-1a81-458d-9437-04af7a9782f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 331986c3-72db-41d4-885a-24d007624ab2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		formatString: 0
+		lineageTag: 7f220b81-b12d-467a-a399-f7fc16f2a91d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = User
+
+	column Day
+		formatString: 0
+		lineageTag: a4af6e96-a24c-439b-b805-5ae8158b7bf4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day]
+
+		annotation SummarizationSetBy = User
+
+	column 'Week Number'
+		formatString: 0
+		lineageTag: 0e118d2e-6044-4ac3-9de8-e5ac297a3410
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Day'
+		formatString: 0
+		lineageTag: 1c6432ee-24f5-493b-a4df-61d40b7d2c50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week Day]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Start Date'
+		formatString: Short Date
+		lineageTag: e488dab6-531d-471a-994c-5352fd4fbbcf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week Start Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name'
+		lineageTag: 8386903b-d1db-482a-88a4-753e3fca1308
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		lineageTag: 898f2219-e787-42d9-ba71-7b59f7194829
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarter
+		lineageTag: fcda23dd-10ca-494b-b477-affc116d94c5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearQuarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    // CALENDAR(MIN(Surveys[Timestamp]),TODAY()),
+				    CALENDAR(MIN(Surveys[Timestamp]),MAX(Surveys[Timestamp])),
+				    "Year",YEAR([Date]),
+				    "Quarter","Qtr "&QUARTER([Date]),
+				    "Month",MONTH([Date]),
+				    "Day",DAY([Date]),
+				    "Week Number",WEEKNUM([Date]),
+				    "Week Day",WEEKDAY([Date]),
+				    "Week Start Date",[Date]-WEEKDAY([Date],1)+1,
+				    "Day Name",FORMAT([Date],"ddd"),
+				    "YearMonth",YEAR([Date])&"-"&FORMAT(MONTH([Date]),"00"),
+				    "YearQuarter",YEAR([Date])&"-Q"&QUARTER([Date])
+				)
+
+	annotation PBI_Id = 7bdbe1efbce14dad8a2dd340bdf71fd9
+

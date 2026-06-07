@@ -1,0 +1,42 @@
+table Patients
+	lineageTag: 1fdcc862-22d4-4033-861a-a22587f11c48
+
+	column PatientID
+		dataType: int64
+		formatString: 0
+		lineageTag: 228da2ad-e592-4ca2-a5f6-b1ee559d0734
+		summarizeBy: none
+		sourceColumn: PatientID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Facility
+		dataType: string
+		lineageTag: 4306e5dd-011a-483e-842a-d911f347c979
+		summarizeBy: none
+		sourceColumn: Facility
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Patients = m
+		mode: import
+		queryGroup: Clinical
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
+				    Patients_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="Patients",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Patients_,{"PatientID", "Facility"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each [Facility] <> null and [Facility] <> ""),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Rows",{{"Facility", Int64.Type}}),
+				    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type", {"Facility"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Errors",{{"Facility", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

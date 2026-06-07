@@ -1,0 +1,92 @@
+table StayCases
+	lineageTag: 15f5e358-f0f4-4a54-b9fc-24542155c15b
+
+	measure 'Total Planned Discharges' =
+			
+			// CALCULATE(
+			//     [Total Discharges],
+			//     DischargeReason[Type]="Planned"
+			// )
+			
+			CALCULATE(
+			    [Total Discharges],
+			    DischargeDestination[Type]="Planned"
+			)
+		formatString: #,0
+		lineageTag: 50a1e7df-d1ab-4ac4-9130-0be4d5b92501
+
+	measure 'Total Discharges' =
+			
+			CALCULATE(
+			    COUNTROWS(StayCases),
+			    USERELATIONSHIP('Calendar'[Date],StayCases[TherapyEndDate]),
+			    ALL(Disciplines)
+			)
+		formatString: #,0
+		lineageTag: 77847485-f2c3-4c0c-864b-359289261127
+
+	column PatientCase_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: f13108d5-5116-43f4-8cc6-4fba75e91732
+		summarizeBy: count
+		sourceColumn: PatientCase_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stay_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: ee9a1bc1-1a83-44e9-bc8e-4d24a6a3528c
+		summarizeBy: none
+		sourceColumn: Stay_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TherapyEndDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0c32b3b6-6c01-40f4-8819-59c7282fce96
+		summarizeBy: none
+		sourceColumn: TherapyEndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndReason_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: e72f00cb-a4ae-4e1b-a7f7-8b9e17251cb2
+		summarizeBy: none
+		sourceColumn: EndReason_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DischargedTo_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 352f2717-b5dc-4b72-b304-4aee256a53f6
+		summarizeBy: none
+		sourceColumn: DischargedTo_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StayCases = m
+		mode: import
+		queryGroup: Clinical
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
+				    StayCases_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="StayCases",version=""]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(StayCases_, each [TherapyEndDate] <> null and [TherapyEndDate] <> ""),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"PatientCase_ID", "Stay_ID", "TherapyEndDate", "EndReason_ID", "DischargedTo_ID"}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Removed Other Columns", each [TherapyEndDate] >= #datetime(2023, 10, 19, 0, 0, 0))
+				in
+				    #"Filtered Rows1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

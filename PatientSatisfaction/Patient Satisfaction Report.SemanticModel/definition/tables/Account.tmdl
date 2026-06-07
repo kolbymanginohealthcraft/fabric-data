@@ -1,0 +1,242 @@
+table Account
+	lineageTag: f7144510-3f4a-4585-aae0-fec818de15fb
+
+	measure 'Total Facilities' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Account[Id]),
+			    VW_NHAegisFacilities[IsValid],
+			    FILTER(
+			        Account,
+			        [Total Respondents]>0 || [Total Planned Discharges]>0
+			    )
+			)
+		formatString: 0
+		lineageTag: aeb1aaef-6fcf-41f5-88e0-ce55ec520f34
+
+	measure 'Customer Name' =
+			
+			// //if one account is selected
+			// SELECTEDVALUE(Account[Name],
+			
+			// //if multiple accounts are selected
+			// IF(ISFILTERED(CustomerGroups[Customer Group]),SELECTEDVALUE(CustomerGroups[Customer Group]),
+			// IF(ISFILTERED(Chain[Name]),SELECTEDVALUE(Chain[Name]),
+			// IF(ISFILTERED('Aegis Area'[Area_Ledger__c]),"Area "&SELECTEDVALUE('Aegis Area'[Area_Ledger__c]),
+			// IF(ISFILTERED('Aegis District'[Name]),SELECTEDVALUE('Aegis District'[Name]),
+			// IF(ISFILTERED('Aegis Region'[Name]),SELECTEDVALUE('Aegis Region'[Name]),
+			// IF(ISFILTERED(Account[BillingState]),SELECTEDVALUE(Account[BillingState]),
+			// IF([Total Facilities]=[Total Facilities BM],"Aegis Therapies",
+			// "My Customers"
+			// ))))))))
+			
+			// //shows number of facilities if more than one are selected
+			// &IF([Total Facilities]>1," ("&[Total Facilities]&" facilities)")
+			
+			
+			
+			//if one account is selected
+			SELECTEDVALUE(Account[Name],
+			
+			//if multiple accounts are selected
+			IF(ISFILTERED(CustomerGroups[Customer Group]),SELECTEDVALUE(CustomerGroups[Customer Group]),
+			IF(ISFILTERED(Chain[Name]),SELECTEDVALUE(Chain[Name]),
+			IF(ISFILTERED(VW_NHAegisFacilities[Region]),"Region "&SELECTEDVALUE(VW_NHAegisFacilities[Region]),
+			IF(ISFILTERED(VW_NHAegisFacilities[District]),"District "&SELECTEDVALUE(VW_NHAegisFacilities[District]),
+			IF(ISFILTERED(VW_NHAegisFacilities[Division]),SELECTEDVALUE(VW_NHAegisFacilities[Division]),
+			IF(ISFILTERED(Account[BillingState]),SELECTEDVALUE(Account[BillingState]),
+			IF([Total Facilities]=[Total Facilities BM],"Aegis Therapies",
+			"My Customers"
+			))))))))
+			
+			//shows number of facilities if more than one are selected
+			&IF([Total Facilities]>1," ("&[Total Facilities]&" facilities)")
+		lineageTag: 8a420f27-ef2b-4f48-bfa1-ba48320910f7
+
+	measure 'Total Facilities BM' =
+			
+			// CALCULATE(
+			//     [Total Facilities],
+			//     ALL(Surveys[SurveyID]),
+			//     ALL(vw_UpnFacilityAccess)
+			// )
+			
+			CALCULATE(
+			    [Total Facilities],
+			    ALL('Aegis Contract'),
+			    ALL(Surveys[SurveyID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		formatString: 0
+		lineageTag: 1cc26e10-b4fc-4c9c-b68e-e7c0f5be28c5
+
+	measure 'Report Title' = IF(SELECTEDVALUE(VW_NHAegisFacilities[Division])="5500 (Direct Bill)","Client Satisfaction Report","Patient Satisfaction Report")
+		lineageTag: a45b43fd-09eb-4b29-afe8-dfdb8ca2462f
+
+	measure 'Total Facilities with AS' =
+			
+			CALCULATE(
+			    [Total Facilities],
+			    FILTER(
+			        Account,
+			        ISBLANK([Advocacy Score])=FALSE()
+			    )
+			)
+		formatString: #,0
+		lineageTag: 34415c1f-1c18-497d-9a21-bd8bc2e4ba01
+
+	measure 'Total Facilities with NPS' =
+			
+			CALCULATE(
+			    [Total Facilities],
+			    FILTER(
+			        Account,
+			        ISBLANK([Net Promoter Score])=FALSE() && [Total Responses NPS]>=[NPS Threshold]
+			    )
+			)
+		formatString: #,0
+		lineageTag: 674766ba-09b2-4257-9b1e-1782ea5a347f
+
+	measure '% Total Facilities with NPS' =
+			
+			DIVIDE(
+			    [Total Facilities with NPS],
+			    [Total Facilities]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 3a7a607a-9a04-4af9-bc5c-b95f9762de59
+
+	measure 'Total Facilities Above Response Rate Baseline' =
+			
+			CALCULATE(
+			    [Total Facilities],
+			    FILTER(
+			        Account,
+			        [Respondents per Planned Discharge]>=[Respondents per Planned Discharge Baseline]
+			    )
+			)
+		formatString: 0
+		lineageTag: 2f57b463-6246-4552-aea3-60a567e0fc30
+
+	measure '% Total Facilities Above Response Rate Baseline' =
+			
+			DIVIDE(
+			    [Total Facilities Above Response Rate Baseline],
+			    [Total Facilities]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 54b9d288-83c0-4160-b44d-42ef85d7ea00
+
+	measure '% Total Facilities with AS' =
+			
+			DIVIDE(
+			    [Total Facilities with AS],
+			    [Total Facilities]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e5f70a15-26fb-4e27-935a-1823cd03b738
+
+	column Id
+		dataType: string
+		lineageTag: bf713f34-88eb-4ee0-994a-4eafde6db3eb
+		summarizeBy: none
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 50679651-3b57-447b-b70e-be5daaf1e158
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 1df98a27-118d-4485-83ff-16fb30db8523
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingStreet
+		dataType: string
+		lineageTag: 6f4f7b8c-eacd-4021-ae91-f6bb79a75389
+		summarizeBy: none
+		sourceColumn: BillingStreet
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingCity
+		dataType: string
+		lineageTag: 02f2a562-bcd3-4594-b855-ffb84994d49c
+		summarizeBy: none
+		sourceColumn: BillingCity
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingState
+		dataType: string
+		lineageTag: 11d1d4a9-7cbe-4746-b397-c533f1d053db
+		summarizeBy: none
+		sourceColumn: BillingState
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingPostalCode
+		dataType: string
+		lineageTag: b0cfe1cd-7589-4c3e-9d58-df790906a326
+		summarizeBy: none
+		sourceColumn: BillingPostalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillingLatitude
+		dataType: double
+		lineageTag: 223b3456-0201-4c87-8ccb-8706fa654048
+		summarizeBy: sum
+		sourceColumn: BillingLatitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BillingLongitude
+		dataType: double
+		lineageTag: 8f18e629-3d05-470b-8f22-2a84a3ec44ac
+		summarizeBy: sum
+		sourceColumn: BillingLongitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CCN__c
+		dataType: string
+		lineageTag: 3e77699f-edee-4a19-8d95-df979d788fc3
+		summarizeBy: none
+		sourceColumn: CCN__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Showable = [Total Respondents]>0 || [Total Planned Discharges]>0
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 52a0e2b5-9a82-45a7-a3a9-d34fd8d33736
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Account = m
+		mode: import
+		queryGroup: 'Customer Data'
+		source =
+				let
+				    Source = Salesforce.Data("https://login.salesforce.com/", [ApiVersion=48]),
+				    Account1 = Source{[Name="Account"]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Account1,{"Id", "Name", "Type", "BillingStreet", "BillingCity", "BillingState", "BillingPostalCode", "BillingLatitude", "BillingLongitude", "CCN__c"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_ResultType = Table
+

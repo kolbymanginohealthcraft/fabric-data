@@ -1,0 +1,75 @@
+table 'Aegis Contract'
+	lineageTag: 9a599296-665f-4a83-99bd-dd7020babb37
+
+	column Id
+		dataType: string
+		lineageTag: 48ad11a3-a9f6-4fef-bbd5-fae93798ef84
+		summarizeBy: none
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: e4b4d8ce-fc0a-4371-b0aa-bd7894f95a1c
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contract_Number__c
+		dataType: string
+		lineageTag: f16049a2-05ad-4e10-81af-a64fa7b57827
+		summarizeBy: none
+		sourceColumn: Contract_Number__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Chain_Account__c
+		dataType: string
+		lineageTag: ea822886-5bda-4b4d-8db4-e611a75ee62d
+		summarizeBy: none
+		sourceColumn: Chain_Account__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Account__c
+		dataType: string
+		lineageTag: 1c55235c-d240-4f55-82a2-d841183c3561
+		summarizeBy: none
+		sourceColumn: Account__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Active__c
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d14cd8a8-8297-4c7a-a769-71bd5861b731
+		summarizeBy: none
+		sourceColumn: Active__c
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contract_Type__c
+		dataType: string
+		lineageTag: 451e083c-2d0f-459e-b471-6def7e5712c4
+		summarizeBy: none
+		sourceColumn: Contract_Type__c
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aegis Contract' = m
+		mode: import
+		queryGroup: 'Customer Data'
+		source =
+				let
+				    Source = Salesforce.Data("https://login.salesforce.com/", [ApiVersion=48]),
+				    Aegis_Contract__c = Source{[Name="Aegis_Contract__c"]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Aegis_Contract__c,{"Id", "Name", "Contract_Number__c", "Chain_Account__c", "Account__c", "Active__c", "Contract_Type__c"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

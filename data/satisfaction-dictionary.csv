@@ -1,0 +1,22 @@
+﻿Question,Discipline,Topic,Sort Order
+These Questions relate to your overall care experience [How often were your needs met timely?],Overall,Timeliness,1
+"These Questions relate to your overall care experience [During your stay, how often was your pain well controlled?]",Overall,Pain Control,2
+These questions relate to your overall facility experience: [How would you rate the facility overall ?],Facility,Facility Rating,3
+These questions relate to your overall facility experience: [How would you rate the care you received?],Facility,Care Rating,4
+These questions relate to your overall facility experience: [How would you rate how well your discharge needs were met],Facility,Discharge Needs Met,5
+"These questions relate to your overall rehab experience: [Overall, the quality of therapy services received was satisfactory.]",Rehab,Satisfaction Level,6
+These questions relate to your overall rehab experience: [The therapy received resulted in a positive outcome.],Rehab,Results of Care,7
+These questions relate to your overall rehab experience: [I would use these therapy services again or recommend these services if someone I know needed care.],Rehab,Would Recommend,8
+I would use these therapy services again or recommend these services if someone I know needed care.,Rehab,Net Promoter Score,9
+Physical Therapy [Progress was made as a result of this therapy.],PT,Progress,10
+Physical Therapy [The therapist(s) explained the treatments and goals so they were understandable.],PT,Explanation of Treatments,11
+Physical Therapy [The therapist(s) had a kind and caring attitude.],PT,Caring Attitude,12
+Physical Therapy [The therapist(s) was responsive to the patient’s needs.],PT,Responsiveness,13
+Occupational Therapy [Progress was made as a result of this therapy.],OT,Progress,14
+Occupational Therapy [The therapist(s) explained the treatments and goals so they were understandable.],OT,Explanation of Treatments,15
+Occupational Therapy [The therapist(s) had a kind and caring attitude.],OT,Caring Attitude,16
+Occupational Therapy [The therapist(s) was responsive to the patient’s needs.],OT,Responsiveness,17
+Speech Therapy [Progress was made as a result of this therapy.],SLP,Progress,18
+Speech Therapy [The therapist(s) explained the treatments and goals so they were understandable.],SLP,Explanation of Treatments,19
+Speech Therapy [The therapist(s) had a kind and caring attitude.],SLP,Caring Attitude,20
+Speech Therapy [The therapist(s) was responsive to the patient’s needs.],SLP,Responsiveness,21

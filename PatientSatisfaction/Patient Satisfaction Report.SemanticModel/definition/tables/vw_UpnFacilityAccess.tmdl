@@ -1,0 +1,55 @@
+table vw_UpnFacilityAccess
+	lineageTag: 599bce96-7b5b-464e-88e5-65a0caea05f4
+
+	column FacilityId
+		dataType: string
+		lineageTag: 8551a37d-f21e-4c27-b89d-3480ee9906fa
+		summarizeBy: none
+		sourceColumn: FacilityId
+
+		annotation SummarizationSetBy = Automatic
+
+	column UPN
+		dataType: string
+		lineageTag: 114b526e-13f9-43f8-8e99-fa8a473e16aa
+		summarizeBy: none
+		sourceColumn: UPN
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_UpnFacilityAccess = m
+		mode: import
+		queryGroup: 'Customer Data'
+		source =
+				let
+				    //UPN table
+				    UPN_Source = PowerPlatform.Dataflows(null),
+				    UPN_Workspaces = UPN_Source{[Id="Workspaces"]}[Data],
+				    UPN_CallWorkspace = UPN_Workspaces{[workspaceId="538303cf-865c-4aae-b405-89ef5e1991aa"]}[Data],
+				    UPN_CallDataFlow = UPN_CallWorkspace{[dataflowId="a94779ab-840e-4438-bef8-c6d736e13745"]}[Data],
+				    UPN_CallTable = UPN_CallDataFlow{[entity="vw_UpnFacilityAccess",version=""]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(UPN_CallTable,{{"FacilityId", Int64.Type}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"FacilityId", type text}}),
+				    //Aegis Contracts
+				    Contracts_Source = Salesforce.Data("https://login.salesforce.com/", [ApiVersion=48]),
+				    Contracts_Table = Contracts_Source{[Name="Aegis_Contract__c"]}[Data],
+				    Contracts_RemovedOtherColumns = Table.SelectColumns(Contracts_Table,{"Contract_Number__c"}),
+				    Contracts_RenamedColumns = Table.RenameColumns(Contracts_RemovedOtherColumns,{{"Contract_Number__c", "FacilityId"}}),
+				    Contracts_AddedCustom = Table.AddColumn(Contracts_RenamedColumns, "UPN", each "kolby.mangino@healthcraftcreative.com;sara.mcolvin@healthcraftcreative.com;sara.spencer@aegistherapies.com"),
+				    Contracts_SplitColumnbyDelimiter = Table.SplitColumn(Contracts_AddedCustom, "UPN", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"UPN.1", "UPN.2", "UPN.3"}),
+				    Contracts_UnpivotedOtherColumns = Table.UnpivotOtherColumns(Contracts_SplitColumnbyDelimiter, {"FacilityId"}, "Attribute", "Value"),
+				    Contracts_RemovedColumns = Table.RemoveColumns(Contracts_UnpivotedOtherColumns,{"Attribute"}),
+				    Contracts_RenamedColumns2 = Table.RenameColumns(Contracts_RemovedColumns,{{"Value", "UPN"}}),
+				
+				    //Combine
+				    Combine_Append = Table.Combine({#"Changed Type1", Contracts_RenamedColumns2}),
+				    Combine_TrimmedText = Table.TransformColumns(Combine_Append,{{"FacilityId", Text.Trim, type text}}),
+				    Combine_LowercasedText = Table.TransformColumns(Combine_TrimmedText,{{"UPN", Text.Lower, type text}}),
+				    Combine_RemovedDuplicates = Table.Distinct(Combine_LowercasedText)
+				in
+				    Combine_RemovedDuplicates
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,26 @@
+﻿Sentiment,Type,Points,Sort,MaxPoints
+Strongly Agree,Level of Agree,4,1,4
+Agree,Level of Agree,3,2,4
+NA,Level of Agree,2,3,4
+Disagree,Level of Agree,1,4,4
+Strongly Disagree,Level of Agree,0,5,4
+Excellent,Rating,4,6,4
+Very Good,Rating,3,7,4
+Good,Rating,2,8,4
+Average,Rating,1,9,4
+Poor,Rating,0,10,4
+Always,Frequency,3,11,3
+Usually,Frequency,2,12,3
+Sometimes,Frequency,1,13,3
+Never,Frequency,0,14,3
+0,NPS,0,15,10
+1,NPS,1,16,10
+2,NPS,2,17,10
+3,NPS,3,18,10
+4,NPS,4,19,10
+5,NPS,5,20,10
+6,NPS,6,21,10
+7,NPS,7,22,10
+8,NPS,8,23,10
+9,NPS,9,24,10
+10,NPS,10,25,10

@@ -19,6 +19,8 @@ databases.json
 data/*.csv
 !data/Outcomes Crosswalk.csv
 !data/Outcomes Custom Scales.csv
+!data/satisfaction-scoring.csv
+!data/satisfaction-dictionary.csv
 
 # Generated / debug artifacts
 queries/.rendered*.sql

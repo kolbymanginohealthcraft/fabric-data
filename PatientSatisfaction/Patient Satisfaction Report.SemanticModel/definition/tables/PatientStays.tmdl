@@ -1,0 +1,39 @@
+table PatientStays
+	lineageTag: 8da723ff-2c5e-477b-972d-a37bb0f18537
+
+	column PatientID
+		dataType: int64
+		formatString: 0
+		lineageTag: c6ed0e3d-c1fd-4611-9636-1f4e766875b3
+		summarizeBy: none
+		sourceColumn: PatientID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stay_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: f83d3a0d-2c88-4a89-bd6f-1d01f774217c
+		summarizeBy: none
+		sourceColumn: Stay_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PatientStays = m
+		mode: import
+		queryGroup: Clinical
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
+				    PatientStays_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="PatientStays",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(PatientStays_,{"PatientID", "Stay_ID"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

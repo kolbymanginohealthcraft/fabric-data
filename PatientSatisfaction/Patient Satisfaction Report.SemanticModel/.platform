@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Patient Satisfaction Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9ae24a84-00cd-42cc-a1be-5c3da667f48e"
+  }
+}
