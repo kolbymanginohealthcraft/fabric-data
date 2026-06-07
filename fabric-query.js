@@ -1,26 +1,44 @@
 const sql = require("mssql");
-const { AzureCliCredential } = require("@azure/identity");
+const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 
 const databases = require("./databases.json");
 
-// Auth delegates to the Azure CLI's own on-disk token cache (~/.azure).
-// You run `az login` ONCE; the CLI keeps a refresh token (~90 days of
-// inactivity) and silently mints new access tokens. No device-code prompt
-// per run. Do NOT switch back to DeviceCodeCredential — that caches only in
-// process memory, so every fresh `node` invocation re-prompts.
-//   processTimeoutInMs: az.cmd serializes around its cache and the default
-//   10s subprocess timeout can trip under concurrent token requests; 30s is
-//   a safe margin. The on-disk cache below means az is spawned at most once
-//   per scope per hour anyway.
-const credential = new AzureCliCredential({
-  tenantId: process.env.AZURE_TENANT_ID,
-  processTimeoutInMs: 30000,
-});
-
+// DURABLE auth, no interactive reauth ever (with regular use):
+// We shell out to the Azure CLI directly — `az account get-access-token` — for a database
+// access token. `az login` (run ONCE) issues a ROLLING refresh token: ~90-day lifetime that
+// is renewed on every use, so as long as this tooling is used periodically the session never
+// expires and NO device code is ever shown. The token is cached in .token-cache.json and
+// reused until ~1 min before expiry; only then do we re-spawn az (which refreshes silently).
+//
+// Why call az ourselves instead of @azure/identity's AzureCliCredential: that wrapper
+// intermittently returned EMPTY output here ("Unexpected end of JSON input") while the direct
+// `az account get-access-token --resource https://database.windows.net/` call always works.
+// DO NOT switch to DeviceCodeCredential (caches only in-memory → re-prompts every run).
+// If `az` ever IS logged out (e.g. >90 days idle), the fix is one command the USER runs:
+// `az login`. There is no device-code flow in this script.
 const TOKEN_CACHE_FILE = path.join(__dirname, ".token-cache.json");
+
+function acquireTokenViaAzCli(scope) {
+  // resource is derived from a fixed scope constant (no user input) -> safe to interpolate.
+  const resource = scope.replace(/\/\.default$/, "/"); // CLI wants --resource, not a scope
+  let raw;
+  try {
+    raw = execSync(
+      `az account get-access-token --resource ${resource} --output json`,
+      { encoding: "utf8", maxBuffer: 16 * 1024 * 1024, stdio: ["ignore", "pipe", "pipe"] }
+    );
+  } catch (e) {
+    throw new Error(
+      "Azure CLI token acquisition failed. Run `az login` once in your shell, then retry. " +
+      "(underlying: " + (e.stderr || e.message || e).toString().trim().split("\n").pop() + ")"
+    );
+  }
+  const t = JSON.parse(raw);
+  return { token: t.accessToken, expiresOn: Number(t.expires_on) * 1000 };
+}
 
 const pools = {};
 
@@ -42,13 +60,10 @@ async function getTokenForScope(scope) {
     return cached.token;
   }
 
-  const tokenResponse = await credential.getToken(scope);
-  cache[scope] = {
-    token: tokenResponse.token,
-    expiresOn: tokenResponse.expiresOnTimestamp,
-  };
+  const fresh = acquireTokenViaAzCli(scope);
+  cache[scope] = fresh;
   writeTokenCache(cache);
-  return tokenResponse.token;
+  return fresh.token;
 }
 
 async function getToken() {
@@ -129,4 +144,4 @@ if (require.main === module) {
     .finally(() => closeAll());
 }
 
-module.exports = { query, closeAll, databases, getTokenForScope, credential };
+module.exports = { query, closeAll, databases, getTokenForScope, acquireTokenViaAzCli };
