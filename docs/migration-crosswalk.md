@@ -21,6 +21,29 @@ Data is ready; the rebinding work is what remains.
 - 🔴 **Gold** — **empty** (no lakehouses/warehouses). Nothing to bind to yet.
 - 🔴 **`LibraryItem` / `LibraryScaleValue`** — the **only source data with no Fabric home**; still only on `aegisdataprod`. See blocker section.
 
+## UPDATE 2026-06-08 — ClinicalOutcomes consumer repoint DONE (resolves Open item #6 for this model)
+
+The **`ClinicalOutcomes/` semantic model** has been fully repointed off
+`AegisPreImplementationLakehouse` and the PowerPlatform dataflows onto the
+medallion, executing the Lane A/B mappings below. Cohort-driven (rolling 12-month
+`CohortAnchorDate`), mirroring the therapist-evaluation pipeline. Commits (now on
+`main`): `6f7a081` (clinical+treatment layer), `d065caf` (dims batch 1), `10b5c33`
+(final dims). Validated against prior PreImpl row counts (within ~0.2%); refreshes
+clean in PBI Desktop.
+
+**Deviations from the original plan worth knowing:**
+- **Telehealth** → Bronze **`TxSession.InteractionMethod`** (`ESynchronous`/`EASynchronous`), *not* the `Billing.*` schema. Replaced a 2.35 GB dataflow read.
+- **DiagnosisCode** → Bronze `dbo.DiagnosisCode` (L4/L3) **+** aegisdataprod `NetHealthDocumentation.DiagnosisCategory` (L2/L1) — Bronze has the code table but **not** the category table. New `_AegisPatient` connection expression. Flip to Bronze when DiagnosisCategory is ingested.
+- **vw_PatientPayers** → Bronze payer chain (`CasePayerSet → ResidentPayerSequence Sequence=1 → ResidentPayer → PayerPayerType → PayerType/Payer`), cohort-filtered. Payer-change-over-time preserved via `CasePayerSet` date segments (verified 117,170 cases change payer over time).
+- **EmployeeBasicInfo** → Silver `dbo.employee`, filtered to non-empty `EmployeeNumber` (the Workday-roster population) so `EmployeeNo` stays unique for its FTEType relationship.
+- **Treatments/Details** → Silver `treatmentminute`/`treatmentsession`, session×service grain, **self-contained track-window filter** (`HAVING MAX(SessionDate) >= anchor`) — avoids a too-long inline cohort-ID list that Power BI's native-query consent dialog can't approve.
+- **CaseTrackDays** kept: its distinct-calendar-days count feeds **ALOS** and **Minutes-per-Week** (a per-track duration column would double-count overlapping discipline days). Efficient Bronze-SQL rebuild of the day count is **deferred** (not urgent post-cohort).
+
+**Still on `AegisPreImplementationLakehouse` / aegisdataprod — no confirmed medallion home (the original Open items, unchanged):**
+`Outcomes Crosswalk`, `Outcomes Custom Scales` (Excel business mappings), `Aegis Contract`, `Account` (Salesforce — separate lakehouse, out of scope), `ICD_10_CM_Mappings`, `Weights` (CSV), `FTEType` (WD roster), `vw_UpnFacilityAccess` (security/UPN — unverified replacement), `LibraryItem`/`LibraryScaleValue` (orphan), `PatientScreens` (no base table).
+
+**Operational:** model now uses many `Value.NativeQuery` calls with a rolling-date anchor → keep **Options → Security → "Require user approval for new native database queries" OFF** (otherwise re-prompts every refresh). The `_PreImpl` connection expression is now **unused** (dead) — the tables above use inline `Sql.Database`. Full detail + gotchas in `memory/project_clinical_outcomes_efficiency_migration.md`.
+
 ## Endpoints (SQL analytics endpoints; one host per workspace)
 
 Wired into `databases.json` (gitignored) under the listed aliases.
