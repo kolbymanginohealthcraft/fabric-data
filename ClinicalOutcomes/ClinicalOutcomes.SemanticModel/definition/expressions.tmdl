@@ -318,3 +318,17 @@ expression dbo_vw_UpnFacilityAccess =
 
 	annotation PBI_ResultType = Table
 
+/// aegisdataprod patient lakehouse (BINetHealthPatientLakehouse) — RETIRING; used
+/// only for DiagnosisCategory (L1/L2) until it lands in true Bronze.
+expression _AegisPatient =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "BINetHealthPatientLakehouse")
+		in
+		    Source
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000012
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+

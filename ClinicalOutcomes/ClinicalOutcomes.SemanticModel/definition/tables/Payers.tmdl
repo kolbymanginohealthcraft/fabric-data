@@ -41,14 +41,9 @@ table Payers
 		queryGroup: Payer
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"18c870d8-8553-4905-8f67-97fe347f8ae8" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="18c870d8-8553-4905-8f67-97fe347f8ae8"]}[Data],
-				    Payers_ = #"18c870d8-8553-4905-8f67-97fe347f8ae8"{[entity="Payers",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(Payers_,{"Payer_ID", "Name"})
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Payer_ID, Name FROM dbo.Payer")
 				in
-				    #"Removed Other Columns"
+				    Source
 
 	annotation PBI_ResultType = Table
 

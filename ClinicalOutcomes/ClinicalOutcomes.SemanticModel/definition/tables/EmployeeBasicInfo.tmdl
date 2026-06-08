@@ -62,18 +62,10 @@ table EmployeeBasicInfo
 		queryGroup: People
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"538303cf-865c-4aae-b405-89ef5e1991aa" = Workspaces{[workspaceId="538303cf-865c-4aae-b405-89ef5e1991aa"]}[Data],
-				    #"5850e03f-8c48-4d08-8182-7cf99d360333" = #"538303cf-865c-4aae-b405-89ef5e1991aa"{[dataflowId="5850e03f-8c48-4d08-8182-7cf99d360333"]}[Data],
-				    EmployeeBasicInfo_ = #"5850e03f-8c48-4d08-8182-7cf99d360333"{[entity="EmployeeBasicInfo",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(EmployeeBasicInfo_,{"LastName", "FirstName", "JobCodeId", "JobTitle", "EmployeeNo", "Person_ID", "Credentials"}),
-				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"EmployeeNo", type text}, {"JobCodeId", Int64.Type}}),
-				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each ([EmployeeNo] <> "99999")),
-				    #"Filtered Rows1" = Table.SelectRows(#"Filtered Rows", each [Person_ID] <> null and [Person_ID] <> ""),
-				    #"Merged Columns" = Table.CombineColumns(#"Filtered Rows1",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Therapist Name")
+				    Source = Value.NativeQuery(_SilverSource, "SELECT NetHealthId AS Person_ID, EmployeeNumber AS EmployeeNo, FullName, JobTitle, Discipline AS Credentials, TRY_CAST(JobCode AS int) AS JobCodeId FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY NetHealthId ORDER BY SourceType, Username) AS rn FROM dbo.employee WHERE NetHealthId IS NOT NULL AND ISNULL(EmployeeNumber,'') <> '' AND EmployeeNumber <> '99999') x WHERE x.rn = 1"),
+				    #"Renamed Columns" = Table.RenameColumns(Source,{{"FullName", "Therapist Name"}})
 				in
-				    #"Merged Columns"
+				    #"Renamed Columns"
 
 	annotation PBI_NavigationStepName = Navigation
 

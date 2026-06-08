@@ -57,21 +57,13 @@ table VW_NHAegisFacilities
 		queryGroup: Management
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
-				    #"7db0035e-f62e-4a62-ad9a-89e21cac8cce" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="7db0035e-f62e-4a62-ad9a-89e21cac8cce"]}[Data],
-				    VW_NHAegisFacilities_ = #"7db0035e-f62e-4a62-ad9a-89e21cac8cce"{[entity="VW_NHAegisFacilities",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(VW_NHAegisFacilities_,{"FacilityId", "DistrictId", "AreaId", "Regionid"}),
-				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Regionid", "Division"}, {"AreaId", "Region"}, {"DistrictId", "District"}}),
-				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns","5555","5555 (Closed Locations)",Replacer.ReplaceText,{"Division"}),
+				    Source = Value.NativeQuery(_SilverSource, "SELECT RIGHT('00000' + LTRIM(RTRIM(CAST(FacilityNumber AS varchar(10)))), 5) AS FacilityId, CAST(DistrictNumber AS varchar(20)) AS District, CAST(AreaNumber AS varchar(20)) AS Region, CAST(TRY_CAST(RegionNumber AS int) AS varchar(10)) AS Division FROM dbo.facilityhierarchy"),
+				    #"Replaced Value" = Table.ReplaceValue(Source,"5555","5555 (Closed Locations)",Replacer.ReplaceText,{"Division"}),
 				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","5500","5500 (Direct Bill)",Replacer.ReplaceText,{"Division"}),
 				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","6500","6500 (PACS Consulting)",Replacer.ReplaceText,{"Division"}),
-				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"}),
-				    #"Added Prefix" = Table.TransformColumns(#"Replaced Value3", {{"FacilityId", each "00000" & _, type text}}),
-				    #"Extracted Last Characters" = Table.TransformColumns(#"Added Prefix", {{"FacilityId", each Text.End(_, 5), type text}})
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"})
 				in
-				    #"Extracted Last Characters"
+				    #"Replaced Value3"
 
 	annotation PBI_NavigationStepName = Navigation
 

@@ -124,13 +124,8 @@ table vw_PatientPayers
 		queryGroup: Payer
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"18c870d8-8553-4905-8f67-97fe347f8ae8" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="18c870d8-8553-4905-8f67-97fe347f8ae8"]}[Data],
-				    vw_PatientPayers_ = #"18c870d8-8553-4905-8f67-97fe347f8ae8"{[entity="vw_PatientPayers",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(vw_PatientPayers_,{"CaseID", "FromDate", "ThruDate", "PayorType", "Payer_ID"}),
-				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"FromDate", type date}, {"ThruDate", type date}})
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT cps.PatientCase_ID AS CaseID, cps.FromDate, cps.ThruDate, pt.Descrip AS PayorType, ppt.Payer_ID FROM dbo.CasePayerSet cps INNER JOIN dbo.ResidentPayerSequence seq ON seq.ResidentPayerSet_ID = cps.ResidentPayerSet_ID AND seq.Sequence = 1 INNER JOIN dbo.ResidentPayer rp ON rp.ResidentPayer_ID = seq.ResidentPayer_ID INNER JOIN dbo.PayerPayerType ppt ON ppt.PayerPayerType_ID = rp.PayerPayerType_ID INNER JOIN dbo.PayerType pt ON pt.PayerType_ID = ppt.PayerType_ID WHERE cps.PatientCase_ID IN " & _QualifyingCaseIdsSql),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"FromDate", type date}, {"ThruDate", type date}})
 				in
 				    #"Changed Type"
 

@@ -56,14 +56,10 @@ table DiagnosisCode
 		queryGroup: Diagnoses
 		source = ```
 				let
-				    //Source
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    CallWorkspace = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    CallDataflow = CallWorkspace{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
+				    //Sources: DiagnosisCode (L4/L3) from true Bronze; DiagnosisCategory (L2/L1) from aegisdataprod until it lands in Bronze
 				
 				    //Codes (L4 and L3)
-				    Codes_GetName = CallDataflow{[entity="DiagnosisCode",version=""]}[Data],
+				    Codes_GetName = Value.NativeQuery(_NetHealthBronze, "SELECT DiagnosisCode_ID, Code, Description, ParentDiagnosisCode_ID, DiagnosisCategory_ID FROM dbo.DiagnosisCode"),
 				    Codes_RemovedOtherColumns = Table.SelectColumns(Codes_GetName,{"DiagnosisCode_ID", "Code", "Description", "ParentDiagnosisCode_ID", "DiagnosisCategory_ID"}),
 				    Codes_DuplicatedColumn = Table.DuplicateColumn(Codes_RemovedOtherColumns, "Code", "ICD"),
 				    Codes_MergeL4 = Table.CombineColumns(Codes_DuplicatedColumn,{"Code", "Description"},Combiner.CombineTextByDelimiter(": ", QuoteStyle.None),"L4"),
@@ -72,7 +68,7 @@ table DiagnosisCode
 				    Codes_RemovedColumns = Table.RemoveColumns(Codes_ExpandL3,{"ParentDiagnosisCode_ID"}),
 				
 				    //Categories (L2 and L1)
-				    Categories_GetName = CallDataflow{[entity="DiagnosisCategory",version=""]}[Data],
+				    Categories_GetName = Value.NativeQuery(_AegisPatient, "SELECT DiagnosisCategory_ID, Description, ParentDiagnosisCategory_ID FROM NetHealthDocumentation.DiagnosisCategory"),
 				    Categories_RemovedOtherColumns = Table.SelectColumns(Categories_GetName,{"DiagnosisCategory_ID", "Description", "ParentDiagnosisCategory_ID"}),
 				    Categories_RenamedColumns = Table.RenameColumns(Categories_RemovedOtherColumns,{{"Description", "L2"}}),
 				    Categories_SplitL2 = Table.SplitColumn(Categories_RenamedColumns, "L2", Splitter.SplitTextByEachDelimiter({"("}, QuoteStyle.Csv, true), {"L2.Desc", "L2.Code"}),
