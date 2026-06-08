@@ -53,7 +53,7 @@ table VW_NHAegisFacilities
 		annotation SummarizationSetBy = Automatic
 
 	partition VW_NHAegisFacilities = m
-		mode: directQuery
+		mode: import
 		queryGroup: Management
 		source =
 				let

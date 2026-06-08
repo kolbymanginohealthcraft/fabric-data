@@ -23,7 +23,7 @@ table 'Override Payer'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Override Payer' = calculated
-		mode: directQuery
+		mode: import
 		source = DISTINCT('Payer Buckets'[Payer Grouping])
 
 	annotation PBI_Id = d40d0ccaecb242f8965d1732c827175a

@@ -37,7 +37,7 @@ table Payers
 		annotation SummarizationSetBy = Automatic
 
 	partition Payers = m
-		mode: directQuery
+		mode: import
 		queryGroup: Payer
 		source =
 				let

@@ -37,7 +37,7 @@ table 'Service Columns BM'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Service Columns BM' = calculated
-		mode: directQuery
+		mode: import
 		source =
 				{
 				    ("Admit Level BM", NAMEOF('MeasureTable'[Admit Level BM]), 0),

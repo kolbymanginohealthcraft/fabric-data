@@ -27,7 +27,7 @@ table 'Peer Group'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Peer Group' = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

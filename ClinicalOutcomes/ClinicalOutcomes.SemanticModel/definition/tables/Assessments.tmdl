@@ -127,7 +127,7 @@ table Assessments
 		annotation SummarizationSetBy = Automatic
 
 	partition Assessments = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

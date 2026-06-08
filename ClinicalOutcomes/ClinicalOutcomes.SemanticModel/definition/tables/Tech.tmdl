@@ -10,7 +10,7 @@ table Tech
 		annotation SummarizationSetBy = Automatic
 
 	partition Tech = m
-		mode: directQuery
+		mode: import
 		queryGroup: Places
 		source =
 				let

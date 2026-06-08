@@ -119,11 +119,6 @@ table DischargeDestination
 		summarizeBy: none
 		sourceColumn: Updated
 
-		variation Variation
-			isDefault
-			relationship: 99a67698-0466-41aa-9b66-283814c451a5
-			defaultHierarchy: LocalDateTable_a7c3593a-a733-49ff-b800-7e7da4482e43.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column FromDate
@@ -133,11 +128,6 @@ table DischargeDestination
 		summarizeBy: none
 		sourceColumn: FromDate
 
-		variation Variation
-			isDefault
-			relationship: d9a86d97-653a-4013-8124-ac7b449600f0
-			defaultHierarchy: LocalDateTable_a4e0e4d9-76c7-441f-9d6a-660ddf526c00.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column ThruDate
@@ -146,11 +136,6 @@ table DischargeDestination
 		lineageTag: fa167576-86b7-4c18-8c00-bfb3b044405f
 		summarizeBy: none
 		sourceColumn: ThruDate
-
-		variation Variation
-			isDefault
-			relationship: 1edfc84e-922e-4478-b74e-3cb4b270f326
-			defaultHierarchy: LocalDateTable_ae436351-83d3-450f-941a-f7c5f89a7a74.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -190,7 +175,7 @@ table DischargeDestination
 		annotation SummarizationSetBy = Automatic
 
 	partition DischargeDestination = m
-		mode: directQuery
+		mode: import
 		queryGroup: Discharge
 		source =
 				let

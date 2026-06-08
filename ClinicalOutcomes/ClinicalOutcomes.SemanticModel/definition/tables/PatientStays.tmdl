@@ -38,11 +38,6 @@ table PatientStays
 		summarizeBy: none
 		sourceColumn: AdmitDate
 
-		variation Variation
-			isDefault
-			relationship: e66cb4c0-b8cc-4894-a0af-925a199e5cf9
-			defaultHierarchy: LocalDateTable_3e5673c6-9976-4658-be6e-2fad58ea2a5c.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -53,11 +48,6 @@ table PatientStays
 		lineageTag: cf7f7ad8-5877-464e-9724-35fc2387c2fd
 		summarizeBy: none
 		sourceColumn: DischargeDate
-
-		variation Variation
-			isDefault
-			relationship: 5dc6644c-a56f-47a5-8a3f-eca222043de5
-			defaultHierarchy: LocalDateTable_b8ea571a-deed-46a3-b3b3-f91ba19c8dd8.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -73,7 +63,7 @@ table PatientStays
 		annotation SummarizationSetBy = Automatic
 
 	partition PatientStays = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let

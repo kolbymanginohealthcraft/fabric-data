@@ -46,7 +46,7 @@ table LibraryScaleValue
 		annotation SummarizationSetBy = Automatic
 
 	partition LibraryScaleValue = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

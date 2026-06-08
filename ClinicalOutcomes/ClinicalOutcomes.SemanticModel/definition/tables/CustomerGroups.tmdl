@@ -18,7 +18,7 @@ table CustomerGroups
 		annotation SummarizationSetBy = Automatic
 
 	partition CustomerGroups = m
-		mode: directQuery
+		mode: import
 		queryGroup: Places
 		source =
 				let

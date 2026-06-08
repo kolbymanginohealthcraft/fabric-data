@@ -21,7 +21,7 @@ table 'Outcome Families'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Outcome Families' = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

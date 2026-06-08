@@ -26,7 +26,7 @@ table 'Override State'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Override State' = calculated
-		mode: directQuery
+		mode: import
 		source = FILTER(DISTINCT(Account[BillingState]),NOT(ISBLANK(Account[BillingState])))
 
 	annotation PBI_Id = d1e47b9cc1d24b8282b33c44cd229b99

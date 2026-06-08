@@ -34,7 +34,7 @@ table 'Override Chain'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Override Chain' = calculated
-		mode: directQuery
+		mode: import
 		source =
 				
 				SELECTCOLUMNS(

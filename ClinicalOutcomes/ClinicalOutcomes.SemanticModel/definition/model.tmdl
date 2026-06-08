@@ -54,7 +54,7 @@ queryGroup FabricTables
 
 annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Assessments","Outcomes Crosswalk","Outcomes Custom Scales","Aegis Contract","Account","Chain","Dictionary","Outcome Families","LibraryItem","LibraryScaleValue","Treatments","TreatmentsDetails","Disciplines","Service","Basis","DischargeReason","Diagnosis","DiagnosisCode","Telehealth","MeasureTable","DestinationPage","IntakeSources","vw_UpnFacilityAccess","Perspectives","Employees","CustomerGroups","Tech","CaseTrackDays","PriorLivingEnvironment","HCC","Weights","ExpectedDischargeDestination","EDD","EmployeeBasicInfo","FTEType","Physician","PLE","VW_NHAegisFacilities","StartDate"]
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -127,5 +127,8 @@ ref table LibraryItem
 ref table LibraryScaleValue
 ref table PatientScreens
 ref table 'Peer Group'
+ref table PatientLevelOptionalServices_Instance
+ref table PatientLevelOptionalServices_Service
+ref table ServiceTypes
 
 ref cultureInfo en-US

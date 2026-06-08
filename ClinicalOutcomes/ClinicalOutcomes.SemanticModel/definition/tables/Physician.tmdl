@@ -32,7 +32,7 @@ table Physician
 		annotation SummarizationSetBy = Automatic
 
 	partition Physician = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

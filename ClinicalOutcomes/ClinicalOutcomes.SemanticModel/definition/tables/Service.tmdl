@@ -60,7 +60,7 @@ table Service
 		annotation SummarizationSetBy = Automatic
 
 	partition Service = m
-		mode: directQuery
+		mode: import
 		queryGroup: Procedures
 		source =
 				let

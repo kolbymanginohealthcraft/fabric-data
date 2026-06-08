@@ -32,7 +32,7 @@ table Disciplines
 		annotation SummarizationSetBy = Automatic
 
 	partition Disciplines = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WCghR0lHSSNRUQGbE6kQr+YP5SZoKyAyQRDCYn6ypgMyIjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Discipline = _t, #"Ordered Discipline" = _t, Disc = _t]),

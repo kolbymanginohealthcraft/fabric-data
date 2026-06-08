@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Stroke Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c645a389-7409-4a45-8f24-4fd48c22ed4f"
+  }
+}

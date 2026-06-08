@@ -23,17 +23,12 @@ table CaseTrackDays
 		summarizeBy: none
 		sourceColumn: TrackDate
 
-		variation Variation
-			isDefault
-			relationship: 3a9cd86e-0493-4472-aa26-80ba952ba37b
-			defaultHierarchy: LocalDateTable_a4cc8487-4eb6-4592-aecd-29b228020808.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
 
 	partition CaseTrackDays = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				// let

@@ -123,7 +123,7 @@ table Employees
 		annotation SummarizationSetBy = Automatic
 
 	partition Employees = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

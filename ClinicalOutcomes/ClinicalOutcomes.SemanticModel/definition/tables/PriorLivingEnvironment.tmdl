@@ -20,7 +20,7 @@ table PriorLivingEnvironment
 		annotation SummarizationSetBy = Automatic
 
 	partition PriorLivingEnvironment = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let

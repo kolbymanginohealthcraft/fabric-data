@@ -49,7 +49,7 @@ table TreatmentsDetails
 		annotation SummarizationSetBy = Automatic
 
 	partition TreatmentsDetails = m
-		mode: directQuery
+		mode: import
 		queryGroup: Visits
 		source =
 				let

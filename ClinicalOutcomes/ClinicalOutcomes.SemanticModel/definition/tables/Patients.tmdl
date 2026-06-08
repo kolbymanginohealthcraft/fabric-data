@@ -91,11 +91,6 @@ table Patients
 		summarizeBy: none
 		sourceColumn: DOB
 
-		variation Variation
-			isDefault
-			relationship: 7c4afb56-a0e6-46cf-96d6-57918ff784e4
-			defaultHierarchy: LocalDateTable_40fdc1f3-9e86-4c8c-b6df-2588df851a45.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -120,7 +115,7 @@ table Patients
 		annotation SummarizationSetBy = Automatic
 
 	partition Patients = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let

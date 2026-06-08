@@ -16,7 +16,7 @@ table Telehealth
 		annotation SummarizationSetBy = Automatic
 
 	partition Telehealth = m
-		mode: directQuery
+		mode: import
 		queryGroup: Visits
 		source =
 				let

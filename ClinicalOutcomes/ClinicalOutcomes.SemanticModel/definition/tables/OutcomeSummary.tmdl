@@ -206,7 +206,7 @@ table OutcomeSummary
 		annotation SummarizationSetBy = Automatic
 
 	partition OutcomeSummary = calculated
-		mode: directQuery
+		mode: import
 		source =
 				
 				SUMMARIZE(

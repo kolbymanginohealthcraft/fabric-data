@@ -435,11 +435,6 @@ table StayCases
 		summarizeBy: none
 		sourceColumn: TherapyStartDate
 
-		variation Variation
-			isDefault
-			relationship: 030c38d2-9756-4824-bdb5-11d0fb022a24
-			defaultHierarchy: LocalDateTable_21309256-202d-42eb-a386-51990176119e.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -1164,7 +1159,7 @@ table StayCases
 		annotation SummarizationSetBy = Automatic
 
 	partition StayCases = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let

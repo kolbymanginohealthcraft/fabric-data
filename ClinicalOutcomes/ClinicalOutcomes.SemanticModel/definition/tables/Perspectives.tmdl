@@ -18,7 +18,7 @@ table Perspectives
 		annotation SummarizationSetBy = Automatic
 
 	partition Perspectives = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

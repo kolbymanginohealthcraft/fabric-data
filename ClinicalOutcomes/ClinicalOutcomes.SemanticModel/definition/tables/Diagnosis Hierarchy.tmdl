@@ -80,7 +80,7 @@ table 'Diagnosis Hierarchy'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Diagnosis Hierarchy' = calculated
-		mode: directQuery
+		mode: import
 		source =
 				{
 				    ("L1", NAMEOF('DX_Cases'[L1]), 0),

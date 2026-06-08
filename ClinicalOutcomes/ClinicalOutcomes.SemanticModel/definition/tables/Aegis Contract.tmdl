@@ -55,11 +55,6 @@ table 'Aegis Contract'
 		summarizeBy: none
 		sourceColumn: Effective_Date__c
 
-		variation Variation
-			isDefault
-			relationship: a7c926c0-5a32-40da-ab30-5097c645818f
-			defaultHierarchy: LocalDateTable_00c23b7c-5f16-4b52-a1b3-c2366e3215a8.'Date Hierarchy'
-
 		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
@@ -73,11 +68,6 @@ table 'Aegis Contract'
 		lineageTag: f43a8323-7b0d-4fa9-aab1-e93dd802b978
 		summarizeBy: none
 		sourceColumn: Term_Date__c
-
-		variation Variation
-			isDefault
-			relationship: 49b49e35-c913-4311-8f45-14e67de53135
-			defaultHierarchy: LocalDateTable_7cbf2a81-ca06-49a6-9e12-9be68a420da7.'Date Hierarchy'
 
 		changedProperty = IsHidden
 
@@ -127,7 +117,7 @@ table 'Aegis Contract'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Aegis Contract' = m
-		mode: directQuery
+		mode: import
 		queryGroup: Management
 		source =
 				let

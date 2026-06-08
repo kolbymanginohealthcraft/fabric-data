@@ -46,7 +46,7 @@ table DestinationPage
 		annotation SummarizationSetBy = Automatic
 
 	partition DestinationPage = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("bY47DsIwDECvYmUqUhmAI0QMbEDHqINV3GIpnypNi3J7zKcCKjZb7/nJxqgjJiafYN/zEC4E1egcxqzKmZTQomObocFIHU8UhW0+fHkJRf8C6xYb9t1K1aVROlxDTKCD6zGK7yWgxyEF9+xtH+tSgaJ5Gz+pg08UPVrQ8hCcRrScMpxpYrpJZsYy7r7WfzYUPNPgbZZ8fQc=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Destination = _t, #"Intended Audience" = _t, #"Sort Order" = _t, Label = _t]),

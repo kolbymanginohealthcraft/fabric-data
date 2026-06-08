@@ -58,7 +58,7 @@ table EmployeeBasicInfo
 		annotation SummarizationSetBy = Automatic
 
 	partition EmployeeBasicInfo = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

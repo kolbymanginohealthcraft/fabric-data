@@ -29,7 +29,7 @@ table Weights
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition Weights = m
-		mode: directQuery
+		mode: import
 		queryGroup: Diagnoses
 		source =
 				let

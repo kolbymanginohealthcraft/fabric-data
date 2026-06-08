@@ -116,7 +116,7 @@ table Dictionary
 		annotation SummarizationSetBy = Automatic
 
 	partition Dictionary = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

@@ -19,7 +19,7 @@ table HCC
 		annotation SummarizationSetBy = Automatic
 
 	partition HCC = m
-		mode: directQuery
+		mode: import
 		queryGroup: Diagnoses
 		source =
 				let

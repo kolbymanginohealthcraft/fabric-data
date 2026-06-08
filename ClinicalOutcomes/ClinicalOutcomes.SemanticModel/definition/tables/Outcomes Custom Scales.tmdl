@@ -58,7 +58,7 @@ table 'Outcomes Custom Scales'
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition 'Outcomes Custom Scales' = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

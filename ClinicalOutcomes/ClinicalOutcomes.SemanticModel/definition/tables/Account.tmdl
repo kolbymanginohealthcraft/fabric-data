@@ -156,7 +156,7 @@ table Account
 		annotation SummarizationSetBy = Automatic
 
 	partition Account = m
-		mode: directQuery
+		mode: import
 		queryGroup: Places
 		source =
 				let

@@ -177,7 +177,7 @@ table Calendar
 			column: Date
 
 	partition Calendar = calculated
-		mode: directQuery
+		mode: import
 		source =
 				
 				ADDCOLUMNS(

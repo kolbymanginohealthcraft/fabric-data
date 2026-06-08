@@ -1,0 +1,104 @@
+table PatientLevelOptionalServices_Service
+	lineageTag: 8284897b-e9d1-4c4a-aa29-096db094391e
+
+	column Service_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 59ba0c75-c12f-4060-a440-66b94810943b
+		summarizeBy: none
+		sourceColumn: Service_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: c3f16eef-5120-4cbe-82c8-9a6a23056499
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 02ae65db-f5f3-40f5-920e-e0528a56d189
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplayOrder
+		dataType: int64
+		formatString: 0
+		lineageTag: be845924-662a-41ff-b5db-97289c01ddde
+		summarizeBy: none
+		sourceColumn: DisplayOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d7f9752c-a409-403d-a694-e259236dd008
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f15a0467-d264-4426-ba76-47ba0ec30ab6
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsActive
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7ffaaf4d-b537-4a9d-a99b-359b2cdd3c96
+		summarizeBy: none
+		sourceColumn: IsActive
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedBy
+		dataType: string
+		lineageTag: 8acc0ff6-b28a-47a6-bac8-d5dda1d18dd0
+		summarizeBy: none
+		sourceColumn: ModifiedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 12726e5c-1e55-486f-b706-36535f2a7bd2
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EpochTimestamp
+		dataType: int64
+		formatString: 0
+		lineageTag: 317809fd-6ae5-426a-837e-3de30958d9dc
+		summarizeBy: none
+		sourceColumn: EpochTimestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PatientLevelOptionalServices_Service = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-4wksxtle6exu7ne42rpqmph27i.datawarehouse.fabric.microsoft.com", "NetHealth_Bronze_Lakehouse"),
+				    Service = Source{[Schema="PatientLevelOptionalServices", Item="Service"]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Service, {"Service_ID", "Name", "Category", "DisplayOrder", "StartDate", "EndDate", "IsActive", "ModifiedBy", "CreatedDate", "EpochTimestamp"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

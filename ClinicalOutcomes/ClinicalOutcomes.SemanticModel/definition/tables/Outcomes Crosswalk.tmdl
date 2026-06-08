@@ -50,7 +50,7 @@ table 'Outcomes Crosswalk'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Outcomes Crosswalk' = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

@@ -325,11 +325,6 @@ table Timeline
 		isNameInferred
 		sourceColumn: [Start]
 
-		variation Variation
-			isDefault
-			relationship: 62502761-aac6-44f5-a5be-3b0040ddb5a4
-			defaultHierarchy: LocalDateTable_1d67e324-065c-471b-a1b6-f0d01ae88ac9.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -341,11 +336,6 @@ table Timeline
 		summarizeBy: none
 		isNameInferred
 		sourceColumn: [End]
-
-		variation Variation
-			isDefault
-			relationship: 1290b4d7-0acb-43b6-8fa9-76b699feb71e
-			defaultHierarchy: LocalDateTable_ad249ee6-2bbe-446d-b43b-15eaec8aa2df.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -428,7 +418,7 @@ table Timeline
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition Timeline = calculated
-		mode: directQuery
+		mode: import
 		source = ```
 				
 				VAR cutoff = EDATE ( TODAY (), -12 ) + 1

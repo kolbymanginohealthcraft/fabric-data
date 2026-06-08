@@ -48,7 +48,7 @@ table FTEType
 		annotation SummarizationSetBy = Automatic
 
 	partition FTEType = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

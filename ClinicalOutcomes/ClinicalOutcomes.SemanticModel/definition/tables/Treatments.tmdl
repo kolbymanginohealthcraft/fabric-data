@@ -32,11 +32,6 @@ table Treatments
 		summarizeBy: none
 		sourceColumn: LaborDate
 
-		variation Variation
-			isDefault
-			relationship: fba3b760-67ad-46dc-9f7a-7b70fed56749
-			defaultHierarchy: LocalDateTable_42d8ee98-afe2-459f-a644-035332cf8201.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -114,7 +109,7 @@ table Treatments
 		annotation SummarizationSetBy = Automatic
 
 	partition Treatments = m
-		mode: directQuery
+		mode: import
 		queryGroup: Visits
 		source =
 				let

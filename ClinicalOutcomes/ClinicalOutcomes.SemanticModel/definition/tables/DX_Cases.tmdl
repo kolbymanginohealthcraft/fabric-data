@@ -138,11 +138,6 @@ table DX_Cases
 		isNameInferred
 		sourceColumn: [Onset]
 
-		variation Variation
-			isDefault
-			relationship: dd4f446f-ac19-4d0f-9aaa-3fff52583682
-			defaultHierarchy: LocalDateTable_fadfd2d6-2e0a-49f0-b963-1f936b635966.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column 'Dx Age' =
@@ -193,7 +188,7 @@ table DX_Cases
 		annotation SummarizationSetBy = Automatic
 
 	partition DX_Cases = calculated
-		mode: directQuery
+		mode: import
 		source =
 				
 				FILTER(

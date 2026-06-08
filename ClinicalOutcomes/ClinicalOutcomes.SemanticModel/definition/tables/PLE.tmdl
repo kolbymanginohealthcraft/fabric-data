@@ -27,7 +27,7 @@ table PLE
 		annotation SummarizationSetBy = Automatic
 
 	partition PLE = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let

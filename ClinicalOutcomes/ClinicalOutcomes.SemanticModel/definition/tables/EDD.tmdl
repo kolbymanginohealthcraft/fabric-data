@@ -27,7 +27,7 @@ table EDD
 		annotation SummarizationSetBy = Automatic
 
 	partition EDD = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMjK0MDNW0lFy9HEDks75ubmleZkllUqxOhA5E6Coe1F+aYGCR35uKjYlppZAUZCkgoanJlYzDGAKtLFKGwFFPXFYbw4U9S/JSC2C0zAZM5iIgk+IM5ANImFyhjC54phSAwMjc5xuNzMFioZkZBYjGxILAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [ID = _t, DisplayValue = _t, Label = _t]),

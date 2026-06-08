@@ -22,7 +22,7 @@ table Chain
 		annotation SummarizationSetBy = Automatic
 
 	partition Chain = m
-		mode: directQuery
+		mode: import
 		queryGroup: Places
 		source =
 				let

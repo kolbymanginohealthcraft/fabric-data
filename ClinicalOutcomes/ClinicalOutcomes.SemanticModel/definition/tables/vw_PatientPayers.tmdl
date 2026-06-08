@@ -33,11 +33,6 @@ table vw_PatientPayers
 		summarizeBy: none
 		sourceColumn: FromDate
 
-		variation Variation
-			isDefault
-			relationship: 83035f91-211b-4312-a8b7-4b5bb91435cd
-			defaultHierarchy: LocalDateTable_fee57495-1b91-4ee4-9c2d-f9f8835f4ff1.'Date Hierarchy'
-
 		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
@@ -50,11 +45,6 @@ table vw_PatientPayers
 		lineageTag: 01548ff2-4d98-4c39-9031-ef0d45aed16b
 		summarizeBy: none
 		sourceColumn: ThruDate
-
-		variation Variation
-			isDefault
-			relationship: be62a77e-3054-42b5-8888-9afd5cebaf76
-			defaultHierarchy: LocalDateTable_6fdb85a3-2131-4437-9f34-4fe96d3cf0ac.'Date Hierarchy'
 
 		changedProperty = IsHidden
 
@@ -130,7 +120,7 @@ table vw_PatientPayers
 		annotation SummarizationSetBy = Automatic
 
 	partition vw_PatientPayers = m
-		mode: directQuery
+		mode: import
 		queryGroup: Payer
 		source =
 				let

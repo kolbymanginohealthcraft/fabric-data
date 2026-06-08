@@ -48,7 +48,7 @@ table 'Service Rows'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Service Rows' = calculated
-		mode: directQuery
+		mode: import
 		source =
 				{
 				    ("Aquatic Therapy", NAMEOF('StayCases'[Uses: Aquatic Therapy]), 0),

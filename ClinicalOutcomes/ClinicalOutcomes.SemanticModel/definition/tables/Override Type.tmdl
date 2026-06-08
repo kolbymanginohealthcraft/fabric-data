@@ -26,7 +26,7 @@ table 'Override Type'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Override Type' = calculated
-		mode: directQuery
+		mode: import
 		source = FILTER(DISTINCT(Account[Type]),NOT(ISBLANK(Account[Type])))
 
 	annotation PBI_Id = 695dde282b0648699a3e73421269e56a

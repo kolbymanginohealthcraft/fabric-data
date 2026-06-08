@@ -49,11 +49,6 @@ table IntakeSources
 		summarizeBy: none
 		sourceColumn: CreatedDate
 
-		variation Variation
-			isDefault
-			relationship: 89550f34-bb6f-4647-8664-d6a3120a4117
-			defaultHierarchy: LocalDateTable_a577b568-4aa7-4dcb-a02d-bc2269743809.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column FieldSet_ID
@@ -100,7 +95,7 @@ table IntakeSources
 		annotation SummarizationSetBy = Automatic
 
 	partition IntakeSources = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    Source = PowerPlatform.Dataflows(null),

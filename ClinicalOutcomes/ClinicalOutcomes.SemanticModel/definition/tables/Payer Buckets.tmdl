@@ -44,7 +44,7 @@ table 'Payer Buckets'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Payer Buckets' = calculated
-		mode: directQuery
+		mode: import
 		source =
 				
 				ADDCOLUMNS(

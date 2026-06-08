@@ -20,7 +20,7 @@ table ExpectedDischargeDestination
 		annotation SummarizationSetBy = Automatic
 
 	partition ExpectedDischargeDestination = m
-		mode: directQuery
+		mode: import
 		queryGroup: Discharge
 		source =
 				let

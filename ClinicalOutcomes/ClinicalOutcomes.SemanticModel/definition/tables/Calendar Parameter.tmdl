@@ -37,7 +37,7 @@ table 'Calendar Parameter'
 		annotation SummarizationSetBy = Automatic
 
 	partition 'Calendar Parameter' = calculated
-		mode: directQuery
+		mode: import
 		source =
 				{
 				    ("Q", NAMEOF('Calendar'[YearQuarter]), 0),

@@ -52,7 +52,7 @@ table Documents
 		annotation SummarizationSetBy = Automatic
 
 	partition Documents = m
-		mode: directQuery
+		mode: import
 		queryGroup: Outcomes
 		source =
 				let

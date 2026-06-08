@@ -22,7 +22,7 @@ table Basis
 		annotation SummarizationSetBy = Automatic
 
 	partition Basis = m
-		mode: directQuery
+		mode: import
 		queryGroup: Procedures
 		source =
 				let

@@ -33,11 +33,6 @@ table PatientScreens
 		summarizeBy: none
 		sourceColumn: PatientDOB
 
-		variation Variation
-			isDefault
-			relationship: e05db0e7-4cd9-497e-8f2c-773334b7944e
-			defaultHierarchy: LocalDateTable_53593660-4636-4454-9b22-820fc66859a0.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -80,11 +75,6 @@ table PatientScreens
 		summarizeBy: none
 		sourceColumn: DateCompleted
 
-		variation Variation
-			isDefault
-			relationship: f0d8a85e-e0ee-4961-ba41-f81c31d01fe7
-			defaultHierarchy: LocalDateTable_5f59e978-f3db-4b71-b65c-0f28f0a3dfe6.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column Id
@@ -97,7 +87,7 @@ table PatientScreens
 		annotation SummarizationSetBy = Automatic
 
 	partition PatientScreens = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let

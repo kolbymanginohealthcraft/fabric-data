@@ -52,7 +52,7 @@ table DiagnosisCode
 		annotation SummarizationSetBy = Automatic
 
 	partition DiagnosisCode = m
-		mode: directQuery
+		mode: import
 		queryGroup: Diagnoses
 		source = ```
 				let

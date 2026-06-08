@@ -71,17 +71,12 @@ table Diagnosis
 		summarizeBy: none
 		sourceColumn: OnsetDate
 
-		variation Variation
-			isDefault
-			relationship: d687eeba-8bf3-405d-9120-621b10132ec3
-			defaultHierarchy: LocalDateTable_c53ff11a-9f7d-433a-bd98-185f0eda6a28.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
 
 	partition Diagnosis = m
-		mode: directQuery
+		mode: import
 		queryGroup: Diagnoses
 		source =
 				let

@@ -18,7 +18,7 @@ table vw_UpnFacilityAccess
 		annotation SummarizationSetBy = Automatic
 
 	partition vw_UpnFacilityAccess = m
-		mode: directQuery
+		mode: import
 		queryGroup: People
 		source =
 				let

@@ -8,15 +8,10 @@ table StartDate
 		summarizeBy: none
 		sourceColumn: StartDate
 
-		variation Variation
-			isDefault
-			relationship: c8252a0b-77ef-4e0f-9169-030c2c9d17d9
-			defaultHierarchy: LocalDateTable_6b49659d-efb7-4183-b2ec-db35869d205d.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	partition StartDate = m
-		mode: directQuery
+		mode: import
 		source =
 				let
 				    StartDate = DateTime.From(Date.AddDays(DateTime.Date(DateTime.LocalNow()), -420))

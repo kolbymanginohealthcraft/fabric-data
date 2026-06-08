@@ -3,6 +3,16 @@ relationship fcf9f264-3205-4956-971a-3e630c61f675
 	fromColumn: PatientStays.PatientID
 	toColumn: Patients.PatientID
 
+relationship 7e38a99c-2eda-1a6f-d348-551a7f7cdbdb
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientLevelOptionalServices_Instance.Resident_ID
+	toColumn: Patients.PatientID
+
+relationship b4f012b4-8994-0371-5de6-be2741324e22
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientLevelOptionalServices_Instance.Service_ID
+	toColumn: PatientLevelOptionalServices_Service.Service_ID
+
 relationship c177e7b8-b678-4ab2-bbf6-14a775ca67e9
 	crossFilteringBehavior: bothDirections
 	fromColumn: StayCases.Stay_ID

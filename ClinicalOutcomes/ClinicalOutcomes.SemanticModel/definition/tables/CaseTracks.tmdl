@@ -71,11 +71,6 @@ table CaseTracks
 		summarizeBy: none
 		sourceColumn: StartDate
 
-		variation Variation
-			isDefault
-			relationship: f3681b27-4766-48b5-889c-845f3aefb9be
-			defaultHierarchy: LocalDateTable_3002af17-beee-4a55-b8e2-18c5467ab6fc.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -86,11 +81,6 @@ table CaseTracks
 		lineageTag: b1bfb695-b01d-4f69-9965-be761954bea4
 		summarizeBy: none
 		sourceColumn: EndDate
-
-		variation Variation
-			isDefault
-			relationship: 5daad277-a70e-46c2-b29d-f492aa670699
-			defaultHierarchy: LocalDateTable_6f94c7d5-e0f8-4b39-9777-afd8b1b9f279.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -180,7 +170,7 @@ table CaseTracks
 		annotation SummarizationSetBy = Automatic
 
 	partition CaseTracks = m
-		mode: directQuery
+		mode: import
 		queryGroup: Patient
 		source =
 				let
