@@ -98,13 +98,9 @@ table IntakeSources
 		mode: import
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
-				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
-				    IntakeSources_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="IntakeSources",version=""]}[Data]
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT IntakeSource_ID, Name, Abbrev, SourceType, ModifiedBy, CreatedDate, FieldSet_ID, PlanUsage, PlaceOfResidenceUsage, IsInstitutional, IsSNF FROM dbo.IntakeSource")
 				in
-				    IntakeSources_
+				    Source
 
 	annotation PBI_NavigationStepName = Navigation
 

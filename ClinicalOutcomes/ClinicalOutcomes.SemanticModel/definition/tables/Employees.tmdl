@@ -127,12 +127,8 @@ table Employees
 		queryGroup: People
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
-				    #"e467353e-471f-4f3e-9ccf-6ecfb20b7f0a" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="e467353e-471f-4f3e-9ccf-6ecfb20b7f0a"]}[Data],
-				    Employees_ = #"e467353e-471f-4f3e-9ccf-6ecfb20b7f0a"{[entity="Employees",version=""]}[Data],
-				    #"Added Custom Column" = Table.AddColumn(Employees_, "Short Name", each Text.Combine({Text.Start([FirstName], 1), " ", [LastName]}), type text),
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Person_ID, FirstName, LastName, StaffTitle, ISNULL(IsInactive,0) AS IsInactive, SupervisorPerson_ID, Taxonomy_ID FROM dbo.Person WHERE Person_ID IS NOT NULL"),
+				    #"Added Custom Column" = Table.AddColumn(Source, "Short Name", each Text.Combine({Text.Start([FirstName], 1), " ", [LastName]}), type text),
 				    #"Merged Columns" = Table.CombineColumns(#"Added Custom Column",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name")
 				in
 				    #"Merged Columns"

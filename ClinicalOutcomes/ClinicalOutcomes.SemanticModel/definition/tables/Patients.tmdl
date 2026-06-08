@@ -119,22 +119,18 @@ table Patients
 		queryGroup: Patient
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
-				    Patients_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="Patients",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(Patients_,{"PatientID", "FirstName", "LastName", "DOB", "Facility"}),
-				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"DOB", type date}}),
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT r.Resident_ID AS PatientID, ri.FirstName, ri.LastName, TRY_CAST(r.DOB AS date) AS DOB, CAST(r.Facility_ID AS varchar(20)) AS Facility FROM dbo.Resident r LEFT JOIN dbo.ResidentInfo ri ON ri.Resident_ID = r.Resident_ID AND ri.IsCurrent = 1 WHERE ISNULL(r.IsDeletedResident,0)=0 AND r.Resident_ID IN (SELECT s.Resident_ID FROM dbo.Stay s INNER JOIN dbo.PatientCase pc ON pc.Stay_ID = s.Stay_ID WHERE pc.PatientCase_ID IN " & _QualifyingCaseIdsSql & ")"),
+				    ValidFacilityIds = List.Buffer(Table.Column(Value.NativeQuery(_SilverSource, "SELECT CAST(NetHealthId AS varchar(20)) AS fid FROM dbo.facility WHERE IsTest = 0 AND NetHealthId IS NOT NULL"), "fid")),
+				    #"Filtered Rows" = Table.SelectRows(Source, each List.Contains(ValidFacilityIds, [Facility])),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Rows",{{"DOB", type date}}),
 				    #"Inserted Merged Column" = Table.AddColumn(#"Changed Type", "Patient Name FirstLast", each Text.Combine({[FirstName], [LastName]}, " "), type text),
 				    #"Merged Columns" = Table.CombineColumns(#"Inserted Merged Column",{"LastName", "FirstName"},Combiner.CombineTextByDelimiter(", ", QuoteStyle.None),"Patient Name"),
 				    #"Trimmed Text" = Table.TransformColumns(#"Merged Columns",{{"Patient Name", Text.Trim, type text}}),
 				    #"Cleaned Text" = Table.TransformColumns(#"Trimmed Text",{{"Patient Name", Text.Clean, type text}}),
 				    #"Replaced Value" = Table.ReplaceValue(#"Cleaned Text","  "," ",Replacer.ReplaceText,{"Patient Name"}),
-				    #"Capitalized Each Word" = Table.TransformColumns(#"Replaced Value",{{"Patient Name", Text.Proper, type text}}),
-				    #"Filtered Rows" = Table.SelectRows(#"Capitalized Each Word", each [Facility] <> null and [Facility] <> "" and not Text.Contains([Facility], "TST"))
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Replaced Value",{{"Patient Name", Text.Proper, type text}})
 				in
-				    #"Filtered Rows"
+				    #"Capitalized Each Word"
 
 	annotation PBI_ResultType = Table
 

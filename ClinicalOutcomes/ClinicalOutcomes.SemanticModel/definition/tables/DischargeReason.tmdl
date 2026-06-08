@@ -105,15 +105,9 @@ table DischargeReason
 		queryGroup: Discharge
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
-				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
-				    Lookup_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Lookup",version=""]}[Data],
-				    #"Filtered Rows" = Table.SelectRows(Lookup_, each ([Type] = "CASEEND   ")),
-				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type", "Abbrev", "Category"})
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Lookup_ID, Descrip, Updated, FromDate, ThruDate, DisplaySequence, IsSystem, ModifiedBy, IsCommon FROM dbo.Lookup WHERE Type = 'CASEEND   '")
 				in
-				    #"Removed Columns"
+				    Source
 
 	annotation PBI_ResultType = Table
 

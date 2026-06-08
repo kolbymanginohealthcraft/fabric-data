@@ -36,13 +36,8 @@ table Physician
 		queryGroup: People
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
-				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
-				    Physician_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Physician",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(Physician_,{"Physician_ID", "FirstName", "LastName", "NPI"}),
-				    #"Merged Columns" = Table.CombineColumns(#"Removed Other Columns",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name")
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Physician_ID, FirstName, LastName, NPI FROM dbo.Physician"),
+				    #"Merged Columns" = Table.CombineColumns(Source,{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name")
 				in
 				    #"Merged Columns"
 
