@@ -124,26 +124,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.475
 			          }
-			        },
-			        {
-			          "Count": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Count Valid": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -747,16 +727,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.599
-			          }
-			        },
-			        {
-			          "Patient:": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -1580,26 +1550,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.491
-			          }
-			        },
-			        {
-			          "..": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "CaseID": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ],
@@ -2444,16 +2394,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.485
-			          }
-			        },
-			        {
-			          ".": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -6601,16 +6541,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.476
 			          }
-			        },
-			        {
-			          "D/C Dest": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -7654,26 +7584,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.714
 			          }
-			        },
-			        {
-			          "Facility": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Facility Name": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ],
 			      "NameType": "Name"
@@ -8477,16 +8387,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.727
-			          }
-			        },
-			        {
-			          "Provider:": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -10707,16 +10607,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.6
 			          }
-			        },
-			        {
-			          "M": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -11138,16 +11028,6 @@ cultureInfo en-US
 			        {
 			          "timeframe for patient view": {
 			            "State": "Generated"
-			          }
-			        },
-			        {
-			          "Timeframe:": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -13004,26 +12884,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.461
-			          }
-			        },
-			        {
-			          "Discipline": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Disc": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -15471,16 +15331,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.727
 			          }
-			        },
-			        {
-			          "Total Cases": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -16349,26 +16199,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.714
 			          }
-			        },
-			        {
-			          "Discharge": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "D/C": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -16582,16 +16412,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.727
-			          }
-			        },
-			        {
-			          "Admit": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -17359,26 +17179,6 @@ cultureInfo en-US
 			          "dtc": {
 			            "State": "Generated"
 			          }
-			        },
-			        {
-			          "D/C Comm": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "% D/C to Comm": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -17512,26 +17312,6 @@ cultureInfo en-US
 			        {
 			          "rehosp": {
 			            "State": "Generated"
-			          }
-			        },
-			        {
-			          "D/C Hospital": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "% D/C to Hosp": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -17688,16 +17468,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.846
-			          }
-			        },
-			        {
-			          "Units/Visit (pt/ot)": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -18330,16 +18100,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.492
-			          }
-			        },
-			        {
-			          "Min/Wk": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -19055,16 +18815,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.468
 			          }
-			        },
-			        {
-			          "Visits/Disc/Wk": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -19702,26 +19452,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.476
-			          }
-			        },
-			        {
-			          "Total Discharges": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Total Cases (as any)": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -21095,16 +20825,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.485
 			          }
-			        },
-			        {
-			          ".": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -21226,16 +20946,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.491
-			          }
-			        },
-			        {
-			          ".": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -22837,16 +22547,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.476
 			          }
-			        },
-			        {
-			          "ID": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -22882,16 +22582,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.714
-			          }
-			        },
-			        {
-			          "Therapist Name": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ],
@@ -24469,26 +24159,6 @@ cultureInfo en-US
 			        {
 			          "disc inv": {
 			            "State": "Generated"
-			          }
-			        },
-			        {
-			          "Disc Involved": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Disc Combo": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -27614,16 +27284,6 @@ cultureInfo en-US
 			            },
 			            "Weight": 0.468
 			          }
-			        },
-			        {
-			          "Provider": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -29580,19 +29240,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Boxplot_Value"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Value": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "boxplot_measure.measure_percentile": {
 			      "Definition": {
@@ -29601,19 +29249,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Boxplot_Percentile"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Percentile": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "boxplot_table.boxplot_measurename": {
 			      "Definition": {
@@ -29640,19 +29276,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Gain per Day"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Gain per Day": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "boxplot_table.column_boxplotmeasure": {
 			      "Definition": {
@@ -29670,19 +29294,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Boxplot_Group"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Item": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.outcome_150": {
 			      "Definition": {
@@ -29790,19 +29402,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Boxplot SVG 3"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Utilization": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "staycases.expected_discharge_destination": {
 			      "Definition": {
@@ -29829,19 +29429,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Minutes % Delivered by Therapist"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Share of Patients' Total Time": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "employeebasicinfo.therapist_name": {
 			      "Definition": {
@@ -29859,19 +29447,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "PLE % Community"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "PLE % Comm": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "staycases.edd__community": {
 			      "Definition": {
@@ -29880,19 +29456,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "EDD % Community"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "EDD % Comm": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "employeebasicinfo.therapist_label": {
 			      "Definition": {
@@ -29919,19 +29483,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "PLE Label"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Prior Living Environment:": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "staycases.edd_label": {
 			      "Definition": {
@@ -29940,19 +29492,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "EDD Label"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "D/C Dest (exp):": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "staycases.add_value": {
 			      "Definition": {
@@ -29961,19 +29501,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "ADD Value"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "D/C Dest (act):": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "staycases.payer_label": {
 			      "Definition": {
@@ -29982,19 +29510,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Payer Label"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Payer(s):": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "staycases.dx_label": {
 			      "Definition": {
@@ -30003,19 +29519,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "DX Label"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Primary Medical Diagnosis:": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.total_minutes_eval__delivered_by_therapist": {
 			      "Definition": {
@@ -30024,19 +29528,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Minutes Eval % Delivered by Therapist"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Share of Patients' Eval Time": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.total_minutes_treat__delivered_by_therapist": {
 			      "Definition": {
@@ -30045,19 +29537,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Minutes Treat % Delivered by Therapist"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Share of Patients' Treat Time": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "employees.therapist_list_2": {
 			      "Definition": {
@@ -30066,19 +29546,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Therapist List 2"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Therapy Team": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "boxplot_table.boxplot_measurenamepatient": {
 			      "Definition": {
@@ -30096,19 +29564,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Boxplot SVG 4"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Boxplot": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.outcomes_svg": {
 			      "Definition": {
@@ -30117,29 +29573,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Outcomes SVG"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Outcome": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Performance": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "employees.stafftitle": {
 			      "Definition": {
@@ -30148,19 +29582,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "StaffTitle"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Job Title": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "dx_cases.type": {
 			      "Definition": {
@@ -30169,19 +29591,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Type"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          ".": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.activefilters_age_range": {
 			      "Definition": {
@@ -30199,19 +29609,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Range: Minutes per Week"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Range: Minutes per Week": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "showscales.total_points": {
 			      "Definition": {
@@ -30220,19 +29618,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Points"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Points": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "showscales.total_count_admit": {
 			      "Definition": {
@@ -30259,29 +29645,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Measurements Recorded"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Count Total": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "Count": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.total_measurements_included_": {
 			      "Definition": {
@@ -30290,29 +29654,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Measurements Included %"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "% Valid Outcomes": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
-			          "% Valid": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "outcomesummary.story": {
 			      "Definition": {
@@ -30330,19 +29672,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Total Cases %"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Total Cases %": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.visits_per_week": {
 			      "Definition": {
@@ -30360,19 +29690,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Gain per Visit"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Gain per Visit": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.gain_pain": {
 			      "Definition": {
@@ -30426,19 +29744,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Uses: Group Therapy"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Group Therapy": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "dx_cases.l2": {
 			      "Definition": {
@@ -30447,19 +29753,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "L2"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "L2": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "dx_cases.l3": {
 			      "Definition": {
@@ -30504,19 +29798,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Admit Level (all)"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Admit": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.discharge_level_all": {
 			      "Definition": {
@@ -30525,19 +29807,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Discharge Level (all)"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "D/C": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "outcomesummary.criteria_start": {
 			      "Definition": {
@@ -30564,19 +29834,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Gait Speed Skip Rate"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Gait Speed Skip Rate (lower is better)": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "account.avglat": {
 			      "Definition": {
@@ -30585,19 +29843,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "AvgLAT"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Lat": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "account.avglong": {
 			      "Definition": {
@@ -30606,19 +29852,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "AvgLONG"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Long": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.visits_per_case_bm": {
 			      "Definition": {
@@ -30627,19 +29861,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Visits per Case BM"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Benchmark": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "measuretable.gain_per_hour": {
 			      "Definition": {
@@ -30648,19 +29870,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Gain per Hour"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Gain per Hour": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "dictionary.dfs_flag": {
 			      "Definition": {
@@ -30669,19 +29879,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "DFS Flag"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "DFS": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "timeline.timeframe_for_timeline": {
 			      "Definition": {
@@ -30690,19 +29888,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "Timeframe for Timeline"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Timeframe:": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "timeline.timelinecases": {
 			      "Definition": {
@@ -30711,19 +29897,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "TimelineCases"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Cases": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "timeline.timelinetracks": {
 			      "Definition": {
@@ -30732,19 +29906,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "TimelineTracks"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Tracks": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "timeline.timelineplosevents": {
 			      "Definition": {
@@ -30753,19 +29915,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "TimelinePLOSEvents"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "PLOS Events": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    },
 			    "timeline.timelinevisits": {
 			      "Definition": {
@@ -30774,19 +29924,7 @@ cultureInfo en-US
 			          "ConceptualProperty": "TimelineVisits"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Skilled Visits": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    }
 			  },
 			  "Relationships": {

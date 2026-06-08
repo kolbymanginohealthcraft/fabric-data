@@ -24,11 +24,9 @@ table ExpectedDischargeDestination
 		queryGroup: Discharge
 		source =
 				let
-				    Source = #"dbo vw_AllEvalsAndDischargesLight_Items",
-				    #"Filtered Rows" = Table.SelectRows(Source, each ([LibraryScaleValue_ID] <> null and [LibraryScaleValue_ID] <> "") and ([LibraryItem_ID] = 7614)),
-				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"LibraryItem_ID"})
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT item.TxDocument_ID, item.LibraryScaleValue_ID FROM dbo.TxDocumentItem item INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql & " AND item.LibraryItem_ID = 7614 AND item.LibraryScaleValue_ID IS NOT NULL")
 				in
-				    #"Removed Columns"
+				    Source
 
 	annotation PBI_NavigationStepName = Navigation
 

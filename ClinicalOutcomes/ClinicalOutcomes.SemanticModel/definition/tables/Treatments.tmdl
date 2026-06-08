@@ -74,10 +74,10 @@ table Treatments
 		annotation SummarizationSetBy = Automatic
 
 	column AssistantModifier
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		dataType: int64
+		formatString: 0
 		lineageTag: 42a9c762-55b9-493f-bcb9-8b55ca2634fd
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: AssistantModifier
 
 		annotation SummarizationSetBy = Automatic

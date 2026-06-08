@@ -20,18 +20,9 @@ table Telehealth
 		queryGroup: Visits
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"60c237c9-bec9-41af-bf9e-6afa43a264e9" = Workspaces{[workspaceId="60c237c9-bec9-41af-bf9e-6afa43a264e9"]}[Data],
-				    #"a29b1603-e21b-4698-8710-e9fa39dc77e3" = #"60c237c9-bec9-41af-bf9e-6afa43a264e9"{[dataflowId="a29b1603-e21b-4698-8710-e9fa39dc77e3"]}[Data],
-				    BillingInfo_ = #"a29b1603-e21b-4698-8710-e9fa39dc77e3"{[entity="BillingInfo",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(BillingInfo_,{"TxSession_ID", "Modifier1", "Modifier2", "Modifier3", "Modifier4"}),
-				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Other Columns", {"TxSession_ID"}, "Attribute", "Value"),
-				    #"Filtered Rows" = Table.SelectRows(#"Unpivoted Other Columns", each ([Value] = "95")),
-				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Attribute", "Value"}),
-				    #"Removed Duplicates" = Table.Distinct(#"Removed Columns")
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT DISTINCT s.TxSession_ID FROM dbo.TxSession s WHERE s.InteractionMethod IN ('ESynchronous','EASynchronous') AND ISNULL(s.IsDeletedSession, 0) = 0")
 				in
-				    #"Removed Duplicates"
+				    Source
 
 	changedProperty = IsHidden
 

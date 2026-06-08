@@ -32,3 +32,6 @@ queries/.debug-render.js
 
 # Compiled Power BI binaries — huge, may embed imported data (PHI). Keep PBIP text format only.
 *.pbix
+
+# Power BI Desktop local binary data cache (never commit)
+**/.pbi/*.abf

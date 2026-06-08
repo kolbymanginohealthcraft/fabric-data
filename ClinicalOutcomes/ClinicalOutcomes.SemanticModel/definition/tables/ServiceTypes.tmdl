@@ -2,11 +2,11 @@ table ServiceTypes
 	lineageTag: 136476f7-a5ba-418b-924b-2cd2b5cfcf49
 
 	measure 'Patients Touched' = ```
-
+			
 			VAR currentType = SELECTEDVALUE ( ServiceTypes[ServiceType] )
 			VAR monthStart  = MIN ( 'Calendar'[Date] )
 			VAR monthEnd    = EOMONTH ( monthStart, 0 )
-
+			
 			// Patients with an active stay in this month (the census denominator)
 			VAR totalPatients =
 			    CALCULATETABLE (
@@ -16,7 +16,7 @@ table ServiceTypes
 			        PatientStays[DischargeDate] >= monthStart
 			            || ISBLANK ( PatientStays[DischargeDate] )
 			    )
-
+			
 			// Cases: patient had an active case overlapping the month
 			VAR casePats =
 			    CALCULATETABLE (
@@ -26,7 +26,7 @@ table ServiceTypes
 			        StayCases[TherapyEndDate] >= monthStart
 			            || ISBLANK ( StayCases[TherapyEndDate] )
 			    )
-
+			
 			// Tracks by discipline
 			VAR trackPT =
 			    CALCULATETABLE (
@@ -36,7 +36,7 @@ table ServiceTypes
 			        ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
 			        Disciplines[Discipline] = "PT"
 			    )
-
+			
 			VAR trackOT =
 			    CALCULATETABLE (
 			        VALUES ( PatientStays[PatientID] ),
@@ -45,7 +45,7 @@ table ServiceTypes
 			        ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
 			        Disciplines[Discipline] = "OT"
 			    )
-
+			
 			VAR trackST =
 			    CALCULATETABLE (
 			        VALUES ( PatientStays[PatientID] ),
@@ -54,7 +54,7 @@ table ServiceTypes
 			        ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
 			        Disciplines[Discipline] = "ST"
 			    )
-
+			
 			// PLOS by category (point events: CreatedDate falls within the month)
 			VAR plosNR =
 			    CALCULATETABLE (
@@ -64,7 +64,7 @@ table ServiceTypes
 			        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
 			        PatientLevelOptionalServices_Service[Category] = "Nursing Restorative"
 			    )
-
+			
 			VAR plosRT =
 			    CALCULATETABLE (
 			        VALUES ( Patients[PatientID] ),
@@ -73,7 +73,7 @@ table ServiceTypes
 			        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
 			        PatientLevelOptionalServices_Service[Category] = "Rehab Tech"
 			    )
-
+			
 			// Screens: PatientScreens (DateCompleted) + PLOS (CreatedDate)
 			VAR plosSC =
 			    DISTINCT (
@@ -93,7 +93,7 @@ table ServiceTypes
 			            )
 			        )
 			    )
-
+			
 			VAR plosWL =
 			    CALCULATETABLE (
 			        VALUES ( Patients[PatientID] ),
@@ -102,21 +102,21 @@ table ServiceTypes
 			        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
 			        PatientLevelOptionalServices_Service[Category] = "Wellness"
 			    )
-
+			
 			// PLOS - Any: distinct patients touched by any PLOS category
 			VAR plosAny =
 			    DISTINCT ( UNION ( plosNR, plosRT, plosSC, plosWL ) )
-
+			
 			// Union of all patients touched by any service (de-duplicated)
 			VAR anyServicePats =
 			    DISTINCT (
 			        UNION ( casePats, trackPT, trackOT, trackST, plosNR, plosRT, plosSC, plosWL )
 			    )
-
+			
 			// Patients in the census NOT touched by any service
 			VAR noServicePats =
 			    EXCEPT ( totalPatients, anyServicePats )
-
+			
 			RETURN
 			SWITCH (
 			    currentType,
@@ -134,18 +134,18 @@ table ServiceTypes
 			    "Total Patients",               COUNTROWS ( totalPatients ),
 			    BLANK ()
 			)
-
+			
 			```
 		formatString: #,0
 		lineageTag: f7cc920d-6ae7-4f76-b35d-93a08e10f63c
 
 	measure 'Patient In Touched List' =
-
+			
 			VAR _pid = SELECTEDVALUE ( Patients[PatientID] )
 			VAR currentType = SELECTEDVALUE ( ServiceTypes[ServiceType] )
 			VAR monthStart = MIN ( 'Calendar'[Date] )
 			VAR monthEnd = EOMONTH ( monthStart, 0 )
-
+			
 			// Return 0 if no patient, month, or type in context
 			RETURN
 			    IF (
@@ -239,7 +239,7 @@ table ServiceTypes
 			                UNION ( casePats, trackPT, trackOT, trackST, plosNR, plosRT, plosSC, plosWL )
 			            )
 			        VAR noServicePats = EXCEPT ( totalPatients, anyServicePats )
-
+			
 			        // Normalize sets to single "PatientID" column for membership check
 			        VAR chk = SELECTCOLUMNS ( ROW ( "PatientID", _pid ), "PatientID", [PatientID] )
 			        VAR inCase = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( casePats, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
@@ -277,7 +277,7 @@ table ServiceTypes
 			        VAR inAnyService = inCase || inTrackPT || inTrackOT || inTrackST || inPlosNR || inPlosRT || inPlosSC || inPlosWL
 			        VAR inTotal = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( totalPatients, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
 			        VAR inNoService = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( noServicePats, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-
+			
 			        RETURN
 			            SWITCH (
 			                currentType,
@@ -322,7 +322,7 @@ table ServiceTypes
 	partition ServiceTypes = calculated
 		mode: import
 		source = ```
-
+				
 				DATATABLE (
 				    "SortOrder", INTEGER,
 				    "ServiceType", STRING,
@@ -344,7 +344,8 @@ table ServiceTypes
 				        { 15, "% On PLOS" }
 				    }
 				)
-
+				
 				```
 
 	annotation PBI_Id = 0c8c52d1ff1645419346dad01ef3f12a
+

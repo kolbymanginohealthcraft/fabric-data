@@ -1,9 +1,137 @@
+/// Cohort anchor date — the pillar that defines "qualifying" across every
+/// fact table. ROLLING 12-month window (today − 365 days); switch to a fixed
+/// `#date(YYYY, M, D)` if a stable window is wanted.
+expression CohortAnchorDate = Date.From(Date.AddDays(DateTime.Date(DateTime.LocalNow()), -365))
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000001
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Date
+
+/// String form of CohortAnchorDate, inlined into SQL strings.
+expression _CohortAnchorDateText = Date.ToText(CohortAnchorDate, [Format="yyyy-MM-dd"])
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000002
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+/// Silver lakehouse SQL endpoint (Aegis_Core_Silver_Lakehouse) — conformed dims.
+expression _SilverSource =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-vox2z5x5nsnuri4qviabf7xo3i.datawarehouse.fabric.microsoft.com", "Aegis_Core_Silver_Lakehouse")
+		in
+		    Source
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000003
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+/// AegisPreImplementationLakehouse SQL endpoint — clinical view layer.
+expression _PreImpl =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse")
+		in
+		    Source
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000004
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+/// NetHealth_Bronze_Lakehouse SQL endpoint — raw NetHealth tables (medallion).
+expression _NetHealthBronze =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-4wksxtle6exu7ne42rpqmph27i.datawarehouse.fabric.microsoft.com", "NetHealth_Bronze_Lakehouse")
+		in
+		    Source
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000005
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+/// ROX_AEGIS__dbo_Lakehouse SQL endpoint — NetHealth Bronze mirror for lookups.
+expression _RoxAegis =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "ROX_AEGIS__dbo_Lakehouse")
+		in
+		    Source
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000006
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+/// REUSABLE SQL FRAGMENT: subquery returning every qualifying PatientCase_ID.
+/// A case qualifies if its case-level TherapyEndDate is in window (SNF signal)
+/// OR any of its CaseTracks has EndDate in window (SL signal — case-level end
+/// is often null/unreliable for SL, so the track is authoritative). Inlined
+/// into each fact table's WHERE so the cohort filter pushes down to Fabric SQL.
+expression _QualifyingCaseIdsSql =
+		"(SELECT pc.PatientCase_ID FROM dbo.PatientCase pc WHERE pc.EndDate >= '" & _CohortAnchorDateText & "' AND ISNULL(pc.IsDeletedCase,0)=0 " &
+		"UNION SELECT tt.PatientCase_ID FROM dbo.TxTrack tt WHERE tt.EndDate >= '" & _CohortAnchorDateText & "' AND ISNULL(tt.IsDeletedTrack,0)=0)"
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000007
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+/// COHORT ANCHOR — full case rows for every qualifying PatientCase_ID.
+expression _QualifyingCases = Value.NativeQuery(_NetHealthBronze, "SELECT pc.PatientCase_ID, pc.Stay_ID, pc.StartDate AS TherapyStartDate, pc.EndDate AS TherapyEndDate, pc.DischargedTo_ID, pc.EndReason_ID, pc.TypeOfCare FROM dbo.PatientCase pc WHERE ISNULL(pc.IsDeletedCase,0)=0 AND pc.PatientCase_ID IN " & _QualifyingCaseIdsSql)
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000008
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// All tracks belonging to qualifying cases.
+expression _QualifyingTracks = Value.NativeQuery(_NetHealthBronze, "SELECT tt.TxTrack_ID, tt.PatientCase_ID, tt.Discipline, tt.StartDate, tt.EndDate FROM dbo.TxTrack tt WHERE ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000009
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Stays containing qualifying cases. DISTINCT in case a Stay spans cases.
+expression _QualifyingStays = Value.NativeQuery(_NetHealthBronze, "SELECT DISTINCT s.Stay_ID, s.Resident_ID AS PatientID, s.AdmitDate, s.DischargeDate, s.IntakeSource_ID, s.MedicalRecordNumber FROM dbo.Stay s WHERE s.Stay_ID IN (SELECT pc.Stay_ID FROM dbo.PatientCase pc WHERE pc.PatientCase_ID IN " & _QualifyingCaseIdsSql & ")")
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000010
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Comma-separated text of every qualifying PatientCase_ID. Inlined into
+/// Silver-side queries as a literal IN list (cohort filter can't fold
+/// cross-database). Used by downstream fact tables in a later phase.
+expression _QualifyingCaseIdList =
+		let
+		    ids = Table.Column(_QualifyingCases, "PatientCase_ID"),
+		    text = Text.Combine(List.Transform(ids, Number.ToText), ",")
+		in
+		    text
+	lineageTag: aaaaaaaa-0000-0000-0000-000000000011
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
 expression dbo_vw_PatientStays =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo_vw_PatientStays = Source{[Schema="dbo",Item="dbo_vw_PatientStays"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_PatientStays, each [DischargeDate] > StartDate or [DischargeDate] = null),
-		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"MedicalRecordNumber"})
+		    Source = _QualifyingStays,
+		    #"Removed Columns" = Table.RemoveColumns(Source,{"MedicalRecordNumber"})
 		in
 		    #"Removed Columns"
 	lineageTag: 4553c8be-9028-412a-a335-63d8ff914f2f
@@ -15,10 +143,8 @@ expression dbo_vw_PatientStays =
 
 expression dbo_vw_StayCases =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo_vw_StayCases = Source{[Schema="dbo",Item="dbo_vw_StayCases"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_StayCases, each [TherapyEndDate] > StartDate or [TherapyEndDate] = null),
-		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"TypeOfCare"})
+		    Source = _QualifyingCases,
+		    #"Removed Columns" = Table.RemoveColumns(Source,{"TypeOfCare"})
 		in
 		    #"Removed Columns"
 	lineageTag: bf581141-dc30-4e9e-97e8-f2358b7b2dac
@@ -30,11 +156,9 @@ expression dbo_vw_StayCases =
 
 expression dbo_vw_CaseTracks =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo_vw_CaseTracks = Source{[Schema="dbo",Item="dbo_vw_CaseTracks"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_CaseTracks, each [EndDate] > StartDate or [EndDate] = null)
+		    Source = _QualifyingTracks
 		in
-		    #"Filtered Rows"
+		    Source
 	lineageTag: d4fe1eaf-8d1e-47c1-b455-1840b60c2e1b
 	queryGroup: FabricTables
 
@@ -44,12 +168,9 @@ expression dbo_vw_CaseTracks =
 
 expression 'dbo vw_AllEvalsAndDischargesLight' =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo.vw_AllEvalsAndDischargesLight = Source{[Schema="dbo",Item="dbo.vw_AllEvalsAndDischargesLight"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo.vw_AllEvalsAndDischargesLight, each [CreatedDate] > StartDate),
-		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"CreatedDate"})
+		    Source = Value.NativeQuery(_NetHealthBronze, "SELECT doc.TxDocument_ID, doc.TxTrack_ID, doc.DocumentType, doc.Physician_ID FROM dbo.TxDocument doc INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
 		in
-		    #"Removed Columns"
+		    Source
 	lineageTag: f96ac244-c9e3-4a4d-8d39-2d9910a3e73a
 	queryGroup: FabricTables
 
@@ -72,12 +193,9 @@ expression excelOutcomesCrosswalk =
 
 expression 'dbo vw_AllEvalsAndDischargesLight_Items' =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo.vw_AllEvalsAndDischargesLight_Items = Source{[Schema="dbo",Item="dbo.vw_AllEvalsAndDischargesLight_Items"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo.vw_AllEvalsAndDischargesLight_Items, each [CreatedDate] > StartDate),
-		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"CreatedDate"})
+		    Source = Value.NativeQuery(_NetHealthBronze, "SELECT item.TxDocument_ID, item.LibraryItem_ID, item.LibraryScaleValue_ID FROM dbo.TxDocumentItem item INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
 		in
-		    #"Removed Columns"
+		    Source
 	lineageTag: 2aaa8513-4701-4124-81f6-500d5e2d8625
 	queryGroup: FabricTables
 
@@ -126,12 +244,9 @@ expression Salesforce_Account =
 
 expression dbo_vw_Treatments =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo_vw_Treatments = Source{[Schema="dbo",Item="dbo_vw_Treatments"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_Treatments, each [LaborDate] > StartDate),
-		    #"Select Columns" = Table.SelectColumns(#"Filtered Rows",{"Person_ID", "SessionId", "LaborDate", "AssistantModifier", "TxTrack_ID", "Duration", "Units", "ServiceCode"})
+		    Source = Value.NativeQuery(_SilverSource, "SELECT tm.SessionId, MAX(tm.PersonId) AS Person_ID, MAX(ts.SessionDate) AS LaborDate, MAX(CAST(tm.AssistantModifier AS int)) AS AssistantModifier, MAX(ts.TrackId) AS TxTrack_ID, SUM(tm.Duration) AS Duration, SUM(tm.Units) AS Units, svc.ServiceCode FROM dbo.treatmentminute tm INNER JOIN dbo.treatmentsession ts ON ts.NetHealthId = tm.SessionId INNER JOIN (SELECT TrackId FROM dbo.treatmentsession GROUP BY TrackId HAVING MAX(SessionDate) >= '" & _CohortAnchorDateText & "') tw ON tw.TrackId = ts.TrackId LEFT JOIN dbo.service svc ON svc.NetHealthId = tm.ServiceId GROUP BY tm.SessionId, svc.ServiceCode")
 		in
-		    #"Select Columns"
+		    Source
 	lineageTag: 1ae51eca-e144-4660-b7bb-3139dec4822b
 	queryGroup: FabricTables
 
@@ -141,12 +256,9 @@ expression dbo_vw_Treatments =
 
 expression dbo_vw_Diagnosis =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_dbo_vw_Diagnosis = Source{[Schema="dbo",Item="dbo_vw_Diagnosis"]}[Data],
-		    #"Filtered Rows" = Table.SelectRows(dbo_dbo_vw_Diagnosis, each [OnsetDate] > StartDate),
-		    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"TxDocument_ID", "DiagnosisType", "DisplayOrder", "DiagnosisCode_ID", "OnsetDate"})
+		    Source = Value.NativeQuery(_NetHealthBronze, "SELECT d.TxDocument_ID, d.DiagnosisType, d.DisplayOrder, d.DiagnosisCode_ID, d.OnsetDate FROM dbo.TxDiagnosis d INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = d.TxDocument_ID AND doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID AND ISNULL(tt.IsDeletedTrack,0)=0 WHERE ISNULL(d.IsInactive,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
 		in
-		    #"Removed Other Columns"
+		    Source
 	lineageTag: 94579a73-0171-437b-92ad-6448fa71e469
 	queryGroup: FabricTables
 
