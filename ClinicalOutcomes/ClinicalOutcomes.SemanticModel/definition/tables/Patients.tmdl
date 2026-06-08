@@ -120,9 +120,12 @@ table Patients
 		source =
 				let
 				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT r.Resident_ID AS PatientID, ri.FirstName, ri.LastName, TRY_CAST(r.DOB AS date) AS DOB, CAST(r.Facility_ID AS varchar(20)) AS Facility FROM dbo.Resident r LEFT JOIN dbo.ResidentInfo ri ON ri.Resident_ID = r.Resident_ID AND ri.IsCurrent = 1 WHERE ISNULL(r.IsDeletedResident,0)=0 AND r.Resident_ID IN (SELECT s.Resident_ID FROM dbo.Stay s INNER JOIN dbo.PatientCase pc ON pc.Stay_ID = s.Stay_ID WHERE pc.PatientCase_ID IN " & _QualifyingCaseIdsSql & ")"),
-				    ValidFacilityIds = List.Buffer(Table.Column(Value.NativeQuery(_SilverSource, "SELECT CAST(NetHealthId AS varchar(20)) AS fid FROM dbo.facility WHERE IsTest = 0 AND NetHealthId IS NOT NULL"), "fid")),
-				    #"Filtered Rows" = Table.SelectRows(Source, each List.Contains(ValidFacilityIds, [Facility])),
-				    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Rows",{{"DOB", type date}}),
+				    FacilityMap = Value.NativeQuery(_SilverSource, "SELECT CAST(NetHealthId AS varchar(20)) AS NetHealthId, FacilityNumber FROM dbo.facility WHERE IsTest = 0 AND NetHealthId IS NOT NULL"),
+				    #"Joined Facility" = Table.NestedJoin(Source, {"Facility"}, FacilityMap, {"NetHealthId"}, "_f", JoinKind.Inner),
+				    #"Expanded Facility" = Table.ExpandTableColumn(#"Joined Facility", "_f", {"FacilityNumber"}),
+				    #"Removed NetHealthId Facility" = Table.RemoveColumns(#"Expanded Facility", {"Facility"}),
+				    #"Renamed Facility" = Table.RenameColumns(#"Removed NetHealthId Facility", {{"FacilityNumber", "Facility"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Facility",{{"DOB", type date}}),
 				    #"Inserted Merged Column" = Table.AddColumn(#"Changed Type", "Patient Name FirstLast", each Text.Combine({[FirstName], [LastName]}, " "), type text),
 				    #"Merged Columns" = Table.CombineColumns(#"Inserted Merged Column",{"LastName", "FirstName"},Combiner.CombineTextByDelimiter(", ", QuoteStyle.None),"Patient Name"),
 				    #"Trimmed Text" = Table.TransformColumns(#"Merged Columns",{{"Patient Name", Text.Trim, type text}}),

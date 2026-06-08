@@ -1,0 +1,10 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "acc0e0b7aa8500ada015",
+  "displayName": "OLD",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 960,
+  "visibility": "HiddenInViewMode",
+  "type": "Drillthrough"
+}

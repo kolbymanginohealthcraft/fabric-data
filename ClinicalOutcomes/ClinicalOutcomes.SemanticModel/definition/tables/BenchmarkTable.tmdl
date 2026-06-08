@@ -53,29 +53,9 @@ table BenchmarkTable
 				    REMOVEFILTERS(Patients),
 				
 				    // keep Division if it was filtered (exactly as filtered)
-				    KEEPFILTERS(__Div),
+				    KEEPFILTERS(__Div)
 				
-				    // override filters for state, type, and chain
-				    SWITCH(
-				        TRUE(),
-				        ISFILTERED('Override State'[BillingState]),
-				            Account[BillingState] IN VALUES('Override State'[BillingState]),
-				        TRUE()
-				    ),
-				    SWITCH(
-				        TRUE(),
-				        ISFILTERED('Override Type'[Type]),
-				            Account[Type] IN VALUES('Override Type'[Type]),
-				        TRUE()
-				    ),
-				    SWITCH(
-				        TRUE(),
-				        ISFILTERED('Override Chain'[Name]),
-				            Chain[Name] IN VALUES('Override Chain'[Name]),
-				        TRUE()
-				    )
-				
-				    // payer override block unchanged / optional
+				    // (override filter system removed 2026-06-08; benchmark = Aegis avg within Division)
 				)
 				
 				```

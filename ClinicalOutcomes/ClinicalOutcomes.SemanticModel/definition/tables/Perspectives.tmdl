@@ -24,9 +24,7 @@ table Perspectives
 				let
 				    //UPN table
 				    UPN_Source = dbo_vw_UpnFacilityAccess,
-				    Contracts_Table = Salesforce_Aegis_Contract,
-				    Contracts_RemovedOtherColumns = Table.SelectColumns(Contracts_Table,{"Contract_Number__c"}),
-				    Contracts_RenamedColumns = Table.RenameColumns(Contracts_RemovedOtherColumns,{{"Contract_Number__c", "FacilityId"}}),
+				    Contracts_RenamedColumns = Table.RenameColumns(Value.NativeQuery(_SilverSource, "SELECT FacilityNumber FROM dbo.facility WHERE IsTest = 0"), {{"FacilityNumber", "FacilityId"}}),
 				    Contracts_AddedCustom = Table.AddColumn(Contracts_RenamedColumns, "UPN", each "kolby.mangino@healthcraftcreative.com;sara.mcolvin@healthcraftcreative.com;mark.besch@aegistherapies.com;brad.miller@aegistherapies.com;dawn.greaves@aegistherapies.com;jaclyn.warshauer@aegistherapies.com;jason.buss@aegistherapies.com"),
 				    Contracts_SplitColumnbyDelimiter = Table.SplitColumn(Contracts_AddedCustom, "UPN", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"UPN.1", "UPN.2", "UPN.3", "UPN.4", "UPN.5", "UPN.6", "UPN.7"}),
 				    Contracts_UnpivotedOtherColumns = Table.UnpivotOtherColumns(Contracts_SplitColumnbyDelimiter, {"FacilityId"}, "Attribute", "Value"),

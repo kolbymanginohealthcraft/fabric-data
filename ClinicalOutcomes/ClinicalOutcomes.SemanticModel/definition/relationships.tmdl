@@ -140,11 +140,6 @@ relationship AutoDetected_8687f4c6-9ebb-4bff-b4ba-6657356e01d1
 	fromColumn: Treatments.Person_ID
 	toColumn: Employees.Person_ID
 
-relationship e6ee4293-88c4-0ede-aa5f-99d68df721b5
-	crossFilteringBehavior: bothDirections
-	fromColumn: Account.CCN__c
-	toColumn: CustomerGroups.CCN
-
 relationship 1979577c-bfc5-594a-5e4e-909910d0a183
 	crossFilteringBehavior: bothDirections
 	fromCardinality: one
@@ -219,27 +214,6 @@ relationship 686a8f46-623a-f546-7a40-af3d6467a0b7
 relationship 43beaaa5-fec0-41a0-a5fe-2b61bead6144
 	fromColumn: StayCases.TherapyEndDate
 	toColumn: Calendar.Date
-
-relationship a2347840-4453-17b7-f6fa-5889f6aaacc8
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: 'Override Chain'.ID
-	toColumn: Chain.Id
-
-relationship f84cf510-846e-f44f-12ba-32caed03a86d
-	crossFilteringBehavior: bothDirections
-	fromColumn: 'Payer Buckets'.'Payer Grouping'
-	toColumn: 'Override Payer'.'Payer Grouping'
-
-relationship e12c79ad-6ae6-4ba2-e3d1-171723a2ee8d
-	crossFilteringBehavior: bothDirections
-	fromColumn: Account.BillingState
-	toColumn: 'Override State'.BillingState
-
-relationship c2df8204-457e-a73f-e455-4b6fa066d13d
-	crossFilteringBehavior: bothDirections
-	fromColumn: Account.Type
-	toColumn: 'Override Type'.Type
 
 relationship 596941e0-9921-ef99-8f6c-c4aa7f4a8493
 	crossFilteringBehavior: bothDirections

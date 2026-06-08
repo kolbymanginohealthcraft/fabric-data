@@ -26,12 +26,11 @@ table Chain
 		queryGroup: Places
 		source =
 				let
-				    Source = Salesforce_Account,
-				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Id", "Name", "Type"}),
-				    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Type] = "Corporate")),
-				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type"})
+				    Source = Value.NativeQuery(_SilverSource, "SELECT DISTINCT ChainName FROM dbo.facility WHERE IsTest = 0 AND ChainName IS NOT NULL AND LTRIM(RTRIM(ChainName)) <> ''"),
+				    #"Added Id" = Table.AddColumn(Source, "Id", each [ChainName], type text),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Id",{{"ChainName", "Name"}})
 				in
-				    #"Removed Columns"
+				    #"Renamed Columns"
 
 	annotation PBI_ResultType = Table
 

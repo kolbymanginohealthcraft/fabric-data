@@ -1,0 +1,371 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "863cd7a4c9000ed9acd5",
+  "position": {
+    "x": 336,
+    "y": 88,
+    "z": 12000,
+    "height": 624,
+    "width": 328,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "StayCases"
+                    }
+                  },
+                  "Property": "Uses: Group Therapy"
+                }
+              },
+              "queryRef": "StayCases.Uses: Group Therapy",
+              "nativeQueryRef": "Group Therapy",
+              "active": true,
+              "displayName": "Group Therapy"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Service Rows"
+                    }
+                  },
+                  "Property": "Service Rows"
+                }
+              },
+              "index": 0,
+              "length": 1
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Total Cases"
+                }
+              },
+              "queryRef": "MeasureTable.Total Cases",
+              "nativeQueryRef": "Total Cases",
+              "displayName": "Total Cases"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Total Cases %"
+                }
+              },
+              "queryRef": "MeasureTable.Total Cases %",
+              "nativeQueryRef": "Total Cases %",
+              "displayName": "Total Cases %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Admit Level"
+                }
+              },
+              "queryRef": "MeasureTable.Admit Level",
+              "nativeQueryRef": "Admit Level",
+              "displayName": "Admit Level"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Discharge Level"
+                }
+              },
+              "queryRef": "MeasureTable.Discharge Level",
+              "nativeQueryRef": "Discharge Level",
+              "displayName": "Discharge Level"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Gain"
+                }
+              },
+              "queryRef": "MeasureTable.Gain",
+              "nativeQueryRef": "Gain",
+              "displayName": "Gain"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "% Improvement"
+                }
+              },
+              "queryRef": "MeasureTable.% Improvement",
+              "nativeQueryRef": "% Improvement",
+              "displayName": "% Improvement"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "% Total Cases Improved"
+                }
+              },
+              "queryRef": "MeasureTable.% Total Cases Improved",
+              "nativeQueryRef": "% Total Cases Improved",
+              "displayName": "% Total Cases Improved"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "ALOS"
+                }
+              },
+              "queryRef": "MeasureTable.ALOS",
+              "nativeQueryRef": "ALOS",
+              "displayName": "ALOS"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "DTC"
+                }
+              },
+              "queryRef": "MeasureTable.DTC",
+              "nativeQueryRef": "DTC",
+              "displayName": "DTC"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Rehosp"
+                }
+              },
+              "queryRef": "MeasureTable.Rehosp",
+              "nativeQueryRef": "Rehosp",
+              "displayName": "Rehosp"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Minutes per Week"
+                }
+              },
+              "queryRef": "MeasureTable.Minutes per Week",
+              "nativeQueryRef": "Minutes per Week",
+              "displayName": "Minutes per Week"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Gain per Day"
+                }
+              },
+              "queryRef": "MeasureTable.Gain per Day",
+              "nativeQueryRef": "Gain per Day",
+              "displayName": "Gain per Day"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Gain per Visit"
+                }
+              },
+              "queryRef": "MeasureTable.Gain per Visit",
+              "nativeQueryRef": "Gain per Visit",
+              "displayName": "Gain per Visit"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "MeasureTable"
+                    }
+                  },
+                  "Property": "Gain per Hour"
+                }
+              },
+              "queryRef": "MeasureTable.Gain per Hour",
+              "nativeQueryRef": "Gain per Hour",
+              "displayName": "Gain per Hour"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Account"
+                    }
+                  },
+                  "Property": "Total Facilities"
+                }
+              },
+              "queryRef": "Account.Total Facilities",
+              "nativeQueryRef": "Total Facilities",
+              "displayName": "Total Facilities"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Patients"
+                    }
+                  },
+                  "Property": "Avg Age"
+                }
+              },
+              "queryRef": "Patients.Avg Age",
+              "nativeQueryRef": "Avg Age",
+              "displayName": "Avg Age"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Service Columns"
+                    }
+                  },
+                  "Property": "Service Columns"
+                }
+              },
+              "index": 0,
+              "length": 16
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "valuesOnRow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Service Rows"
+                    }
+                  },
+                  "Property": "Rows Title"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'All values refer to entire cases that did or did not include this service'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

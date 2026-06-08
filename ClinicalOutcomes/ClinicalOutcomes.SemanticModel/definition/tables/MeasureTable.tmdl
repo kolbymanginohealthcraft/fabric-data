@@ -1210,17 +1210,6 @@ table MeasureTable
 			        "All"
 			    )
 			)
-			&
-			IF(
-			    ISFILTERED('Override Payer'[Payer Grouping]),
-			    UNICHAR(13)&UNICHAR(10)&
-			    "vs "&
-			    SWITCH(
-			        SELECTEDVALUE('Override Payer'[Payer Grouping]),
-			        "(a) Medicare Part A and A-Like","All Part A",
-			        "(b) Medicare Part B and HMO B","All Part B"
-			    )
-			)
 		lineageTag: e7eaa42f-8ad2-4237-a916-977ada3bd203
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -2365,15 +2354,9 @@ table MeasureTable
 	measure 'ActiveFilters: Override' =
 			
 			var newline = UNICHAR(13)&UNICHAR(10)
-			var multiline = REPT(newline,2)
 			
-			// var overridedivision = IF(ISFILTERED(VW_NHAegisFacilities[Division]),"Division(s): "&CONCATENATEX(VALUES(VW_NHAegisFacilities[Division]),VW_NHAegisFacilities[Division],", "))
 			var overridedivision = IF(([Total Cases]<>[Total Cases BM] || ISFILTERED(VW_NHAegisFacilities[Division])),"Division(s): "&CONCATENATEX(VALUES(VW_NHAegisFacilities[Division]),VW_NHAegisFacilities[Division],", "))
-			var overridechain = IF(ISFILTERED('Override Chain'[Name]),LEFT(SELECTEDVALUE('Override Chain'[Name]),17),"Aegis Therapies")
-			var overridetype = IF(ISFILTERED('Override Type'[Type]),"Facility Type(s): "&CONCATENATEX(VALUES('Override Type'[Type]),'Override Type'[Type],", "))
-			var overridepayer = IF(ISFILTERED('Override Payer'[Payer Grouping]),"Payer(s): "&CONCATENATEX(VALUES('Override Payer'[OPGLabel]),'Override Payer'[OPGLabel],", "))
-			var overridestate = IF(ISFILTERED('Override State'[BillingState]),"State(s): "&CONCATENATEX(VALUES('Override State'[BillingState]),'Override State'[BillingState],", "))
-			var concatTable = FILTER({overridedivision,overridechain,overridetype,overridepayer,overridestate},NOT(ISBLANK([Value])))
+			var concatTable = FILTER({overridedivision},NOT(ISBLANK([Value])))
 			return CONCATENATEX(concatTable,[Value],newline)
 		lineageTag: 84aa1836-d8ee-4bb0-a2cd-3adaaf948954
 
@@ -2485,9 +2468,8 @@ table MeasureTable
 			
 			var pcat = IF(ISFILTERED('Payer Buckets'[Payer Categorization]),"Cat")
 			var pgroup = IF(ISFILTERED('Payer Buckets'[Payer Grouping]),"Group")
-			var ogroup = IF(ISFILTERED('Override Payer'[Payer Grouping]),"Override")
 			
-			var pvalues = FILTER({pcat,pgroup,ogroup},ISBLANK([Value])=FALSE())
+			var pvalues = FILTER({pcat,pgroup},ISBLANK([Value])=FALSE())
 			var concat = CONCATENATEX(pvalues,[Value],", ")
 			return concat
 		lineageTag: 139734ac-627f-4634-aa70-3b1387dfdbb3

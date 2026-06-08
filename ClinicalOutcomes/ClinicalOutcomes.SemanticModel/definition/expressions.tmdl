@@ -216,32 +216,6 @@ expression excelOutcomesCustomScales =
 
 	annotation PBI_ResultType = Table
 
-expression Salesforce_Aegis_Contract =
-		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_Salesforce_Aegis_Contract = Source{[Schema="dbo",Item="Salesforce_Aegis_Contract"]}[Data]
-		in
-		    dbo_Salesforce_Aegis_Contract
-	lineageTag: 164c4c59-de35-40ab-ac15-e1ce537e0611
-	queryGroup: FabricTables
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Table
-
-expression Salesforce_Account =
-		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_Salesforce_Account = Source{[Schema="dbo",Item="Salesforce_Account"]}[Data]
-		in
-		    dbo_Salesforce_Account
-	lineageTag: 34f3aab1-69a5-4a6a-bac5-3c473b8bc2cc
-	queryGroup: FabricTables
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Table
-
 expression dbo_vw_Treatments =
 		let
 		    Source = Value.NativeQuery(_SilverSource, "SELECT tm.SessionId, MAX(tm.PersonId) AS Person_ID, MAX(ts.SessionDate) AS LaborDate, MAX(CAST(tm.AssistantModifier AS int)) AS AssistantModifier, MAX(ts.TrackId) AS TxTrack_ID, SUM(tm.Duration) AS Duration, SUM(tm.Units) AS Units, svc.ServiceCode FROM dbo.treatmentminute tm INNER JOIN dbo.treatmentsession ts ON ts.NetHealthId = tm.SessionId INNER JOIN (SELECT TrackId FROM dbo.treatmentsession GROUP BY TrackId HAVING MAX(SessionDate) >= '" & _CohortAnchorDateText & "') tw ON tw.TrackId = ts.TrackId LEFT JOIN dbo.service svc ON svc.NetHealthId = tm.ServiceId GROUP BY tm.SessionId, svc.ServiceCode")

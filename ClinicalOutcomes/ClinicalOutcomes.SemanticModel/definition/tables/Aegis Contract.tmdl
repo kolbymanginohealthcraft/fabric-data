@@ -73,8 +73,6 @@ table 'Aegis Contract'
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation UnderlyingDateTimeDataType = Date
-
 	column Contract_Type__c
 		dataType: string
 		lineageTag: b89ebe03-f24c-4217-9e6d-a731e2f6c9e2
@@ -121,12 +119,15 @@ table 'Aegis Contract'
 		queryGroup: Management
 		source =
 				let
-				    Source = Salesforce_Aegis_Contract,
-				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Name", "Contract_Number__c", "Aegis_District__c", "Chain_Account__c", "Account__c", "Effective_Date__c", "Term_Date__c", "Contract_Type__c"}),
-				    #"Added Prefix" = Table.TransformColumns(#"Removed Other Columns", {{"Contract_Number__c", each "0000" & _, type text}}),
-				    #"Extracted Last Characters" = Table.TransformColumns(#"Added Prefix", {{"Contract_Number__c", each Text.End(_, 5), type text}})
+				    facility_ = Value.NativeQuery(_SilverSource, "SELECT FacilityNumber, Name, ChainName, ContractType, TermedOn FROM dbo.facility WHERE IsTest = 0"),
+				    hierarchy_ = Value.NativeQuery(_SilverSource, "SELECT FacilityNumber, DistrictName FROM dbo.facilityhierarchy WHERE IsTest = 0"),
+				    #"Joined Hierarchy" = Table.NestedJoin(facility_, {"FacilityNumber"}, hierarchy_, {"FacilityNumber"}, "_h", JoinKind.LeftOuter),
+				    #"Expanded Hierarchy" = Table.ExpandTableColumn(#"Joined Hierarchy", "_h", {"DistrictName"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded Hierarchy", {{"FacilityNumber", "Contract_Number__c"}, {"ChainName", "Chain_Account__c"}, {"ContractType", "Contract_Type__c"}, {"TermedOn", "Term_Date__c"}, {"DistrictName", "Aegis_District__c"}}),
+				    #"Added Account" = Table.AddColumn(#"Renamed Columns", "Account__c", each [Contract_Number__c], type text),
+				    #"Added Effective Date" = Table.AddColumn(#"Added Account", "Effective_Date__c", each null, type date)
 				in
-				    #"Extracted Last Characters"
+				    #"Added Effective Date"
 
 	annotation PBI_ResultType = Table
 

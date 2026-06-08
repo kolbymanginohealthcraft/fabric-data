@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "4be9c8ab73ea3b2b2029",
+  "displayName": "◆ Legacy View",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 960,
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "201L"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "type": "Drillthrough"
+}
