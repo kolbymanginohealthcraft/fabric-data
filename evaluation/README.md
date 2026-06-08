@@ -17,6 +17,7 @@ node queries/pull-attribution.js       # therapist-attribution.csv (treatment mi
 node queries/pull-library-dim.js       # library-dim.csv     (LibraryItem -> OP/SNF)
 node queries/pull-facility-dim.js      # facility-dim.csv    (Facility_ID -> DivisionCode)
 node queries/pull-facility-hier.js     # facility-hier.csv   (District/Area/Region ledgers)
+node queries/pull-missed-visits.js     # missed-visits.csv   (per Person x Setting missed/delivered counts)
 ```
 
 Consumer (Python, `python -m evaluation.<step>` from repo root):
@@ -26,6 +27,8 @@ build_tracks       # tracks.csv        one row/track: cohort dims, Stay, 6 metri
 build_attribution  # contributions.csv role-based track->therapist credit
 score              # therapist-metrics.csv  per (therapist x metric x stay) Raw/Weighted/Percentile
 build_roster       # employee-roster.csv    per-employee audit (role, group, template, ...)
+build_missed_visits_feed  # missed-visits-feed.csv  MissedVisitRate, long schema (ready, gated off)
+build_hh_candidates       # hh-clinician-candidates.csv  HH-group roster options (see docs/home-health-roster-options.md)
 build_feed         # therapist-scorecard-feed.csv  wide app feed (the IT handoff surface)
 ```
 
@@ -39,7 +42,12 @@ build_feed         # therapist-scorecard-feed.csv  wide app feed (the IT handoff
 - **score** — in-scope = Contract Rehab + Senior Living only; percentile within Outcome Cohort
   (Discipline × Library × PoR); stay-split metrics rank within cohort ∩ stay.
 - **build_roster** — implements the scorecard-group classifier; one auditable row per employee.
-- **build_feed** — pivots metrics wide + joins identity/group + stamps version metadata.
+- **build_missed_visits_feed** — % missed visits (MissedVisitRate = missed / (missed+delivered)) per
+  clinician per setting, from missed-visits.csv. Plain rate only — no FR/frequency split exists in the
+  data (see project memory). Emits the same long schema as satisfaction so build_feed can fold it in.
+- **build_feed** — pivots metrics wide + joins identity/group + stamps version metadata. Folds in
+  satisfaction always; folds in missed-visits only when `INCLUDE_MISSED_VISITS=1` (off by default —
+  the metric is ready but HH clinicians aren't a scored group yet, and it currently spans all settings).
 
 Auth: `fabric-query.js` shells `az` directly; run `az login` once (rolling refresh → no re-auth).
 Install deps: `pip install -r evaluation/requirements.txt`.

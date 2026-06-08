@@ -13,6 +13,7 @@ Run from repo root:  python -m evaluation.build_feed
 from __future__ import annotations
 from datetime import date, datetime, timedelta
 from pathlib import Path
+import os
 import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
@@ -31,6 +32,19 @@ def main() -> None:
     else:
         print("NOTE: satisfaction-feed.csv not found — feed will be clinical-only "
               "(run: python -m evaluation.build_satisfaction_feed)")
+    # fold in the missed-visits domain (MissedVisitRate), same long schema — but GATED OFF by
+    # default: the metric is built and ready, yet HH clinicians aren't a scored group yet, so we
+    # don't want it silently landing on CR/SL scorecards. Flip on with INCLUDE_MISSED_VISITS=1
+    # once the Home Health Field Clinician group is defined (and ideally scoped there).
+    mv_path = DATA / "missed-visits-feed.csv"
+    if os.environ.get("INCLUDE_MISSED_VISITS") == "1" and mv_path.exists():
+        mvf = pd.read_csv(mv_path, usecols=["Person_ID", "Metric", "Stay", "Raw", "Weighted", "Percentile"])
+        m = pd.concat([m, mvf], ignore_index=True)
+        print(f"folded missed-visits-feed: +{len(mvf):,} rows "
+              f"({mvf['Person_ID'].nunique():,} clinicians) [INCLUDE_MISSED_VISITS=1]")
+    elif mv_path.exists():
+        print("NOTE: missed-visits-feed.csv present but NOT folded "
+              "(set INCLUDE_MISSED_VISITS=1 to include it once the HH group is scoped)")
     roster = pd.read_csv(DATA / "employee-roster.csv",
                          usecols=["Person_ID", "FullName", "Discipline", "Role",
                                   "ScorecardGroup", "Template"])

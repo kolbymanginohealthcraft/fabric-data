@@ -2,16 +2,23 @@ table StayCases
 	lineageTag: 15f5e358-f0f4-4a54-b9fc-24542155c15b
 
 	measure 'Total Planned Discharges' =
-			
+
+			// Planned = ALL discharges EXCEPT those with an explicitly Unplanned destination.
+			// A BLANK/missing destination counts as PLANNED (user call 2026-06-07). Such cases have
+			// a null DischargedTo_ID -> no related DischargeDestination row, so the old
+			// CALCULATE(..., [Type]="Planned") dropped them. Total - Unplanned keeps them in Planned,
+			// matching evaluation/build_planned_discharges.py (~Setting.isin(UNPLANNED)).
+			//
 			// CALCULATE(
 			//     [Total Discharges],
 			//     DischargeReason[Type]="Planned"
 			// )
-			
-			CALCULATE(
-			    [Total Discharges],
-			    DischargeDestination[Type]="Planned"
-			)
+
+			[Total Discharges]
+			    - CALCULATE(
+			        [Total Discharges],
+			        DischargeDestination[Type]="Unplanned"
+			    )
 		formatString: #,0
 		lineageTag: 50a1e7df-d1ab-4ac4-9130-0be4d5b92501
 

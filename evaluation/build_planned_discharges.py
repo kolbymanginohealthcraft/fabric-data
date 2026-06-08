@@ -1,9 +1,10 @@
 """Response Rate DENOMINATOR — planned discharges per facility.
 
-Mirrors the PBIP exactly: derive a discharge destination's Setting from its Descrip, then
+Derive a discharge destination's Setting from its Descrip, then
 Planned = Setting NOT IN {Hospital, Hospice, Expired, Left Facility AMA}. (IRF / Rehab Hospital
-is Planned; only acute Hospital is Unplanned.) Aggregates discharges.csv to per-facility
-planned/total counts. The numerator (survey respondents) comes from build_satisfaction once the
+is Planned; only acute Hospital is Unplanned.) BLANK/null destination defaults to PLANNED
+(user call 2026-06-07) — diverges from the PBIP, which excluded blanks. Aggregates
+discharges.csv to per-facility planned/total counts. The numerator (survey respondents) comes from build_satisfaction once the
 survey xlsx is reachable; Response Rate = respondents / planned discharges.
 
 Input:  data/discharges.csv  (Facility_ID, DischargedTo, n_discharges)
@@ -46,7 +47,11 @@ def setting_of(descrip) -> str:
 def main() -> None:
     df = pd.read_csv(DATA / "discharges.csv")
     df["Setting"] = df["DischargedTo"].map(setting_of)
-    df["Planned"] = ~df["Setting"].isin(UNPLANNED_SETTINGS) & df["DischargedTo"].notna()
+    # Blank/null destination DEFAULTS TO PLANNED (user call 2026-06-07): only an EXPLICIT
+    # unplanned setting (acute Hospital / Hospice / Expired / Left AMA) is unplanned. A missing
+    # destination inflates the denominator -> lower Response Rate, the conservative fallback.
+    # (SL has the highest blank rate ~11.9%; this is a global rule, not SL-only.)
+    df["Planned"] = ~df["Setting"].isin(UNPLANNED_SETTINGS)
 
     g = df.groupby("Facility_ID").apply(
         lambda x: pd.Series({
