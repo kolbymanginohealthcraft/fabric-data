@@ -6,24 +6,24 @@ table Facility
 	lineageTag: fac11000-0000-4000-8000-000000000001
 
 	measure 'Customer Name' =
-
+			
 			//if one therapist is selected
 			IF(ISFILTERED(Employees[Person_ID]),SELECTEDVALUE(Employees[Name])&" ("&SELECTEDVALUE(Employees[StaffTitle])&")",
-
+			
 			//if one facility is selected
-			IF(HASONEVALUE(Facility[FacilityNumber]),SELECTEDVALUE(Facility[Name])&" ("&SELECTEDVALUE(Facility[BillingCity])&", "&SELECTEDVALUE(Facility[BillingState])&")",
-
+			IF(HASONEVALUE(Facility[FacilityNumber]),SELECTEDVALUE(Facility[Name])&" ("&SELECTEDVALUE(Facility[City])&", "&SELECTEDVALUE(Facility[State])&")",
+			
 			//if multiple facilities are selected
 			IF(ISFILTERED(Facility[ChainName]),SELECTEDVALUE(Facility[ChainName]),
 			IF(ISFILTERED(Facility[Region]),"Region "&SELECTEDVALUE(Facility[Region]),
 			IF(ISFILTERED(Facility[District]),"District "&SELECTEDVALUE(Facility[District]),
 			IF(ISFILTERED(Facility[Division]),SELECTEDVALUE(Facility[Division]),
-			IF(ISFILTERED(Facility[BillingState]),"State of "&SELECTEDVALUE(Facility[BillingState]),
+			IF(ISFILTERED(Facility[State]),"State of "&SELECTEDVALUE(Facility[State]),
 			IF(ISFILTERED(vw_UpnFacilityAccess[UPN]),"Customers of "&SELECTEDVALUE(vw_UpnFacilityAccess[UPN]),
 			IF([Total Facilities]=[Total Facilities BM],"Aegis Therapies",
 			"My Customers"
 			)))))))))
-
+			
 			//shows number of facilities if more than one are selected
 			&IF([Total Facilities]>1," ("&[Total Facilities]&" facilities)")
 		lineageTag: 2d04ebc2-0b34-4df4-a7fa-ae16d1ee25f2
@@ -31,7 +31,7 @@ table Facility
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Total Facilities' =
-
+			
 			CALCULATE(
 			    DISTINCTCOUNT(Facility[FacilityNumber]),
 			    Facility[IsValid]
@@ -40,7 +40,7 @@ table Facility
 		lineageTag: e44133cf-a2f7-403d-8aca-99f2450f188b
 
 	measure 'Total Facilities BM' =
-
+			
 			CALCULATE(
 			    [Total Facilities],
 			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
@@ -77,35 +77,35 @@ table Facility
 
 		annotation SummarizationSetBy = Automatic
 
-	column BillingStreet
+	column Address1
 		dataType: string
 		lineageTag: 367b7781-578f-42f3-a907-d0f7ed12008b
 		summarizeBy: none
-		sourceColumn: BillingStreet
+		sourceColumn: Address1
 
 		annotation SummarizationSetBy = Automatic
 
-	column BillingCity
+	column City
 		dataType: string
 		lineageTag: 40b3e75f-4033-402d-b84c-b614260a8bc0
 		summarizeBy: none
-		sourceColumn: BillingCity
+		sourceColumn: City
 
 		annotation SummarizationSetBy = Automatic
 
-	column BillingState
+	column State
 		dataType: string
 		lineageTag: a84233ca-4a61-4568-b14c-c989f5e679d2
 		summarizeBy: none
-		sourceColumn: BillingState
+		sourceColumn: State
 
 		annotation SummarizationSetBy = Automatic
 
-	column BillingPostalCode
+	column Zip
 		dataType: string
 		lineageTag: 0d3b3ab1-3e0e-4253-b7cd-5abdb926fe80
 		summarizeBy: none
-		sourceColumn: BillingPostalCode
+		sourceColumn: Zip
 
 		annotation SummarizationSetBy = Automatic
 
@@ -144,27 +144,25 @@ table Facility
 
 		annotation SummarizationSetBy = Automatic
 
-	column Contract_Type__c
+	column ContractType
 		dataType: string
 		lineageTag: b89ebe03-f24c-4217-9e6d-a731e2f6c9e2
 		summarizeBy: none
-		sourceColumn: Contract_Type__c
+		sourceColumn: ContractType
 
 		annotation SummarizationSetBy = Automatic
 
-	column Term_Date__c
+	column TermedOn
 		dataType: dateTime
 		isHidden
 		formatString: Short Date
 		lineageTag: f43a8323-7b0d-4fa9-aab1-e93dd802b978
 		summarizeBy: none
-		sourceColumn: Term_Date__c
+		sourceColumn: TermedOn
 
 		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
 
 	column IsValid = Facility[Division] IN {"5500 (Direct Bill)", "8450 (Contract Rehab)"}
 		formatString: """TRUE"";""TRUE"";""FALSE"""
@@ -174,7 +172,7 @@ table Facility
 		annotation SummarizationSetBy = Automatic
 
 	column Department =
-
+			
 			SWITCH(
 			    Facility[Division],
 			    "5500 (Direct Bill)","Senior Living",
@@ -212,11 +210,11 @@ table Facility
 				    #"Div 5555" = Table.ReplaceValue(#"Removed Join Key","5555","5555 (Closed Locations)",Replacer.ReplaceText,{"Division"}),
 				    #"Div 5500" = Table.ReplaceValue(#"Div 5555","5500","5500 (Direct Bill)",Replacer.ReplaceText,{"Division"}),
 				    #"Div 6500" = Table.ReplaceValue(#"Div 5500","6500","6500 (PACS Consulting)",Replacer.ReplaceText,{"Division"}),
-				    #"Div 8450" = Table.ReplaceValue(#"Div 6500","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"}),
-				    #"Renamed Columns" = Table.RenameColumns(#"Div 8450", {{"Address1", "BillingStreet"}, {"City", "BillingCity"}, {"State", "BillingState"}, {"Zip", "BillingPostalCode"}, {"ContractType", "Contract_Type__c"}, {"TermedOn", "Term_Date__c"}})
+				    #"Div 8450" = Table.ReplaceValue(#"Div 6500","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"})
 				in
-				    #"Renamed Columns"
+				    #"Div 8450"
 
 	annotation PBI_ResultType = Table
 
 	annotation PBI_NavigationStepName = Navigation
+

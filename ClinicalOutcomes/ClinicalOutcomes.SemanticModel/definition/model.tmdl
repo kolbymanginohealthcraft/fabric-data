@@ -52,7 +52,7 @@ queryGroup FabricTables
 
 	annotation PBI_QueryGroupOrder = 10
 
-annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Assessments","Outcomes Crosswalk","Outcomes Custom Scales","Facility","Dictionary","Outcome Families","Treatments","TreatmentsDetails","Disciplines","Service","Basis","DischargeReason","Diagnosis","DiagnosisCode","Telehealth","MeasureTable","DestinationPage","IntakeSources","vw_UpnFacilityAccess","Employees","CaseTrackDays","PriorLivingEnvironment","HCC","ExpectedDischargeDestination","EDD","EmployeeBasicInfo","FTEType","Physician","PLE","PatientScreens","Peer Group","PatientLevelOptionalServices_Instance","PatientLevelOptionalServices_Service","CohortAnchorDate","_CohortAnchorDateText","_SilverSource","_PreImpl","_NetHealthBronze","_RoxAegis","_QualifyingCaseIdsSql","_QualifyingCases","_QualifyingTracks","_QualifyingStays","_QualifyingCaseIdList","dbo_vw_PatientStays","dbo_vw_StayCases","dbo_vw_CaseTracks","dbo vw_AllEvalsAndDischargesLight","excelOutcomesCrosswalk","dbo vw_AllEvalsAndDischargesLight_Items","excelOutcomesCustomScales","dbo_vw_Treatments","dbo_vw_Diagnosis","ICD_10_CM_Mappings","csv_C2824T2n","excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster","dbo_vw_UpnFacilityAccess","_AegisPatient","Unit of Analysis"]
+annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Assessments","Outcomes Crosswalk","Outcomes Custom Scales","Facility","Dictionary","Outcome Families","Treatments","TreatmentsDetails","Disciplines","Service","Basis","DischargeReason","Diagnosis","DiagnosisCode","Telehealth","MeasureTable","DestinationPage","IntakeSources","vw_UpnFacilityAccess","Employees","CaseTrackDays","PriorLivingEnvironment","ExpectedDischargeDestination","EDD","EmployeeBasicInfo","FTEType","Physician","PLE","PatientScreens","Peer Group","PatientLevelOptionalServices_Instance","PatientLevelOptionalServices_Service","CohortAnchorDate","_CohortAnchorDateText","_SilverSource","_PreImpl","_NetHealthBronze","_RoxAegis","_QualifyingCaseIdsSql","_QualifyingCases","_QualifyingTracks","_QualifyingStays","_QualifyingCaseIdList","dbo_vw_PatientStays","dbo_vw_StayCases","dbo_vw_CaseTracks","dbo vw_AllEvalsAndDischargesLight","excelOutcomesCrosswalk","dbo vw_AllEvalsAndDischargesLight_Items","excelOutcomesCustomScales","dbo_vw_Treatments","dbo_vw_Diagnosis","excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster","dbo_vw_UpnFacilityAccess","_AegisPatient","Unit of Analysis"]
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
@@ -67,7 +67,6 @@ ref table Payers
 ref table Documents
 ref table Assessments
 ref table DischargeDestination
-ref table Facility
 ref table 'Outcomes Crosswalk'
 ref table 'Outcomes Custom Scales'
 ref table OutcomeSummary
@@ -95,7 +94,6 @@ ref table DestinationPage
 ref table IntakeSources
 ref table DX_Cases
 ref table CaseTrackDays
-ref table HCC
 ref table ExpectedDischargeDestination
 ref table EDD
 ref table EmployeeBasicInfo
@@ -115,6 +113,7 @@ ref table PatientLevelOptionalServices_Instance
 ref table PatientLevelOptionalServices_Service
 ref table ServiceTypes
 ref table 'Unit of Analysis'
+ref table Facility
 
 ref cultureInfo en-US
 

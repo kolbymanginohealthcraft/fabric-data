@@ -1638,8 +1638,8 @@ table MeasureTable
 	measure 'ActiveFilters: State' =
 			
 			IF(
-			    ISFILTERED(Facility[BillingState]),
-			    CONCATENATEX(VALUES(Facility[BillingState]),Facility[BillingState],", "),
+			    ISFILTERED(Facility[State]),
+			    CONCATENATEX(VALUES(Facility[State]),Facility[State],", "),
 			    "All"
 			)
 		lineageTag: 612541c1-b846-48e4-b575-b2a6fc542bbf
@@ -1769,19 +1769,6 @@ table MeasureTable
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Patient Acuity Dx Weight Delta Image' =
-			
-			var metric = [Average Diagnosis Weight Delta]
-			return
-			IF([Report Scope]="Filtered",
-			IF(metric=0,BLANK(),
-			IF(metric>0,FORMAT([Patient Acuity Delta Image Higher],""),
-			IF(metric<0,FORMAT([Patient Acuity Delta Image Lower],"")
-			))))
-		lineageTag: 9dc00cf7-c14e-469b-8ef6-7ff2edb8f52b
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'Patient Acuity Dx Age Delta Image' =
 			
 			var metric = [Avg Dx Age Delta]
@@ -1878,7 +1865,7 @@ table MeasureTable
 			
 			var progressLineColor = IF([Gain]>0,"#7fbc42","#D64550")
 			var progressLineSize = 15
-
+			
 			return
 			
 			//check if valid count > 0
@@ -1953,95 +1940,8 @@ table MeasureTable
 		dataCategory: ImageUrl
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
-	measure 'Outcomes SVG SL' = ```
-			
-			
-			var canvasWidth = 774
-			var canvasHeight = 25
-			
-			var endLinePad_x = .01 //prev was .12
-			var endLinePad_y = .35 //top and bottom padding for end lines
-			
-			var progressLineColor = IF([Gain]>0,"#7fbc42","#D64550")
-			var progressLineSize = 7
 
-			var trackColor = "#D0D0D0"
-
-			return
-			
-			//check if valid count > 0
-			IF(ISBLANK([Total Measurements]),BLANK(),
-			
-			//prefix
-			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
-			
-			//left end line
-			"<line 
-			    x1="""&endLinePad_x*canvasWidth&""" 
-			    y1="""&endLinePad_y*canvasHeight&""" 
-			    x2="""&endLinePad_x*canvasWidth&""" 
-			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
-			    stroke="""&trackColor&""" 
-			    stroke-width=""2""
-			/>"&
-			
-			//right end line
-			"<line 
-			    x1="""&(1-endLinePad_x)*canvasWidth&""" 
-			    y1="""&endLinePad_y*canvasHeight&""" 
-			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
-			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
-			    stroke="""&trackColor&""" 
-			    stroke-width=""2""
-			/>"&
-			
-			//span line
-			"<line 
-			    x1="""&endLinePad_x*canvasWidth&""" 
-			    y1="""&.50*canvasHeight&""" 
-			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
-			    y2="""&.50*canvasHeight&""" 
-			    stroke="""&trackColor&"""
-			    stroke-width=""2""
-			/>"&
-			
-			//progress line
-			"<line 
-			    x1="""&[Admit Level]*canvasWidth&""" 
-			    y1="""&.5*canvasHeight&""" 
-			    x2="""&[Discharge Level]*canvasWidth&""" 
-			    y2="""&.5*canvasHeight&""" 
-			    stroke="""&progressLineColor&""" 
-			    stroke-width="""&progressLineSize&"""
-			/>"&
-			
-			//admit circle
-			"<circle 
-			    cx="""&[Admit Level]*canvasWidth&""" 
-			    cy="""&.5*canvasHeight&""" 
-			    r="""&(1-2*endLinePad_y)*canvasHeight&""" 
-			    fill=""#0C436A""
-			/>"&
-			
-			//discharge circle
-			"<circle 
-			    cx="""&[Discharge Level]*canvasWidth&""" 
-			    cy="""&.5*canvasHeight&""" 
-			    r="""&(1-2*endLinePad_y)*canvasHeight&""" 
-			    fill=""#0C436A""
-			/>"&
-			
-			//suffix
-			"</svg>"
-			
-			)
-			```
-		displayFolder: Outcomes
-		lineageTag: 601abb3b-788a-4975-b76d-0698491883a0
-		dataCategory: ImageUrl
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-	measure 'Discharges per Therapist' =
+	measure 'Discharges per Therapist' =
 			
 			DIVIDE(
 			    [Total Cases],
@@ -2843,6 +2743,95 @@ table MeasureTable
 		formatString: 0.0%;-0.0%;0.0%
 		displayFolder: Unit of Analysis
 		lineageTag: 0a1b2c3d-0002-0002-0002-00000000000a
+
+	measure 'Outcomes SVG SL' = ```
+			
+			
+			var canvasWidth = 774
+			var canvasHeight = 25
+			
+			var endLinePad_x = .01 //prev was .12
+			var endLinePad_y = .35 //top and bottom padding for end lines
+			
+			var progressLineColor = IF([Gain]>0,"#7fbc42","#D64550")
+			var progressLineSize = 7
+			
+			var trackColor = "#D0D0D0"
+			
+			return
+			
+			//check if valid count > 0
+			IF(ISBLANK([Total Measurements]),BLANK(),
+			
+			//prefix
+			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//left end line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_x*canvasWidth&""" 
+			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
+			    stroke="""&trackColor&""" 
+			    stroke-width=""2""
+			/>"&
+			
+			//right end line
+			"<line 
+			    x1="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
+			    stroke="""&trackColor&""" 
+			    stroke-width=""2""
+			/>"&
+			
+			//span line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&.50*canvasHeight&""" 
+			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y2="""&.50*canvasHeight&""" 
+			    stroke="""&trackColor&"""
+			    stroke-width=""2""
+			/>"&
+			
+			//progress line
+			"<line 
+			    x1="""&[Admit Level]*canvasWidth&""" 
+			    y1="""&.5*canvasHeight&""" 
+			    x2="""&[Discharge Level]*canvasWidth&""" 
+			    y2="""&.5*canvasHeight&""" 
+			    stroke="""&progressLineColor&""" 
+			    stroke-width="""&progressLineSize&"""
+			/>"&
+			
+			//admit circle
+			"<circle 
+			    cx="""&[Admit Level]*canvasWidth&""" 
+			    cy="""&.5*canvasHeight&""" 
+			    r="""&(1-2*endLinePad_y)*canvasHeight&""" 
+			    fill=""#0C436A""
+			/>"&
+			
+			//discharge circle
+			"<circle 
+			    cx="""&[Discharge Level]*canvasWidth&""" 
+			    cy="""&.5*canvasHeight&""" 
+			    r="""&(1-2*endLinePad_y)*canvasHeight&""" 
+			    fill=""#0C436A""
+			/>"&
+			
+			//suffix
+			"</svg>"
+			
+			)
+			```
+		displayFolder: Outcomes
+		lineageTag: 601abb3b-788a-4975-b76d-0698491883a0
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition MeasureTable = m
 		mode: import

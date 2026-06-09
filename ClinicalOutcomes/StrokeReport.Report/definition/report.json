@@ -204,7 +204,7 @@
                 "Entity": "Facility"
               }
             },
-            "Property": "BillingState"
+            "Property": "State"
           }
         },
         "type": "Categorical",
@@ -321,117 +321,6 @@
           }
         },
         "type": "Advanced",
-        "howCreated": "User",
-        "isHiddenInViewMode": true
-      },
-      {
-        "name": "Filter8677c376e49efd663f56",
-        "ordinal": 15,
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Facility"
-              }
-            },
-            "Property": "FacilityNumber"
-          }
-        },
-        "type": "Advanced",
-        "filter": {
-          "Version": 2,
-          "From": [
-            {
-              "Name": "a",
-              "Entity": "Facility",
-              "Type": 0
-            }
-          ],
-          "Where": [
-            {
-              "Condition": {
-                "Not": {
-                  "Expression": {
-                    "Comparison": {
-                      "ComparisonKind": 0,
-                      "Left": {
-                        "Column": {
-                          "Expression": {
-                            "SourceRef": {
-                              "Source": "a"
-                            }
-                          },
-                          "Property": "FacilityNumber"
-                        }
-                      },
-                      "Right": {
-                        "Literal": {
-                          "Value": "null"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        },
-        "howCreated": "User",
-        "isHiddenInViewMode": true
-      },
-      {
-        "name": "cbe8fd464d0e1d919c1c",
-        "ordinal": 16,
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Calendar"
-              }
-            },
-            "Property": "ReliableScope"
-          }
-        },
-        "type": "Categorical",
-        "filter": {
-          "Version": 2,
-          "From": [
-            {
-              "Name": "c",
-              "Entity": "Calendar",
-              "Type": 0
-            }
-          ],
-          "Where": [
-            {
-              "Condition": {
-                "In": {
-                  "Expressions": [
-                    {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Source": "c"
-                          }
-                        },
-                        "Property": "ReliableScope"
-                      }
-                    }
-                  ],
-                  "Values": [
-                    [
-                      {
-                        "Literal": {
-                          "Value": "true"
-                        }
-                      }
-                    ]
-                  ]
-                }
-              }
-            }
-          ]
-        },
         "howCreated": "User",
         "isHiddenInViewMode": true
       },

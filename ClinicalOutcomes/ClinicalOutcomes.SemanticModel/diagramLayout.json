@@ -543,19 +543,6 @@
         },
         {
           "location": {
-            "x": 1240,
-            "y": 2520
-          },
-          "nodeIndex": "HCC",
-          "nodeLineageTag": "b629b5c1-26f6-423e-a948-439f6ef8ec06",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 47
-        },
-        {
-          "location": {
             "x": 1840,
             "y": 2520
           },
@@ -1397,19 +1384,6 @@
             "width": 240
           },
           "zIndex": 3
-        },
-        {
-          "location": {
-            "x": 40,
-            "y": 480
-          },
-          "nodeIndex": "HCC",
-          "nodeLineageTag": "b629b5c1-26f6-423e-a948-439f6ef8ec06",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 4
         }
       ],
       "name": "Diagnosis",

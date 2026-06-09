@@ -240,32 +240,6 @@ expression dbo_vw_Diagnosis =
 
 	annotation PBI_ResultType = Table
 
-expression ICD_10_CM_Mappings =
-		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_ICD_10_CM_Mappings = Source{[Schema="dbo",Item="ICD_10_CM_Mappings"]}[Data]
-		in
-		    dbo_ICD_10_CM_Mappings
-	lineageTag: 7d998b94-ea86-4a96-a772-cb8e181251c0
-	queryGroup: FabricTables
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Table
-
-expression csv_C2824T2n =
-		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),
-		    dbo_csv_C2824T2n = Source{[Schema="dbo",Item="csv_C2824T2n"]}[Data]
-		in
-		    dbo_csv_C2824T2n
-	lineageTag: ba81edb5-95a0-435a-9274-d44fbc150596
-	queryGroup: FabricTables
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Table
-
 expression excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster =
 		let
 		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-7etkehckn7cejnmv5wbgoctzfe.datawarehouse.fabric.microsoft.com", "AegisPreImplementationLakehouse"),

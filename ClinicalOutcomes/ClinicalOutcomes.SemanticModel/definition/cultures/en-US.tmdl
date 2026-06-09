@@ -1,1 +1,1587 @@
 cultureInfo en-US
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "measuretable.admit_level": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Admit Level"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Admit": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Admit Level": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.discharge_level": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Discharge Level"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Discharge": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "D/C": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Discharge Level": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.dtc": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "DTC"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D/C Comm": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "% D/C to Comm": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "DTC": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.rehosp": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Rehosp"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D/C Hospital": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "% D/C to Hosp": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Rehosp": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.minutes_per_week": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Minutes per Week"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Min/Wk": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Minutes per Week": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.units_per_visit_pt_ot": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Units per Visit (pt/ot)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Units/Visit (pt/ot)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.visits_per_discipline_per_week": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Visits per Discipline per Week"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Visits/Disc/Wk": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.visits_per_case": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Visits per Case"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Provider": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.visits_per_case_bm": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Visits per Case BM"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Benchmark": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_measurements": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Measurements"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Count": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Count Valid": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.outcomes_svg": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Outcomes SVG"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Outcome": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Performance": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_cases": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Cases"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total Discharges": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Total Cases": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Total Cases (as any)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_cases_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Cases %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total Cases %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.gain": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Gain"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gain": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.improvement": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "% Improvement"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% Improvement": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_cases_improved": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "% Total Cases Improved"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% Total Cases Improved": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.alos": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "ALOS"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "ALOS": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.gain_per_day": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Gain per Day"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gain per Day": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.gain_per_visit": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Gain per Visit"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gain per Visit": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.gain_per_hour": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Gain per Hour"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gain per Hour": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.gain_bm": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Gain BM"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gain BM": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_measurements_included_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Measurements Included %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% Valid Outcomes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "% Valid": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_measurements_recorded": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Measurements Recorded"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Count Total": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Count": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.admit_level_all": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Admit Level (all)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Admit": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.discharge_level_all": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Discharge Level (all)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D/C": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_minutes__delivered_by_therapist": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Minutes % Delivered by Therapist"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Share of Patients' Total Time": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_minutes_eval__delivered_by_therapist": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Minutes Eval % Delivered by Therapist"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Share of Patients' Eval Time": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "measuretable.total_minutes_treat__delivered_by_therapist": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MeasureTable",
+			          "ConceptualProperty": "Total Minutes Treat % Delivered by Therapist"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Share of Patients' Treat Time": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.ple__community": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "PLE % Community"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "PLE % Comm": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.edd__community": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "EDD % Community"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "EDD % Comm": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.patientcase_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "PatientCase_ID"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "..": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "CaseID": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Case ID": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.disc_inv": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "Disc Inv"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Disc Involved": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Disc Combo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.age_range": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "Age Range"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          ".": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.gait_speed_skip_rate": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "Gait Speed Skip Rate"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gait Speed Skip Rate (lower is better)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.uses_group_therapy": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "Uses: Group Therapy"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Group Therapy": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.range_minutes_per_week": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "Range: Minutes per Week"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Range: Minutes per Week": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.edd_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "EDD Label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D/C Dest (exp):": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.add_value": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "ADD Value"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D/C Dest (act):": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.dx_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "DX Label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Primary Medical Diagnosis:": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.payer_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "Payer Label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Payer(s):": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "staycases.ple_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StayCases",
+			          "ConceptualProperty": "PLE Label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Prior Living Environment:": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "disciplines.ordered_discipline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Disciplines",
+			          "ConceptualProperty": "Ordered Discipline"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Discipline": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Disc": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "outcomes_breakdown.case_count": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Outcomes Breakdown",
+			          "ConceptualProperty": "Case Count"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total Cases": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "calendar.yearmonth": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Calendar",
+			          "ConceptualProperty": "YearMonth"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "M": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "calendar.timeframe_for_patient_view": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Calendar",
+			          "ConceptualProperty": "Timeframe for Patient View"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Timeframe:": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facility.total_facilities": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facility",
+			          "ConceptualProperty": "Total Facilities"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total Facilities": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facility.name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facility",
+			          "ConceptualProperty": "Name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Facility": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Facility Name": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facility.customer_name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facility",
+			          "ConceptualProperty": "Customer Name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Provider:": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "patients.avg_age": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Patients",
+			          "ConceptualProperty": "Avg Age"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Avg Age": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "patients.patient_name_for_title": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Patients",
+			          "ConceptualProperty": "Patient Name for Title"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Patient:": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dx_cases.type": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DX_Cases",
+			          "ConceptualProperty": "Type"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          ".": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dx_cases.l2": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DX_Cases",
+			          "ConceptualProperty": "L2"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "L2": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "payer_buckets.payer_grouping": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Payer Buckets",
+			          "ConceptualProperty": "Payer Grouping"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          ".": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "payer_buckets.payer_categorization": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Payer Buckets",
+			          "ConceptualProperty": "Payer Categorization"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          ".": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "employees.name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Employees",
+			          "ConceptualProperty": "Name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Therapist Name": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "employees.stafftitle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Employees",
+			          "ConceptualProperty": "StaffTitle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Job Title": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "employees.person_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Employees",
+			          "ConceptualProperty": "Person_ID"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "ID": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "employees.therapist_list_2": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Employees",
+			          "ConceptualProperty": "Therapist List 2"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Therapy Team": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dictionary.dfs_flag": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dictionary",
+			          "ConceptualProperty": "DFS Flag"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "DFS": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dischargedestination.setting": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DischargeDestination",
+			          "ConceptualProperty": "Setting"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D/C Dest": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "timeline.timeframe_for_timeline": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Timeline",
+			          "ConceptualProperty": "Timeframe for Timeline"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Timeframe:": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "timeline.timelinecases": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Timeline",
+			          "ConceptualProperty": "TimelineCases"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cases": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "timeline.timelinetracks": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Timeline",
+			          "ConceptualProperty": "TimelineTracks"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tracks": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "timeline.timelinevisits": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Timeline",
+			          "ConceptualProperty": "TimelineVisits"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Skilled Visits": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "timeline.timelineplosevents": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Timeline",
+			          "ConceptualProperty": "TimelinePLOSEvents"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "PLOS Events": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "showscales.total_points": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ShowScales",
+			          "ConceptualProperty": "Total Points"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Points": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

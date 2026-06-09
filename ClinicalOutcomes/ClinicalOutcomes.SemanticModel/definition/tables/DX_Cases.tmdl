@@ -39,40 +39,6 @@ table DX_Cases
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Total Comorbidities' =
-			
-			// CALCULATE(
-			//     COUNTROWS(DX_Cases),
-			//     DX_Cases[Type]="Secondary",
-			//     NOT(ISBLANK(DX_Cases[Weight]))
-			// )
-			
-			CALCULATE(
-			    DISTINCTCOUNT(DX_Cases[ICD]),
-			    DX_Cases[Type]="Secondary",
-			    NOT(ISBLANK(DX_Cases[Weight]))
-			)
-		formatString: 0
-		lineageTag: 3e54f0f1-1af2-4050-bb14-52cedef833d2
-
-	measure 'Total Comorbidity Weight' = ```
-			
-			VAR SecondaryDistinctICDs =
-			    FILTER (
-			        VALUES ( DX_Cases[ICD] ),
-			        CALCULATE ( MAX ( DX_Cases[Type] ) ) = "Secondary"
-			    )
-			RETURN
-			    SUMX (
-			        SecondaryDistinctICDs,
-			        CALCULATE ( MAX ( DX_Cases[Weight] ) )
-			    )
-			
-			```
-		lineageTag: ef41e7b1-9a44-4b25-8b48-0e4e01287356
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column PatientCase_ID
 		formatString: 0
 		lineageTag: 739931fa-8f01-4c68-9db1-a5f3c0af785c
@@ -161,30 +127,6 @@ table DX_Cases
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Curated clinical condition grouping by ICD prefix. Activate a group by filtering
-	/// this column (e.g. Stroke). Combine with DX_Cases[Type]="Primary" for primary-dx cohorts.
-	/// Stroke = I60-I63 (hemorrhagic + ischemic) + I69 (sequelae); excludes I65-I68 (no infarction) + G45 (TIA).
-	/// Add conditions by extending the SWITCH (e.g. Total Joint).
-	column 'Condition Group' =
-
-			SWITCH(
-			    TRUE(),
-			    LEFT(DX_Cases[ICD],3) IN {"I60","I61","I62","I63","I69"}, "Stroke",
-			    BLANK()
-			)
-		lineageTag: 5acc0001-0000-4000-8000-000000000001
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	column Weight = RELATED(HCC[Weight])
-		lineageTag: 152c1e2f-6e25-4add-ad08-7774e25f8883
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column Type = ```
 			
 			// IF(DX_Cases[DisplayOrder]=1,"Primary","Secondary")
@@ -199,6 +141,22 @@ table DX_Cases
 			
 			```
 		lineageTag: ce550af3-0032-44b1-93a4-6157ba8cd4c8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Curated clinical condition grouping by ICD prefix. Activate a group by filtering
+	/// this column (e.g. Stroke). Combine with DX_Cases[Type]="Primary" for primary-dx cohorts.
+	/// Stroke = I60-I63 (hemorrhagic + ischemic) + I69 (sequelae); excludes I65-I68 (no infarction) + G45 (TIA).
+	/// Add conditions by extending the SWITCH (e.g. Total Joint).
+	column 'Condition Group' =
+			
+			SWITCH(
+			    TRUE(),
+			    LEFT(DX_Cases[ICD],3) IN {"I60","I61","I62","I63","I69"}, "Stroke",
+			    BLANK()
+			)
+		lineageTag: 5acc0001-0000-4000-8000-000000000001
 		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic

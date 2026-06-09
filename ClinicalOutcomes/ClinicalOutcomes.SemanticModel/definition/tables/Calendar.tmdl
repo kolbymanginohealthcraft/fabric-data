@@ -134,17 +134,6 @@ table Calendar
 
 		annotation SummarizationSetBy = Automatic
 
-	column ReliableScope =
-			
-			// DATE(YEAR(TODAY())-1,MONTH(TODAY()),1)<='Calendar'[Date]
-			
-			'Calendar'[Date] >= DATE(YEAR(TODAY())-1,MONTH(TODAY()),1)
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		lineageTag: ee2c5621-a5f8-4426-9772-775d41be5d3b
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
 	column YearWeek
 		lineageTag: 1af5412d-7a14-4c33-9771-179176a96ff7
 		summarizeBy: none

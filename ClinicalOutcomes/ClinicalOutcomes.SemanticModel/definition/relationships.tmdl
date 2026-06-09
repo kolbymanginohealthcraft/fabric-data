@@ -220,10 +220,6 @@ relationship 9d8a4f47-d684-7bc9-32af-f05d1dc4a46c
 	fromColumn: PatientScreens.'Resolved PatientID'
 	toColumn: Patients.PatientID
 
-relationship 0e6eae42-a0c8-2e76-9892-ff250e5ef61c
-	fromColumn: DX_Cases.ICD
-	toColumn: HCC.ICD
-
 relationship AutoDetected_941d6392-fce1-47ac-b70d-aafa8f0f0c9c
 	fromColumn: EmployeeBasicInfo.JobCodeId
 	toColumn: 'Peer Group'.'Job Code'

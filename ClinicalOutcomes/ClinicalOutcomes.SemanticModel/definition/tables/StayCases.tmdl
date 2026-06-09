@@ -114,53 +114,6 @@ table StayCases
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Average Diagnosis Weight' =
-			
-			// AVERAGEX(
-			//     VALUES(StayCases[PatientCase_ID]),
-			//     // COUNTROWS(RELATEDTABLE(DX_Cases))
-			//     SUMX(Weights,Weights[Weight])
-			// )
-			
-			// AVERAGEX(
-			//     VALUES(StayCases[PatientCase_ID]),
-			//     SUMX(RELATEDTABLE(DX_Cases),SUMX(RELATEDTABLE(Weights),Weights[Weight]))
-			// )
-			
-			// AVERAGEX(
-			//     VALUES(StayCases[PatientCase_ID]),
-			//     SUM(DX_Cases[Weight])
-			// )
-			
-			AVERAGEX(
-			    VALUES(StayCases[PatientCase_ID]),
-			    SUMX(
-			        FILTER(
-			            DISTINCT(
-			                SELECTCOLUMNS(
-			                    RELATEDTABLE(DX_Cases),
-			                    "ICD", DX_Cases[ICD],
-			                    "Weight",RELATED(HCC[Weight])
-			                )
-			            ),
-			            NOT ISBLANK([Weight])
-			        ),
-			        [Weight]
-			    )
-			)
-		formatString: 0.00
-		lineageTag: 1df0ac62-13e5-49fa-a4f5-571582d397bb
-
-	measure 'Average Diagnosis Weight BM' =
-			
-			IF([Report Scope]="Filtered",
-			CALCULATE(
-			    [Average Diagnosis Weight],
-			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
-			))
-		formatString: 0.00
-		lineageTag: 51169804-fe08-480e-9425-f313b1293d12
-
 	measure 'Average Number of Diagnoses Delta' = IF([Report Scope]="Filtered",[Average Number of Diagnoses]-[Average Number of Diagnoses BM])
 		lineageTag: 2d319c51-934a-4c6e-9278-c0a51dfd3e9f
 
@@ -168,11 +121,6 @@ table StayCases
 
 	measure 'Avg Dx Age Delta' = IF([Report Scope]="Filtered",[Avg Dx Age]-[Avg Dx Age BM])
 		lineageTag: a4987ab4-d32a-4b9c-b900-7d5e4a13e324
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	measure 'Average Diagnosis Weight Delta' = IF([Report Scope]="Filtered",[Average Diagnosis Weight]-[Average Diagnosis Weight BM])
-		lineageTag: 5baf57f7-13d6-402c-9a8b-a29d1f5abb54
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
