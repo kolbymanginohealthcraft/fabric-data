@@ -1,6 +1,6 @@
 # PatientJourney model — scoping sketch
 
-**Status:** Stage 1 BUILT + Desktop-verified (commit 0b2de98). Stage 1.5 (leanness strip) pending.
+**Status:** Stage 1 (re-anchor) verified (0b2de98). Stage 1.5 (leanness strip, 57->29 tables) BUILT + validator-clean (bce287b), pending Desktop refresh verify.
 **Date:** 2026-06-09. Model name = **`PatientTimeline.SemanticModel`** (not "PatientJourney").
 **Context:** the `TimelineReport` needs a fundamentally different population than the
 `ClinicalOutcomes.SemanticModel` provides. This documents why, and sketches a separate
