@@ -1,0 +1,220 @@
+/// Unified facility dimension. Collapses the former Salesforce-shaped star
+/// (Account + Chain + Aegis Contract + VW_NHAegisFacilities) into one table,
+/// since all four now derive from Silver dbo.facility + dbo.facilityhierarchy
+/// keyed on the 5-digit FacilityNumber. One row per facility.
+table Facility
+	lineageTag: fac11000-0000-4000-8000-000000000001
+
+	measure 'Customer Name' =
+			
+			//if one therapist is selected
+			IF(ISFILTERED(Employees[Person_ID]),SELECTEDVALUE(Employees[Name])&" ("&SELECTEDVALUE(Employees[StaffTitle])&")",
+			
+			//if one facility is selected
+			IF(HASONEVALUE(Facility[FacilityNumber]),SELECTEDVALUE(Facility[Name])&" ("&SELECTEDVALUE(Facility[City])&", "&SELECTEDVALUE(Facility[State])&")",
+			
+			//if multiple facilities are selected
+			IF(ISFILTERED(Facility[ChainName]),SELECTEDVALUE(Facility[ChainName]),
+			IF(ISFILTERED(Facility[Region]),"Region "&SELECTEDVALUE(Facility[Region]),
+			IF(ISFILTERED(Facility[District]),"District "&SELECTEDVALUE(Facility[District]),
+			IF(ISFILTERED(Facility[Division]),SELECTEDVALUE(Facility[Division]),
+			IF(ISFILTERED(Facility[State]),"State of "&SELECTEDVALUE(Facility[State]),
+			IF(ISFILTERED(vw_UpnFacilityAccess[UPN]),"Customers of "&SELECTEDVALUE(vw_UpnFacilityAccess[UPN]),
+			IF([Total Facilities]=[Total Facilities BM],"Aegis Therapies",
+			"My Customers"
+			)))))))))
+			
+			//shows number of facilities if more than one are selected
+			&IF([Total Facilities]>1," ("&[Total Facilities]&" facilities)")
+		lineageTag: 2d04ebc2-0b34-4df4-a7fa-ae16d1ee25f2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Facilities' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Facility[FacilityNumber]),
+			    Facility[IsValid]
+			)
+		formatString: #,0
+		lineageTag: e44133cf-a2f7-403d-8aca-99f2450f188b
+
+	measure 'Total Facilities BM' =
+			
+			CALCULATE(
+			    [Total Facilities],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: 0
+		lineageTag: 0922def0-5323-43f4-b70d-3ccc26761f45
+
+	measure 'Total Contracts' = COUNTROWS(Facility)
+		formatString: #,0
+		lineageTag: b4ab3b76-9320-446b-8220-26f65d498590
+
+	column FacilityNumber
+		dataType: string
+		isKey
+		lineageTag: 3d5bd9e8-2699-4706-b041-3a80a0876043
+		summarizeBy: none
+		sourceColumn: FacilityNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 8de62160-91de-4663-81e2-b87b6ebc5b47
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ChainName
+		dataType: string
+		lineageTag: bf422674-5689-4a8d-beaa-acc1fe74ad58
+		summarizeBy: none
+		sourceColumn: ChainName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Address1
+		dataType: string
+		lineageTag: 367b7781-578f-42f3-a907-d0f7ed12008b
+		summarizeBy: none
+		sourceColumn: Address1
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 40b3e75f-4033-402d-b84c-b614260a8bc0
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: a84233ca-4a61-4568-b14c-c989f5e679d2
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column Zip
+		dataType: string
+		lineageTag: 0d3b3ab1-3e0e-4253-b7cd-5abdb926fe80
+		summarizeBy: none
+		sourceColumn: Zip
+
+		annotation SummarizationSetBy = Automatic
+
+	column District
+		dataType: string
+		lineageTag: 7b31e9a4-f993-4dea-8054-ab6e299c68cb
+		summarizeBy: none
+		sourceColumn: District
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 15e698b4-37e0-4eaa-a0a0-5dbe5af79892
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Division
+		dataType: string
+		lineageTag: ef4be545-c21a-4b7a-90d3-f94a9a335fe5
+		summarizeBy: none
+		sourceColumn: Division
+
+		annotation SummarizationSetBy = Automatic
+
+	column DistrictName
+		dataType: string
+		isHidden
+		lineageTag: 1b034e8e-6bfc-43b5-8735-889d11f6e90e
+		summarizeBy: none
+		sourceColumn: DistrictName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractType
+		dataType: string
+		lineageTag: b89ebe03-f24c-4217-9e6d-a731e2f6c9e2
+		summarizeBy: none
+		sourceColumn: ContractType
+
+		annotation SummarizationSetBy = Automatic
+
+	column TermedOn
+		dataType: dateTime
+		isHidden
+		formatString: Short Date
+		lineageTag: f43a8323-7b0d-4fa9-aab1-e93dd802b978
+		summarizeBy: none
+		sourceColumn: TermedOn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsValid = Facility[Division] IN {"5500 (Direct Bill)", "8450 (Contract Rehab)"}
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 72b2ee4f-7d8b-45d5-86bb-fb1d974e9cd3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department =
+			
+			SWITCH(
+			    Facility[Division],
+			    "5500 (Direct Bill)","Senior Living",
+			    "All Other"
+			)
+		lineageTag: 374a723a-5f52-466c-9e74-c49bb769eb3d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Qualified Customer' = TRUE()
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a351c029-fd8d-4ac0-b146-37bcc68ebd00
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contract Label' = Facility[FacilityNumber]&" - "&Facility[Name]
+		lineageTag: eaa5c207-4686-4b51-84d2-abcd8830f24e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Facility = m
+		mode: import
+		queryGroup: Places
+		source =
+				let
+				    facility_ = Value.NativeQuery(_SilverSource, "SELECT FacilityNumber, Name, ChainName, ContractType, TermedOn, Address1, City, State, Zip FROM dbo.facility WHERE IsTest = 0"),
+				    hierarchy_ = Value.NativeQuery(_SilverSource, "SELECT RIGHT('00000' + LTRIM(RTRIM(CAST(FacilityNumber AS varchar(10)))), 5) AS FacilityNumber, DistrictName, CAST(DistrictNumber AS varchar(20)) AS District, CAST(AreaNumber AS varchar(20)) AS Region, CAST(TRY_CAST(RegionNumber AS int) AS varchar(10)) AS Division FROM dbo.facilityhierarchy"),
+				    #"Facility Join Key" = Table.AddColumn(facility_, "_k", each Text.End("00000" & Text.From([FacilityNumber]), 5), type text),
+				    #"Joined Hierarchy" = Table.NestedJoin(#"Facility Join Key", {"_k"}, hierarchy_, {"FacilityNumber"}, "_h", JoinKind.LeftOuter),
+				    #"Expanded Hierarchy" = Table.ExpandTableColumn(#"Joined Hierarchy", "_h", {"DistrictName", "District", "Region", "Division"}, {"DistrictName", "District", "Region", "Division"}),
+				    #"Removed Join Key" = Table.RemoveColumns(#"Expanded Hierarchy", {"_k"}),
+				    #"Div 5555" = Table.ReplaceValue(#"Removed Join Key","5555","5555 (Closed Locations)",Replacer.ReplaceText,{"Division"}),
+				    #"Div 5500" = Table.ReplaceValue(#"Div 5555","5500","5500 (Direct Bill)",Replacer.ReplaceText,{"Division"}),
+				    #"Div 6500" = Table.ReplaceValue(#"Div 5500","6500","6500 (PACS Consulting)",Replacer.ReplaceText,{"Division"}),
+				    #"Div 8450" = Table.ReplaceValue(#"Div 6500","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"})
+				in
+				    #"Div 8450"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

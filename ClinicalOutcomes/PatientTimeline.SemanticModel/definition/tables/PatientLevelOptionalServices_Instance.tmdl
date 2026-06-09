@@ -1,0 +1,49 @@
+table PatientLevelOptionalServices_Instance
+	lineageTag: e573f993-d4f5-4614-ab71-a1d1fc0aefa1
+
+	column Resident_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 07da1270-ca17-4862-bbca-6fef9f6dd46c
+		summarizeBy: none
+		sourceColumn: Resident_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Service_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 788d916a-1597-4717-b7d2-87838bac6ac1
+		summarizeBy: none
+		sourceColumn: Service_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e7c0caba-64b2-4e47-b906-97ddeb674c7a
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PatientLevelOptionalServices_Instance = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-4wksxtle6exu7ne42rpqmph27i.datawarehouse.fabric.microsoft.com", "NetHealth_Bronze_Lakehouse"),
+				    Instance = Source{[Schema="PatientLevelOptionalServices", Item="Instance"]}[Data],
+				    Service = Source{[Schema="PatientLevelOptionalServices", Item="Service"]}[Data],
+				    #"Merged Service" = Table.NestedJoin(Instance, {"Service_ID"}, Service, {"Id"}, "ServiceLookup", JoinKind.LeftOuter),
+				    #"Expanded ServiceLookup" = Table.ExpandTableColumn(#"Merged Service", "ServiceLookup", {"Service_ID"}, {"ServiceLookup.Service_ID"}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Expanded ServiceLookup", {"Resident_ID", "ServiceLookup.Service_ID", "CreatedDate"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns", {{"ServiceLookup.Service_ID", "Service_ID"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

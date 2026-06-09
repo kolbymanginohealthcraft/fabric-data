@@ -1,0 +1,51 @@
+table Payers
+	lineageTag: b8105cf2-7565-48c3-a456-0448416a59cb
+
+	measure 'Unique Payer Names' = DISTINCTCOUNT(Payers[Name])
+		formatString: 0
+		lineageTag: 7f9dcc53-270b-4f62-80b8-193955ea5548
+
+	measure 'Unique Payer IDs' = DISTINCTCOUNT(Payers[Payer_ID])
+		formatString: 0
+		lineageTag: e28a338f-eae6-4550-bea1-c8f35b6dc0e4
+
+	column Payer_ID
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: 35ec01f0-781e-4c19-8d38-653c6bcebba8
+		summarizeBy: none
+		sourceColumn: Payer_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: db816cc6-dca1-4f6b-8057-f040fc9d36c4
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Special Needs' = IF(CONTAINSSTRING(Payers[Name],"iSNP"),"ISNP")
+		lineageTag: 1ec1af2a-e398-4fc1-b98a-c629642de91e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Payers = m
+		mode: import
+		queryGroup: Payer
+		source =
+				let
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Payer_ID, Name FROM dbo.Payer")
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,36 @@
+/// Disconnected selector for the reporting unit of analysis. Contract rehab reports
+/// Per Case; Senior Living reports Per Track. Read by the unit-aware measures
+/// (Volume, % Improved/Declined/No Change/Measured) via SELECTEDVALUE, defaulting
+/// to "Per Case" so existing per-case visuals are unchanged when nothing is selected.
+table 'Unit of Analysis'
+	lineageTag: 0a1b2c3d-0001-0001-0001-000000000001
+
+	column Unit
+		dataType: string
+		lineageTag: 0a1b2c3d-0001-0001-0001-000000000002
+		summarizeBy: none
+		sourceColumn: Unit
+		sortByColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0a1b2c3d-0001-0001-0001-000000000003
+		summarizeBy: none
+		sourceColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Unit of Analysis' = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [Unit = text, Sort = Int64.Type], {{"Per Case", 1}, {"Per Track", 2}})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

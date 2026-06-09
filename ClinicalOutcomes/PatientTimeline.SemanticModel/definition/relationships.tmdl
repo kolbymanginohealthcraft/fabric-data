@@ -1,0 +1,233 @@
+relationship fcf9f264-3205-4956-971a-3e630c61f675
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientStays.PatientID
+	toColumn: Patients.PatientID
+
+relationship 7e38a99c-2eda-1a6f-d348-551a7f7cdbdb
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientLevelOptionalServices_Instance.Resident_ID
+	toColumn: Patients.PatientID
+
+relationship b4f012b4-8994-0371-5de6-be2741324e22
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientLevelOptionalServices_Instance.Service_ID
+	toColumn: PatientLevelOptionalServices_Service.Service_ID
+
+relationship c177e7b8-b678-4ab2-bbf6-14a775ca67e9
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.Stay_ID
+	toColumn: PatientStays.Stay_ID
+
+relationship c38b63d8-336d-4f7f-9f3b-644040b4a02d
+	crossFilteringBehavior: bothDirections
+	fromColumn: CaseTracks.PatientCase_ID
+	toColumn: StayCases.PatientCase_ID
+
+relationship 20f74ad0-34f8-4c46-bcd1-4ee55f9c2ec7
+	crossFilteringBehavior: bothDirections
+	fromColumn: Documents.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship b8fc5cba-e0ea-4509-9f45-f39251ff9cae
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_PatientPayers.Payer_ID
+	toColumn: Payers.Payer_ID
+
+relationship 39230298-9cd7-4ca0-b23f-9b9cb3a4f6ef
+	crossFilteringBehavior: bothDirections
+	fromColumn: Assessments.TxDocument_ID
+	toColumn: Documents.TxDocument_ID
+
+relationship cfa99d51-0ce4-4fc5-894b-2950c8a64b61
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_PatientPayers.CaseID
+	toColumn: StayCases.PatientCase_ID
+
+relationship b6ff7395-fe56-4da9-a26e-3178fe96eaaa
+	crossFilteringBehavior: bothDirections
+	fromColumn: Patients.Facility
+	toColumn: Facility.FacilityNumber
+
+relationship 138f499d-a430-41e4-9fb9-a0d7f4f4c279
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.DischargedTo_ID
+	toColumn: DischargeDestination.Lookup_ID
+
+relationship 5612bd7c-c0ac-4498-b01a-d6a002d154fe
+	crossFilteringBehavior: bothDirections
+	fromColumn: Assessments.LibraryItem_ID
+	toColumn: 'Outcomes Crosswalk'.LibraryItem_ID
+
+relationship 06b3dba9-4e7a-4ab2-bafd-f3123b0a7ee2
+	crossFilteringBehavior: bothDirections
+	fromColumn: Assessments.LibraryScaleValue_ID
+	toColumn: 'Outcomes Custom Scales'.'Library Scale Value'
+
+relationship 33a3fd8f-b2a6-45ea-a64e-ef7b7f15006d
+	crossFilteringBehavior: bothDirections
+	fromColumn: Treatments.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship 4a1a4c7b-58de-48c6-b150-e5c64e0176e1
+	crossFilteringBehavior: bothDirections
+	fromColumn: TreatmentsDetails.SessionId
+	toColumn: Treatments.SessionId
+
+relationship 6633e018-89bb-45b2-af47-92e5980ad165
+	crossFilteringBehavior: bothDirections
+	fromColumn: CaseTracks.Discipline
+	toColumn: Disciplines.Discipline
+
+relationship 6154d5d7-371b-4a71-9dd1-241d9b6dc08e
+	crossFilteringBehavior: bothDirections
+	fromColumn: TreatmentsDetails.ServiceCode
+	toColumn: Service.ServiceCode
+
+relationship 3bbfdd5a-978b-4695-9d65-075419f018aa
+	crossFilteringBehavior: bothDirections
+	fromColumn: Diagnosis.DiagnosisCode_ID
+	toColumn: DiagnosisCode.DiagnosisCode_ID
+
+relationship 00cb0b70-7888-43ee-b258-30e554619a95
+	crossFilteringBehavior: bothDirections
+	fromColumn: Diagnosis.TxDocument_ID
+	toColumn: Documents.TxDocument_ID
+
+relationship f47638fc-5057-4d5a-9395-912614064f46
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.EndReason_ID
+	toColumn: DischargeReason.Lookup_ID
+
+relationship 1d1d2772-84a9-4db4-ba10-b924b4b3f1e6
+	crossFilteringBehavior: bothDirections
+	fromColumn: Dictionary.Family
+	toColumn: 'Outcome Families'.'Family Code'
+
+relationship b69078a5-8f4c-4e17-88ca-bb5cfb2e7ad9
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Treatments.SessionId
+	toColumn: Telehealth.TxSession_ID
+
+relationship 0c4f4b51-743b-4130-92e6-aaa97ff9a84b
+	crossFilteringBehavior: bothDirections
+	fromColumn: vw_UpnFacilityAccess.FacilityId
+	toColumn: Facility.FacilityNumber
+
+relationship 7fc7692b-639f-477f-b9da-86e56f83e690
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Basis.Code
+	toColumn: Service.ServiceCode
+
+relationship AutoDetected_2525ee13-01fd-4c39-b28e-99d280cc78cd
+	crossFilteringBehavior: bothDirections
+	fromColumn: Documents.Physician_ID
+	toColumn: Physician.Physician_ID
+
+relationship AutoDetected_8687f4c6-9ebb-4bff-b4ba-6657356e01d1
+	crossFilteringBehavior: bothDirections
+	fromColumn: Treatments.Person_ID
+	toColumn: Employees.Person_ID
+
+relationship AutoDetected_0824a98b-b04f-4ca7-b692-d36b27c694f5
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientStays.IntakeSource_ID
+	toColumn: IntakeSources.IntakeSource_ID
+
+relationship AutoDetected_d23521c7-f563-4162-ba1d-9f91a9b82566
+	crossFilteringBehavior: bothDirections
+	fromColumn: CaseTrackDays.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship 3c298fa5-d45f-4810-bf9f-5acec3f438ce
+	crossFilteringBehavior: bothDirections
+	fromColumn: StayCases.'Payer Categorization'
+	toColumn: 'Payer Buckets'.'Payer Categorization'
+
+relationship 01db020c-65e2-2f3d-99a8-cd83acfa69f8
+	crossFilteringBehavior: bothDirections
+	fromColumn: DX_Cases.PatientCase_ID
+	toColumn: StayCases.PatientCase_ID
+
+relationship 240b19de-d08a-7678-dabc-1b7a7335f972
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: ExpectedDischargeDestination.TxDocument_ID
+	toColumn: Documents.TxDocument_ID
+
+relationship 73b05198-0569-9b79-1b45-a35db1209519
+	crossFilteringBehavior: bothDirections
+	fromColumn: ExpectedDischargeDestination.LibraryScaleValue_ID
+	toColumn: EDD.ID
+
+relationship c0298ef0-8e4b-bb0f-ea77-9d23b2fa677f
+	crossFilteringBehavior: bothDirections
+	fromColumn: Employees.EmployeeNo
+	toColumn: FTEType.'Employee ID'
+
+relationship c11cbe2c-183a-15bb-eea6-20174f776526
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: PriorLivingEnvironment.TxDocument_ID
+	toColumn: Documents.TxDocument_ID
+
+relationship 82f15a19-a717-4f14-d11d-e29c3ccd7103
+	crossFilteringBehavior: bothDirections
+	fromColumn: PriorLivingEnvironment.LibraryScaleValue_ID
+	toColumn: PLE.ID
+
+relationship 43beaaa5-fec0-41a0-a5fe-2b61bead6144
+	fromColumn: StayCases.TherapyEndDate
+	toColumn: Calendar.Date
+
+relationship 596941e0-9921-ef99-8f6c-c4aa7f4a8493
+	crossFilteringBehavior: bothDirections
+	fromColumn: ShowScales.LibraryItem_ID
+	toColumn: Dictionary.LibraryItem_ID
+
+relationship 9e3f5f6d-99a5-4ec9-8ac5-01d3d457fdba
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromColumn: OutcomeSummary.PatientCase_ID
+	toColumn: StayCases.PatientCase_ID
+
+relationship 39e30131-d82f-4539-97ae-869e215160a6
+	crossFilteringBehavior: bothDirections
+	fromColumn: OutcomeSummary.LibraryItem_ID
+	toColumn: Dictionary.LibraryItem_ID
+
+relationship a4adb311-dfeb-203e-5cb4-96a247d77115
+	crossFilteringBehavior: bothDirections
+	fromColumn: OutcomeSummary.TxTrack_ID
+	toColumn: CaseTracks.TxTrack_ID
+
+relationship AutoDetected_adeb323e-38ba-4394-9000-82aee7d01b83
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: DischargeReason.DisplaySequence
+	toColumn: DischargeDestination.DisplaySequence
+
+relationship 9d8a4f47-d684-7bc9-32af-f05d1dc4a46c
+	fromColumn: PatientScreens.'Resolved PatientID'
+	toColumn: Patients.PatientID
+
+relationship AutoDetected_941d6392-fce1-47ac-b70d-aafa8f0f0c9c
+	fromColumn: Employees.JobCodeId
+	toColumn: 'Peer Group'.'Job Code'
+
+relationship d88c4b6e-28bc-0ae9-b2b1-7f140150f342
+	crossFilteringBehavior: bothDirections
+	fromColumn: Timeline.PatientID
+	toColumn: Patients.PatientID
+
+relationship 71b00000-0000-4000-8000-0000000000c1
+	isActive: false
+	fromColumn: CaseTracks.EndDate
+	toColumn: Calendar.Date
+
+relationship 11b10000-0000-4000-8000-0000000000a1
+	fromColumn: OutcomeSummary.LibraryItem_ID
+	toColumn: LibraryItem.LibraryItem_ID
+

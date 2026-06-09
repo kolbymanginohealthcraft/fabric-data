@@ -1,0 +1,34 @@
+table ExpectedDischargeDestination
+	lineageTag: ad3c6697-604a-4989-adbd-f54629f713ed
+
+	column TxDocument_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: a4c18103-28f3-4453-b87c-8eec1590de97
+		summarizeBy: none
+		sourceColumn: TxDocument_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryScaleValue_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: ef25252a-659b-442b-aa0e-ddb056f8ad7f
+		summarizeBy: none
+		sourceColumn: LibraryScaleValue_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ExpectedDischargeDestination = m
+		mode: import
+		queryGroup: Discharge
+		source =
+				let
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT item.TxDocument_ID, item.LibraryScaleValue_ID FROM dbo.TxDocumentItem item INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql & " AND item.LibraryItem_ID = 7614 AND item.LibraryScaleValue_ID IS NOT NULL")
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

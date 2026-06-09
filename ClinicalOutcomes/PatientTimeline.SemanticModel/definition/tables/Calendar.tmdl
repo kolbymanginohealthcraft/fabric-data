@@ -1,0 +1,189 @@
+table Calendar
+	lineageTag: 74314849-39dd-40d3-9386-e3ea04963081
+	dataCategory: Time
+
+	measure 'Today''s Date' = TODAY()
+		formatString: Short Date
+		lineageTag: 5ab381dd-055a-4ab4-96c7-249b1362130a
+
+	measure Timeframe =
+			
+			// "Timeframe: "&
+			FORMAT(MIN('Calendar'[Date]),"mm/dd/yyyy")&" - "&FORMAT(MAX('Calendar'[Date]),"mm/dd/yyyy")
+		lineageTag: f5244a50-7366-4bff-bff8-c0ae004d7a57
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Timeframe for Patient View' =
+			
+			MIN(StayCases[TherapyStartDate])&" - "&MAX(StayCases[TherapyEndDate])&
+			IF(
+			    [Total Cases] > 1,
+			    " ("&FORMAT([Total Cases],"#,###")&" cases)"
+			)
+		lineageTag: b5f2c2d4-842b-49bb-b5bf-d95bcdd9b4b7
+
+	measure 'Total Calendar Days' =
+			
+			COUNTROWS('Calendar')
+		lineageTag: 5faa05fe-8e31-4747-a19d-9d9083bf3a2b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Report Date' =
+			
+			// "Report Date: "&
+			FORMAT(TODAY(),"mm/dd/yyyy")
+		lineageTag: 81a30952-696e-40c6-89c2-2d302e31359b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Date
+		isKey
+		formatString: Short Date
+		lineageTag: c58aea1b-7332-4d18-8225-97ea0afa8818
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		lineageTag: 2110138b-1955-4ffe-a6d6-7f0bef4a498d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarter
+		lineageTag: fac55edc-3edf-49ae-9459-d9ad8d221494
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearQuarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: f3234a53-2084-4e74-9ebd-cf3f97652e02
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Number'
+		formatString: 0
+		lineageTag: 11328bc1-6ffd-47d3-a28f-06aa2d41a9bb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Day'
+		formatString: 0
+		lineageTag: 934b8218-2567-4328-8427-9f5bf3346d08
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week Day]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day
+		formatString: 0
+		lineageTag: 03317bd0-da69-4816-bc96-204f4cc80d09
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name'
+		lineageTag: 8c002178-e217-4b52-bd4d-8cbbe4b2781f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Start Date'
+		formatString: Short Date
+		lineageTag: e7faf6d1-d0e5-400d-9ac2-2dee65a5a3cf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Week Start Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: 09fcc546-6821-4dd7-8163-6d5143f634de
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		formatString: 0
+		lineageTag: 9aff7e1d-af3a-4462-95dd-6ce5be3edb9a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearWeek
+		lineageTag: 1af5412d-7a14-4c33-9771-179176a96ff7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearWeek]
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: 56d1a6a9-d369-4775-bac6-02a6ee7ff7ab
+
+		level Year
+			lineageTag: e84af10c-9a75-46d2-a416-bacebf7097fa
+			column: Year
+
+		level Quarter
+			lineageTag: 1b1ce00d-3b52-4420-907c-3b35b7c373b7
+			column: Quarter
+
+		level Month
+			lineageTag: afd4801c-9199-4f04-bc5b-0378ef58da74
+			column: Month
+
+		level Day
+			lineageTag: 69b29c97-a7b8-4486-814b-740abba88a5e
+			column: Day
+
+		level Date
+			lineageTag: 20865bee-4cba-4949-8884-926fc56f1355
+			column: Date
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    // CALENDAR(DATE(YEAR(TODAY())-1,MONTH(TODAY()),1),TODAY()),
+				    CALENDAR("1/1/2020",TODAY()-1),
+				    "Year",YEAR([Date]),
+				    "Quarter","Qtr "&QUARTER([Date]),
+				    "Month",MONTH([Date]),
+				    "Day",DAY([Date]),
+				    "Week Number",WEEKNUM([Date]),
+				    "Week Day",WEEKDAY([Date]),
+				    "Week Start Date",[Date]-WEEKDAY([Date],1)+1,
+				    "Day Name",FORMAT([Date],"ddd"),
+				    "YearQuarter",YEAR([Date])&"-Q"&QUARTER([Date]),
+				    "YearMonth",YEAR([Date])&"-"&FORMAT(MONTH([Date]),"00"),
+				    "YearWeek",YEAR([Date])&"-"&FORMAT(WEEKNUM([Date]),"00")
+				)
+
+	annotation PBI_Id = 5fe0dcb260d049c2a80dc56f513d2515
+

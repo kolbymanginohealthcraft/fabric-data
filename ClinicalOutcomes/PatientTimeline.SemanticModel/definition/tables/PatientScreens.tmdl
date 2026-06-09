@@ -1,0 +1,106 @@
+table PatientScreens
+	lineageTag: ea8715f3-cac8-4fbd-8f9c-c5cb0de5bc39
+
+	column PatientId
+		dataType: int64
+		formatString: 0
+		lineageTag: a0132ed6-f2f8-4e33-825b-8d70d6e2b02b
+		summarizeBy: count
+		sourceColumn: PatientId
+
+		annotation SummarizationSetBy = Automatic
+
+	column PatientName
+		dataType: string
+		lineageTag: 875a3351-4d07-46f7-a2e8-9a186e563db6
+		summarizeBy: none
+		sourceColumn: PatientName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Facility
+		dataType: string
+		lineageTag: f2638e03-c207-4a78-bed8-89adc49fe15f
+		summarizeBy: none
+		sourceColumn: Facility
+
+		annotation SummarizationSetBy = Automatic
+
+	column PatientDOB
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d7cf0466-5488-448d-9211-d63068ee6939
+		summarizeBy: none
+		sourceColumn: PatientDOB
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Resolved PatientID' = ```
+			
+			VAR ExistingID = PatientScreens[PatientID]
+			VAR ScreenName = PatientScreens[PatientName]
+			VAR ScreenDOB  = PatientScreens[PatientDOB]
+			VAR ScreenFac  = PatientScreens[Facility]
+			RETURN
+			IF (
+			    NOT ISBLANK ( ExistingID ) && ExistingID <> 0,
+			    ExistingID,
+			    CALCULATE (
+			        MAX ( Patients[PatientID] ),
+			        FILTER (
+			            Patients,
+			            Patients[DOB] = ScreenDOB
+			                && Patients[Facility] = ScreenFac
+			                && (
+			                    Patients[Patient Name] = ScreenName
+			                    || Patients[Patient Name FirstLast] = ScreenName
+			                )
+			        )
+			    )
+			)
+			
+			```
+		formatString: 0
+		lineageTag: af1939c2-cf45-49cc-aec4-1303b290a459
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateCompleted
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e3125e5c-8b83-485f-a6a3-60893cd21dce
+		summarizeBy: none
+		sourceColumn: DateCompleted
+
+		annotation SummarizationSetBy = Automatic
+
+	column Id
+		dataType: int64
+		formatString: 0
+		lineageTag: 4beb8dc2-8ec5-47a8-b2f2-c20ab78b7cd5
+		summarizeBy: count
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PatientScreens = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"db9e762e-b1da-4705-8c3b-315fa4c4647c" = Workspaces{[workspaceId="db9e762e-b1da-4705-8c3b-315fa4c4647c"]}[Data],
+				    #"6fb0c00b-84f1-475a-8466-6aeeb670e343" = #"db9e762e-b1da-4705-8c3b-315fa4c4647c"{[dataflowId="6fb0c00b-84f1-475a-8466-6aeeb670e343"]}[Data],
+				    PatientScreens_ = #"6fb0c00b-84f1-475a-8466-6aeeb670e343"{[entity="PatientScreens",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(PatientScreens_,{"Id", "PatientId", "PatientName", "PatientDOB", "Facility", "DateCompleted"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

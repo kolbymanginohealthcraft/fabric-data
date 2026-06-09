@@ -1,0 +1,42 @@
+/// Toggle for which date the Calendar dimension filters on.
+/// Default (no selection) and "Case End Date" use the active
+/// StayCases.TherapyEndDate -> Calendar relationship (correct for contract
+/// rehab / per-case reporting). "Track End Date" swaps the Calendar onto
+/// CaseTracks.EndDate via USERELATIONSHIP (disabling the case relationship to
+/// avoid an ambiguity loop) -- correct for Senior Living, whose cases are
+/// open-ended and whose authoritative end signal is the track. SL reports pin
+/// this to "Track End Date"; contract-rehab reports leave it unset.
+table 'Time Basis'
+	lineageTag: 71b00000-0000-4000-8000-000000000001
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem 'Case End Date' = SELECTEDMEASURE()
+
+		calculationItem 'Track End Date' =
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    USERELATIONSHIP(CaseTracks[EndDate], Calendar[Date]),
+				    CROSSFILTER(StayCases[TherapyEndDate], Calendar[Date], None)
+				)
+
+	column 'Time Basis'
+		dataType: string
+		lineageTag: 71b00000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 71b00000-0000-4000-8000-000000000003
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
