@@ -188,6 +188,11 @@ relationship 43beaaa5-fec0-41a0-a5fe-2b61bead6144
 	fromColumn: StayCases.TherapyEndDate
 	toColumn: Calendar.Date
 
+relationship 71b00000-0000-4000-8000-0000000000c1
+	isActive: false
+	fromColumn: CaseTracks.EndDate
+	toColumn: Calendar.Date
+
 relationship 596941e0-9921-ef99-8f6c-c4aa7f4a8493
 	crossFilteringBehavior: bothDirections
 	fromColumn: ShowScales.LibraryItem_ID
