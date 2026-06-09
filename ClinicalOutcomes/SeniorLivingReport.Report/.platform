@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Senior Living Outcomes"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5e91a000-0000-4000-8000-000000000001"
+  }
+}
