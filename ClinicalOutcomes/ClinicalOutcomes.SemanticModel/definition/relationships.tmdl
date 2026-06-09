@@ -181,11 +181,6 @@ relationship 43beaaa5-fec0-41a0-a5fe-2b61bead6144
 	fromColumn: StayCases.TherapyEndDate
 	toColumn: Calendar.Date
 
-relationship 71b00000-0000-4000-8000-0000000000c1
-	isActive: false
-	fromColumn: CaseTracks.EndDate
-	toColumn: Calendar.Date
-
 relationship 596941e0-9921-ef99-8f6c-c4aa7f4a8493
 	crossFilteringBehavior: bothDirections
 	fromColumn: ShowScales.LibraryItem_ID
@@ -201,10 +196,6 @@ relationship 39e30131-d82f-4539-97ae-869e215160a6
 	crossFilteringBehavior: bothDirections
 	fromColumn: OutcomeSummary.LibraryItem_ID
 	toColumn: Dictionary.LibraryItem_ID
-
-relationship 11b10000-0000-4000-8000-0000000000a1
-	fromColumn: OutcomeSummary.LibraryItem_ID
-	toColumn: LibraryItem.LibraryItem_ID
 
 relationship a4adb311-dfeb-203e-5cb4-96a247d77115
 	crossFilteringBehavior: bothDirections
@@ -230,4 +221,13 @@ relationship d88c4b6e-28bc-0ae9-b2b1-7f140150f342
 	crossFilteringBehavior: bothDirections
 	fromColumn: Timeline.PatientID
 	toColumn: Patients.PatientID
+
+relationship 71b00000-0000-4000-8000-0000000000c1
+	isActive: false
+	fromColumn: CaseTracks.EndDate
+	toColumn: Calendar.Date
+
+relationship 11b10000-0000-4000-8000-0000000000a1
+	fromColumn: OutcomeSummary.LibraryItem_ID
+	toColumn: LibraryItem.LibraryItem_ID
 

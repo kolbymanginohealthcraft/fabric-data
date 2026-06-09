@@ -39,3 +39,4 @@ table 'Time Basis'
 		sourceColumn: Ordinal
 
 		annotation SummarizationSetBy = Automatic
+
