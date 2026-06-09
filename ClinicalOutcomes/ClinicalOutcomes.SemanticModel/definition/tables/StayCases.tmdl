@@ -140,7 +140,7 @@ table StayCases
 			                SELECTCOLUMNS(
 			                    RELATEDTABLE(DX_Cases),
 			                    "ICD", DX_Cases[ICD],
-			                    "Weight",RELATED(Weights[Weight])
+			                    "Weight",RELATED(HCC[Weight])
 			                )
 			            ),
 			            NOT ISBLANK([Weight])

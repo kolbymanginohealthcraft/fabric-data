@@ -18,6 +18,24 @@ table HCC
 
 		annotation SummarizationSetBy = Automatic
 
+	column Description
+		dataType: string
+		lineageTag: f22f6b3e-f715-447a-8377-e52b066f5875
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: double
+		lineageTag: a9c5b4fd-92b9-4c3c-928c-31059e7c0093
+		summarizeBy: none
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	partition HCC = m
 		mode: import
 		queryGroup: Diagnoses
@@ -29,9 +47,18 @@ table HCC
 				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Description"}),
 				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"Diagnosis_Code", "ICD"}, {"CMS-HCC_Model_Category_V28", "HCC"}}),
 				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"ICD"}),
-				    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Duplicates",{{"HCC", Int64.Type}})
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Duplicates",{{"HCC", Int64.Type}}),
+				    // --- folded-in HCC weights (formerly the Weights table) ---
+				    WeightsSource = csv_C2824T2n,
+				    W_Filtered = Table.SelectRows(WeightsSource, each Text.Contains([_NAME_], "INS_HCC")),
+				    W_Renamed = Table.RenameColumns(W_Filtered,{{"_NAME_", "HCC"}, {"COL1", "Weight"}, {"_LABEL_", "Description"}}),
+				    W_Replaced = Table.ReplaceValue(W_Renamed,"INS_HCC","",Replacer.ReplaceText,{"HCC"}),
+				    W_Typed = Table.TransformColumnTypes(W_Replaced,{{"HCC", Int64.Type}, {"Weight", type number}}),
+				    W_Keep = Table.SelectColumns(W_Typed,{"HCC", "Weight", "Description"}),
+				    Joined = Table.NestedJoin(#"Changed Type1", {"HCC"}, W_Keep, {"HCC"}, "_w", JoinKind.LeftOuter),
+				    Expanded = Table.ExpandTableColumn(Joined, "_w", {"Weight", "Description"}, {"Weight", "Description"})
 				in
-				    #"Changed Type1"
+				    Expanded
 
 	annotation PBI_NavigationStepName = Navigation
 

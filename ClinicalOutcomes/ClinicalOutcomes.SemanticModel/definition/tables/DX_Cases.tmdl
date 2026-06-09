@@ -177,7 +177,7 @@ table DX_Cases
 
 		annotation SummarizationSetBy = Automatic
 
-	column Weight = RELATED(Weights[Weight])
+	column Weight = RELATED(HCC[Weight])
 		lineageTag: 152c1e2f-6e25-4add-ad08-7774e25f8883
 		summarizeBy: none
 

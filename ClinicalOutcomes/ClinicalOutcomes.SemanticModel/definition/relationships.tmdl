@@ -243,10 +243,6 @@ relationship AutoDetected_adeb323e-38ba-4394-9000-82aee7d01b83
 	fromColumn: DischargeReason.DisplaySequence
 	toColumn: DischargeDestination.DisplaySequence
 
-relationship AutoDetected_caf2083e-74d3-4749-aaee-211d30491415
-	fromColumn: HCC.HCC
-	toColumn: Weights.HCC
-
 relationship 9d8a4f47-d684-7bc9-32af-f05d1dc4a46c
 	fromColumn: PatientScreens.'Resolved PatientID'
 	toColumn: Patients.PatientID
