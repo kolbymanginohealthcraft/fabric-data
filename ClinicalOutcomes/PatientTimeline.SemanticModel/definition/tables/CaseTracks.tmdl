@@ -86,103 +86,6 @@ table CaseTracks
 
 		annotation UnderlyingDateTimeDataType = Date
 
-	column 'Evaluating Therapist' =
-			
-			CALCULATE(
-			    FIRSTNONBLANK(Employees[Name],1),
-			    Service[Type]="Eval"
-			)
-		lineageTag: 848867f7-6e2d-4485-8d78-cdc7284719a8
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Evaluation Method' =
-			
-			// CALCULATE(
-			//     FIRSTNONBLANK(Employees[Name],1),
-			//     Service[Type]="Eval"
-			// )
-			
-			IF(
-			    CALCULATE(MIN(Treatments[LaborDate]))=CALCULATE(MIN(Treatments[LaborDate]),ISBLANK(Telehealth[TxSession_ID])=FALSE()),
-			    "Telehealth",
-			    "In-Person"
-			)
-			
-			// CALCULATE(MIN(Treatments[LaborDate]))
-			
-			// CALCULATE(MIN(Treatments[LaborDate]),ISBLANK(Telehealth[TxSession_ID])=FALSE())
-		lineageTag: 5c1cd6a9-99b4-4dff-aa0f-2973eb181770
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Evaluating Therapist FTE Type' =
-			
-			CALCULATE(
-			    FIRSTNONBLANK(FTEType[Type],1),
-			    Service[Type]="Eval"
-			)
-		lineageTag: a10f132b-0863-41e5-8d0f-2d914a6a56c3
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Admit Level: Walk 10 ft' =
-			
-			CALCULATE(
-			    [Admit Level],
-			    Dictionary[Name] = "I. Walk 10 feet"
-			)
-		lineageTag: 44545570-b036-405f-9011-993abc0b7481
-		summarizeBy: sum
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Admit Level: Gait Speed' =
-			
-			CALCULATE(
-			    [Admit Level],
-			    Dictionary[Name] = "4MWT Gait Speed Test"
-			)
-		lineageTag: 1124b76f-684d-4a87-9029-b4daf2e22c15
-		summarizeBy: sum
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column UsesRequiredMeasure =
-			
-			SWITCH(
-			    CaseTracks[Discipline],
-			    "PT",ISBLANK(CALCULATE([Admit Level],Dictionary[RequiredFor]="PT"))=FALSE(),
-			    "OT",ISBLANK(CALCULATE([Admit Level],Dictionary[RequiredFor]="OT"))=FALSE(),
-			    BLANK()
-			)
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		lineageTag: a9c13d2d-374f-4296-b8b9-e673ab950af4
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Track Result' =
-			
-			SWITCH(
-			    TRUE(),
-			    [Gain]>0,"Improved",
-			    [Gain]<0,"Declined",
-			    ISBLANK([Gain]),"N/A",
-			    "No Change"
-			)
-		lineageTag: 0a1b2c3d-0003-0003-0003-000000000001
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
 	partition CaseTracks = m
 		mode: import
 		queryGroup: Patient
@@ -196,4 +99,4 @@ table CaseTracks
 	annotation PBI_ResultType = Table
 
 	annotation PBI_NavigationStepName = Navigation
-
+

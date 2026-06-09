@@ -6,13 +6,10 @@ table Facility
 	lineageTag: fac11000-0000-4000-8000-000000000001
 
 	measure 'Customer Name' =
-			
-			//if one therapist is selected
-			IF(ISFILTERED(Employees[Person_ID]),SELECTEDVALUE(Employees[Name])&" ("&SELECTEDVALUE(Employees[StaffTitle])&")",
-			
+
 			//if one facility is selected
 			IF(HASONEVALUE(Facility[FacilityNumber]),SELECTEDVALUE(Facility[Name])&" ("&SELECTEDVALUE(Facility[City])&", "&SELECTEDVALUE(Facility[State])&")",
-			
+
 			//if multiple facilities are selected
 			IF(ISFILTERED(Facility[ChainName]),SELECTEDVALUE(Facility[ChainName]),
 			IF(ISFILTERED(Facility[Region]),"Region "&SELECTEDVALUE(Facility[Region]),
@@ -20,12 +17,8 @@ table Facility
 			IF(ISFILTERED(Facility[Division]),SELECTEDVALUE(Facility[Division]),
 			IF(ISFILTERED(Facility[State]),"State of "&SELECTEDVALUE(Facility[State]),
 			IF(ISFILTERED(vw_UpnFacilityAccess[UPN]),"Customers of "&SELECTEDVALUE(vw_UpnFacilityAccess[UPN]),
-			IF([Total Facilities]=[Total Facilities BM],"Aegis Therapies",
-			"My Customers"
-			)))))))))
-			
-			//shows number of facilities if more than one are selected
-			&IF([Total Facilities]>1," ("&[Total Facilities]&" facilities)")
+			"All Facilities"
+			)))))))
 		lineageTag: 2d04ebc2-0b34-4df4-a7fa-ae16d1ee25f2
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -38,15 +31,6 @@ table Facility
 			)
 		formatString: #,0
 		lineageTag: e44133cf-a2f7-403d-8aca-99f2450f188b
-
-	measure 'Total Facilities BM' =
-			
-			CALCULATE(
-			    [Total Facilities],
-			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
-			)
-		formatString: 0
-		lineageTag: 0922def0-5323-43f4-b70d-3ccc26761f45
 
 	measure 'Total Contracts' = COUNTROWS(Facility)
 		formatString: #,0
@@ -217,4 +201,4 @@ table Facility
 	annotation PBI_ResultType = Table
 
 	annotation PBI_NavigationStepName = Navigation
-
+

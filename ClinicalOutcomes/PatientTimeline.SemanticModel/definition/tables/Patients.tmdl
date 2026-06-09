@@ -28,23 +28,6 @@ table Patients
 			)
 		lineageTag: 99fdae27-bc81-467f-8cdb-937bdaf6962f
 
-	measure 'Avg Age BM' =
-			
-			IF([Report Scope]="Filtered",
-			CALCULATE(
-			    [Avg Age],
-			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
-			))
-		formatString: 0.0
-		lineageTag: 997564e6-128d-4fb9-bf60-f32782e8b213
-
-	measure 'Avg Age Delta' =
-			
-			IF([Report Scope]="Filtered",[Avg Age]-[Avg Age BM])
-		lineageTag: 3b6a8269-6b01-48df-ad66-c84a00f7a94d
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'Avg Age Unweighted' =
 			
 			AVERAGEX(
@@ -138,4 +121,4 @@ table Patients
 	annotation PBI_ResultType = Table
 
 	annotation PBI_NavigationStepName = Navigation
-
+
