@@ -42,10 +42,9 @@ table DischargeDestination
 		changedProperty = FormatString
 
 	column Lookup_ID
-		dataType: int64
+		dataType: string
 		isHidden
 		isKey
-		formatString: 0
 		lineageTag: 50cb8e7e-8cdf-4d6a-bf3b-4c9bca79d7f3
 		summarizeBy: none
 		sourceColumn: Lookup_ID
@@ -93,6 +92,7 @@ table DischargeDestination
 			    "Hospice","Institutional",
 			    "Memory Care","Institutional",
 			    "SNF","Institutional",
+			    "Unknown","Unknown",
 			    "Other"
 			)
 		lineageTag: 08a01640-1e00-469d-8784-20026d2cb34a
@@ -103,18 +103,20 @@ table DischargeDestination
 	column Type =
 			
 			IF(
+			    DischargeDestination[Setting] = "Unknown",
+			    "Unknown",
+			IF(
 			    DischargeDestination[Setting] IN {"Hospital", "Hospice", "Expired", "Left Facility AMA"},
 			    "Unplanned",
 			    "Planned"
-			)
+			))
 		lineageTag: 0439d3b7-ad49-47d7-9e57-a07b178331ed
 		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
 
 	column Updated
-		dataType: dateTime
-		formatString: General Date
+		dataType: string
 		lineageTag: 031d74d0-c66b-4d02-82c3-5978f0e93daf
 		summarizeBy: none
 		sourceColumn: Updated
@@ -122,8 +124,7 @@ table DischargeDestination
 		annotation SummarizationSetBy = Automatic
 
 	column FromDate
-		dataType: dateTime
-		formatString: General Date
+		dataType: string
 		lineageTag: 0e6cdfac-5933-4626-8602-f956cef1a3ce
 		summarizeBy: none
 		sourceColumn: FromDate
@@ -131,8 +132,7 @@ table DischargeDestination
 		annotation SummarizationSetBy = Automatic
 
 	column ThruDate
-		dataType: dateTime
-		formatString: General Date
+		dataType: string
 		lineageTag: fa167576-86b7-4c18-8c00-bfb3b044405f
 		summarizeBy: none
 		sourceColumn: ThruDate
@@ -140,17 +140,15 @@ table DischargeDestination
 		annotation SummarizationSetBy = Automatic
 
 	column DisplaySequence
-		dataType: int64
-		formatString: 0
+		dataType: string
 		lineageTag: 161bc2fa-9737-4ba6-baa2-0bb549c22e19
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: DisplaySequence
 
 		annotation SummarizationSetBy = Automatic
 
 	column IsSystem
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		dataType: string
 		lineageTag: 4cd97167-d9ff-4ea5-aaa8-d61eb74c72de
 		summarizeBy: none
 		sourceColumn: IsSystem
@@ -166,8 +164,7 @@ table DischargeDestination
 		annotation SummarizationSetBy = Automatic
 
 	column IsCommon
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		dataType: string
 		lineageTag: cc761508-d66c-4438-9a5d-87860f5f7c8c
 		summarizeBy: none
 		sourceColumn: IsCommon
@@ -179,9 +176,11 @@ table DischargeDestination
 		queryGroup: Discharge
 		source =
 				let
-				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Lookup_ID, Descrip, Updated, FromDate, ThruDate, DisplaySequence, IsSystem, ModifiedBy, IsCommon FROM dbo.Lookup WHERE Type = 'DISCHRGTO '")
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Lookup_ID, Descrip, Updated, FromDate, ThruDate, DisplaySequence, IsSystem, ModifiedBy, IsCommon FROM dbo.Lookup WHERE Type = 'DISCHRGTO '"),
+				    UnknownRow = Table.FromRecords({[Lookup_ID = -1, Descrip = "Unknown", Updated = null, FromDate = null, ThruDate = null, DisplaySequence = 9999, IsSystem = null, ModifiedBy = null, IsCommon = null]}),
+				    Combined = Table.Combine({Source, UnknownRow})
 				in
-				    Source
+				    Combined
 
 	annotation PBI_ResultType = Table
 

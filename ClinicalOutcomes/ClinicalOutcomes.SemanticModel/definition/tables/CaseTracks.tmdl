@@ -169,6 +169,20 @@ table CaseTracks
 
 		annotation SummarizationSetBy = Automatic
 
+	column 'Track Result' =
+			
+			SWITCH(
+			    TRUE(),
+			    [Gain]>0,"Improved",
+			    [Gain]<0,"Declined",
+			    ISBLANK([Gain]),"N/A",
+			    "No Change"
+			)
+		lineageTag: 0a1b2c3d-0003-0003-0003-000000000001
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition CaseTracks = m
 		mode: import
 		queryGroup: Patient

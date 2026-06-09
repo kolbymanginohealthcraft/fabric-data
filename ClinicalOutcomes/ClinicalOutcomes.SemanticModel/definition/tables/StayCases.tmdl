@@ -452,7 +452,7 @@ table StayCases
 		annotation UnderlyingDateTimeDataType = Date
 
 	column DischargedTo_ID
-		dataType: int64
+		dataType: double
 		isHidden
 		formatString: 0
 		displayFolder: Discharge Destination
@@ -1164,9 +1164,10 @@ table StayCases
 		source =
 				let
 				    Source = dbo_vw_StayCases,
-				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"TherapyStartDate", type date}, {"TherapyEndDate", type date}, {"DischargedTo_ID", Int64.Type}, {"EndReason_ID", Int64.Type}})
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"TherapyStartDate", type date}, {"TherapyEndDate", type date}, {"DischargedTo_ID", Int64.Type}, {"EndReason_ID", Int64.Type}}),
+				    #"Unknown Discharge to -1" = Table.ReplaceValue(#"Changed Type", null, -1, Replacer.ReplaceValue, {"DischargedTo_ID"})
 				in
-				    #"Changed Type"
+				    #"Unknown Discharge to -1"
 
 	annotation PBI_ResultType = Table
 

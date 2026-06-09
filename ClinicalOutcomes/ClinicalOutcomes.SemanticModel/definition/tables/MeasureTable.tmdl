@@ -195,7 +195,7 @@ table MeasureTable
 			
 			DIVIDE(
 			    CALCULATE([Total Cases],DischargeDestination[Group] = "Community"),
-			    [Total Cases]
+			    CALCULATE([Total Cases],DischargeDestination[Type] <> "Unknown")
 			)
 		formatString: 0.0%;-0.0%;0.0%
 		displayFolder: Discharge Destination
@@ -230,7 +230,7 @@ table MeasureTable
 			
 			DIVIDE(
 			    CALCULATE([Total Cases],FILTER(DischargeDestination,DischargeDestination[Setting] = "Hospital")),
-			    [Total Cases]
+			    CALCULATE([Total Cases],DischargeDestination[Type] <> "Unknown")
 			)
 		formatString: 0.0%;-0.0%;0.0%
 		displayFolder: Discharge Destination
@@ -2653,6 +2653,98 @@ table MeasureTable
 		formatString: #,0
 		displayFolder: Minutes
 		lineageTag: 90e95855-c1c8-4228-a2b8-589d9d4e27ce
+
+	measure 'Sel Unit' = SELECTEDVALUE('Unit of Analysis'[Unit], "Per Case")
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000001
+
+	measure Volume =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    [Total Tracks],
+			    [Total Cases]
+			)
+		formatString: #,0
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000002
+
+	measure '% Improved' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    DIVIDE(CALCULATE([Total Tracks],FILTER(CaseTracks,[Gain]>0)),CALCULATE([Total Tracks],FILTER(CaseTracks,ISBLANK([Gain])=FALSE()))),
+			    DIVIDE(CALCULATE([Total Cases],FILTER(StayCases,[Gain]>0)),CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE())))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000003
+
+	measure '% Declined' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    DIVIDE(CALCULATE([Total Tracks],FILTER(CaseTracks,[Gain]<0)),CALCULATE([Total Tracks],FILTER(CaseTracks,ISBLANK([Gain])=FALSE()))),
+			    DIVIDE(CALCULATE([Total Cases],FILTER(StayCases,[Gain]<0)),CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE())))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000004
+
+	measure '% No Change' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    DIVIDE(CALCULATE([Total Tracks],FILTER(CaseTracks,[Gain]=0)),CALCULATE([Total Tracks],FILTER(CaseTracks,ISBLANK([Gain])=FALSE()))),
+			    DIVIDE(CALCULATE([Total Cases],FILTER(StayCases,[Gain]=0)),CALCULATE([Total Cases],FILTER(StayCases,ISBLANK([Gain])=FALSE())))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000005
+
+	measure '% Measured' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    DIVIDE(CALCULATE([Total Tracks],FILTER(CaseTracks,NOT(ISBLANK([Total Measurements Recorded])))),CALCULATE([Total Tracks],REMOVEFILTERS(Dictionary))),
+			    DIVIDE(CALCULATE([Total Cases],FILTER(StayCases,NOT(ISBLANK([Total Measurements Recorded])))),CALCULATE([Total Cases],REMOVEFILTERS(Dictionary)))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000006
+
+	measure '% Pain Improved' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    DIVIDE(CALCULATE([Total Tracks],FILTER(CaseTracks,[Gain (Pain)]>0)),CALCULATE([Total Tracks],FILTER(CaseTracks,[Admit Level (Pain)]<>1 && ISBLANK([Admit Level (Pain)])=FALSE()))),
+			    DIVIDE(CALCULATE([Total Cases],FILTER(StayCases,[Gain (Pain)]>0)),CALCULATE([Total Cases],FILTER(StayCases,[Admit Level (Pain)]<>1 && ISBLANK([Admit Level (Pain)])=FALSE())))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000007
+
+	measure 'Volume with Pain' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    CALCULATE([Total Tracks],FILTER(CaseTracks,[Admit Level (Pain)]<>1 && ISBLANK([Admit Level (Pain)])=FALSE())),
+			    CALCULATE([Total Cases],FILTER(StayCases,[Admit Level (Pain)]<>1 && ISBLANK([Admit Level (Pain)])=FALSE()))
+			)
+		formatString: #,0
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000008
+
+	measure 'Volume with Outcomes' =
+			
+			IF(
+			    [Sel Unit] = "Per Track",
+			    CALCULATE([Total Tracks],FILTER(CaseTracks,[Total Measurements]>0)),
+			    CALCULATE([Total Cases],FILTER(StayCases,[Total Measurements]>0))
+			)
+		formatString: #,0
+		displayFolder: Unit of Analysis
+		lineageTag: 0a1b2c3d-0002-0002-0002-000000000009
 
 	partition MeasureTable = m
 		mode: import
