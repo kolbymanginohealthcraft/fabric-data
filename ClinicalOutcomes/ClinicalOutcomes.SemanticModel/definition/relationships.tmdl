@@ -163,9 +163,8 @@ relationship 73b05198-0569-9b79-1b45-a35db1209519
 
 relationship c0298ef0-8e4b-bb0f-ea77-9d23b2fa677f
 	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: FTEType.'Employee ID'
-	toColumn: Employees.EmployeeNo
+	fromColumn: Employees.EmployeeNo
+	toColumn: FTEType.'Employee ID'
 
 relationship c11cbe2c-183a-15bb-eea6-20174f776526
 	crossFilteringBehavior: bothDirections
