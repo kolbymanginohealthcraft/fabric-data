@@ -1,6 +1,19 @@
 # PatientJourney model — scoping sketch
 
-**Status:** Stage 1 (re-anchor) verified (0b2de98). Stage 1.5 (leanness strip, 57->29 tables) BUILT + validator-clean (bce287b), pending Desktop refresh verify.
+**Status:** Stage 1 (re-anchor) verified + KEPT as the model (0b2de98). Stage 1.5 leanness strip was ATTEMPTED then REVERTED (05461eb) — see warning below.
+
+**⚠️ DO NOT strip the outcome layer.** The Timeline calc table's Case and Track lanes set
+`"AdmitLevel", [Admit Level]` / `"DischargeLevel", [Discharge Level]` — i.e. the report shows
+track/case OUTCOMES where available, sourced from `OutcomeSummary`. So `OutcomeSummary` +
+`Assessments` + the outcome dimension (`Dictionary`/`Outcomes Crosswalk`/`Outcomes Custom Scales`)
++ the `Admit Level`/`Discharge Level`/`Gain` measures MUST stay. PatientTimeline = inclusive
+population (Stage 1) **plus** the outcome layer. The aggressive strip broke this; reverted to the
+full 57-table Stage 1. LESSON: any validator MUST scan calculated-table PARTITION DAX (the
+`source = ```...```` block), not just measure/column bodies — mine missed the Timeline partition's
+`[Admit Level]` refs and false-passed. A future leanness pass can still drop the genuinely-unused
+non-outcome cruft (BenchmarkTable, Unit of Analysis, Time Basis, the eval cluster Employees/FTEType/
+Peer Group, Service field-params, Physician, etc.) but must keep the outcome layer and validate
+partition DAX.
 **Date:** 2026-06-09. Model name = **`PatientTimeline.SemanticModel`** (not "PatientJourney").
 **Context:** the `TimelineReport` needs a fundamentally different population than the
 `ClinicalOutcomes.SemanticModel` provides. This documents why, and sketches a separate
