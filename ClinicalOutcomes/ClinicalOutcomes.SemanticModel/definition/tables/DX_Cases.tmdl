@@ -161,6 +161,22 @@ table DX_Cases
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Curated clinical condition grouping by ICD prefix. Activate a group by filtering
+	/// this column (e.g. Stroke). Combine with DX_Cases[Type]="Primary" for primary-dx cohorts.
+	/// Stroke = I60-I63 (hemorrhagic + ischemic) + I69 (sequelae); excludes I65-I68 (no infarction) + G45 (TIA).
+	/// Add conditions by extending the SWITCH (e.g. Total Joint).
+	column 'Condition Group' =
+
+			SWITCH(
+			    TRUE(),
+			    LEFT(DX_Cases[ICD],3) IN {"I60","I61","I62","I63","I69"}, "Stroke",
+			    BLANK()
+			)
+		lineageTag: 5acc0001-0000-4000-8000-000000000001
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	column Weight = RELATED(Weights[Weight])
 		lineageTag: 152c1e2f-6e25-4add-ad08-7774e25f8883
 		summarizeBy: none
