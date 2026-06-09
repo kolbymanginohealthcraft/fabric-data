@@ -1,0 +1,34 @@
+table PriorLivingEnvironment
+	lineageTag: 1fbff6cf-44c6-46d3-8f68-d2e966657432
+
+	column TxDocument_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 72ec6874-5c0f-4f74-a836-e0c167361362
+		summarizeBy: none
+		sourceColumn: TxDocument_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryScaleValue_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 63ada3e2-b141-4ce5-970b-00ac2630f97e
+		summarizeBy: none
+		sourceColumn: LibraryScaleValue_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PriorLivingEnvironment = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT item.TxDocument_ID, item.LibraryScaleValue_ID FROM dbo.TxDocumentItem item INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql & " AND item.LibraryItem_ID = 7857 AND item.LibraryScaleValue_ID IS NOT NULL")
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

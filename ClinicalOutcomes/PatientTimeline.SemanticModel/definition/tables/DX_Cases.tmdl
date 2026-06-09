@@ -25,6 +25,15 @@ table DX_Cases
 		formatString: #,0
 		lineageTag: 816a6720-003e-47fc-8032-96d66ad28734
 
+	measure 'Total Cases PM Dx BM' =
+			
+			CALCULATE(
+			    [Total Cases PM Dx],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		formatString: #,0
+		lineageTag: 777e117c-c18b-4378-8290-c2f0ff1a3ca3
+
 	measure 'Show only primary' = "Show only"
 		lineageTag: c2890fa0-ec91-4489-bc8b-4f2db5af4536
 
@@ -173,4 +182,4 @@ table DX_Cases
 				)
 
 	annotation PBI_Id = 1d02769579db49cb821a747a2c4e86fa
-
+

@@ -52,7 +52,7 @@ queryGroup FabricTables
 
 	annotation PBI_QueryGroupOrder = 10
 
-annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Facility","Treatments","TreatmentsDetails","Disciplines","Service","Diagnosis","DiagnosisCode","MeasureTable","IntakeSources","vw_UpnFacilityAccess","ExpectedDischargeDestination","EDD","PatientScreens","PatientLevelOptionalServices_Instance","PatientLevelOptionalServices_Service","CohortAnchorDate","_CohortAnchorDateText","_SilverSource","_PreImpl","_NetHealthBronze","_RoxAegis","_QualifyingCaseIdsSql","_QualifyingCases","_QualifyingTracks","_QualifyingStays","_QualifyingCaseIdList","dbo_vw_PatientStays","dbo_vw_StayCases","dbo_vw_CaseTracks","dbo vw_AllEvalsAndDischargesLight","excelOutcomesCrosswalk","dbo vw_AllEvalsAndDischargesLight_Items","excelOutcomesCustomScales","dbo_vw_Treatments","dbo_vw_Diagnosis","excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster","dbo_vw_UpnFacilityAccess","_AegisPatient"]
+annotation PBI_QueryOrder = ["Patients","PatientStays","StayCases","CaseTracks","vw_PatientPayers","Payers","DischargeDestination","Documents","Assessments","Outcomes Crosswalk","Outcomes Custom Scales","Facility","Dictionary","Outcome Families","Treatments","TreatmentsDetails","Disciplines","Service","Basis","DischargeReason","Diagnosis","DiagnosisCode","Telehealth","MeasureTable","DestinationPage","IntakeSources","vw_UpnFacilityAccess","Employees","CaseTrackDays","PriorLivingEnvironment","ExpectedDischargeDestination","EDD","FTEType","Physician","PLE","PatientScreens","Peer Group","PatientLevelOptionalServices_Instance","PatientLevelOptionalServices_Service","CohortAnchorDate","_CohortAnchorDateText","_SilverSource","_PreImpl","_NetHealthBronze","_RoxAegis","_QualifyingCaseIdsSql","_QualifyingCases","_QualifyingTracks","_QualifyingStays","_QualifyingCaseIdList","dbo_vw_PatientStays","dbo_vw_StayCases","dbo_vw_CaseTracks","dbo vw_AllEvalsAndDischargesLight","excelOutcomesCrosswalk","dbo vw_AllEvalsAndDischargesLight_Items","excelOutcomesCustomScales","dbo_vw_Treatments","dbo_vw_Diagnosis","excel_Employee_FTE_status_vs_patient_outcomes_WD_Roster","dbo_vw_UpnFacilityAccess","_AegisPatient","Unit of Analysis","LibraryItem"]
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
@@ -65,28 +65,56 @@ ref table CaseTracks
 ref table vw_PatientPayers
 ref table Payers
 ref table Documents
+ref table Assessments
 ref table DischargeDestination
+ref table 'Outcomes Crosswalk'
+ref table 'Outcomes Custom Scales'
+ref table OutcomeSummary
+ref table Dictionary
 ref table Calendar
 ref table Treatments
 ref table TreatmentsDetails
 ref table Disciplines
 ref table Service
+ref table Basis
+ref table DischargeReason
 ref table Diagnosis
 ref table DiagnosisCode
+ref table 'Outcome Families'
+ref table 'Outcomes Breakdown'
+ref table Telehealth
 ref table MeasureTable
 ref table vw_UpnFacilityAccess
 ref table ContextTable
 ref table 'Payer Buckets'
+ref table BenchmarkTable
+ref table Employees
+ref table Physician
+ref table DestinationPage
 ref table IntakeSources
 ref table DX_Cases
+ref table CaseTrackDays
 ref table ExpectedDischargeDestination
 ref table EDD
+ref table FTEType
 ref table Timeline
+ref table PriorLivingEnvironment
+ref table PLE
+ref table ShowScales
+ref table 'Diagnosis Hierarchy'
+ref table 'Service Rows'
+ref table 'Service Columns'
+ref table 'Calendar Parameter'
+ref table 'Service Columns BM'
 ref table PatientScreens
+ref table 'Peer Group'
 ref table PatientLevelOptionalServices_Instance
 ref table PatientLevelOptionalServices_Service
 ref table ServiceTypes
+ref table 'Unit of Analysis'
 ref table Facility
+ref table 'Time Basis'
+ref table LibraryItem
 
 ref cultureInfo en-US
 
