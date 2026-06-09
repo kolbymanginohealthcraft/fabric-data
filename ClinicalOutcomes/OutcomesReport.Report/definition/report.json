@@ -194,23 +194,6 @@
         "howCreated": "User"
       },
       {
-        "name": "8de93ef6bf5022969204",
-        "displayName": "Account Type",
-        "ordinal": 6,
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Account"
-              }
-            },
-            "Property": "Type"
-          }
-        },
-        "type": "Categorical",
-        "howCreated": "User"
-      },
-      {
         "name": "ffb1b45940d557ee8766",
         "displayName": "State",
         "ordinal": 7,
@@ -270,22 +253,6 @@
               }
             },
             "Property": "District"
-          }
-        },
-        "type": "Categorical",
-        "howCreated": "User"
-      },
-      {
-        "name": "3799428c98b0089be780",
-        "ordinal": 11,
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "CustomerGroups"
-              }
-            },
-            "Property": "Customer Group"
           }
         },
         "type": "Categorical",
