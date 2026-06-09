@@ -122,6 +122,53 @@ table Employees
 
 		annotation SummarizationSetBy = Automatic
 
+	column EmployeeNo
+		dataType: string
+		lineageTag: daef7094-0ddb-4e8b-9af4-474f316478a0
+		summarizeBy: none
+		sourceColumn: EmployeeNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Therapist Name'
+		dataType: string
+		lineageTag: 43f58bc9-c689-4401-9fcc-ea0b8fc12733
+		summarizeBy: none
+		sourceColumn: Therapist Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobTitle
+		dataType: string
+		lineageTag: bc432d8f-a035-4ad4-8b27-eae5bb90f6c1
+		summarizeBy: none
+		sourceColumn: JobTitle
+
+		annotation SummarizationSetBy = Automatic
+
+	column Credentials
+		dataType: string
+		lineageTag: 64b9b580-0aaf-4d1c-b027-71fcfa0f429a
+		summarizeBy: none
+		sourceColumn: Credentials
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobCodeId
+		dataType: int64
+		formatString: 0
+		lineageTag: 8898ece1-44ac-46d2-97ae-2669230d3403
+		summarizeBy: none
+		sourceColumn: JobCodeId
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Therapist Label' = Employees[Therapist Name]&" ("&Employees[JobTitle]&")"
+		lineageTag: c35bfe96-babf-4431-968d-6408045e260e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Employees = m
 		mode: import
 		queryGroup: People
@@ -129,9 +176,14 @@ table Employees
 				let
 				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Person_ID, FirstName, LastName, StaffTitle, ISNULL(IsInactive,0) AS IsInactive, SupervisorPerson_ID, Taxonomy_ID FROM dbo.Person WHERE Person_ID IS NOT NULL"),
 				    #"Added Custom Column" = Table.AddColumn(Source, "Short Name", each Text.Combine({Text.Start([FirstName], 1), " ", [LastName]}), type text),
-				    #"Merged Columns" = Table.CombineColumns(#"Added Custom Column",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name")
+				    #"Merged Columns" = Table.CombineColumns(#"Added Custom Column",{"FirstName", "LastName"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Name"),
+				    // --- folded-in Silver employee attributes (formerly EmployeeBasicInfo) ---
+				    EmpInfo = Value.NativeQuery(_SilverSource, "SELECT NetHealthId AS Person_ID, EmployeeNumber AS EmployeeNo, FullName, JobTitle, Discipline AS Credentials, TRY_CAST(JobCode AS int) AS JobCodeId FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY NetHealthId ORDER BY SourceType, Username) AS rn FROM dbo.employee WHERE NetHealthId IS NOT NULL AND ISNULL(EmployeeNumber,'') <> '' AND EmployeeNumber <> '99999') x WHERE x.rn = 1"),
+				    #"Renamed EmpInfo" = Table.RenameColumns(EmpInfo, {{"FullName", "Therapist Name"}}),
+				    #"Joined EmpInfo" = Table.NestedJoin(#"Merged Columns", {"Person_ID"}, #"Renamed EmpInfo", {"Person_ID"}, "_e", JoinKind.LeftOuter),
+				    #"Expanded EmpInfo" = Table.ExpandTableColumn(#"Joined EmpInfo", "_e", {"EmployeeNo", "Therapist Name", "JobTitle", "Credentials", "JobCodeId"}, {"EmployeeNo", "Therapist Name", "JobTitle", "Credentials", "JobCodeId"})
 				in
-				    #"Merged Columns"
+				    #"Expanded EmpInfo"
 
 	annotation PBI_ResultType = Table
 

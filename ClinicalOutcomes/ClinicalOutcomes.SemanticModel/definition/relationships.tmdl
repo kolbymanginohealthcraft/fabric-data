@@ -161,17 +161,11 @@ relationship 73b05198-0569-9b79-1b45-a35db1209519
 	fromColumn: ExpectedDischargeDestination.LibraryScaleValue_ID
 	toColumn: EDD.ID
 
-relationship AutoDetected_888f9b44-e882-419e-85c3-723c1e070008
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: EmployeeBasicInfo.Person_ID
-	toColumn: Employees.Person_ID
-
 relationship c0298ef0-8e4b-bb0f-ea77-9d23b2fa677f
 	crossFilteringBehavior: bothDirections
 	fromCardinality: one
 	fromColumn: FTEType.'Employee ID'
-	toColumn: EmployeeBasicInfo.EmployeeNo
+	toColumn: Employees.EmployeeNo
 
 relationship c11cbe2c-183a-15bb-eea6-20174f776526
 	crossFilteringBehavior: bothDirections
@@ -226,7 +220,7 @@ relationship 9d8a4f47-d684-7bc9-32af-f05d1dc4a46c
 	toColumn: Patients.PatientID
 
 relationship AutoDetected_941d6392-fce1-47ac-b70d-aafa8f0f0c9c
-	fromColumn: EmployeeBasicInfo.JobCodeId
+	fromColumn: Employees.JobCodeId
 	toColumn: 'Peer Group'.'Job Code'
 
 relationship d88c4b6e-28bc-0ae9-b2b1-7f140150f342

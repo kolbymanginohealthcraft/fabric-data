@@ -569,19 +569,6 @@
         },
         {
           "location": {
-            "x": 2440,
-            "y": 2520
-          },
-          "nodeIndex": "EmployeeBasicInfo",
-          "nodeLineageTag": "b7fd8bfc-d16e-4092-965a-0605a861dac3",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 51
-        },
-        {
-          "location": {
             "x": 2740,
             "y": 2520
           },
@@ -1172,19 +1159,6 @@
             "width": 240
           },
           "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 340,
-            "y": 40
-          },
-          "nodeIndex": "EmployeeBasicInfo",
-          "nodeLineageTag": "b7fd8bfc-d16e-4092-965a-0605a861dac3",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 1
         },
         {
           "location": {
