@@ -203,6 +203,10 @@ relationship 39e30131-d82f-4539-97ae-869e215160a6
 	fromColumn: OutcomeSummary.LibraryItem_ID
 	toColumn: Dictionary.LibraryItem_ID
 
+relationship 11b10000-0000-4000-8000-0000000000a1
+	fromColumn: OutcomeSummary.LibraryItem_ID
+	toColumn: LibraryItem.LibraryItem_ID
+
 relationship a4adb311-dfeb-203e-5cb4-96a247d77115
 	crossFilteringBehavior: bothDirections
 	fromColumn: OutcomeSummary.TxTrack_ID

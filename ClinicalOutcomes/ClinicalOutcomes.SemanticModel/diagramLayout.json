@@ -748,6 +748,19 @@
             "width": 220
           },
           "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 40,
+            "y": 40
+          },
+          "nodeIndex": "LibraryItem",
+          "nodeLineageTag": "11b10000-0000-4000-8000-000000000001",
+          "size": {
+            "height": 100,
+            "width": 200
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",
@@ -1103,6 +1116,19 @@
             "width": 240
           },
           "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 40,
+            "y": 40
+          },
+          "nodeIndex": "LibraryItem",
+          "nodeLineageTag": "11b10000-0000-4000-8000-000000000001",
+          "size": {
+            "height": 100,
+            "width": 200
+          },
+          "zIndex": 0
         }
       ],
       "name": "Outcomes",
