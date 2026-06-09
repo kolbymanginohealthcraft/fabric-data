@@ -46,17 +46,7 @@ relationship cfa99d51-0ce4-4fc5-894b-2950c8a64b61
 relationship b6ff7395-fe56-4da9-a26e-3178fe96eaaa
 	crossFilteringBehavior: bothDirections
 	fromColumn: Patients.Facility
-	toColumn: 'Aegis Contract'.Contract_Number__c
-
-relationship c408437e-240f-45c2-a3f0-ecb6d1abea63
-	crossFilteringBehavior: bothDirections
-	fromColumn: 'Aegis Contract'.Account__c
-	toColumn: Account.Id
-
-relationship 6bf26691-747a-4cd8-99de-9a22317ea4b2
-	crossFilteringBehavior: bothDirections
-	fromColumn: 'Aegis Contract'.Chain_Account__c
-	toColumn: Chain.Id
+	toColumn: Facility.FacilityNumber
 
 relationship 138f499d-a430-41e4-9fb9-a0d7f4f4c279
 	crossFilteringBehavior: bothDirections
@@ -122,7 +112,7 @@ relationship b69078a5-8f4c-4e17-88ca-bb5cfb2e7ad9
 relationship 0c4f4b51-743b-4130-92e6-aaa97ff9a84b
 	crossFilteringBehavior: bothDirections
 	fromColumn: vw_UpnFacilityAccess.FacilityId
-	toColumn: 'Aegis Contract'.Contract_Number__c
+	toColumn: Facility.FacilityNumber
 
 relationship 7fc7692b-639f-477f-b9da-86e56f83e690
 	crossFilteringBehavior: bothDirections
@@ -139,12 +129,6 @@ relationship AutoDetected_8687f4c6-9ebb-4bff-b4ba-6657356e01d1
 	crossFilteringBehavior: bothDirections
 	fromColumn: Treatments.Person_ID
 	toColumn: Employees.Person_ID
-
-relationship 1979577c-bfc5-594a-5e4e-909910d0a183
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: Tech.ID
-	toColumn: 'Aegis Contract'.Contract_Number__c
 
 relationship AutoDetected_0824a98b-b04f-4ca7-b692-d36b27c694f5
 	crossFilteringBehavior: bothDirections
@@ -165,11 +149,6 @@ relationship 01db020c-65e2-2f3d-99a8-cd83acfa69f8
 	crossFilteringBehavior: bothDirections
 	fromColumn: DX_Cases.PatientCase_ID
 	toColumn: StayCases.PatientCase_ID
-
-relationship 5d6b4764-ef83-b3d0-747e-92eae876ae2d
-	crossFilteringBehavior: bothDirections
-	fromColumn: Perspectives.FacilityId
-	toColumn: 'Aegis Contract'.Contract_Number__c
 
 relationship 240b19de-d08a-7678-dabc-1b7a7335f972
 	crossFilteringBehavior: bothDirections
@@ -204,12 +183,6 @@ relationship 82f15a19-a717-4f14-d11d-e29c3ccd7103
 	crossFilteringBehavior: bothDirections
 	fromColumn: PriorLivingEnvironment.LibraryScaleValue_ID
 	toColumn: PLE.ID
-
-relationship 686a8f46-623a-f546-7a40-af3d6467a0b7
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: VW_NHAegisFacilities.FacilityId
-	toColumn: 'Aegis Contract'.Contract_Number__c
 
 relationship 43beaaa5-fec0-41a0-a5fe-2b61bead6144
 	fromColumn: StayCases.TherapyEndDate

@@ -35,13 +35,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Account"
+                      "Entity": "Facility"
                     }
                   },
                   "Property": "Customer Name"
                 }
               },
-              "queryRef": "Account.Customer Name",
+              "queryRef": "Facility.Customer Name",
               "nativeQueryRef": "Provider:",
               "displayName": "Provider:"
             }
@@ -292,7 +292,7 @@
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "Customer Name"

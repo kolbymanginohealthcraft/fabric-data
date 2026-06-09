@@ -1638,8 +1638,8 @@ table MeasureTable
 	measure 'ActiveFilters: State' =
 			
 			IF(
-			    ISFILTERED(Account[BillingState]),
-			    CONCATENATEX(VALUES(Account[BillingState]),Account[BillingState],", "),
+			    ISFILTERED(Facility[BillingState]),
+			    CONCATENATEX(VALUES(Facility[BillingState]),Facility[BillingState],", "),
 			    "All"
 			)
 		lineageTag: 612541c1-b846-48e4-b575-b2a6fc542bbf
@@ -2442,7 +2442,7 @@ table MeasureTable
 			
 			var newline = UNICHAR(13)&UNICHAR(10)
 			
-			var overridedivision = IF(([Total Cases]<>[Total Cases BM] || ISFILTERED(VW_NHAegisFacilities[Division])),"Division(s): "&CONCATENATEX(VALUES(VW_NHAegisFacilities[Division]),VW_NHAegisFacilities[Division],", "))
+			var overridedivision = IF(([Total Cases]<>[Total Cases BM] || ISFILTERED(Facility[Division])),"Division(s): "&CONCATENATEX(VALUES(Facility[Division]),Facility[Division],", "))
 			var concatTable = FILTER({overridedivision},NOT(ISBLANK([Value])))
 			return CONCATENATEX(concatTable,[Value],newline)
 		lineageTag: 84aa1836-d8ee-4bb0-a2cd-3adaaf948954

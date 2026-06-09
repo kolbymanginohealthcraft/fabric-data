@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Account"
+                      "Entity": "Facility"
                     }
                   },
                   "Property": "Name"
                 }
               },
-              "queryRef": "Account.Name",
+              "queryRef": "Facility.Name",
               "nativeQueryRef": "Name"
             },
             {
@@ -245,7 +245,7 @@
             }
           },
           "selector": {
-            "metadata": "Account.Name"
+            "metadata": "Facility.Name"
           }
         },
         {
@@ -445,7 +445,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "Name"

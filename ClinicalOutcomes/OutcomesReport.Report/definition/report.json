@@ -135,7 +135,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Aegis Contract"
+                "Entity": "Facility"
               }
             },
             "Property": "Contract Label"
@@ -152,7 +152,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "Name"
@@ -184,10 +184,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Chain"
+                "Entity": "Facility"
               }
             },
-            "Property": "Name"
+            "Property": "ChainName"
           }
         },
         "type": "Categorical",
@@ -201,7 +201,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "BillingState"
@@ -217,7 +217,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "Division"
@@ -233,7 +233,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "Region"
@@ -249,7 +249,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "District"
@@ -266,7 +266,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Perspectives"
+                "Entity": "vw_UpnFacilityAccess"
               }
             },
             "Property": "UPN"
@@ -331,10 +331,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Aegis Contract"
+                "Entity": "Facility"
               }
             },
-            "Property": "Contract_Number__c"
+            "Property": "FacilityNumber"
           }
         },
         "type": "Advanced",
@@ -343,7 +343,7 @@
           "From": [
             {
               "Name": "a",
-              "Entity": "Aegis Contract",
+              "Entity": "Facility",
               "Type": 0
             }
           ],
@@ -361,7 +361,7 @@
                               "Source": "a"
                             }
                           },
-                          "Property": "Contract_Number__c"
+                          "Property": "FacilityNumber"
                         }
                       },
                       "Right": {
@@ -498,7 +498,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "Department"
@@ -510,7 +510,7 @@
           "From": [
             {
               "Name": "v",
-              "Entity": "VW_NHAegisFacilities",
+              "Entity": "Facility",
               "Type": 0
             }
           ],

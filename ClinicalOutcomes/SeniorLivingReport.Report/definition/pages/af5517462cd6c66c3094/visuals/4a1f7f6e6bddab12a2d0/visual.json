@@ -280,13 +280,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Account"
+                      "Entity": "Facility"
                     }
                   },
                   "Property": "Total Facilities"
                 }
               },
-              "queryRef": "Account.Total Facilities",
+              "queryRef": "Facility.Total Facilities",
               "nativeQueryRef": "Total Facilities",
               "displayName": "Total Facilities"
             },

@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Aegis Contract"
+                      "Entity": "Facility"
                     }
                   },
                   "Property": "Qualified Customer"
                 }
               },
-              "queryRef": "Aegis Contract.Qualified Customer",
+              "queryRef": "Facility.Qualified Customer",
               "nativeQueryRef": "Qualified Customer",
               "active": true
             }
@@ -372,7 +372,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Aegis Contract"
+                "Entity": "Facility"
               }
             },
             "Property": "Qualified Customer"

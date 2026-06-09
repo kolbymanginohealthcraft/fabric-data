@@ -39,16 +39,15 @@ table BenchmarkTable
 				
 				
 				
-				VAR __Div = VALUES(VW_NHAegisFacilities[Department])   -- capture current Division selection
+				VAR __Div = VALUES(Facility[Department])   -- capture current Division selection
 				RETURN
 				CALCULATE(
 				    SELECTEDMEASURE(),
 				
 				    // reset almost everything
-				    REMOVEFILTERS('Aegis Contract'),
+				    REMOVEFILTERS(Facility),
 				    REMOVEFILTERS(StayCases[PatientCase_ID]),
 				    REMOVEFILTERS(vw_UpnFacilityAccess),
-				    REMOVEFILTERS(Perspectives),
 				    REMOVEFILTERS(Employees),
 				    REMOVEFILTERS(Patients),
 				

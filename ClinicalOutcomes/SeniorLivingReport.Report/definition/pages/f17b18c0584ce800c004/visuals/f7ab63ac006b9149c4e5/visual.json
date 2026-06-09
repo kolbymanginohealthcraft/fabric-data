@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Chain"
+                      "Entity": "Facility"
                     }
                   },
-                  "Property": "Name"
+                  "Property": "ChainName"
                 }
               },
-              "queryRef": "Chain.Name",
+              "queryRef": "Facility.ChainName",
               "nativeQueryRef": "Name"
             },
             {
@@ -300,7 +300,7 @@
             }
           },
           "selector": {
-            "metadata": "Chain.Name"
+            "metadata": "Facility.ChainName"
           }
         }
       ],
@@ -491,10 +491,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Chain"
+                "Entity": "Facility"
               }
             },
-            "Property": "Name"
+            "Property": "ChainName"
           }
         },
         "type": "Categorical",

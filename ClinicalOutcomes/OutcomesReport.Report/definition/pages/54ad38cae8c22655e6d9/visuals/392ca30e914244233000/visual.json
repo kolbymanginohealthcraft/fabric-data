@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Account"
+                      "Entity": "Facility"
                     }
                   },
                   "Property": "Customer Name"
                 }
               },
-              "queryRef": "Account.Customer Name",
+              "queryRef": "Facility.Customer Name",
               "nativeQueryRef": "Customer Name"
             }
           ]
@@ -123,7 +123,7 @@
             }
           },
           "selector": {
-            "metadata": "Account.Customer Name"
+            "metadata": "Facility.Customer Name"
           }
         }
       ],
@@ -277,7 +277,7 @@
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "Customer Name"

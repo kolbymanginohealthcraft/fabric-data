@@ -322,32 +322,6 @@
         },
         {
           "location": {
-            "x": 3940,
-            "y": 1280
-          },
-          "nodeIndex": "Aegis Contract",
-          "nodeLineageTag": "9277a1a4-0aee-482d-b4c0-d24d5374606b",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 24
-        },
-        {
-          "location": {
-            "x": 4240,
-            "y": 1280
-          },
-          "nodeIndex": "VW_NHAegisFacilities",
-          "nodeLineageTag": "7dd4cb6d-457e-4cdf-97ca-ee634e0711f8",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 25
-        },
-        {
-          "location": {
             "x": 40,
             "y": 1900
           },
@@ -504,45 +478,6 @@
         },
         {
           "location": {
-            "x": 3640,
-            "y": 1900
-          },
-          "nodeIndex": "Account",
-          "nodeLineageTag": "de80411b-29fe-4d92-96a0-79f90f45680b",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 38
-        },
-        {
-          "location": {
-            "x": 3940,
-            "y": 1900
-          },
-          "nodeIndex": "Chain",
-          "nodeLineageTag": "657c25e3-3c08-4758-9be1-358671d9b79d",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 39
-        },
-        {
-          "location": {
-            "x": 4240,
-            "y": 1900
-          },
-          "nodeIndex": "Tech",
-          "nodeLineageTag": "c593e078-30bf-4d51-8863-85455d258daf",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 40
-        },
-        {
-          "location": {
             "x": 4540,
             "y": 1900
           },
@@ -553,19 +488,6 @@
             "width": 240
           },
           "zIndex": 41
-        },
-        {
-          "location": {
-            "x": 4840,
-            "y": 1900
-          },
-          "nodeIndex": "Perspectives",
-          "nodeLineageTag": "db30dcdf-20f0-4259-a2e7-656c3dbd9ad7",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 42
         },
         {
           "location": {
@@ -631,19 +553,6 @@
             "width": 240
           },
           "zIndex": 47
-        },
-        {
-          "location": {
-            "x": 1540,
-            "y": 2520
-          },
-          "nodeIndex": "Weights",
-          "nodeLineageTag": "a6c23eff-d28b-4155-8ebc-6f1df671277e",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 48
         },
         {
           "location": {
@@ -852,6 +761,19 @@
             "width": 240
           },
           "zIndex": 64
+        },
+        {
+          "location": {
+            "x": 40,
+            "y": 40
+          },
+          "nodeIndex": "Facility",
+          "nodeLineageTag": "fac11000-0000-4000-8000-000000000001",
+          "size": {
+            "height": 120,
+            "width": 220
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",
@@ -1228,65 +1150,13 @@
             "x": 40,
             "y": 40
           },
-          "nodeIndex": "Account",
-          "nodeLineageTag": "de80411b-29fe-4d92-96a0-79f90f45680b",
+          "nodeIndex": "Facility",
+          "nodeLineageTag": "fac11000-0000-4000-8000-000000000001",
           "size": {
-            "height": 380,
-            "width": 240
+            "height": 120,
+            "width": 220
           },
           "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 340,
-            "y": 40
-          },
-          "nodeIndex": "Chain",
-          "nodeLineageTag": "657c25e3-3c08-4758-9be1-358671d9b79d",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 1
-        },
-        {
-          "location": {
-            "x": 640,
-            "y": 40
-          },
-          "nodeIndex": "Aegis Contract",
-          "nodeLineageTag": "9277a1a4-0aee-482d-b4c0-d24d5374606b",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 2
-        },
-        {
-          "location": {
-            "x": 940,
-            "y": 40
-          },
-          "nodeIndex": "VW_NHAegisFacilities",
-          "nodeLineageTag": "7dd4cb6d-457e-4cdf-97ca-ee634e0711f8",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 3
-        },
-        {
-          "location": {
-            "x": 40,
-            "y": 480
-          },
-          "nodeIndex": "Tech",
-          "nodeLineageTag": "c593e078-30bf-4d51-8863-85455d258daf",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 4
         }
       ],
       "name": "Places & Hierarchy",
@@ -1328,19 +1198,6 @@
             "width": 240
           },
           "zIndex": 1
-        },
-        {
-          "location": {
-            "x": 640,
-            "y": 40
-          },
-          "nodeIndex": "Perspectives",
-          "nodeLineageTag": "db30dcdf-20f0-4259-a2e7-656c3dbd9ad7",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 2
         },
         {
           "location": {
@@ -1553,19 +1410,6 @@
             "width": 240
           },
           "zIndex": 4
-        },
-        {
-          "location": {
-            "x": 340,
-            "y": 480
-          },
-          "nodeIndex": "Weights",
-          "nodeLineageTag": "a6c23eff-d28b-4155-8ebc-6f1df671277e",
-          "size": {
-            "height": 380,
-            "width": 240
-          },
-          "zIndex": 5
         }
       ],
       "name": "Diagnosis",
