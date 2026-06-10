@@ -1,0 +1,115 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "5a5a5a5a5a5a5a5a5a5a",
+  "position": {
+    "x": 248,
+    "y": 72,
+    "z": 1,
+    "height": 600,
+    "width": 696,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ScorecardMetrics"
+                    }
+                  },
+                  "Property": "Metric"
+                }
+              },
+              "queryRef": "ScorecardMetrics.Metric",
+              "nativeQueryRef": "Metric",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ScorecardMetrics"
+                    }
+                  },
+                  "Property": "Stay"
+                }
+              },
+              "queryRef": "ScorecardMetrics.Stay",
+              "nativeQueryRef": "Stay",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ScorecardMetrics"
+                    }
+                  },
+                  "Property": "Raw Value"
+                }
+              },
+              "queryRef": "ScorecardMetrics.Raw Value",
+              "nativeQueryRef": "Raw Value"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ScorecardMetrics"
+                    }
+                  },
+                  "Property": "Weighted Value"
+                }
+              },
+              "queryRef": "ScorecardMetrics.Weighted Value",
+              "nativeQueryRef": "Weighted Value"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ScorecardMetrics"
+                    }
+                  },
+                  "Property": "Percentile Rank"
+                }
+              },
+              "queryRef": "ScorecardMetrics.Percentile Rank",
+              "nativeQueryRef": "Percentile Rank"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Therapist Scorecard — Raw / Weighted / Percentile (matches the performance evaluation)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

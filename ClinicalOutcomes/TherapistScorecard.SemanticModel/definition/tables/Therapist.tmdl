@@ -1,0 +1,86 @@
+/// One row per scored therapist (from therapist-scorecard-feed.csv). UPN drives the per-therapist
+/// RLS role so a clinician sees only their own scorecard. Role/ScorecardGroup/Template decide which
+/// metric template applies (Template A full vs B reduced) — same categorization as the evaluation.
+table Therapist
+	lineageTag: c576980b-b4c5-46d7-28e9-546576879abc
+
+	column Person_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: d687a91c-c5d6-47e8-39fa-6576879abcde
+		summarizeBy: none
+		sourceColumn: Person_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FullName
+		dataType: string
+		lineageTag: e798ba2d-d6e7-48f9-4a0b-76879abcdef0
+		summarizeBy: none
+		sourceColumn: FullName
+
+		annotation SummarizationSetBy = Automatic
+
+	column UPN
+		dataType: string
+		lineageTag: f8a9cb3e-e7f8-490a-5b1c-879abcdef012
+		summarizeBy: none
+		sourceColumn: UPN
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeNumber
+		dataType: string
+		lineageTag: 09badc4f-f809-401b-6c2d-9abcdef01234
+		summarizeBy: none
+		sourceColumn: EmployeeNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discipline
+		dataType: string
+		lineageTag: 1acbed50-0910-412c-7d3e-abcdef012345
+		summarizeBy: none
+		sourceColumn: Discipline
+
+		annotation SummarizationSetBy = Automatic
+
+	column Role
+		dataType: string
+		lineageTag: 2bdcfe61-1a21-423d-8e4f-bcdef0123456
+		summarizeBy: none
+		sourceColumn: Role
+
+		annotation SummarizationSetBy = Automatic
+
+	column ScorecardGroup
+		dataType: string
+		lineageTag: 3ced022f-2b32-434e-9f50-cdef01234567
+		summarizeBy: none
+		sourceColumn: ScorecardGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	column Template
+		dataType: string
+		lineageTag: 4dfe1330-3c43-445f-a061-def012345678
+		summarizeBy: none
+		sourceColumn: Template
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Therapist = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\KLM0001\Documents\Dev\Work\fabric-data\data\therapist-scorecard-feed.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Kept = Table.SelectColumns(Promoted, {"Person_ID", "FullName", "UPN", "EmployeeNumber", "Discipline", "Role", "ScorecardGroup", "Template"}),
+				    LowerUPN = Table.TransformColumns(Kept, {{"UPN", each Text.Lower(Text.From(_)), type text}}),
+				    Typed = Table.TransformColumnTypes(LowerUPN, {{"Person_ID", Int64.Type}, {"FullName", type text}, {"UPN", type text}, {"EmployeeNumber", type text}, {"Discipline", type text}, {"Role", type text}, {"ScorecardGroup", type text}, {"Template", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Therapist Scorecard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c2d3e4f5-6a71-4b82-9c03-1d2e3f405162"
+  }
+}

@@ -1,0 +1,8 @@
+/// Each therapist sees only their own scorecard row (matches the performance evaluation).
+role 'Therapist Self'
+	modelPermission: read
+
+	tablePermission Therapist = Therapist[UPN] = LOWER(USERPRINCIPALNAME())
+
+	annotation PBI_Id = f30a5ae71119415ba00d50145c180a3d
+

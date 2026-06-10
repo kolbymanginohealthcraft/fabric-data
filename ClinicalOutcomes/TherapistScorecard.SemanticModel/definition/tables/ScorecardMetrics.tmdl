@@ -1,0 +1,86 @@
+/// One row per (therapist x metric x stay) from the eval pipeline output. Raw/Weighted/Percentile
+/// are the SAME numbers the performance evaluation shows. Combines therapist-metrics.csv (clinical)
+/// + satisfaction-feed.csv (Advocacy Score, Response Rate). Dev source = local committed CSVs;
+/// production = IT-ingested medallion table (same boundary as the rest of the pipeline).
+table ScorecardMetrics
+	lineageTag: 2b7c9e10-1a2b-4c3d-8e4f-5a6b7c8d9e01
+
+	measure 'Raw Value' = AVERAGE(ScorecardMetrics[Raw])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 3c8d0f21-2b3c-4d4e-9f50-6b7c8d9e0f12
+
+	measure 'Weighted Value' = AVERAGE(ScorecardMetrics[Weighted])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 4d9e1032-3c4d-4e5f-a061-7c8d9e0f1023
+
+	measure 'Percentile Rank' = AVERAGE(ScorecardMetrics[Percentile])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5e0f2143-4d5e-4f60-b172-8d9e0f102134
+
+	column Person_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f103254-5e6f-4071-c283-9e0f10213245
+		summarizeBy: none
+		sourceColumn: Person_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Metric
+		dataType: string
+		lineageTag: 70214365-6f70-4182-d394-0f1021324356
+		summarizeBy: none
+		sourceColumn: Metric
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stay
+		dataType: string
+		lineageTag: 81325476-7081-4293-e4a5-102132435467
+		summarizeBy: none
+		sourceColumn: Stay
+
+		annotation SummarizationSetBy = Automatic
+
+	column Raw
+		dataType: double
+		isHidden
+		lineageTag: 92436587-8192-43a4-f5b6-213243546578
+		summarizeBy: none
+		sourceColumn: Raw
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weighted
+		dataType: double
+		isHidden
+		lineageTag: a3547698-92a3-44b5-06c7-324354657689
+		summarizeBy: none
+		sourceColumn: Weighted
+
+		annotation SummarizationSetBy = Automatic
+
+	column Percentile
+		dataType: double
+		isHidden
+		lineageTag: b465879a-a3b4-45c6-17d8-43546576879a
+		summarizeBy: none
+		sourceColumn: Percentile
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ScorecardMetrics = m
+		mode: import
+		source =
+				let
+				    ClinicalSrc = Csv.Document(File.Contents("C:\Users\KLM0001\Documents\Dev\Work\fabric-data\data\therapist-metrics.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Clinical = Table.SelectColumns(Table.PromoteHeaders(ClinicalSrc, [PromoteAllScalars = true]), {"Person_ID", "Metric", "Stay", "Raw", "Weighted", "Percentile"}),
+				    SatSrc = Csv.Document(File.Contents("C:\Users\KLM0001\Documents\Dev\Work\fabric-data\data\satisfaction-feed.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Sat = Table.SelectColumns(Table.PromoteHeaders(SatSrc, [PromoteAllScalars = true]), {"Person_ID", "Metric", "Stay", "Raw", "Weighted", "Percentile"}),
+				    Combined = Table.Combine({Clinical, Sat}),
+				    Typed = Table.TransformColumnTypes(Combined, {{"Person_ID", Int64.Type}, {"Metric", type text}, {"Stay", type text}, {"Raw", type number}, {"Weighted", type number}, {"Percentile", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

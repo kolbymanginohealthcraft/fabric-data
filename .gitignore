@@ -35,3 +35,5 @@ queries/.debug-render.js
 
 # Power BI Desktop local binary data cache (never commit)
 **/.pbi/*.abf
+# All PBIP .pbi/ local state (cache + per-user editor/local settings) — never commit
+**/.pbi/
