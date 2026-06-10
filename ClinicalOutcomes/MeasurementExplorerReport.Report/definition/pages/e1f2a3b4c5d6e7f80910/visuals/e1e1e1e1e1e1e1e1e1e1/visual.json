@@ -1,0 +1,128 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "e1e1e1e1e1e1e1e1e1e1",
+  "position": {
+    "x": 248,
+    "y": 72,
+    "z": 1,
+    "height": 600,
+    "width": 696,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Physician"
+                    }
+                  },
+                  "Property": "Name"
+                }
+              },
+              "queryRef": "Physician.Name",
+              "nativeQueryRef": "Name",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Total Assessments"
+                }
+              },
+              "queryRef": "Assessments.Total Assessments",
+              "nativeQueryRef": "Total Assessments"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Total GG Assessments"
+                }
+              },
+              "queryRef": "Assessments.Total GG Assessments",
+              "nativeQueryRef": "Total GG Assessments"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "% ANA Responses"
+                }
+              },
+              "queryRef": "Assessments.% ANA Responses",
+              "nativeQueryRef": "% ANA Responses"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Raw Admit"
+                }
+              },
+              "queryRef": "Assessments.Raw Admit",
+              "nativeQueryRef": "Raw Admit"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Raw Discharge"
+                }
+              },
+              "queryRef": "Assessments.Raw Discharge",
+              "nativeQueryRef": "Raw Discharge"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Measurement & Outcomes by Physician'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
