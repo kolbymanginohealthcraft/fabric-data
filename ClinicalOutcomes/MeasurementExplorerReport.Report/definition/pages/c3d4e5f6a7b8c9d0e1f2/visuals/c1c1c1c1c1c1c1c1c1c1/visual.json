@@ -1,0 +1,129 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "c1c1c1c1c1c1c1c1c1c1",
+  "position": {
+    "x": 248,
+    "y": 72,
+    "z": 1,
+    "height": 600,
+    "width": 696,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Outcomes Custom Scales"
+                    }
+                  },
+                  "Property": "Scale Name"
+                }
+              },
+              "queryRef": "Outcomes Custom Scales.Scale Name",
+              "nativeQueryRef": "Scale Name",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Outcomes Custom Scales"
+                    }
+                  },
+                  "Property": "Response Description"
+                }
+              },
+              "queryRef": "Outcomes Custom Scales.Response Description",
+              "nativeQueryRef": "Response Description",
+              "active": true
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Documents"
+                    }
+                  },
+                  "Property": "DocumentType"
+                }
+              },
+              "queryRef": "Documents.DocumentType",
+              "nativeQueryRef": "DocumentType",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Total Assessments"
+                }
+              },
+              "queryRef": "Assessments.Total Assessments",
+              "nativeQueryRef": "Total Assessments"
+            }
+          ]
+        }
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "Outcomes Custom Scales.Scale Name"
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Outcomes Custom Scales.Response Description"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Response Distribution — Admit vs Discharge (count of assessments)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

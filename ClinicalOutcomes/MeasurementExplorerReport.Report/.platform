@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Measurement Explorer"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7c3e9a21-4b8d-4f6a-9c2e-1d5b8a4f0e22"
+  }
+}
