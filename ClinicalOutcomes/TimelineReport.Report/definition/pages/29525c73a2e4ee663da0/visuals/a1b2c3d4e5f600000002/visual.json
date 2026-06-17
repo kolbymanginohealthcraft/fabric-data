@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
-  "name": "d925c931d8759795d295",
+  "name": "a1b2c3d4e5f600000002",
   "position": {
-    "x": 576,
-    "y": 208,
-    "z": 3000,
-    "height": 96,
-    "width": 232.00000000000003,
-    "tabOrder": 3000
+    "x": 8,
+    "y": 160,
+    "z": 18000,
+    "height": 200,
+    "width": 128,
+    "tabOrder": 18000
   },
   "visual": {
     "visualType": "slicer",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "StayCases"
+                      "Entity": "ServiceTouch"
                     }
                   },
-                  "Property": "Expected Discharge Destination"
+                  "Property": "Residence"
                 }
               },
-              "queryRef": "StayCases.EDD",
-              "nativeQueryRef": "EDD",
+              "queryRef": "ServiceTouch.Residence",
+              "nativeQueryRef": "Residence",
               "active": true
             }
           ]
@@ -64,13 +64,6 @@
                   "Value": "8D"
                 }
               }
-            },
-            "expandCollapseToggleType": {
-              "expr": {
-                "Literal": {
-                  "Value": "2D"
-                }
-              }
             }
           }
         }
@@ -95,19 +88,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Discharge Destination (expected)'"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 2,
-                      "Percent": 0
-                    }
-                  }
+                  "Value": "'Place of Residence'"
                 }
               }
             },
@@ -145,56 +126,11 @@
                   "Value": "false"
                 }
               }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Slicer: D/C Dest (exp)'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "visualHeader": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
             }
           }
         }
       ]
     },
-    "syncGroup": {
-      "groupName": "Expected Discharge Destination",
-      "fieldChanges": true,
-      "filterChanges": true
-    },
     "drillFilterOtherVisuals": true
-  },
-  "parentGroupName": "6586c54605d29aa7ad84",
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "42f44070aeeb1148b18a",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "StayCases"
-              }
-            },
-            "Property": "Expected Discharge Destination"
-          }
-        },
-        "type": "Categorical",
-        "isHiddenInViewMode": true
-      }
-    ]
   }
 }

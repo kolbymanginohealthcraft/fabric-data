@@ -20,15 +20,48 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Calendar"
+                      "Entity": "ServiceTouch"
                     }
                   },
-                  "Property": "YearMonth"
+                  "Property": "MonthStart"
                 }
               },
-              "queryRef": "Calendar.YearMonth",
-              "nativeQueryRef": "YearMonth",
-              "active": true
+              "queryRef": "ServiceTouch.MonthStart",
+              "nativeQueryRef": "Month",
+              "active": true,
+              "displayName": "Month"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ServiceTouch"
+                    }
+                  },
+                  "Property": "QuarterLabel"
+                }
+              },
+              "queryRef": "ServiceTouch.QuarterLabel",
+              "nativeQueryRef": "Quarter",
+              "active": false,
+              "displayName": "Quarter"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Period Grain"
+                    }
+                  },
+                  "Property": "Period Grain"
+                }
+              },
+              "index": 0,
+              "length": 2
             }
           ]
         },

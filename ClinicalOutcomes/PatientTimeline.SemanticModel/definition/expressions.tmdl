@@ -70,27 +70,8 @@ expression _RoxAegis =
 
 	annotation PBI_ResultType = Function
 
-/// REUSABLE SQL FRAGMENT: subquery returning every qualifying PatientCase_ID.
-/// A case qualifies if its case-level TherapyEndDate is in window (SNF signal)
-/// OR any of its CaseTracks has EndDate in window (SL signal — case-level end
-/// is often null/unreliable for SL, so the track is authoritative). Inlined
-/// into each fact table's WHERE so the cohort filter pushes down to Fabric SQL.
-/// PatientTimeline ANCHOR — patients with any STAY active in the window
-/// (admitted, discharged, or still in within ~2 years). Activity-based, NOT
-/// therapy-completion based, so it INCLUDES never-therapy and in-progress
-/// patients (the whole point of this model vs the outcomes cohort).
-expression _QualifyingPatientIdsSql =
-		"(SELECT s.Resident_ID FROM dbo.Stay s WHERE s.AdmitDate >= '" & _CohortAnchorDateText & "' OR s.DischargeDate >= '" & _CohortAnchorDateText & "' OR s.DischargeDate IS NULL)"
-	lineageTag: aaaaaaaa-0000-0000-0000-0000000000a1
-	queryGroup: FabricTables
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Text
-
 /// All cases belonging to qualifying patients (incl. open/in-progress cases).
-expression _QualifyingCaseIdsSql =
-		"(SELECT pc.PatientCase_ID FROM dbo.PatientCase pc INNER JOIN dbo.Stay s ON s.Stay_ID = pc.Stay_ID WHERE ISNULL(pc.IsDeletedCase,0)=0 AND s.Resident_ID IN " & _QualifyingPatientIdsSql & ")"
+expression _QualifyingCaseIdsSql = "(SELECT pc.PatientCase_ID FROM dbo.PatientCase pc INNER JOIN dbo.Stay s ON s.Stay_ID = pc.Stay_ID WHERE ISNULL(pc.IsDeletedCase,0)=0 AND s.Resident_ID IN " & _QualifyingPatientIdsSql & ")"
 	lineageTag: aaaaaaaa-0000-0000-0000-000000000007
 	queryGroup: FabricTables
 
@@ -292,4 +273,21 @@ expression _AegisPatient =
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Function
+
+/// REUSABLE SQL FRAGMENT: subquery returning every qualifying PatientCase_ID.
+/// A case qualifies if its case-level TherapyEndDate is in window (SNF signal)
+/// OR any of its CaseTracks has EndDate in window (SL signal — case-level end
+/// is often null/unreliable for SL, so the track is authoritative). Inlined
+/// into each fact table's WHERE so the cohort filter pushes down to Fabric SQL.
+/// PatientTimeline ANCHOR — patients with any STAY active in the window
+/// (admitted, discharged, or still in within ~2 years). Activity-based, NOT
+/// therapy-completion based, so it INCLUDES never-therapy and in-progress
+/// patients (the whole point of this model vs the outcomes cohort).
+expression _QualifyingPatientIdsSql = "(SELECT s.Resident_ID FROM dbo.Stay s WHERE s.AdmitDate >= '" & _CohortAnchorDateText & "' OR s.DischargeDate >= '" & _CohortAnchorDateText & "' OR s.DischargeDate IS NULL)"
+	lineageTag: aaaaaaaa-0000-0000-0000-0000000000a1
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
 

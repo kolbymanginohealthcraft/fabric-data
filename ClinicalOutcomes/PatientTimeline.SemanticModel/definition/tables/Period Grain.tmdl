@@ -1,0 +1,48 @@
+table 'Period Grain'
+	lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6e10
+
+	column 'Period Grain'
+		lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6e11
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Period Grain Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Period Grain Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Period Grain Fields'
+		isHidden
+		lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6e12
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Period Grain Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Period Grain Order'
+		isHidden
+		formatString: 0
+		lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6e13
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Period Grain' = calculated
+		mode: import
+		source =
+				{
+				    ("Month", NAMEOF('ServiceTouch'[MonthStart]), 0),
+				    ("Quarter", NAMEOF('ServiceTouch'[QuarterLabel]), 1)
+				}
+
+	annotation PBI_Id = 5e9a2c107d834b6e9c442f1a8b7d6e00
+

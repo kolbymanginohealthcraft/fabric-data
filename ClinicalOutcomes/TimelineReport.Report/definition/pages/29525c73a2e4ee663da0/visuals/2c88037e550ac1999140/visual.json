@@ -20,15 +20,48 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Calendar"
+                      "Entity": "ServiceTouch"
                     }
                   },
-                  "Property": "YearMonth"
+                  "Property": "MonthStart"
                 }
               },
-              "queryRef": "Calendar.YearMonth",
-              "nativeQueryRef": "YearMonth",
-              "active": true
+              "queryRef": "ServiceTouch.MonthStart",
+              "nativeQueryRef": "Month",
+              "active": true,
+              "displayName": "Month"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ServiceTouch"
+                    }
+                  },
+                  "Property": "QuarterLabel"
+                }
+              },
+              "queryRef": "ServiceTouch.QuarterLabel",
+              "nativeQueryRef": "Quarter",
+              "active": false,
+              "displayName": "Quarter"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Period Grain"
+                    }
+                  },
+                  "Property": "Period Grain"
+                }
+              },
+              "index": 0,
+              "length": 2
             }
           ]
         },
@@ -123,7 +156,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Patients Touched (patient-level optional services)'"
+                  "Value": "'Patients Touched (additional services)'"
                 }
               }
             }
@@ -177,35 +210,42 @@
                     [
                       {
                         "Literal": {
-                          "Value": "'PLOS - Nursing Restorative'"
+                          "Value": "'Nursing Restorative'"
                         }
                       }
                     ],
                     [
                       {
                         "Literal": {
-                          "Value": "'PLOS - Rehab Tech'"
+                          "Value": "'Rehab Tech'"
                         }
                       }
                     ],
                     [
                       {
                         "Literal": {
-                          "Value": "'PLOS - Screens'"
+                          "Value": "'Screens'"
                         }
                       }
                     ],
                     [
                       {
                         "Literal": {
-                          "Value": "'PLOS - Wellness'"
+                          "Value": "'Wellness'"
                         }
                       }
                     ],
                     [
                       {
                         "Literal": {
-                          "Value": "'PLOS - Any'"
+                          "Value": "'Electronic Screens'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Additional Services'"
                         }
                       }
                     ]

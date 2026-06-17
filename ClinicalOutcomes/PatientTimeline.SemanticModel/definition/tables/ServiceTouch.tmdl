@@ -1,0 +1,242 @@
+table ServiceTouch
+	lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b01
+
+	column PatientID
+		formatString: 0
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b02
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [PatientID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthStart
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b03
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthStart]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column QuarterLabel
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b04
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [QuarterLabel]
+		sortByColumn: QuarterSort
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuarterSort
+		formatString: 0
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b05
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [QuarterSort]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ServiceType
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b06
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ServiceType]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Residence
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b07
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Residence]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ServiceTouch = calculated
+		mode: import
+		source = ```
+				
+				// One row per (PatientID, MonthStart, ServiceType) that a patient was "touched".
+				// Precomputed once at refresh so the report does DISTINCTCOUNT instead of set algebra.
+				// Residence = the place-of-residence (IntakeSources[Name]) active that month.
+				VAR cutoff = EDATE ( TODAY (), -12 ) + 1
+				VAR todayDate = TODAY ()
+				VAR firstMonth = DATE ( YEAR ( cutoff ), MONTH ( cutoff ), 1 )
+				VAR nMonths = DATEDIFF ( firstMonth, todayDate, MONTH )
+				VAR monthSpine =
+				    SELECTCOLUMNS (
+				        GENERATESERIES ( 0, nMonths, 1 ),
+				        "mStart", EDATE ( firstMonth, [Value] )
+				    )
+				
+				// ---- Census: patients with an active stay overlapping the month ----
+				VAR censusRows =
+				    GENERATE (
+				        monthSpine,
+				        VAR mS = [mStart]
+				        VAR mE = EOMONTH ( mS, 0 )
+				        RETURN
+				            SELECTCOLUMNS (
+				                FILTER (
+				                    PatientStays,
+				                    PatientStays[AdmitDate] <= mE
+				                        && ( PatientStays[DischargeDate] >= mS || ISBLANK ( PatientStays[DischargeDate] ) )
+				                ),
+				                "PatientID", PatientStays[PatientID],
+				                "MonthStart", mS,
+				                "ServiceType", "Total Patients",
+				                "Residence", COALESCE ( RELATED ( IntakeSources[Name] ), "Unknown" )
+				            )
+				    )
+				
+				// ---- Residence map: distinct (PatientID, MonthStart) -> Residence for PLOS/screen lookup.
+				// Distinct-named columns so the per-row lookup below is unambiguous; NATURALLEFTOUTERJOIN
+				// can't be used here (the join keys come from different source tables = different lineage).
+				VAR residenceMap =
+				    DISTINCT (
+				        SELECTCOLUMNS (
+				            censusRows,
+				            "mapPatientID", [PatientID],
+				            "mapMonthStart", [MonthStart],
+				            "mapResidence", [Residence]
+				        )
+				    )
+				
+				// ---- Cases: active therapy case overlapping the month ----
+				VAR caseRows =
+				    GENERATE (
+				        monthSpine,
+				        VAR mS = [mStart]
+				        VAR mE = EOMONTH ( mS, 0 )
+				        RETURN
+				            SELECTCOLUMNS (
+				                FILTER (
+				                    StayCases,
+				                    StayCases[TherapyStartDate] <= mE
+				                        && ( StayCases[TherapyEndDate] >= mS || ISBLANK ( StayCases[TherapyEndDate] ) )
+				                ),
+				                "PatientID", RELATED ( PatientStays[PatientID] ),
+				                "MonthStart", mS,
+				                "ServiceType", "Case",
+				                "Residence", COALESCE ( RELATED ( IntakeSources[Name] ), "Unknown" )
+				            )
+				    )
+				
+				// ---- Tracks: active discipline track overlapping the month (PT/OT/ST) ----
+				VAR trackRows =
+				    GENERATE (
+				        monthSpine,
+				        VAR mS = [mStart]
+				        VAR mE = EOMONTH ( mS, 0 )
+				        RETURN
+				            SELECTCOLUMNS (
+				                FILTER (
+				                    CaseTracks,
+				                    CaseTracks[StartDate] <= mE
+				                        && ( CaseTracks[EndDate] >= mS || ISBLANK ( CaseTracks[EndDate] ) )
+				                        && CaseTracks[Discipline] IN { "PT", "OT", "ST" }
+				                ),
+				                "PatientID", RELATED ( PatientStays[PatientID] ),
+				                "MonthStart", mS,
+				                "ServiceType", "Track - " & CaseTracks[Discipline],
+				                "Residence", COALESCE ( RELATED ( IntakeSources[Name] ), "Unknown" )
+				            )
+				    )
+				
+				// ---- PLOS instances: point events by category (Screens here = PLOS screen) ----
+				VAR plosBase =
+				    SELECTCOLUMNS (
+				        FILTER (
+				            PatientLevelOptionalServices_Instance,
+				            PatientLevelOptionalServices_Instance[CreatedDate] >= firstMonth
+				                && PatientLevelOptionalServices_Instance[CreatedDate] <= todayDate
+				                && RELATED ( PatientLevelOptionalServices_Service[Category] )
+				                    IN { "Nursing Restorative", "Rehab Tech", "Screens", "Wellness" }
+				        ),
+				        "PatientID", RELATED ( Patients[PatientID] ),
+				        "MonthStart",
+				            DATE (
+				                YEAR ( PatientLevelOptionalServices_Instance[CreatedDate] ),
+				                MONTH ( PatientLevelOptionalServices_Instance[CreatedDate] ),
+				                1
+				            ),
+				        "ServiceType", RELATED ( PatientLevelOptionalServices_Service[Category] )
+				    )
+				VAR plosRows =
+				    ADDCOLUMNS (
+				        plosBase,
+				        "Residence",
+				            VAR _pid = [PatientID]
+				            VAR _ms = [MonthStart]
+				            RETURN
+				                COALESCE (
+				                    MAXX (
+				                        FILTER ( residenceMap, [mapPatientID] = _pid && [mapMonthStart] = _ms ),
+				                        [mapResidence]
+				                    ),
+				                    "Unknown"
+				                )
+				    )
+				
+				// ---- Electronic Screens: the PatientScreens table (distinct from PLOS screens) ----
+				VAR eScreenBase =
+				    SELECTCOLUMNS (
+				        FILTER (
+				            PatientScreens,
+				            NOT ISBLANK ( PatientScreens[DateCompleted] )
+				                && PatientScreens[DateCompleted] >= firstMonth
+				                && PatientScreens[DateCompleted] <= todayDate
+				        ),
+				        "PatientID", PatientScreens[Resolved PatientID],
+				        "MonthStart",
+				            DATE (
+				                YEAR ( PatientScreens[DateCompleted] ),
+				                MONTH ( PatientScreens[DateCompleted] ),
+				                1
+				            ),
+				        "ServiceType", "Electronic Screens"
+				    )
+				VAR eScreenRows =
+				    ADDCOLUMNS (
+				        eScreenBase,
+				        "Residence",
+				            VAR _pid = [PatientID]
+				            VAR _ms = [MonthStart]
+				            RETURN
+				                COALESCE (
+				                    MAXX (
+				                        FILTER ( residenceMap, [mapPatientID] = _pid && [mapMonthStart] = _ms ),
+				                        [mapResidence]
+				                    ),
+				                    "Unknown"
+				                )
+				    )
+				
+				// ---- Combine, de-duplicate, and stamp quarter columns ----
+				VAR allRows =
+				    UNION (
+				        SELECTCOLUMNS ( censusRows, "PatientID", [PatientID], "MonthStart", [MonthStart], "ServiceType", [ServiceType], "Residence", [Residence] ),
+				        SELECTCOLUMNS ( caseRows, "PatientID", [PatientID], "MonthStart", [MonthStart], "ServiceType", [ServiceType], "Residence", [Residence] ),
+				        SELECTCOLUMNS ( trackRows, "PatientID", [PatientID], "MonthStart", [MonthStart], "ServiceType", [ServiceType], "Residence", [Residence] ),
+				        plosRows,
+				        eScreenRows
+				    )
+				VAR deduped =
+				    DISTINCT (
+				        FILTER ( allRows, NOT ISBLANK ( [PatientID] ) )
+				    )
+				RETURN
+				    ADDCOLUMNS (
+				        deduped,
+				        "QuarterSort", YEAR ( [MonthStart] ) * 10 + ROUNDUP ( MONTH ( [MonthStart] ) / 3, 0 ),
+				        "QuarterLabel", "Q" & ROUNDUP ( MONTH ( [MonthStart] ) / 3, 0 ) & " " & YEAR ( [MonthStart] )
+				    )
+				
+				```
+
+	annotation PBI_Id = 7a1c0d2e9b444f318a165c2e1f6d4b00
+

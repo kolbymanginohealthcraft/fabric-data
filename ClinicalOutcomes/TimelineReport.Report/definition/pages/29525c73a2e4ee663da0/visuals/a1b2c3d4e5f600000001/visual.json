@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
-  "name": "77522c1f38a47c9caba1",
+  "name": "a1b2c3d4e5f600000001",
   "position": {
-    "x": 440,
-    "y": 312,
-    "z": 6000,
-    "height": 224,
+    "x": 8,
+    "y": 88,
+    "z": 17000,
+    "height": 64,
     "width": 128,
-    "tabOrder": 6000
+    "tabOrder": 17000
   },
   "visual": {
     "visualType": "slicer",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "StayCases"
+                      "Entity": "Period Grain"
                     }
                   },
-                  "Property": "Age Range"
+                  "Property": "Period Grain"
                 }
               },
-              "queryRef": "StayCases.Age Range",
-              "nativeQueryRef": "Age Range",
+              "queryRef": "Period Grain.Period Grain",
+              "nativeQueryRef": "Period Grain",
               "active": true
             }
           ]
@@ -64,13 +64,6 @@
                   "Value": "8D"
                 }
               }
-            },
-            "expandCollapseToggleType": {
-              "expr": {
-                "Literal": {
-                  "Value": "2D"
-                }
-              }
             }
           }
         }
@@ -95,19 +88,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Age Range'"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 2,
-                      "Percent": 0
-                    }
-                  }
+                  "Value": "'Period'"
                 }
               }
             },
@@ -133,19 +114,6 @@
             }
           }
         }
-      ],
-      "selection": [
-        {
-          "properties": {
-            "strictSingleSelect": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
       ]
     },
     "visualContainerObjects": {
@@ -158,73 +126,11 @@
                   "Value": "false"
                 }
               }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Slicer: Age Range'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "visualHeader": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
             }
           }
         }
       ]
     },
-    "syncGroup": {
-      "groupName": "Age Range",
-      "fieldChanges": true,
-      "filterChanges": true
-    },
     "drillFilterOtherVisuals": true
-  },
-  "parentGroupName": "6586c54605d29aa7ad84",
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "d44c385a6b04dd250303",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Payer Buckets"
-              }
-            },
-            "Property": "Payer Grouping"
-          }
-        },
-        "type": "Categorical",
-        "howCreated": "User",
-        "isHiddenInViewMode": true
-      },
-      {
-        "name": "2314ed1c4bd90c053a37",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Payer Buckets"
-              }
-            },
-            "Property": "Payer Categorization"
-          }
-        },
-        "type": "Categorical",
-        "howCreated": "User",
-        "isHiddenInViewMode": true
-      }
-    ]
   }
 }

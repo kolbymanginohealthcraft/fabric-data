@@ -201,7 +201,7 @@ table Facility
 		queryGroup: Places
 		source =
 				let
-				    facility_ = Value.NativeQuery(_SilverSource, "SELECT FacilityNumber, Name, ChainName, ContractType, TermedOn, Address1, City, State, Zip FROM dbo.facility WHERE IsTest = 0"),
+				    facility_ = Value.NativeQuery(_SilverSource, "SELECT FacilityNumber, Name, ChainName, ContractType, TermedOn, Address1, City, State, Zip FROM (SELECT FacilityNumber, Name, ChainName, ContractType, TermedOn, Address1, City, State, Zip, ROW_NUMBER() OVER (PARTITION BY FacilityNumber ORDER BY CASE WHEN TermedOn IS NULL THEN 0 ELSE 1 END, TermedOn DESC) AS _rn FROM dbo.facility WHERE IsTest = 0) x WHERE _rn = 1"),
 				    hierarchy_ = Value.NativeQuery(_SilverSource, "SELECT RIGHT('00000' + LTRIM(RTRIM(CAST(FacilityNumber AS varchar(10)))), 5) AS FacilityNumber, DistrictName, CAST(DistrictNumber AS varchar(20)) AS District, CAST(AreaNumber AS varchar(20)) AS Region, CAST(TRY_CAST(RegionNumber AS int) AS varchar(10)) AS Division FROM dbo.facilityhierarchy"),
 				    #"Facility Join Key" = Table.AddColumn(facility_, "_k", each Text.End("00000" & Text.From([FacilityNumber]), 5), type text),
 				    #"Joined Hierarchy" = Table.NestedJoin(#"Facility Join Key", {"_k"}, hierarchy_, {"FacilityNumber"}, "_h", JoinKind.LeftOuter),

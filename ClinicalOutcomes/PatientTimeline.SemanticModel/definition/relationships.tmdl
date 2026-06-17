@@ -231,3 +231,11 @@ relationship 11b10000-0000-4000-8000-0000000000a1
 	fromColumn: OutcomeSummary.LibraryItem_ID
 	toColumn: LibraryItem.LibraryItem_ID
 
+relationship 5e9a2c10-0000-4000-8000-0000000000d1
+	fromColumn: ServiceTouch.PatientID
+	toColumn: Patients.PatientID
+
+relationship 5e9a2c10-0000-4000-8000-0000000000d2
+	fromColumn: ServiceTouch.ServiceType
+	toColumn: ServiceTypes.ServiceType
+

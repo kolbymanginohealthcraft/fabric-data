@@ -3,137 +3,50 @@ table ServiceTypes
 
 	measure 'Patients Touched' = ```
 			
+			// Reads the precomputed ServiceTouch fact (DISTINCTCOUNT) instead of doing set
+			// algebra over the fact tables at query time. Period (month/quarter) and Residence
+			// arrive as filters on ServiceTouch directly; the ServiceType row arrives via the
+			// ServiceTouch -> ServiceTypes relationship for the atomic rows.
+			VAR atomic =
+			    {
+			        "Case", "Track - PT", "Track - OT", "Track - ST",
+			        "Nursing Restorative", "Rehab Tech",
+			        "Screens", "Wellness", "Electronic Screens"
+			    }
+			VAR additionalServiceTypes =
+			    {
+			        "Nursing Restorative", "Rehab Tech",
+			        "Screens", "Wellness", "Electronic Screens"
+			    }
 			VAR currentType = SELECTEDVALUE ( ServiceTypes[ServiceType] )
-			VAR monthStart  = MIN ( 'Calendar'[Date] )
-			VAR monthEnd    = EOMONTH ( monthStart, 0 )
-			
-			// Patients with an active stay in this month (the census denominator)
-			VAR totalPatients =
+			VAR censusPats =
 			    CALCULATETABLE (
-			        VALUES ( PatientStays[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        PatientStays[AdmitDate] <= monthEnd,
-			        PatientStays[DischargeDate] >= monthStart
-			            || ISBLANK ( PatientStays[DischargeDate] )
+			        VALUES ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] = "Total Patients"
 			    )
-			
-			// Cases: patient had an active case overlapping the month
-			VAR casePats =
+			VAR anyPats =
 			    CALCULATETABLE (
-			        VALUES ( PatientStays[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        StayCases[TherapyStartDate] <= monthEnd,
-			        StayCases[TherapyEndDate] >= monthStart
-			            || ISBLANK ( StayCases[TherapyEndDate] )
+			        VALUES ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] IN atomic
 			    )
-			
-			// Tracks by discipline
-			VAR trackPT =
+			VAR additionalServicePats =
 			    CALCULATETABLE (
-			        VALUES ( PatientStays[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        CaseTracks[StartDate] <= monthEnd,
-			        ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
-			        Disciplines[Discipline] = "PT"
+			        VALUES ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] IN additionalServiceTypes
 			    )
-			
-			VAR trackOT =
-			    CALCULATETABLE (
-			        VALUES ( PatientStays[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        CaseTracks[StartDate] <= monthEnd,
-			        ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
-			        Disciplines[Discipline] = "OT"
-			    )
-			
-			VAR trackST =
-			    CALCULATETABLE (
-			        VALUES ( PatientStays[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        CaseTracks[StartDate] <= monthEnd,
-			        ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
-			        Disciplines[Discipline] = "ST"
-			    )
-			
-			// PLOS by category (point events: CreatedDate falls within the month)
-			VAR plosNR =
-			    CALCULATETABLE (
-			        VALUES ( Patients[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			        PatientLevelOptionalServices_Service[Category] = "Nursing Restorative"
-			    )
-			
-			VAR plosRT =
-			    CALCULATETABLE (
-			        VALUES ( Patients[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			        PatientLevelOptionalServices_Service[Category] = "Rehab Tech"
-			    )
-			
-			// Screens: PatientScreens (DateCompleted) + PLOS (CreatedDate)
-			VAR plosSC =
-			    DISTINCT (
-			        UNION (
-			            CALCULATETABLE (
-			                VALUES ( PatientScreens[Resolved PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                PatientScreens[DateCompleted] >= monthStart,
-			                PatientScreens[DateCompleted] <= monthEnd
-			            ),
-			            CALCULATETABLE (
-			                VALUES ( Patients[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			                PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			                PatientLevelOptionalServices_Service[Category] = "Screens"
-			            )
-			        )
-			    )
-			
-			VAR plosWL =
-			    CALCULATETABLE (
-			        VALUES ( Patients[PatientID] ),
-			        REMOVEFILTERS ( 'Calendar' ),
-			        PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			        PatientLevelOptionalServices_Service[Category] = "Wellness"
-			    )
-			
-			// PLOS - Any: distinct patients touched by any PLOS category
-			VAR plosAny =
-			    DISTINCT ( UNION ( plosNR, plosRT, plosSC, plosWL ) )
-			
-			// Union of all patients touched by any service (de-duplicated)
-			VAR anyServicePats =
-			    DISTINCT (
-			        UNION ( casePats, trackPT, trackOT, trackST, plosNR, plosRT, plosSC, plosWL )
-			    )
-			
-			// Patients in the census NOT touched by any service
-			VAR noServicePats =
-			    EXCEPT ( totalPatients, anyServicePats )
-			
+			VAR total = COUNTROWS ( censusPats )
 			RETURN
-			SWITCH (
-			    currentType,
-			    "Case",                         COUNTROWS ( casePats ),
-			    "Track - PT",                   COUNTROWS ( trackPT ),
-			    "Track - OT",                   COUNTROWS ( trackOT ),
-			    "Track - ST",                   COUNTROWS ( trackST ),
-			    "PLOS - Any",                   COUNTROWS ( plosAny ),
-			    "PLOS - Nursing Restorative",   COUNTROWS ( plosNR ),
-			    "PLOS - Rehab Tech",            COUNTROWS ( plosRT ),
-			    "PLOS - Screens",               COUNTROWS ( plosSC ),
-			    "PLOS - Wellness",              COUNTROWS ( plosWL ),
-			    "Any Service",                  COUNTROWS ( anyServicePats ),
-			    "No Service",                   COUNTROWS ( noServicePats ),
-			    "Total Patients",               COUNTROWS ( totalPatients ),
-			    BLANK ()
-			)
+			    SWITCH (
+			        currentType,
+			        "Total Patients", total,
+			        "Any Service", COUNTROWS ( anyPats ),
+			        "Additional Services", COUNTROWS ( additionalServicePats ),
+			        "No Service", COUNTROWS ( EXCEPT ( censusPats, anyPats ) ),
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] )
+			    )
 			
 			```
 		formatString: #,0
@@ -141,165 +54,108 @@ table ServiceTypes
 
 	measure 'Patient In Touched List' =
 			
+			// 1 when the single patient in context contributed to [Patients Touched]
+			// for the current ServiceType + period; 0 otherwise. Used to highlight the
+			// per-patient timeline. Delegates to the rewritten (fact-based) measure.
 			VAR _pid = SELECTEDVALUE ( Patients[PatientID] )
-			VAR currentType = SELECTEDVALUE ( ServiceTypes[ServiceType] )
-			VAR monthStart = MIN ( 'Calendar'[Date] )
-			VAR monthEnd = EOMONTH ( monthStart, 0 )
-			
-			// Return 0 if no patient, month, or type in context
 			RETURN
-			    IF (
-			        ISBLANK ( _pid ) || ISBLANK ( currentType ) || ISBLANK ( monthStart ),
-			        0,
-			        VAR totalPatients =
-			            CALCULATETABLE (
-			                VALUES ( PatientStays[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                PatientStays[AdmitDate] <= monthEnd,
-			                PatientStays[DischargeDate] >= monthStart
-			                    || ISBLANK ( PatientStays[DischargeDate] )
-			            )
-			        VAR casePats =
-			            CALCULATETABLE (
-			                VALUES ( PatientStays[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                StayCases[TherapyStartDate] <= monthEnd,
-			                StayCases[TherapyEndDate] >= monthStart
-			                    || ISBLANK ( StayCases[TherapyEndDate] )
-			            )
-			        VAR trackPT =
-			            CALCULATETABLE (
-			                VALUES ( PatientStays[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                CaseTracks[StartDate] <= monthEnd,
-			                ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
-			                Disciplines[Discipline] = "PT"
-			            )
-			        VAR trackOT =
-			            CALCULATETABLE (
-			                VALUES ( PatientStays[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                CaseTracks[StartDate] <= monthEnd,
-			                ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
-			                Disciplines[Discipline] = "OT"
-			            )
-			        VAR trackST =
-			            CALCULATETABLE (
-			                VALUES ( PatientStays[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                CaseTracks[StartDate] <= monthEnd,
-			                ( CaseTracks[EndDate] >= monthStart || ISBLANK ( CaseTracks[EndDate] ) ),
-			                Disciplines[Discipline] = "ST"
-			            )
-			        VAR plosNR =
-			            CALCULATETABLE (
-			                VALUES ( Patients[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			                PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			                PatientLevelOptionalServices_Service[Category] = "Nursing Restorative"
-			            )
-			        VAR plosRT =
-			            CALCULATETABLE (
-			                VALUES ( Patients[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			                PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			                PatientLevelOptionalServices_Service[Category] = "Rehab Tech"
-			            )
-			        VAR plosSC =
-			            DISTINCT (
-			                UNION (
-			                    CALCULATETABLE (
-			                        VALUES ( PatientScreens[Resolved PatientID] ),
-			                        REMOVEFILTERS ( 'Calendar' ),
-			                        PatientScreens[DateCompleted] >= monthStart,
-			                        PatientScreens[DateCompleted] <= monthEnd
-			                    ),
-			                    CALCULATETABLE (
-			                        VALUES ( Patients[PatientID] ),
-			                        REMOVEFILTERS ( 'Calendar' ),
-			                        PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			                        PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			                        PatientLevelOptionalServices_Service[Category] = "Screens"
-			                    )
-			                )
-			            )
-			        VAR plosWL =
-			            CALCULATETABLE (
-			                VALUES ( Patients[PatientID] ),
-			                REMOVEFILTERS ( 'Calendar' ),
-			                PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			                PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			                PatientLevelOptionalServices_Service[Category] = "Wellness"
-			            )
-			        VAR plosAny = DISTINCT ( UNION ( plosNR, plosRT, plosSC, plosWL ) )
-			        VAR anyServicePats =
-			            DISTINCT (
-			                UNION ( casePats, trackPT, trackOT, trackST, plosNR, plosRT, plosSC, plosWL )
-			            )
-			        VAR noServicePats = EXCEPT ( totalPatients, anyServicePats )
-			
-			        // Normalize sets to single "PatientID" column for membership check
-			        VAR chk = SELECTCOLUMNS ( ROW ( "PatientID", _pid ), "PatientID", [PatientID] )
-			        VAR inCase = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( casePats, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-			        VAR inTrackPT = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( trackPT, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-			        VAR inTrackOT = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( trackOT, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-			        VAR inTrackST = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( trackST, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-			        VAR inPlosNR = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( plosNR, "PatientID", Patients[PatientID] ), chk ) ) > 0
-			        VAR inPlosRT = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( plosRT, "PatientID", Patients[PatientID] ), chk ) ) > 0
-			        VAR inPlosWL = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( plosWL, "PatientID", Patients[PatientID] ), chk ) ) > 0
-			        VAR plosSC1 =
-			            SELECTCOLUMNS (
-			                CALCULATETABLE (
-			                    VALUES ( PatientScreens[Resolved PatientID] ),
-			                    REMOVEFILTERS ( 'Calendar' ),
-			                    PatientScreens[DateCompleted] >= monthStart,
-			                    PatientScreens[DateCompleted] <= monthEnd
-			                ),
-			                "PatientID", PatientScreens[Resolved PatientID]
-			            )
-			        VAR plosSC2 =
-			            SELECTCOLUMNS (
-			                CALCULATETABLE (
-			                    VALUES ( Patients[PatientID] ),
-			                    REMOVEFILTERS ( 'Calendar' ),
-			                    PatientLevelOptionalServices_Instance[CreatedDate] >= monthStart,
-			                    PatientLevelOptionalServices_Instance[CreatedDate] <= monthEnd,
-			                    PatientLevelOptionalServices_Service[Category] = "Screens"
-			                ),
-			                "PatientID", Patients[PatientID]
-			            )
-			        VAR inPlosSC =
-			            COUNTROWS ( INTERSECT ( plosSC1, chk ) ) > 0
-			                || COUNTROWS ( INTERSECT ( plosSC2, chk ) ) > 0
-			        VAR inPlosAny = inPlosNR || inPlosRT || inPlosSC || inPlosWL
-			        VAR inAnyService = inCase || inTrackPT || inTrackOT || inTrackST || inPlosNR || inPlosRT || inPlosSC || inPlosWL
-			        VAR inTotal = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( totalPatients, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-			        VAR inNoService = COUNTROWS ( INTERSECT ( SELECTCOLUMNS ( noServicePats, "PatientID", PatientStays[PatientID] ), chk ) ) > 0
-			
-			        RETURN
-			            SWITCH (
-			                currentType,
-			                "Case", inCase,
-			                "Track - PT", inTrackPT,
-			                "Track - OT", inTrackOT,
-			                "Track - ST", inTrackST,
-			                "PLOS - Any", inPlosAny,
-			                "PLOS - Nursing Restorative", inPlosNR,
-			                "PLOS - Rehab Tech", inPlosRT,
-			                "PLOS - Screens", inPlosSC,
-			                "PLOS - Wellness", inPlosWL,
-			                "Any Service", inAnyService,
-			                "No Service", inNoService,
-			                "Total Patients", inTotal,
-			                0
-			            )
-			    + 0
-			)
+			    IF ( ISBLANK ( _pid ), 0, IF ( [Patients Touched] > 0, 1, 0 ) )
 		lineageTag: f98b0e13-9a98-4e83-91b6-d94ebe5f4cdc
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Touched (Any Service)' =
+			
+			VAR num =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType]
+			            IN {
+			                "Case", "Track - PT", "Track - OT", "Track - ST",
+			                "Nursing Restorative", "Rehab Tech",
+			                "Screens", "Wellness", "Electronic Screens"
+			            }
+			    )
+			VAR den =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] = "Total Patients"
+			    )
+			RETURN
+			    DIVIDE ( num, den )
+		formatString: 0.0%
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f01
+
+	measure '% On Caseload' =
+			
+			VAR num =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] IN { "Case", "Track - PT", "Track - OT", "Track - ST" }
+			    )
+			VAR den =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] = "Total Patients"
+			    )
+			RETURN
+			    DIVIDE ( num, den )
+		formatString: 0.0%
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f02
+
+	measure '% On Additional Services' =
+			
+			VAR num =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType]
+			            IN {
+			                "Nursing Restorative", "Rehab Tech",
+			                "Screens", "Wellness", "Electronic Screens"
+			            }
+			    )
+			VAR den =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] = "Total Patients"
+			    )
+			RETURN
+			    DIVIDE ( num, den )
+		formatString: 0.0%
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f03
+
+	measure 'Is Untouched' =
+			
+			// 1 when the patient in context is in the census for the period but received no
+			// service. Drop on a table with Patients[Patient Name] and filter = 1 to list
+			// untouched patients for the selected month/quarter.
+			VAR inCensus =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] = "Total Patients"
+			    ) > 0
+			VAR inAny =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType]
+			            IN {
+			                "Case", "Track - PT", "Track - OT", "Track - ST",
+			                "Nursing Restorative", "Rehab Tech",
+			                "Screens", "Wellness", "Electronic Screens"
+			            }
+			    ) > 0
+			RETURN
+			    IF ( inCensus && NOT inAny, 1, 0 )
+		formatString: 0
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f04
 
 	column SortOrder
 		formatString: 0
@@ -331,17 +187,18 @@ table ServiceTypes
 				        { 2, "Track - PT" },
 				        { 3, "Track - OT" },
 				        { 4, "Track - ST" },
-				        { 5, "PLOS - Any" },
-				        { 6, "PLOS - Nursing Restorative" },
-				        { 7, "PLOS - Rehab Tech" },
-				        { 8, "PLOS - Screens" },
-				        { 9, "PLOS - Wellness" },
-				        { 10, "Any Service" },
-				        { 11, "No Service" },
-				        { 12, "Total Patients" },
-				        { 13, "% Touched (Any Service)" },
-				        { 14, "% On Caseload" },
-				        { 15, "% On PLOS" }
+				        { 5, "Additional Services" },
+				        { 6, "Nursing Restorative" },
+				        { 7, "Rehab Tech" },
+				        { 8, "Screens" },
+				        { 9, "Electronic Screens" },
+				        { 10, "Wellness" },
+				        { 11, "Any Service" },
+				        { 12, "No Service" },
+				        { 13, "Total Patients" },
+				        { 14, "% Touched (Any Service)" },
+				        { 15, "% On Caseload" },
+				        { 16, "% On Additional Services" }
 				    }
 				)
 				

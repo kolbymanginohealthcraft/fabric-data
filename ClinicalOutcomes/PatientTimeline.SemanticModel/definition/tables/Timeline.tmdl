@@ -309,6 +309,23 @@ table Timeline
 		formatString: #,0
 		lineageTag: 8727d0a7-bb2b-48b7-911b-24648f3c34dc
 
+	measure 'Timeline Patients' =
+
+			// Distinct patients with a stay overlapping the 1-year horizon (the census denominator).
+			VAR hStart = EDATE ( TODAY (), -12 ) + 1
+			VAR hEnd = TODAY ()
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT ( PatientStays[PatientID] ),
+			        FILTER (
+			            PatientStays,
+			            PatientStays[AdmitDate] <= hEnd
+			                && ( PatientStays[DischargeDate] >= hStart || ISBLANK ( PatientStays[DischargeDate] ) )
+			        )
+			    )
+		formatString: #,0
+		lineageTag: 7a1c0d2e-9b44-4f31-8a16-5c2e1f6d4b21
+
 	column Item
 		lineageTag: 8ee8af5a-65ff-4cb5-8dd8-d990e997acf2
 		summarizeBy: none
@@ -421,7 +438,7 @@ table Timeline
 		mode: import
 		source = ```
 				
-				VAR cutoff = EDATE ( TODAY (), -24 ) + 1
+				VAR cutoff = EDATE ( TODAY (), -12 ) + 1
 				VAR base =
 				    FILTER (
 				        UNION (

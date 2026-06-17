@@ -31,23 +31,16 @@ table CaseTrackDays
 		mode: import
 		queryGroup: Patient
 		source =
-				// let
-				//     Source = PowerPlatform.Dataflows(null),
-				//     Workspaces = Source{[Id="Workspaces"]}[Data],
-				//     #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				//     #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
-				//     CaseTracks_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="CaseTracks",version=""]}[Data],
-				//     #"Changed Type" = Table.TransformColumnTypes(CaseTracks_,{{"StartDate", type date}, {"EndDate", type date}}),
-				//     #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [EndDate] <> null and [EndDate] <> "" and [EndDate] >= #date(2022, 1, 1)),
-				//     #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"TxTrack_ID", "StartDate", "EndDate"}),
-				//     #"Added Custom" = Table.AddColumn(#"Removed Other Columns", "ListOfDates", each List.Dates([StartDate], Duration.Days([EndDate]-[StartDate])+1, #duration(1, 0, 0, 0))),
-				//     #"Expanded ListOfDates" = Table.ExpandListColumn(#"Added Custom", "ListOfDates"),
-				//     #"Removed Columns" = Table.RemoveColumns(#"Expanded ListOfDates",{"StartDate", "EndDate"}),
-				//     #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"ListOfDates", "TrackDate"}}),
-				//     #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"TrackDate", type date}})
-				// in
-				//     #"Changed Type1"
-				
+				// Daily TrackDate grain for ALOS / Minutes-per-Week. Expanded LOCALLY
+				// from the in-memory CaseTracks set (~237K rows) via List.Dates — NOT
+				// in SQL. A server-side tally expansion was tried and reverted: it is
+				// far slower here because the range join cross-products (~36s just to
+				// count) and ships all ~8.7M day-rows over the wire, vs transferring
+				// 237K track rows and exploding them cheaply in the mashup engine.
+				// GUARD RAIL: daysCount capped at 3651 (10 years) so a junk track
+				// (max observed span ~21yr; only 21 tracks of 2.55M exceed 10yr, all
+				// data errors) can't balloon the explosion. Open tracks (null EndDate)
+				// run to today, matching the prior behavior.
 				let
 				    Source = CaseTracks,
 				    #"Removed Other Columns" = Table.SelectColumns(CaseTracks,{"TxTrack_ID", "StartDate", "EndDate"}),
@@ -57,7 +50,7 @@ table CaseTrackDays
 				    each
 				        let
 				            actualEndDate = if [EndDate] = null then Date.From(DateTime.LocalNow()) else [EndDate],
-				            daysCount = Duration.Days(actualEndDate - [StartDate]) + 1
+				            daysCount = List.Min({Duration.Days(actualEndDate - [StartDate]) + 1, 3651})
 				        in
 				            List.Dates([StartDate], daysCount, #duration(1, 0, 0, 0))
 				),

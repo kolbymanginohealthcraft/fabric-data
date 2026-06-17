@@ -23,6 +23,21 @@
                       "Entity": "Timeline"
                     }
                   },
+                  "Property": "Timeline Patients"
+                }
+              },
+              "queryRef": "Timeline.Timeline Patients",
+              "nativeQueryRef": "Patients",
+              "displayName": "Patients"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Timeline"
+                    }
+                  },
                   "Property": "TimelineCases"
                 }
               },
@@ -72,8 +87,8 @@
                 }
               },
               "queryRef": "Timeline.TimelinePLOSEvents",
-              "nativeQueryRef": "PLOS Events",
-              "displayName": "PLOS Events"
+              "nativeQueryRef": "Additional Services",
+              "displayName": "Additional Services"
             }
           ]
         }
@@ -118,7 +133,7 @@
             "rowCount": {
               "expr": {
                 "Literal": {
-                  "Value": "4L"
+                  "Value": "5L"
                 }
               }
             }
@@ -191,6 +206,20 @@
           },
           "selector": {
             "id": "default"
+          }
+        },
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Timeline.Timeline Patients"
           }
         },
         {
