@@ -2,7 +2,7 @@ const sql = require("mssql");
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
+require("dotenv").config({ quiet: true }); // quiet: keep stdout pure JSON for programmatic callers
 
 const databases = require("./databases.json");
 
