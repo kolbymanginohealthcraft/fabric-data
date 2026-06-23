@@ -12,8 +12,9 @@ Inputs (data/):
   satisfaction-scoring.csv, satisfaction-dictionary.csv  <- evaluation.extract_satisfaction_lookups
 Output: data/satisfaction-scores.csv  (Facility, Discipline, AdvocacyScore, n_responses, n_surveys)
 
-NOTE: Response Rate (surveys / appropriate discharges) is NOT here yet — its denominator needs
-the "appropriate discharges" definition + a Fabric discharge pull. Advocacy Score only for now.
+Also builds Response Rate (discipline-specific respondents / discipline-specific planned discharges,
+per Facility x Discipline) -> data/satisfaction-response-rate.csv. Both satisfaction metrics are now
+Facility x Discipline.
 Run from repo root:  python -m evaluation.build_satisfaction
 """
 from __future__ import annotations
@@ -62,6 +63,18 @@ def clean_bizno(series: pd.Series) -> pd.Series:
     """Survey Facility cell -> digit-only business number (handles junk prefixes, '.', names, dates)."""
     s = series.astype(str).str.replace(r"\D", "", regex=True)
     return s.where(s.str.len() > 0)  # '' -> NaN
+
+
+def received_columns(df: pd.DataFrame) -> dict:
+    """Map survey discipline (PT/OT/ST) -> its 'Did you receive ...?' column (whitespace-robust:
+    e.g. OT's column has a stray space, 'Did you receive Occupational Therapy ?')."""
+    keyword = {"PT": "physical", "OT": "occupational", "ST": "speech"}
+    out = {}
+    for disc, kw in keyword.items():
+        match = [c for c in df.columns if "receive" in c.lower() and kw in c.lower()]
+        if match:
+            out[disc] = match[0]
+    return out
 
 
 def main() -> None:
@@ -128,15 +141,17 @@ def main() -> None:
 
 
 def response_rate(surveys: pd.DataFrame) -> None:
-    """Response Rate = survey respondents / planned discharges, per facility, over a trailing window.
-    Mirrors the PBIP 'Respondents per Planned Discharge'. Numerator window MUST match the discharge
-    denominator window (planned-discharges.csv is a trailing-1-year Bronze pull) or the rate is junk."""
+    """Response Rate per Facility x Discipline = discipline-specific respondents / discipline-specific
+    planned discharges. A survey counts toward discipline D iff 'Did you receive D?'=Yes; the
+    denominator (planned-discharges.csv, now Facility x Discipline) counts planned-discharged patients
+    who received D. So Speech isn't measured against patients who never got speech. Numerator window
+    MUST match the discharge denominator window (same 12 complete calendar months)."""
     pd_path = DATA / "planned-discharges.csv"
     if not pd_path.exists():
         print("\nResponse Rate skipped: data/planned-discharges.csv not found "
               "(run: node queries/pull-discharges.js  then  python -m evaluation.build_planned_discharges)")
         return
-    planned = pd.read_csv(pd_path)
+    planned = pd.read_csv(pd_path)        # Facility_ID, Discipline, n_total, n_planned
 
     ts = pd.to_datetime(surveys["Timestamp"], errors="coerce")
     # Complete-calendar-month window, matching the discharge pull's
@@ -144,27 +159,38 @@ def response_rate(surveys: pd.DataFrame) -> None:
     # current month so numerator and denominator cover the same 12 complete months.
     month_start = pd.Timestamp.now().normalize().replace(day=1)      # first of current month (exclusive upper)
     cutoff = month_start - pd.DateOffset(months=RR_TRAILING_MONTHS)  # first of month N months back (inclusive lower)
-    win = surveys[(ts >= cutoff) & (ts < month_start)]
-    resp = win.groupby(["Facility_ID", "FacilityName"]).agg(n_respondents=("SurveyID", "nunique")).reset_index()
+    win = surveys[(ts >= cutoff) & (ts < month_start)].copy()
 
-    rr = resp.merge(planned[["Facility_ID", "n_planned"]], on="Facility_ID", how="left")
+    # discipline-specific numerator: a survey counts for discipline D iff "Did you receive D?" == Yes
+    recv = received_columns(win)
+    num_frames = []
+    for disc, col in recv.items():
+        yes = win[win[col].astype(str).str.strip().str.lower().eq("yes")]
+        n = (yes.groupby(["Facility_ID", "FacilityName"])["SurveyID"].nunique()
+             .reset_index(name="n_respondents"))
+        n["Discipline"] = disc
+        num_frames.append(n)
+    resp = pd.concat(num_frames, ignore_index=True)
+
+    rr = resp.merge(planned[["Facility_ID", "Discipline", "n_planned"]],
+                    on=["Facility_ID", "Discipline"], how="left")
     missing = rr["n_planned"].isna().sum()
     rr = rr.dropna(subset=["n_planned"])
     rr = rr[rr["n_planned"] > 0]
     rr["n_planned"] = rr["n_planned"].astype(int)
     rr["ResponseRate"] = rr["n_respondents"] / rr["n_planned"]
 
-    rr[["Facility_ID", "FacilityName", "n_respondents", "n_planned", "ResponseRate"]] \
-        .sort_values("ResponseRate", ascending=False).to_csv(DATA / "satisfaction-response-rate.csv", index=False)
-    print(f"\nwrote satisfaction-response-rate.csv: {len(rr)} facilities "
+    rr[["Facility_ID", "FacilityName", "Discipline", "n_respondents", "n_planned", "ResponseRate"]] \
+        .sort_values(["Discipline", "ResponseRate"], ascending=[True, False]) \
+        .to_csv(DATA / "satisfaction-response-rate.csv", index=False)
+    print(f"\nwrote satisfaction-response-rate.csv: {len(rr)} Facility x Discipline cells "
           f"({RR_TRAILING_MONTHS} complete months: {cutoff.date()} through "
-          f"{(month_start - pd.Timedelta(days=1)).date()})")
-    print(f"  numerator window respondents: {win['SurveyID'].nunique():,} | "
-          f"{missing} facilities had surveys but no discharge denominator (dropped)")
-    over = (rr["ResponseRate"] > 1).sum()
-    print(f"  ResponseRate: median {rr['ResponseRate'].median():.2f}, "
-          f"mean {rr['ResponseRate'].mean():.2f}, >100%: {over} facilities "
-          f"(more surveys than planned discharges — check window/denominator)")
+          f"{(month_start - pd.Timedelta(days=1)).date()}); "
+          f"{missing} cells had respondents but no discharge denominator (dropped)")
+    print("  ResponseRate by discipline (median / mean / >100% count):")
+    for disc, g in rr.groupby("Discipline"):
+        print(f"    {disc}: median {g['ResponseRate'].median():.2f}, mean {g['ResponseRate'].mean():.2f}, "
+              f">100%: {(g['ResponseRate'] > 1).sum()}")
 
 
 if __name__ == "__main__":

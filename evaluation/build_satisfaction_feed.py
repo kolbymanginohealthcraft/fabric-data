@@ -11,8 +11,8 @@ Attribution is simpler than outcomes (the surveys have no patient/therapist grai
     Sum planned discharges over the territory.
   - CR Managers / Leadership stay PARKED (consistent with the clinical scorecard).
 
-Percentile peer group (higher is better): ScorecardGroup x Discipline for Advocacy; ScorecardGroup
-for Response Rate (RR is facility-level, not discipline-specific). [CONFIRM: see note in summary.]
+Percentile peer group (higher is better): ScorecardGroup x Discipline for BOTH Advocacy and Response
+Rate (both are now Facility x Discipline). Managers (Discipline='All') percentile among managers.
 
 Inputs (data/): employee-roster.csv, employee-dim.csv, facility-hier.csv, facility-dim.csv,
                 satisfaction-scores.csv, satisfaction-response-rate.csv
@@ -73,7 +73,7 @@ def main() -> None:
     roster = pd.read_csv(DATA / "employee-roster.csv", dtype=str)
     roster["Person_ID"] = roster["Person_ID"].astype(int)
     scores = pd.read_csv(DATA / "satisfaction-scores.csv")          # Facility_ID, Discipline, AdvocacyScore, n_responses, n_surveys
-    rr = pd.read_csv(DATA / "satisfaction-response-rate.csv")       # Facility_ID, n_respondents, n_planned, ResponseRate
+    rr = pd.read_csv(DATA / "satisfaction-response-rate.csv")       # Facility_ID, Discipline, n_respondents, n_planned, ResponseRate
 
     fac = pd.read_csv(DATA / "facility-dim.csv")
     fac["code"] = fac["FacilityName"].str.extract(r"^\s*(\d+)")[0].str.zfill(5)
@@ -81,7 +81,7 @@ def main() -> None:
 
     adv = scores.set_index(["Facility_ID", "Discipline"])["AdvocacyScore"].to_dict()
     advN = scores.set_index(["Facility_ID", "Discipline"])["n_responses"].to_dict()
-    rr_rate = rr.set_index("Facility_ID")["ResponseRate"].to_dict()
+    rr_rate = rr.set_index(["Facility_ID", "Discipline"])["ResponseRate"].to_dict()
 
     rows = []
 
@@ -101,9 +101,9 @@ def main() -> None:
         a = adv.get((fid, sd))
         if pd.notna(a):
             rows.append({**base, "Metric": "AdvocacyScore", "Raw": a})
-        rt = rr_rate.get(fid)
+        rt = rr_rate.get((fid, sd))                                 # RR is now Facility x Discipline
         if pd.notna(rt):
-            rows.append({**base, "Metric": "ResponseRate", "Discipline": "All", "Raw": rt})
+            rows.append({**base, "Metric": "ResponseRate", "Raw": rt})   # base Discipline = sd
 
     # ---- TELEHEALTH: no home building -> Advocacy over facilities they SERVED (their discipline) ----
     served = served_facilities()
@@ -152,8 +152,9 @@ def main() -> None:
     df["Stay"] = "All"
     df["Weighted"] = df["Raw"]                                      # no within-therapist re-weighting for satisfaction
 
-    # percentile within peer group (higher = better); Advocacy peers by discipline, RR by group only
-    df["CohortDisc"] = df.apply(lambda x: x["Discipline"] if x["Metric"] == "AdvocacyScore" else "All", axis=1)
+    # percentile within peer group (higher = better); BOTH metrics now peer by ScorecardGroup x
+    # Discipline (RR is discipline-specific now). Managers carry Discipline='All' -> peer among managers.
+    df["CohortDisc"] = df["Discipline"]
     df["Percentile"] = df.groupby(["Metric", "ScorecardGroup", "CohortDisc"])["Raw"].rank(pct=True)
 
     out = df[["Person_ID", "FullName", "ScorecardGroup", "Discipline", "Facility_ID",

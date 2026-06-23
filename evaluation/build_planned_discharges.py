@@ -7,8 +7,11 @@ is Planned; only acute Hospital is Unplanned.) BLANK/null destination defaults t
 discharges.csv to per-facility planned/total counts. The numerator (survey respondents) comes from build_satisfaction once the
 survey xlsx is reachable; Response Rate = respondents / planned discharges.
 
-Input:  data/discharges.csv  (Facility_ID, DischargedTo, n_discharges)
-Output: data/planned-discharges.csv  (Facility_ID, n_planned, n_total)
+Input:  data/discharges.csv  (Facility_ID, Discipline, DischargedTo, n_discharges)
+Output: data/planned-discharges.csv  (Facility_ID, Discipline, n_planned, n_total)
+Discipline-specific (Facility x Discipline): the denominator counts planned-discharged patients who
+RECEIVED that discipline, matching the discipline-specific survey numerator (so Speech isn't measured
+against patients who never got speech).
 Run from repo root:  python -m evaluation.build_planned_discharges
 """
 from __future__ import annotations
@@ -53,7 +56,7 @@ def main() -> None:
     # (SL has the highest blank rate ~11.9%; this is a global rule, not SL-only.)
     df["Planned"] = ~df["Setting"].isin(UNPLANNED_SETTINGS)
 
-    g = df.groupby("Facility_ID").apply(
+    g = df.groupby(["Facility_ID", "Discipline"]).apply(
         lambda x: pd.Series({
             "n_total": int(x["n_discharges"].sum()),
             "n_planned": int(x.loc[x["Planned"], "n_discharges"].sum()),
@@ -61,7 +64,10 @@ def main() -> None:
     g.to_csv(DATA / "planned-discharges.csv", index=False)
 
     tot, planned = int(df["n_discharges"].sum()), int(df.loc[df["Planned"], "n_discharges"].sum())
-    print(f"facilities: {len(g):,} | discharges total {tot:,} | planned {planned:,} ({planned/tot:.1%})")
+    print(f"facility x discipline cells: {len(g):,} | facilities: {g['Facility_ID'].nunique():,} | "
+          f"discharge-discipline rows total {tot:,} | planned {planned:,} ({planned/tot:.1%})")
+    print("\nplanned discharges by discipline:")
+    print(g.groupby("Discipline")["n_planned"].sum().to_string())
     print("\nSetting mix (by discharge count):")
     print(df.groupby("Setting")["n_discharges"].sum().sort_values(ascending=False).to_string())
     print(f"\nwrote planned-discharges.csv")
