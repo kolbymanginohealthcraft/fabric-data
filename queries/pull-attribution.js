@@ -55,7 +55,8 @@ WITH track_window AS (
     SELECT TrackId
     FROM dbo.treatmentsession
     GROUP BY TrackId
-    HAVING MAX(SessionDate) >= DATEADD(YEAR, @YEARS, GETDATE())
+    HAVING MAX(SessionDate) >= DATEADD(YEAR, @YEARS, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
+       AND MAX(SessionDate) <  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
 )
 SELECT
     s.TrackId                    AS TxTrack_ID,

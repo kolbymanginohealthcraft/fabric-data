@@ -29,7 +29,8 @@ JOIN dbo.Stay stay      ON stay.Stay_ID = pc.Stay_ID
 JOIN dbo.Resident res   ON res.Resident_ID = stay.Resident_ID AND res.IsDeletedResident = 0
 LEFT JOIN dbo.Lookup ldd ON ldd.Lookup_ID = pc.DischargedTo_ID AND ldd.Type = 'DISCHRGTO '
 WHERE pc.IsDeletedCase = 0
-  AND pc.EndDate >= DATEADD(YEAR, @YEARS, GETDATE())
+  AND pc.EndDate >= DATEADD(YEAR, @YEARS, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
+  AND pc.EndDate <  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
 GROUP BY res.Facility_ID, ldd.Descrip
 ORDER BY res.Facility_ID`;
 

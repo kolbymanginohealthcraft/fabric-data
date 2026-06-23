@@ -38,7 +38,8 @@ AssessmentScores AS (
       AND item.LibraryScaleValue_ID IS NOT NULL
       AND doc.IsInactive = 0
       AND trk.IsDeletedTrack = 0
-      AND trk.EndDate >= DATEADD(YEAR, __YEARS__, GETDATE())
+      AND trk.EndDate >= DATEADD(YEAR, __YEARS__, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
+      AND trk.EndDate <  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
 )
 SELECT
     TxTrack_ID,

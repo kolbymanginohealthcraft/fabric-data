@@ -139,8 +139,12 @@ def response_rate(surveys: pd.DataFrame) -> None:
     planned = pd.read_csv(pd_path)
 
     ts = pd.to_datetime(surveys["Timestamp"], errors="coerce")
-    cutoff = pd.Timestamp.now().normalize() - pd.DateOffset(months=RR_TRAILING_MONTHS)
-    win = surveys[ts >= cutoff]
+    # Complete-calendar-month window, matching the discharge pull's
+    # [DATEADD(YEAR,-1,firstOfThisMonth), firstOfThisMonth) bounds: exclude the partial
+    # current month so numerator and denominator cover the same 12 complete months.
+    month_start = pd.Timestamp.now().normalize().replace(day=1)      # first of current month (exclusive upper)
+    cutoff = month_start - pd.DateOffset(months=RR_TRAILING_MONTHS)  # first of month N months back (inclusive lower)
+    win = surveys[(ts >= cutoff) & (ts < month_start)]
     resp = win.groupby(["Facility_ID", "FacilityName"]).agg(n_respondents=("SurveyID", "nunique")).reset_index()
 
     rr = resp.merge(planned[["Facility_ID", "n_planned"]], on="Facility_ID", how="left")
@@ -153,7 +157,8 @@ def response_rate(surveys: pd.DataFrame) -> None:
     rr[["Facility_ID", "FacilityName", "n_respondents", "n_planned", "ResponseRate"]] \
         .sort_values("ResponseRate", ascending=False).to_csv(DATA / "satisfaction-response-rate.csv", index=False)
     print(f"\nwrote satisfaction-response-rate.csv: {len(rr)} facilities "
-          f"(trailing {RR_TRAILING_MONTHS} mo, since {cutoff.date()})")
+          f"({RR_TRAILING_MONTHS} complete months: {cutoff.date()} through "
+          f"{(month_start - pd.Timedelta(days=1)).date()})")
     print(f"  numerator window respondents: {win['SurveyID'].nunique():,} | "
           f"{missing} facilities had surveys but no discharge denominator (dropped)")
     over = (rr["ResponseRate"] > 1).sum()

@@ -29,7 +29,9 @@ const SQL = `
 WITH track AS (
   SELECT TxTrack_ID, PatientCase_ID, Discipline, StartDate, EndDate
   FROM dbo.TxTrack
-  WHERE IsDeletedTrack = 0 AND EndDate >= DATEADD(YEAR, @YEARS, GETDATE())
+  WHERE IsDeletedTrack = 0
+    AND EndDate >= DATEADD(YEAR, @YEARS, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
+    AND EndDate <  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
 ),
 tp AS (  -- track x distinct covering PRIMARY payer type
   SELECT t.TxTrack_ID, pt.PayerType_ID
