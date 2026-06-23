@@ -23,8 +23,7 @@ import pandas as pd
 
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
-SLP_TO_ST = {"SLP": "ST"}                       # survey uses SLP; clinical data uses ST
-THERAPY_DISCIPLINES = {"PT", "OT", "SLP"}        # discipline-specific advocacy = these only
+THERAPY_DISCIPLINES = {"PT", "OT", "SLP"}        # discipline-specific advocacy = these only (speech = SLP)
 RR_TRAILING_MONTHS = 12                          # Response Rate window; MUST match the discharge pull
 NULL_FACILITY = "95993"                           # PBIP rule (Surveys M): null Facility -> 95993
 #                                                  (= "The Ching Villas"); rescues the Ohana survey,
@@ -68,7 +67,7 @@ def clean_bizno(series: pd.Series) -> pd.Series:
 def received_columns(df: pd.DataFrame) -> dict:
     """Map survey discipline (PT/OT/ST) -> its 'Did you receive ...?' column (whitespace-robust:
     e.g. OT's column has a stray space, 'Did you receive Occupational Therapy ?')."""
-    keyword = {"PT": "physical", "OT": "occupational", "ST": "speech"}
+    keyword = {"PT": "physical", "OT": "occupational", "SLP": "speech"}
     out = {}
     for disc, kw in keyword.items():
         match = [c for c in df.columns if "receive" in c.lower() and kw in c.lower()]
@@ -130,7 +129,7 @@ def main() -> None:
         points=("Points", "sum"), maxpoints=("MaxPoints", "sum"),
         n_responses=("Points", "size"), n_surveys=("SurveyID", "nunique")).reset_index()
     g["AdvocacyScore"] = g["points"] / g["maxpoints"]
-    g["Discipline"] = g["Discipline"].replace(SLP_TO_ST)        # SLP -> ST to match clinical
+    # speech stays SLP (survey native) — clinical side now also uses SLP, so no conversion needed
 
     out = g[["Facility_ID", "FacilityName", "Discipline", "AdvocacyScore", "n_responses", "n_surveys"]]
     out.to_csv(DATA / "satisfaction-scores.csv", index=False)

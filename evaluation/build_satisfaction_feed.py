@@ -30,13 +30,14 @@ from evaluation.build_attribution import (
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 
-# clinician discipline -> survey discipline (assistants fold into their registered discipline)
+# clinician discipline -> survey discipline (assistants fold into their registered discipline;
+# all speech credentials -> SLP, matching the consolidated discipline everywhere else)
 DISC_MAP = {"PT": "PT", "PTA": "PT", "OT": "OT", "COTA": "OT",
-            "ST": "ST", "SLP": "ST", "CF-SLP": "ST", "CFY": "ST"}
+            "ST": "SLP", "SLP": "SLP", "CF-SLP": "SLP", "CFY": "SLP"}
 HOME_FIELD_GROUPS = {"Contract Rehab Field Clinician", "SL Field Clinician"}  # attributed by home facility
 TELEHEALTH = "Telehealth Field Clinician"                                     # no home building -> served facilities
 MGR_GROUP = "SL Area Manager"
-SURVEY_DISCIPLINES = ["PT", "OT", "ST"]
+SURVEY_DISCIPLINES = ["PT", "OT", "SLP"]
 
 
 def weighted_advocacy(pairs, adv, advN):

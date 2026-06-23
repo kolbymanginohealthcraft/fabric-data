@@ -14,7 +14,7 @@ from pathlib import Path
 import pandas as pd
 
 from evaluation.build_attribution import (
-    role_of, SL_AREA_MGR_CODES, DOR_CODES,
+    role_of, norm_discipline, SL_AREA_MGR_CODES, DOR_CODES,
     build_ledger_maps, territory_codes, _orgchart_territory,
 )
 
@@ -42,6 +42,7 @@ def home_type(home, M: dict) -> str:
 def main() -> None:
     emp = pd.read_csv(DATA / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
     emp["Person_ID"] = emp["Person_ID"].astype(int)
+    emp["Discipline"] = emp["Discipline"].map(norm_discipline)     # ST/CF-SLP/CFY -> SLP
     emp["JobCode_int"] = pd.to_numeric(emp["JobCode"], errors="coerce")
     emp["home"] = emp["HomeLocation"].str.zfill(5)
     emp["Role"] = [role_of(jc, d, t)

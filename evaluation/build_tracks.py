@@ -21,6 +21,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from evaluation.build_attribution import norm_discipline
+
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 
@@ -54,7 +56,9 @@ def derive_outcome_flags(o: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     base = pd.read_csv(DATA / "track-base.csv")
+    base["Discipline"] = base["Discipline"].map(norm_discipline)   # ST -> SLP (consolidate speech)
     oc = pd.read_csv(DATA / "track-outcomes.csv", low_memory=False)
+    oc["Discipline"] = oc["Discipline"].map(norm_discipline)
     lib = pd.read_csv(DATA / "library-dim.csv")[["LibraryItem_ID", "Library"]]
     fac = pd.read_csv(DATA / "facility-dim.csv", dtype={"DivisionCode": str})
     cw = pd.read_csv(DATA / "Outcomes Crosswalk.csv")[["LibraryItem_ID", "RequiredFor"]]

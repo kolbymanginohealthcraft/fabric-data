@@ -29,6 +29,16 @@ SCORED_MANAGER_CODES = SL_AREA_MGR_CODES               # UN-PARK CR: add DOR_COD
 REGISTERED_DISC = {"PT", "OT", "ST", "SLP", "CF-SLP", "CFY"}
 ASSISTANT_DISC = {"PTA", "COTA", "OTA"}
 
+# All speech credentials collapse to ONE label, "SLP" (no CF-SLP vs ST vs CFY split). The survey
+# already uses SLP natively; clinical track discipline is "ST" -> normalized here. Apply at every
+# point a discipline is displayed or used as a cohort/peer key.
+SPEECH_DISC = {"ST", "SLP", "CF-SLP", "CFY", "SLP-CF"}
+
+
+def norm_discipline(d):
+    """Consolidate speech credentials (ST / SLP / CF-SLP / CFY) to 'SLP'; pass others through."""
+    return "SLP" if d in SPEECH_DISC else d
+
 # Leadership ABOVE the DOR/Area tier (Regional Director, VP, Chief, President, Sr Director,
 # Regional Clinical Director, etc.) — detected by TITLE since their codes are scattered
 # (756/868/2925/8211/8215/8222/...). PARKED: role=Manager, excluded from clinical credit, no

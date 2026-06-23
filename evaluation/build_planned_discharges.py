@@ -18,6 +18,8 @@ from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 
+from evaluation.build_attribution import norm_discipline
+
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 UNPLANNED_SETTINGS = {"Hospital", "Hospice", "Expired", "Left Facility AMA"}
@@ -49,6 +51,7 @@ def setting_of(descrip) -> str:
 
 def main() -> None:
     df = pd.read_csv(DATA / "discharges.csv")
+    df["Discipline"] = df["Discipline"].map(norm_discipline)       # ST -> SLP (match the survey numerator)
     df["Setting"] = df["DischargedTo"].map(setting_of)
     # Blank/null destination DEFAULTS TO PLANNED (user call 2026-06-07): only an EXPLICIT
     # unplanned setting (acute Hospital / Hospice / Expired / Left AMA) is unplanned. A missing
