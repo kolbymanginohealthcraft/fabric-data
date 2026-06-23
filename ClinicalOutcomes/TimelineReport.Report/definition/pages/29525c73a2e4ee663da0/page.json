@@ -4,5 +4,15 @@
   "displayName": "Timeline Aggregate",
   "displayOption": "FitToPage",
   "height": 720,
-  "width": 960
+  "width": 960,
+  "visualInteractions": [
+    { "source": "a1b2c3d4e5f600000006", "target": "71a20adb90be8e0d0256", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "89fd90718b00d758dda4", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "b7a947766c986a797192", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "291432f818c7578445c7", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "3bfa1d443ece00148b70", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "a1b2c3d4e5f600000001", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "a1b2c3d4e5f600000002", "type": "NoFilter" },
+    { "source": "a1b2c3d4e5f600000006", "target": "a1b2c3d4e5f600000004", "type": "NoFilter" }
+  ]
 }

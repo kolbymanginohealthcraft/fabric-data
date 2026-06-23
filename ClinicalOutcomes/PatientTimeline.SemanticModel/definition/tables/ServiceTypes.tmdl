@@ -38,14 +38,25 @@ table ServiceTypes
 			        ServiceTouch[ServiceType] IN additionalServiceTypes
 			    )
 			VAR total = COUNTROWS ( censusPats )
+			// Blank the matrix GRAND total (neither Group nor ServiceType in scope): a distinct
+			// count of patients across every service unions to MORE than the census, which reads
+			// as >100%. Group subtotals (Group in scope) and detail rows still compute. The chart
+			// puts ServiceType on Series, so its segments stay in scope and are unaffected.
+			VAR isGrandTotal =
+			    NOT ISINSCOPE ( ServiceTypes[ServiceType] )
+			        && NOT ISINSCOPE ( ServiceTypes[Group] )
 			RETURN
-			    SWITCH (
-			        currentType,
-			        "Total Patients", total,
-			        "Any Service", COUNTROWS ( anyPats ),
-			        "Additional Services", COUNTROWS ( additionalServicePats ),
-			        "No Service", COUNTROWS ( EXCEPT ( censusPats, anyPats ) ),
-			        DISTINCTCOUNT ( ServiceTouch[PatientID] )
+			    IF (
+			        isGrandTotal,
+			        BLANK (),
+			        SWITCH (
+			            currentType,
+			            "Total Patients", total,
+			            "Any Service", COUNTROWS ( anyPats ),
+			            "Additional Services", COUNTROWS ( additionalServicePats ),
+			            "No Service", COUNTROWS ( EXCEPT ( censusPats, anyPats ) ),
+			            DISTINCTCOUNT ( ServiceTouch[PatientID] )
+			        )
 			    )
 			
 			```
@@ -157,6 +168,22 @@ table ServiceTypes
 		formatString: 0
 		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f04
 
+	measure 'Patients Touched %' =
+
+			// [Patients Touched] as a share of the period census (Total Patients). Drives the
+			// Count <-> Percent value toggle so one matrix can show either. Works for any row,
+			// group subtotal, or rollup: Total Patients = 100%, No Service = % untouched.
+			VAR census =
+			    CALCULATE (
+			        DISTINCTCOUNT ( ServiceTouch[PatientID] ),
+			        REMOVEFILTERS ( ServiceTypes ),
+			        ServiceTouch[ServiceType] = "Total Patients"
+			    )
+			RETURN
+			    DIVIDE ( [Patients Touched], census )
+		formatString: 0.0%
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f05
+
 	column SortOrder
 		formatString: 0
 		lineageTag: cda13565-77f8-41ae-a9a1-00df9928828b
@@ -172,6 +199,56 @@ table ServiceTypes
 		isNameInferred
 		sourceColumn: [ServiceType]
 		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group = ```
+
+			SWITCH (
+			    ServiceTypes[ServiceType],
+			    "Case", "Therapy Caseload",
+			    "Track - PT", "Therapy Caseload",
+			    "Track - OT", "Therapy Caseload",
+			    "Track - ST", "Therapy Caseload",
+			    "Nursing Restorative", "Additional Services",
+			    "Rehab Tech", "Additional Services",
+			    "Screens", "Additional Services",
+			    "Wellness", "Additional Services",
+			    "Electronic Screens", "Additional Services",
+			    "Any Service", "Overall",
+			    "No Service", "Overall",
+			    "Total Patients", "Overall",
+			    BLANK ()
+			)
+			```
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f06
+		summarizeBy: none
+		sortByColumn: GroupSort
+
+		annotation SummarizationSetBy = Automatic
+
+	column GroupSort = ```
+
+			SWITCH (
+			    ServiceTypes[ServiceType],
+			    "Case", 1,
+			    "Track - PT", 1,
+			    "Track - OT", 1,
+			    "Track - ST", 1,
+			    "Nursing Restorative", 2,
+			    "Rehab Tech", 2,
+			    "Screens", 2,
+			    "Wellness", 2,
+			    "Electronic Screens", 2,
+			    "Any Service", 3,
+			    "No Service", 3,
+			    "Total Patients", 3,
+			    99
+			)
+			```
+		formatString: 0
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f07
+		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
 

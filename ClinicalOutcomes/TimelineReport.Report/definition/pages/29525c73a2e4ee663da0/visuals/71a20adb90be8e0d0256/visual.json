@@ -3,9 +3,9 @@
   "name": "71a20adb90be8e0d0256",
   "position": {
     "x": 144,
-    "y": 336,
+    "y": 368,
     "z": 13000,
-    "height": 104,
+    "height": 344,
     "width": 808,
     "tabOrder": 13000
   },
@@ -75,6 +75,21 @@
                       "Entity": "ServiceTypes"
                     }
                   },
+                  "Property": "Group"
+                }
+              },
+              "queryRef": "ServiceTypes.Group",
+              "nativeQueryRef": "Group",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ServiceTypes"
+                    }
+                  },
                   "Property": "ServiceType"
                 }
               },
@@ -98,7 +113,41 @@
                 }
               },
               "queryRef": "ServiceTypes.Patients Touched",
-              "nativeQueryRef": "Patients Touched"
+              "nativeQueryRef": "Count",
+              "active": true,
+              "displayName": "Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ServiceTypes"
+                    }
+                  },
+                  "Property": "Patients Touched %"
+                }
+              },
+              "queryRef": "ServiceTypes.Patients Touched %",
+              "nativeQueryRef": "Percent",
+              "active": false,
+              "displayName": "Percent"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Value Mode"
+                    }
+                  },
+                  "Property": "Value Mode"
+                }
+              },
+              "index": 0,
+              "length": 2
             }
           ]
         }
@@ -111,13 +160,13 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "125D"
+                  "Value": "140D"
                 }
               }
             }
           },
           "selector": {
-            "metadata": "ServiceTypes.ServiceType"
+            "metadata": "ServiceTypes.Group"
           }
         },
         {
@@ -125,13 +174,13 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "86D"
+                  "Value": "150D"
                 }
               }
             }
           },
           "selector": {
-            "metadata": "ServiceTypes.Patients Touched"
+            "metadata": "ServiceTypes.ServiceType"
           }
         }
       ],
@@ -141,7 +190,27 @@
             "rowSubtotals": {
               "expr": {
                 "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "columnSubtotals": {
+              "expr": {
+                "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
+            "stepped": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
@@ -156,7 +225,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Patients Touched (overall)'"
+                  "Value": "'Patients touched by service'"
                 }
               }
             }
@@ -177,7 +246,7 @@
                 "Entity": "ServiceTypes"
               }
             },
-            "Property": "ServiceType"
+            "Property": "Group"
           }
         },
         "type": "Categorical",
@@ -202,7 +271,7 @@
                             "Source": "s"
                           }
                         },
-                        "Property": "ServiceType"
+                        "Property": "Group"
                       }
                     }
                   ],
@@ -210,21 +279,21 @@
                     [
                       {
                         "Literal": {
-                          "Value": "'Any Service'"
+                          "Value": "'Therapy Caseload'"
                         }
                       }
                     ],
                     [
                       {
                         "Literal": {
-                          "Value": "'No Service'"
+                          "Value": "'Additional Services'"
                         }
                       }
                     ],
                     [
                       {
                         "Literal": {
-                          "Value": "'Total Patients'"
+                          "Value": "'Overall'"
                         }
                       }
                     ]
@@ -234,36 +303,6 @@
             }
           ]
         },
-        "isHiddenInViewMode": true
-      },
-      {
-        "name": "a2f6b570e25dca0cc9ba",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "ServiceTypes"
-              }
-            },
-            "Property": "Patients Touched"
-          }
-        },
-        "type": "Advanced",
-        "isHiddenInViewMode": true
-      },
-      {
-        "name": "8c382d0f043009d8ade6",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Calendar"
-              }
-            },
-            "Property": "YearMonth"
-          }
-        },
-        "type": "Categorical",
         "isHiddenInViewMode": true
       }
     ]

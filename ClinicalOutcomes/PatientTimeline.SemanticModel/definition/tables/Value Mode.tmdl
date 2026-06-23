@@ -1,0 +1,47 @@
+table 'Value Mode'
+	lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6f10
+
+	column 'Value Mode'
+		lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6f11
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Value Mode Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Value Mode Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Value Mode Fields'
+		isHidden
+		lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6f12
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Value Mode Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Value Mode Order'
+		isHidden
+		formatString: 0
+		lineageTag: 5e9a2c10-7d83-4b6e-9c44-2f1a8b7d6f13
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Value Mode' = calculated
+		mode: import
+		source =
+				{
+				    ("Count", NAMEOF('ServiceTypes'[Patients Touched]), 0),
+				    ("Percent", NAMEOF('ServiceTypes'[Patients Touched %]), 1)
+				}
+
+	annotation PBI_Id = 5e9a2c107d834b6e9c442f1a8b7d6f00

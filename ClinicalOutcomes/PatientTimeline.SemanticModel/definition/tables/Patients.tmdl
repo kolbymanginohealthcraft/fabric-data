@@ -114,6 +114,32 @@ table Patients
 
 		annotation SummarizationSetBy = Automatic
 
+	column 'Has Timeline Data' = ```
+
+			// 1 when the patient has a stay overlapping the trailing-12-month horizon, i.e. they
+			// appear in the timeline / census. Used as a hidden page filter so the patient picker
+			// (and every visual) only offers patients with data. Non-circular by design: it reads
+			// PatientStays, NOT Timeline (Timeline already depends on Patients).
+			VAR cutoff = EDATE ( TODAY (), -12 ) + 1
+			RETURN
+			    IF (
+			        COUNTROWS (
+			            FILTER (
+			                RELATEDTABLE ( PatientStays ),
+			                PatientStays[AdmitDate] <= TODAY ()
+			                    && ( PatientStays[DischargeDate] >= cutoff || ISBLANK ( PatientStays[DischargeDate] ) )
+			            )
+			        ) > 0,
+			        1,
+			        0
+			    )
+			```
+		formatString: 0
+		lineageTag: c2b71f44-0a3e-4d7a-9f51-1b2c3d4e5f10
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Patients = m
 		mode: import
 		queryGroup: Patient

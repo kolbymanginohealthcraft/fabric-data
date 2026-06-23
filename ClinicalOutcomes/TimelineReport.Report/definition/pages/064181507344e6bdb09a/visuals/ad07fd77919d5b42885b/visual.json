@@ -72,8 +72,8 @@
                 }
               },
               "queryRef": "Timeline.TimelinePLOSEvents",
-              "nativeQueryRef": "PLOS Events",
-              "displayName": "PLOS Events"
+              "nativeQueryRef": "Additional Services",
+              "displayName": "Additional Services"
             }
           ]
         }
