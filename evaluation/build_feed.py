@@ -19,6 +19,8 @@ import pandas as pd
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 SCORING_VERSION = "1.0.0"
+MIN_EFFECTIVE_TRACKS = 10   # person-level reliability gate: below this -> data_quality_flag='low_volume'
+IN_SCOPE_SERVICELINES = {"Contract Rehab", "Senior Living"}
 
 
 def main() -> None:
@@ -65,20 +67,33 @@ def main() -> None:
             .merge(roster, on="Person_ID", how="left")
             .merge(emp[["Person_ID", "UPN", "EmployeeNumber"]], on="Person_ID", how="left"))
 
-    # metadata / versioning
+    # effective volume = Sum of attribution Weight over in-scope tracks ('effective tracks'). Drives
+    # the reliability gate: a percentile built on a handful of tracks is noise. Sub-floor therapists
+    # (disproportionately terminated/incidental staff; PRN isn't flagged anywhere else) are MARKED
+    # data_quality_flag='low_volume' rather than dropped — reversible, and the app hides them by default.
+    _tr = pd.read_csv(DATA / "tracks.csv", usecols=["TxTrack_ID", "ServiceLine"])
+    _tr = _tr[_tr["ServiceLine"].isin(IN_SCOPE_SERVICELINES)]
+    _co = pd.read_csv(DATA / "contributions.csv", usecols=["TxTrack_ID", "Person_ID", "Weight"])
+    _vol = _co.merge(_tr, on="TxTrack_ID", how="inner").groupby("Person_ID")["Weight"].sum()
+    feed["effective_tracks"] = feed["Person_ID"].map(_vol).round(1)
+
+    # metadata / versioning. Period = the 12 COMPLETE calendar months the pulls window to (first of the
+    # month a year back .. last day of the prior month), matching the SQL window — NOT a rolling 365d.
     today = date.today()
+    fom = today.replace(day=1)
     feed["scoring_version"] = SCORING_VERSION
     feed["as_of_date"] = today.isoformat()
     feed["computed_at"] = datetime.now().replace(microsecond=0).isoformat()
-    feed["period_start"] = (today - timedelta(days=365)).isoformat()
-    feed["period_end"] = today.isoformat()
-    feed["data_quality_flag"] = "OK"
+    feed["period_start"] = date(fom.year - 1, fom.month, 1).isoformat()
+    feed["period_end"] = (fom - timedelta(days=1)).isoformat()
+    feed["data_quality_flag"] = (feed["effective_tracks"].fillna(0) >= MIN_EFFECTIVE_TRACKS
+                                 ).map({True: "OK", False: "low_volume"})
 
     # column order: identity -> categorization -> metadata -> metrics
     ident = ["Person_ID", "FullName", "UPN", "EmployeeNumber", "Discipline",
              "Role", "ScorecardGroup", "Template"]
     meta = ["scoring_version", "as_of_date", "computed_at",
-            "period_start", "period_end", "data_quality_flag"]
+            "period_start", "period_end", "effective_tracks", "data_quality_flag"]
     metric_cols = [c for c in feed.columns if c not in ident + meta]
     feed = feed[ident + meta + sorted(metric_cols)]
 
@@ -92,6 +107,9 @@ def main() -> None:
     print(f"columns: {len(feed.columns)}")
     print("\nmetric columns:")
     print("\n".join("  " + c for c in metric_cols))
+    nlow = int((feed["data_quality_flag"] == "low_volume").sum())
+    print(f"\ndata_quality_flag: low_volume={nlow} (<{MIN_EFFECTIVE_TRACKS} effective tracks), "
+          f"OK={len(feed) - nlow}")
     print(f"\nScorecardGroup in feed:")
     print(feed["ScorecardGroup"].value_counts().to_string())
 
