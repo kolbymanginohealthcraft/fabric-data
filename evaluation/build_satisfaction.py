@@ -178,7 +178,12 @@ def response_rate(surveys: pd.DataFrame) -> None:
     rr = rr.dropna(subset=["n_planned"])
     rr = rr[rr["n_planned"] > 0]
     rr["n_planned"] = rr["n_planned"].astype(int)
-    rr["ResponseRate"] = rr["n_respondents"] / rr["n_planned"]
+    raw_rate = rr["n_respondents"] / rr["n_planned"]
+    n_capped = int((raw_rate > 1).sum())
+    # CAP at 100% (committee-approved 2026-06-23): a rate >1 (more respondents than planned
+    # discharges, from window/denominator edges) is nonsensical as a "rate" and, left uncapped,
+    # distorts any composite that averages it against bounded 0-1 metrics.
+    rr["ResponseRate"] = raw_rate.clip(upper=1.0)
 
     rr[["Facility_ID", "FacilityName", "Discipline", "n_respondents", "n_planned", "ResponseRate"]] \
         .sort_values(["Discipline", "ResponseRate"], ascending=[True, False]) \
@@ -186,11 +191,11 @@ def response_rate(surveys: pd.DataFrame) -> None:
     print(f"\nwrote satisfaction-response-rate.csv: {len(rr)} Facility x Discipline cells "
           f"({RR_TRAILING_MONTHS} complete months: {cutoff.date()} through "
           f"{(month_start - pd.Timedelta(days=1)).date()}); "
-          f"{missing} cells had respondents but no discharge denominator (dropped)")
-    print("  ResponseRate by discipline (median / mean / >100% count):")
+          f"{missing} cells had respondents but no discharge denominator (dropped); "
+          f"{n_capped} cells capped at 100%")
+    print("  ResponseRate by discipline (median / mean, capped):")
     for disc, g in rr.groupby("Discipline"):
-        print(f"    {disc}: median {g['ResponseRate'].median():.2f}, mean {g['ResponseRate'].mean():.2f}, "
-              f">100%: {(g['ResponseRate'] > 1).sum()}")
+        print(f"    {disc}: median {g['ResponseRate'].median():.2f}, mean {g['ResponseRate'].mean():.2f}")
 
 
 if __name__ == "__main__":

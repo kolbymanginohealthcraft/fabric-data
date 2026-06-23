@@ -146,7 +146,10 @@ def main() -> None:
         # Response Rate = total respondents / total planned discharges over territory
         sub = rr_idx[rr_idx.index.isin(fids)]
         if len(sub) and sub["n_planned"].sum() > 0:
-            rows.append({**base, "Metric": "ResponseRate", "Raw": sub["n_respondents"].sum() / sub["n_planned"].sum()})
+            # territory aggregate is recomputed from sums, so cap at 100% here too (matches the
+            # per-cell cap in build_satisfaction; otherwise a high-response territory exceeds 1.0)
+            rows.append({**base, "Metric": "ResponseRate",
+                         "Raw": min(sub["n_respondents"].sum() / sub["n_planned"].sum(), 1.0)})
 
     df = pd.DataFrame(rows)
     df["Stay"] = "All"
