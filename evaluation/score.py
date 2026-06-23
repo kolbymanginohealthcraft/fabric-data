@@ -16,6 +16,8 @@ Every metric is a Sum(num)/Sum(den) ratio:
   PctDischWithOutcome  num=has_outcome den=1                  qualify: all tracks (cohort=Disc x PoR)
 
 Universe = in-scope payers only (Stay in {Short, Long}); Excluded/Changed/NoPayer dropped.
+EXCEPTION: SL (Template B) Gain is computed over ALL the SL therapist's patients (all stays/payers)
+and emitted as Stay="All" in an SL-only pool — see the SL block below. CR/Telehealth are unchanged.
 Run from repo root:  python -m evaluation.score
 """
 from __future__ import annotations
@@ -27,6 +29,7 @@ REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 FULL_COHORT = ["Discipline", "DomLibrary", "PoR"]
 DISCH_COHORT = ["Discipline", "PoR"]            # no-outcome tracks have no library
+SL_SCORECARD_GROUPS = {"SL Field Clinician", "SL Area Manager"}  # Template B: Gain over ALL patients
 
 
 def compute(df, num, den, cohort_cols):
@@ -106,6 +109,25 @@ def main() -> None:
             res["Metric"] = name
             res["Stay"] = stay_lbl
             rows.append(res)
+
+    # SL (Template B) Gain over ALL patients. SL Field Clinicians + SL Area Managers are graded on
+    # Gain across ALL their tracks (all stays / all payers), not the Long-only subset the split Gain
+    # above gives. SL has ~0 short-stay tracks, so in practice this restores the ~8.5% of caseload on
+    # non-Medicare-A/B payers (Medicaid/private/etc.) that the stay filter dropped — more defensible
+    # (full caseload) at no reliability cost (values stable, rankings preserved, pools >=25). Emitting
+    # it under Stay="All" — a label the split Gain never produces — puts SL in its OWN percentile pool
+    # automatically (CR/Telehealth are never in the "All" group), which is the peer-appropriate
+    # comparison. CR/Telehealth Short/Long Gain above is left UNCHANGED (their pool still includes SL's
+    # Long value, so their numbers don't move). Gain/hr does NOT apply to SL. -> unsuffixed Gain_* col.
+    roster = pd.read_csv(DATA / "employee-roster.csv", usecols=["Person_ID", "ScorecardGroup"])
+    sl_ids = set(roster.loc[roster["ScorecardGroup"].isin(SL_SCORECARD_GROUPS), "Person_ID"])
+    sl_gain = ct[(ct["n_included"] > 0) & ct["Person_ID"].isin(sl_ids)]
+    if len(sl_gain):
+        res = compute(sl_gain, "track_gain", "1", FULL_COHORT)
+        res["Metric"] = "Gain"
+        res["Stay"] = "All"
+        rows.append(res)
+        print(f"SL all-patient Gain (Stay=All, SL-only pool): {res['Person_ID'].nunique()} therapists")
 
     out = pd.concat(rows, ignore_index=True)
     out = out[["Person_ID", "Metric", "Stay", "Raw", "Weighted", "Percentile"]]
