@@ -90,34 +90,44 @@ def main() -> None:
         title = (r["JobTitle"] or "").lower()
         dset = divs.get(r["Person_ID"], set())
         insc = dset & {"Contract Rehab", "Senior Living"}
-        # scorecard group + template + attribution rule
+        # HomeLocation -> hierarchy -> region -> division = the 1:1 EMPLOYEE attribute that decides
+        # the bucket (replaces treatment-footprint inference, which let cross-coverage straddle two).
+        home_div = REGION_DIV.get(code2region.get(r["home"], r["home"]), "")
+        # returns: ScorecardGroup, Template, AttributionRule, GroupBasis (how the group was decided)
         if role == "Manager":
             jc = r["JobCode_int"]
             if jc in SL_AREA_MGR_CODES:
                 if r["Status"] == "Terminated":
-                    return "SL Area Manager (terminated-excluded)", "-", "Excluded (terminated)"
-                return "SL Area Manager", "B", "Building credit: 1.0 for every track in territory"
+                    return "SL Area Manager (terminated-excluded)", "-", "Excluded (terminated)", "code"
+                return "SL Area Manager", "B", "Building credit: 1.0 for every track in territory", "code"
             if jc in DOR_CODES:
-                return "CR Manager / DOR (PARKED)", "-", "Parked - no credit yet"
-            return "Leadership (PARKED, above DOR/Area)", "-", "Parked - higher-tier manager, no credit yet"
+                return "CR Manager / DOR (PARKED)", "-", "Parked - no credit yet", "code"
+            return "Leadership (PARKED, above DOR/Area)", "-", "Parked - higher-tier manager, no credit yet", "code"
         if role in ("Registered", "Assistant"):
             base = ("Eval-author: full credit (1.0) for tracks they authored the EVAL on"
                     if role == "Registered"
                     else "Treatment-minute share of tracks they treated")
             if "telehealth" in title:
-                return "Telehealth Field Clinician", "A", base
+                return "Telehealth Field Clinician", "A", base, "title"
+            # PRIMARY: home division (1:1, no straddling)
+            if home_div == "Contract Rehab":
+                return "Contract Rehab Field Clinician", "A", base, "home"
+            if home_div == "Senior Living":
+                return "SL Field Clinician", "B", base, "home"
+            # FALLBACK (~1.6%: home is Closed / HAP / blank / unmapped): treatment footprint, the old
+            # logic. User wants these KEPT for now (not excluded) for spot-checking -> basis flags them.
             if "Contract Rehab" in insc:
-                return "Contract Rehab Field Clinician", "A", base
+                return "Contract Rehab Field Clinician", "A", base, "work-fallback"
             if insc == {"Senior Living"}:
-                return "SL Field Clinician", "B", base
+                return "SL Field Clinician", "B", base, "work-fallback"
             if not dset:
-                return "(no scored tracks)", "-", base + " (no tracks in window)"
-            return "Out of scope (HAP/Closed/Other only)", "-", base
-        return "Excluded (non-clinical/blank discipline)", "-", "None"
+                return "(no scored tracks)", "-", base + " (no tracks in window)", "none"
+            return "Out of scope (HAP/Closed/Other only)", "-", base, "work-fallback"
+        return "Excluded (non-clinical/blank discipline)", "-", "None", "none"
 
     rows = []
     for _, r in emp.iterrows():
-        grp, tmpl, rule = classify(r)
+        grp, tmpl, rule, basis = classify(r)
         d = divs.get(r["Person_ID"], set())
         rec = {
             "Person_ID": r["Person_ID"], "FullName": r["FullName"],
@@ -126,6 +136,7 @@ def main() -> None:
             "HomeDivision": REGION_DIV.get(code2region.get(r["home"], r["home"]), ""),
             "HomeLocationType": home_type(r["home"], M),
             "Role": r["Role"], "ScorecardGroup": grp, "Template": tmpl,
+            "GroupBasis": basis,
             "AttributionRule": rule,
             "Scored": "Y" if r["Person_ID"] in scored else "N",
             "DivisionsWorked": "; ".join(sorted(d)) if d else "",
@@ -151,6 +162,10 @@ def main() -> None:
     print(out["ScorecardGroup"].value_counts(dropna=False).to_string())
     print("\n=== Role distribution ===")
     print(out["Role"].value_counts().to_string())
+    print("\n=== GroupBasis (how field-clinician scorecard group was decided) ===")
+    print(out["GroupBasis"].value_counts().to_string())
+    fb = out[(out["GroupBasis"] == "work-fallback") & out["Role"].isin(["Registered", "Assistant"])]
+    print(f"work-fallback field clinicians (home Closed/HAP/blank -> spot-check these): {len(fb)}")
     print(f"\nScored (appear in therapist-metrics): {(out['Scored']=='Y').sum():,}")
 
 
