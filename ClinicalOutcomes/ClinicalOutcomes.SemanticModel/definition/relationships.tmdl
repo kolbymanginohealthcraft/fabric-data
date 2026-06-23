@@ -231,3 +231,8 @@ relationship 11b10000-0000-4000-8000-0000000000a1
 	fromColumn: OutcomeSummary.LibraryItem_ID
 	toColumn: LibraryItem.LibraryItem_ID
 
+relationship d17f3103-b5fd-4dc0-9d39-de122a6a3285
+	crossFilteringBehavior: bothDirections
+	fromColumn: PatientStays.Stay_ID
+	toColumn: StayReferralSource.Stay_ID
+

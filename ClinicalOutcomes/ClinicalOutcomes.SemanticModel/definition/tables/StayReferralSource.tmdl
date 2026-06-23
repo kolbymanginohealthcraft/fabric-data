@@ -1,0 +1,86 @@
+/// Referral source per stay, matched from customer EMR exports (PCC). Referral source is NOT in
+/// NetHealth — it only exists in the customer's data. Keyed by Stay_ID → PatientStays so every
+/// outcomes measure can be sliced by where the patient was referred from.
+table StayReferralSource
+	lineageTag: 22f2df81-357f-4150-9401-3c886e5660dd
+
+	measure 'Stays with Referral Source' = COUNTROWS(StayReferralSource)
+		formatString: #,0
+		lineageTag: 5d5be2ec-53f1-4b69-a094-40738843a410
+
+	column Stay_ID
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: ac84c0d5-af6d-4177-8147-1c04231dd863
+		summarizeBy: none
+		sourceColumn: Stay_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReferralSource
+		dataType: string
+		lineageTag: 4884ccf5-9ac3-46aa-92b6-69afde8a2097
+		summarizeBy: none
+		sourceColumn: ReferralSource
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReferralType
+		dataType: string
+		lineageTag: b93ec0c0-5f3a-432e-b7c4-6fa7ebeb284b
+		summarizeBy: none
+		sourceColumn: ReferralType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReferralFacilityNumber
+		dataType: string
+		lineageTag: 344fe68e-7cb4-4f2d-b948-9a36a48b7ede
+		summarizeBy: none
+		sourceColumn: ReferralFacilityNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column AdmitDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: e8f1e508-981d-472d-a14a-7785c06c850b
+		summarizeBy: none
+		sourceColumn: AdmitDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ResidentNumber
+		dataType: string
+		lineageTag: 652109db-7af6-4427-abd3-bb73fdc3620c
+		summarizeBy: none
+		sourceColumn: ResidentNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer
+		dataType: string
+		lineageTag: fdbf385a-f076-4f7e-9a47-08d63881f327
+		summarizeBy: none
+		sourceColumn: Customer
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StayReferralSource = m
+		mode: import
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\KLM0001\Documents\Dev\Work\fabric-data\data\referral-source-stays.csv"),[Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Stay_ID", Int64.Type}, {"ReferralSource", type text}, {"ReferralType", type text}, {"ReferralFacilityNumber", type text}, {"AdmitDate", type date}, {"ResidentNumber", type text}, {"Customer", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation

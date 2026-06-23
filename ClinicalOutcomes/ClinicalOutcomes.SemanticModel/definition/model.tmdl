@@ -115,6 +115,7 @@ ref table 'Unit of Analysis'
 ref table Facility
 ref table 'Time Basis'
 ref table LibraryItem
+ref table StayReferralSource
 
 ref cultureInfo en-US
 
