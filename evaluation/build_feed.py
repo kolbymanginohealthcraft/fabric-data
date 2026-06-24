@@ -20,7 +20,11 @@ import pandas as pd
 REPO = Path(__file__).resolve().parent.parent
 DATA = REPO / "data"
 SCORING_VERSION = "1.0.0"
-MIN_EFFECTIVE_TRACKS = 10   # person-level reliability gate: below this -> data_quality_flag='low_volume'
+MIN_EFFECTIVE_TRACKS = 25   # person-level reliability gate: below this -> data_quality_flag='low_volume'.
+#                             Raised 10->25 (2026-06-23): the 10-25 band carried ~2x the percentile
+#                             extreme-rate and ~2x the Gain sampling error (p90 SE ~0.09 vs a ~0.14
+#                             cohort spread) = unstable per-individual scores. Means were unbiased, so
+#                             this is a stability gate, not a bias fix. Costs ~3% of clinical volume.
 IN_SCOPE_SERVICELINES = {"Contract Rehab", "Senior Living"}
 
 # credential -> licensed/folded discipline (Primary_Discipline); speech already normalized to SLP
