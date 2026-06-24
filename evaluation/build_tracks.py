@@ -70,7 +70,11 @@ def main() -> None:
     oc = derive_outcome_flags(oc)
     oc = oc.merge(lib, on="LibraryItem_ID", how="left")        # -> Library
     oc = oc.merge(cw, on="LibraryItem_ID", how="left")         # -> RequiredFor
-    oc["uses_required"] = oc["RequiredFor"].eq(oc["Discipline"])
+    # %Usage counts a VALID use of the discipline's required measure (Gait Speed PT / Barthel OT) --
+    # numeric at BOTH eval and discharge, not mere presence. "Present anywhere" was near-ceiling
+    # (~88-93%) because it counted N/A / one-sided charting; valid use is ~43% and actually
+    # discriminates (PT especially: 83% present -> 24% valid).
+    oc["uses_required"] = oc["RequiredFor"].eq(oc["Discipline"]) & oc["valid"]
 
     # dominant library per track (mode by outcome count; tie -> SNF)
     libcount = (oc.dropna(subset=["Library"])
