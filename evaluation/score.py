@@ -39,6 +39,10 @@ def compute(df, num, den, cohort_cols):
     d["_num"] = d[num] if num != "1" else 1.0
     d["_den"] = d[den] if den != "1" else 1.0
     d = d.dropna(subset=["_num", "_den"])
+    # Managers percentile among MANAGERS only, individuals among individuals (a building aggregate has
+    # lower variance than an individual, so mixing them compresses managers to mid-pack). One role per
+    # person, so this just splits the ranking pool; it doesn't change Raw/Weighted.
+    d["_pool"] = np.where(d["Role"] == "Manager", "M", "I")
     d["_wn"] = d["Weight"] * d["_num"]
     d["_wd"] = d["Weight"] * d["_den"]
 
@@ -51,11 +55,11 @@ def compute(df, num, den, cohort_cols):
 
     # Percentile: per (person, cohort) weighted value -> rank within cohort -> volume-weighted
     cohort_ok = d.dropna(subset=cohort_cols)
-    cell = cohort_ok.groupby(["Person_ID"] + cohort_cols).agg(
+    cell = cohort_ok.groupby(["Person_ID", "_pool"] + cohort_cols).agg(
         cwn=("_wn", "sum"), cwd=("_wd", "sum")).reset_index()
     cell = cell[cell["cwd"] > 0]
     cell["cval"] = cell["cwn"] / cell["cwd"]
-    cell["pct"] = cell.groupby(cohort_cols)["cval"].rank(pct=True)
+    cell["pct"] = cell.groupby(cohort_cols + ["_pool"])["cval"].rank(pct=True)   # rank within cohort x pool
     agg = cell.groupby("Person_ID").apply(
         lambda g: np.average(g["pct"], weights=g["cwd"]), include_groups=False
     ).rename("Percentile").reset_index()
