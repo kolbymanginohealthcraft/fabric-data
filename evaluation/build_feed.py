@@ -34,6 +34,23 @@ COHORT_OF = {"Contract Rehab Field Clinician": "CR", "Telehealth Field Clinician
              "SL Field Clinician": "SL", "SL Area Manager": "SL"}
 CLINICAL_METRICS = {"Gain", "GainPerHour", "PctImproved", "PctUsage", "PctValid", "PctDischWithOutcome"}
 SAT_METRICS = {"AdvocacyScore", "ResponseRate"}
+FLAT_CLINICAL = {"PctUsage", "PctValid", "PctDischWithOutcome"}  # non-stay-split; apply to both templates
+
+
+def applies(template, metric, stay):
+    """Which (metric, stay) rows belong on a therapist's scorecard, by template:
+      Template A (CR / Telehealth): stay-split Gain / GainPerHour / PctImproved (Short, Long); no 'All'.
+      Template B (Senior Living):   all-patients Gain / PctImproved ('All' only); NO stay split, NO Gain/hr.
+      Both: PctUsage / PctValid / PctDischWithOutcome (discipline/role applicability already enforced
+      upstream by blanks) + the two satisfaction metrics.
+    Unknown template -> keep (never silently drop a scored therapist we can't classify)."""
+    if metric in SAT_METRICS or metric in FLAT_CLINICAL:
+        return True
+    if template == "B":
+        return metric in ("Gain", "PctImproved") and stay == "All"
+    if template == "A":
+        return metric in ("Gain", "PctImproved", "GainPerHour") and stay in ("Short", "Long")
+    return True
 
 # our wide column -> original (legacy) header
 _METRIC_STEM = {
@@ -56,7 +73,7 @@ def _metric_cols(ostem):
 
 # final column order: legacy layout (minus dropped/skipped) then our additions
 OUTPUT_ORDER = (
-    ["Timeframe", "Person_ID", "EmployeeNo", "Name", "StaffTitle", "Cohort",
+    ["Timeframe", "Person_ID", "EmployeeNo", "Name", "StaffTitle", "JobCodeId", "Cohort",
      "All_Disciplines", "Primary_Discipline",
      "Total_Visits", "Total_Minutes", "Total_Tracks", "Total_Weighted_Tracks",
      "Short_Stay_Tracks", "Short_Stay_Visits", "Short_Stay_Minutes",
@@ -100,6 +117,16 @@ def main() -> None:
     emp = pd.read_csv(DATA / "employee-dim.csv", dtype=str).drop_duplicates("Person_ID")
     emp["Person_ID"] = emp["Person_ID"].astype(int)
 
+    # ---- enforce scorecard applicability BEFORE composites/pivot: keep only the (metric, stay) rows
+    # that belong on the therapist's scorecard, so the file never ships a score that must be ignored
+    # downstream (a missed ignore = a false conclusion). This also makes the composites below average
+    # ONLY the applicable metrics. SL = all-patients Gain/%Improved, no stay split, no Gain/hr.
+    tmpl = roster.drop_duplicates("Person_ID").set_index("Person_ID")["Template"].to_dict()
+    n0 = len(m)
+    m = m[[applies(tmpl.get(p), mt, st)
+           for p, mt, st in zip(m["Person_ID"], m["Metric"], m["Stay"])]].copy()
+    print(f"applicability filter: kept {len(m):,}/{n0:,} metric rows (dropped off-scorecard metrics)")
+
     # ---- composites (mean of percentiles, stay-collapsed, N/A-aware) — computed on 0-1, scaled x100 ----
     pm = m.dropna(subset=["Percentile"]).groupby(["Person_ID", "Metric"])["Percentile"].mean().reset_index()
     clin_avg = pm[pm["Metric"].isin(CLINICAL_METRICS)].groupby("Person_ID")["Percentile"].mean()
@@ -114,7 +141,7 @@ def main() -> None:
 
     feed = (wide
             .merge(roster, on="Person_ID", how="left")
-            .merge(emp[["Person_ID", "UPN", "EmployeeNumber", "JobTitle"]], on="Person_ID", how="left"))
+            .merge(emp[["Person_ID", "UPN", "EmployeeNumber", "JobTitle", "JobCode"]], on="Person_ID", how="left"))
 
     # ---- volume (in-scope tracks): counts from contributions, visits/minutes from attribution ----
     trk = pd.read_csv(DATA / "tracks.csv", usecols=["TxTrack_ID", "ServiceLine", "Stay", "Discipline"])
@@ -138,8 +165,16 @@ def main() -> None:
         feed[f"{pre}_Visits"] = feed["Person_ID"].map(sub["Total_Visits"].sum())
         feed[f"{pre}_Minutes"] = feed["Person_ID"].map(sub["Total_Minutes"].sum())
 
+    # SL (Template B) is graded over all patients with no stay split -> blank the stay-split VOLUME
+    # columns too (Total_* volumes are kept), so the file shows SL no stay breakdown at all.
+    is_tmpl_b = feed["Template"].eq("B")
+    for c in ("Short_Stay_Tracks", "Short_Stay_Visits", "Short_Stay_Minutes",
+              "Long_Stay_Tracks", "Long_Stay_Visits", "Long_Stay_Minutes"):
+        feed.loc[is_tmpl_b, c] = pd.NA
+
     # ---- derived legacy descriptors ----
     feed["StaffTitle"] = feed["JobTitle"]
+    feed["JobCodeId"] = pd.to_numeric(feed["JobCode"], errors="coerce").astype("Int64")  # legacy integer job code (Workday)
     feed["Cohort"] = feed["ScorecardGroup"].map(COHORT_OF)
     feed["Primary_Discipline"] = feed["Discipline"].map(DISC_FOLD)
     feed["Clinical_Excellence_Avg_Percentile"] = (feed["Person_ID"].map(clin_avg) * 100)

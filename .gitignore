@@ -27,6 +27,9 @@ queries/.rendered*.sql
 queries/.pull.log
 queries/.debug-render.js
 
+# Generated Word renderings of the docs/*.md (regenerate via `python -m evaluation.build_docx`)
+docs/*.docx
+
 # Binary workbooks (may contain sensitive metrics) — keep local only
 *.xlsx
 

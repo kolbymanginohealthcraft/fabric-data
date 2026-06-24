@@ -46,8 +46,8 @@ track, and the SLP track within a single stay are three separate tracks. The tra
 score, because it is the level at which a discipline's clinical work and outcomes actually live.
 
 In the current window there are **~230,000** discharged tracks; **~195,800** fall inside our scope
-(Contract Rehab + Senior Living — see §6). **95%** of in-scope tracks carry at least one recorded
-outcome.
+(Contract Rehab + Senior Living — see §6), of which **~78% carry a scored outcome** — the clinical
+sample the metrics are built on (see §5 for what makes an outcome count).
 
 ---
 
@@ -85,24 +85,12 @@ library item by its **version name**, using a single rule:
 A *track* can technically touch more than one library, so we assign each track the **dominant
 library** — the one used by the majority of its outcomes, with ties broken to **SNF**.
 
-**A key validation for the committee:** the long-standing assumption has been that a track draws
-on a single library. We can now confirm how well that holds:
-
-| | All charted outcomes | **Scored (included) outcomes** |
-|---|---|---|
-| Single library (assumption holds) | **94.4%** | **98.8%** |
-| Mixed OP + SNF | 5.6% | 1.2% |
-| ↳ of which a *genuine tie* (the SNF tiebreak actually decides) | 1.6% | 0.3% |
-
-So the assumption holds **94.4%** of the time across all charted outcomes — and **98.8%** when
-restricted to the *scored* (included) outcomes that actually drive cohorts. It gets *stronger* on the
-data that matters because invalid and one-sided charting accounted for much of the apparent mixing;
-once you require a valid, improvable outcome, the libraries separate almost completely. The tiebreak
-rule decides at most **1.6%** of tracks (0.3% on the scored basis). We tested whether flipping it
-(SNF-wins → OP-wins) changes any ratings: among the therapists who actually get scored, the composite
-percentile moves **0.4 points on average**, and exactly **one** person moves more than 10 points.
-**The tiebreak is immaterial** — the single-library assumption is sound, and the rare exceptions
-don't sway results.
+**A key validation for the committee:** the long-standing assumption that a track draws on a single
+library holds for **98.8%** of scored tracks — only **0.3%** are a genuine tie the SNF rule has to
+break. We tested whether flipping the tiebreak
+(SNF-wins → OP-wins) changes any ratings: among scored therapists the composite percentile moves
+**0.4 points on average**, and exactly **one** person moves more than 10 points. **The tiebreak is
+immaterial** — the single-library assumption is sound, and the rare exceptions don't sway results.
 
 ### 4.3 Place of Residence (PoR)
 
@@ -118,12 +106,9 @@ buckets:
 | **Other** | Anything not recognized above (residual catch-all) |
 
 **Complete code mapping.** Every intake-source code present in the current window, its NetHealth
-`Name`, and the bucket it maps to. Counts are this window, all divisions. **Scored tracks** =
-*included* outcomes (valid at both eval and discharge **and** improvable, i.e. not started at 100%) —
-this is the basis for Gain and % Tracks Improved, and the honest clinical sample size. It is well
-below the total wherever charting is sparse or outcomes are invalid (notably Home Health, and
-Outpatient Clinic where it nearly halves). The looser *valid* tier (the basis for % Discharges-with-
-Outcome and % Valid) sits a few percent above this.
+`Name`, and the bucket it maps to. Counts are this window, all divisions; **Scored tracks** = tracks
+with a usable outcome (see §5), which falls well below the total wherever charting is sparse (notably
+Home Health, 0 scored).
 
 | Code | NetHealth Name | → PoR bucket | Total tracks | Scored tracks (included) |
 |---|---|---|---|---|
@@ -359,6 +344,14 @@ Two **composite** percentiles summarize the detail:
 - **Patient Satisfaction (Avg Percentile)** — the average of Advocacy Score and Response Rate.
 
 All percentiles are reported on a **0–100** scale.
+
+**The output file carries only each therapist's *applicable* metrics.** A therapist's row holds the
+metrics that belong on their scorecard and nothing else — Contract Rehab / Telehealth show the
+stay-split metrics (and Gain per Hour); Senior Living shows the all-patients Gain and % Improved with
+no stay split and no Gain per Hour; % Usage is present only for PT/OT, and % Discharges-with-Outcome
+only for registered therapists and managers. Inapplicable cells are left blank rather than filled
+with a number that would have to be ignored — and the two composites are averaged over only the
+metrics that apply to that therapist, so they are never diluted by a metric off their scorecard.
 
 ---
 
