@@ -38,6 +38,7 @@ SAT_METRICS = {"AdvocacyScore", "ResponseRate"}
 # our wide column -> original (legacy) header
 _METRIC_STEM = {
     "Gain_Short": "Gain_Short_Stay", "Gain_Long": "Gain_Long_Stay", "Gain": "Gain_All_Stay",
+    "PctImproved": "Percent_Tracks_Improved_All_Stay",   # SL-only all-patients % Improved (no stay split)
     "GainPerHour_Short": "Gain_Per_Hour_Short_Stay", "GainPerHour_Long": "Gain_Per_Hour_Long_Stay",
     "PctImproved_Short": "Percent_Tracks_Improved_Short_Stay", "PctImproved_Long": "Percent_Tracks_Improved_Long_Stay",
     "PctUsage": "Percent_Usage_Of_Required_Measure", "PctDischWithOutcome": "Percent_Tracks_With_Outcome",
@@ -68,6 +69,7 @@ OUTPUT_ORDER = (
     + ["Clinical_Excellence_Avg_Percentile", "Patient_Satisfaction_Avg_Percentile"]
     # --- our additions (not in the legacy file) ---
     + _metric_cols("Gain_All_Stay")
+    + _metric_cols("Percent_Tracks_Improved_All_Stay")
     + ["Discipline", "Role", "ScorecardGroup", "Template", "UPN",
        "scoring_version", "as_of_date", "computed_at", "period_start", "period_end", "data_quality_flag"]
 )
@@ -146,6 +148,11 @@ def main() -> None:
     # ---- metadata (period = the 12 COMPLETE calendar months, matching the SQL window) ----
     today = date.today()
     fom = today.replace(day=1)
+    # window rolls on the 10th (10-day reconciliation lag): until the 10th the just-closed month is
+    # still reconciling, so back the upper bound up to the first of the previous month (mirrors the
+    # CASE WHEN DAY(GETDATE()) >= 10 logic in the SQL pulls).
+    if today.day < 10:
+        fom = (fom - timedelta(days=1)).replace(day=1)
     ps, pe = date(fom.year - 1, fom.month, 1), fom - timedelta(days=1)
     feed["Timeframe"] = f"{ps.strftime('%b')} {ps.day}, {ps.year} - {pe.strftime('%b')} {pe.day} {pe.year}"
     feed["scoring_version"] = SCORING_VERSION

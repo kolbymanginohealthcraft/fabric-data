@@ -153,12 +153,16 @@ def response_rate(surveys: pd.DataFrame) -> None:
     planned = pd.read_csv(pd_path)        # Facility_ID, Discipline, n_total, n_planned
 
     ts = pd.to_datetime(surveys["Timestamp"], errors="coerce")
-    # Complete-calendar-month window, matching the discharge pull's
-    # [DATEADD(YEAR,-1,firstOfThisMonth), firstOfThisMonth) bounds: exclude the partial
-    # current month so numerator and denominator cover the same 12 complete months.
-    month_start = pd.Timestamp.now().normalize().replace(day=1)      # first of current month (exclusive upper)
-    cutoff = month_start - pd.DateOffset(months=RR_TRAILING_MONTHS)  # first of month N months back (inclusive lower)
-    win = surveys[(ts >= cutoff) & (ts < month_start)].copy()
+    # Complete-calendar-month window, matching the discharge pull. The window rolls on the 10th
+    # (10-day reconciliation lag): until the 10th the just-closed month is still reconciling, so the
+    # exclusive upper bound backs up to the first of the previous month (mirrors the SQL
+    # CASE WHEN DAY(GETDATE()) >= 10 logic). Numerator and denominator stay on the same 12 months.
+    now = pd.Timestamp.now()
+    month_start = now.normalize().replace(day=1)                    # first of current month
+    if now.day < 10:
+        month_start = month_start - pd.DateOffset(months=1)         # exclude still-reconciling just-closed month
+    cutoff = month_start - pd.DateOffset(months=RR_TRAILING_MONTHS)  # inclusive lower bound
+    win = surveys[(ts >= cutoff) & (ts < month_start)].copy()       # month_start = exclusive upper
 
     # discipline-specific numerator: a survey counts for discipline D iff "Did you receive D?" == Yes
     recv = received_columns(win)

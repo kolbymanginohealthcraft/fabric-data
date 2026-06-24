@@ -36,8 +36,9 @@ JOIN dbo.TxTrack trk    ON trk.PatientCase_ID = pc.PatientCase_ID AND trk.IsDele
                           AND trk.Discipline IN ('PT','OT','ST')
 LEFT JOIN dbo.Lookup ldd ON ldd.Lookup_ID = pc.DischargedTo_ID AND ldd.Type = 'DISCHRGTO '
 WHERE pc.IsDeletedCase = 0
-  AND pc.EndDate >= DATEADD(YEAR, @YEARS, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
-  AND pc.EndDate <  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+  -- window rolls on the 10th (10-day reconciliation lag); days 1-9 still exclude the just-closed month
+  AND pc.EndDate >= DATEADD(YEAR, @YEARS, DATEADD(MONTH, CASE WHEN DAY(GETDATE()) >= 10 THEN 0 ELSE -1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)))
+  AND pc.EndDate <  DATEADD(MONTH, CASE WHEN DAY(GETDATE()) >= 10 THEN 0 ELSE -1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
 GROUP BY res.Facility_ID, trk.Discipline, ldd.Descrip
 ORDER BY res.Facility_ID, trk.Discipline`;
 

@@ -30,8 +30,9 @@ WITH track AS (
   SELECT TxTrack_ID, PatientCase_ID, Discipline, StartDate, EndDate
   FROM dbo.TxTrack
   WHERE IsDeletedTrack = 0
-    AND EndDate >= DATEADD(YEAR, @YEARS, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
-    AND EndDate <  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    -- window rolls on the 10th (10-day reconciliation lag); days 1-9 still exclude the just-closed month
+    AND EndDate >= DATEADD(YEAR, @YEARS, DATEADD(MONTH, CASE WHEN DAY(GETDATE()) >= 10 THEN 0 ELSE -1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)))
+    AND EndDate <  DATEADD(MONTH, CASE WHEN DAY(GETDATE()) >= 10 THEN 0 ELSE -1 END, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1))
 ),
 tp AS (  -- track x distinct covering PRIMARY payer type
   SELECT t.TxTrack_ID, pt.PayerType_ID
