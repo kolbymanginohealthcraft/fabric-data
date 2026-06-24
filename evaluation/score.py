@@ -13,7 +13,7 @@ Every metric is a Sum(num)/Sum(den) ratio:
   PctImproved          num=improved    den=1     stay-split   qualify: has included outcomes
   PctUsage             num=uses_req    den=1                  qualify: PT/OT tracks
   PctValid             num=n_valid_good den=n_valid_good+n_invalid   qualify: has measurements
-  PctDischWithOutcome  num=has_outcome den=1   REGISTERED+MANAGER only  qualify: their tracks (cohort=Disc x PoR)
+  PctDischWithOutcome  num=has_valid_outcome den=1  REGISTERED+MANAGER only  qualify: their tracks (cohort=Disc x PoR)
 
 Universe = in-scope payers only (Stay in {Short, Long}); Excluded/Changed/NoPayer dropped.
 EXCEPTION: SL (Template B) Gain is computed over ALL the SL therapist's patients (all stays/payers)
@@ -76,7 +76,7 @@ METRICS = [
     # Registered + Manager ONLY (committee decision): documenting the discharge outcome is the
     # eval-author's / building's responsibility, not the assistant's -> N/A (blank) for assistants,
     # and the percentile pool is registered+manager. (Same N/A-by-population pattern as %Usage for SLP.)
-    ("PctDischWithOutcome", "has_outcome", "1", False,
+    ("PctDischWithOutcome", "has_valid_outcome", "1", False,
         lambda t: t["TxTrack_ID"].notna() & t["Role"].isin(["Registered", "Manager"]), DISCH_COHORT),
 ]
 

@@ -90,6 +90,7 @@ def main() -> None:
         "n_outcomes": g.size(),
         "n_included": g["included"].sum(),
         "track_gain": g.apply(lambda d: d.loc[d["included"], "gain"].mean(), include_groups=False),
+        "n_valid": g["valid"].sum(),          # valid outcomes (numeric eval+disch) -> %Disch numerator
         "n_valid_good": g["valid_good"].sum(),
         "n_invalid": g["invalid"].sum(),
         "uses_required": g["uses_required"].any(),
@@ -102,6 +103,10 @@ def main() -> None:
     # LEFT join base <- agg  (tracks with no crosswalked outcome: has_outcome=0)
     df = base.merge(agg, on="TxTrack_ID", how="left")
     df["has_outcome"] = df["n_outcomes"].notna() & (df["n_outcomes"] > 0)
+    # %Disch numerator: discharge had a VALID outcome (numeric eval+disch), not just any outcome.
+    # No-outcome / only-invalid tracks -> False (counted as failures, NOT dropped); denominator stays
+    # all discharges. Distinct from %Valid (which is per-recorded-outcome quality, not per-discharge).
+    df["has_valid_outcome"] = df["n_valid"].fillna(0) > 0
 
     # dims: ServiceLine + PoR
     fac["DivisionCode"] = fac["DivisionCode"].str.replace(r"\.0$", "", regex=True).str.zfill(5)
