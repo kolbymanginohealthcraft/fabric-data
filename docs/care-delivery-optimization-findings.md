@@ -117,6 +117,64 @@ the registered-vs-assistant staffing conversation.
 
 ---
 
+## Good outcomes, delivered efficiently
+
+A good outcome is good; a good outcome reached with *less* therapy time is better. So beyond
+"did the patient reach a good function level" (effectiveness), we also measured **gain per hour
+of therapy** (efficiency) — the same payer-neutral idea the framework calls FG/min. A typical
+episode gains about **1 function point over ~18 hours** of therapy.
+
+Two things stand out:
+
+- **Facilities reliably differ in efficiency, too** — just like effectiveness. Adjusted for
+  patient difficulty, the same sites consistently get more (or less) functional gain per hour
+  (reproducibility **0.75**, nearly as strong as the effectiveness signal).
+- **Efficiency is a *separate* lens, not a restatement of effectiveness** (they only
+  correlate ~0.57). Split sites four ways:
+
+  |  | Reaches good function | Reaches less function |
+  |---|---|---|
+  | **Efficient (good gain/hour)** | ✅ best — good results, lean | efficient but leaves function on the table |
+  | **Inefficient (costly hours)** | good results, but expensive | ❌ weakest |
+
+  About **a third of facilities are good at one but not the other** — e.g., they get patients to
+  a good place but use a lot of hours to do it, or they're lean but stop short of the best
+  result. That's why a fair scorecard should show **both**: *did they get a good result* **and**
+  *did they get it efficiently*. Judging on either alone misses half the picture.
+
+## Can we just prescribe the best care plan?
+
+Not yet — and we can show exactly why. The dream of "Phase 3" is to tell a clinician, at
+evaluation, *"for this patient, the optimal plan is X."* That only works if the things we
+**control** (how much, how often, how intense, what interventions) reliably change the result.
+
+We ran the decisive test: how well can we predict a patient's outcome from **who they are**
+(their givens) versus **who they are plus the full care plan**?
+
+- From the **patient alone**: we explain ~60% of the discharge function level.
+- Adding the **entire care plan** on top: ~62%.
+- **The plan adds about 2 percentage points.**
+
+In plain terms: **knowing everything we control barely changes the predicted outcome beyond
+knowing the patient.** So we can't honestly hand a clinician an "optimal plan" — the levers
+just don't move the result enough (and what little signal they carry is tangled up with which
+patients get which plan).
+
+**What we *can* do today** is the valuable, honest version:
+
+- **Set expectations.** From a patient's givens we can project their likely functional
+  trajectory and discharge level reasonably well — useful for patients, families, and
+  facilities.
+- **Flag off-track patients.** When someone is tracking below their expected path, surface it
+  so the team can reassess. (Monitoring, not prescribing.)
+
+**What it would take to truly prescribe** is causal evidence — a deliberate study that *varies*
+the plan (e.g., intensity or approach) and measures the effect, rather than observing the plans
+clinicians already chose. That's a real project, and worth naming as the path to Phase 3 rather
+than pretending our current data can shortcut it.
+
+---
+
 ## What this means for us
 
 1. **The data is trustworthy for what matters most — comparing providers.** That's the
