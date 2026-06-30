@@ -21,6 +21,10 @@ data/*.csv
 !data/Outcomes Custom Scales.csv
 !data/satisfaction-scoring.csv
 !data/satisfaction-dictionary.csv
+!data/library-group-map.csv
+
+# Generated analysis outputs (derived/case-level residual tables — keep the code, not the outputs)
+analysis/outputs/
 
 # Generated / debug artifacts
 queries/.rendered*.sql
