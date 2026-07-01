@@ -128,6 +128,7 @@ it's a discrete reusable fact). This is how the skill compounds.
 - `themeCollection.baseTheme` requires `reportVersionAtImport` — hand-minimized report.json won't open. (2026-06-09)
 - Multi-line TMDL DAX without the blank line + 3-tab body → "lineageTag syntax incorrect" parse error.
 - `formatString: #,##0` is wrong; Desktop writes `#,0`.
+- A measure and a column in the SAME table cannot share a name → Desktop open fails with `PFE_XL_MEASURE_COLUMN_ALREADY_EXIST`. When exposing a hidden raw column via an aggregation, give the measure a distinct name (column `Observed` → measure `Avg Observed`), like the therapist model's `Raw`→`Raw Value`. (2026-06-30)
 
 ## Related
 - **fabric-workflow** — Fabric connection/auth, lakehouse endpoints, repointing, refresh,
