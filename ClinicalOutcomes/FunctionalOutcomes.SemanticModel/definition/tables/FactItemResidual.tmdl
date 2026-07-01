@@ -10,15 +10,15 @@ table FactItemResidual
 		formatString: +0.00;-0.00;0.00
 		lineageTag: 11a20001-0001-4a01-8b01-100000000002
 
-	measure Observed = AVERAGE(FactItemResidual[Observed])
+	measure 'Avg Observed' = AVERAGE(FactItemResidual[Observed])
 		formatString: 0.00
 		lineageTag: 11a20001-0001-4a01-8b01-100000000003
 
-	measure Expected = AVERAGE(FactItemResidual[Expected])
+	measure 'Avg Expected' = AVERAGE(FactItemResidual[Expected])
 		formatString: 0.00
 		lineageTag: 11a20001-0001-4a01-8b01-100000000004
 
-	measure Gain = AVERAGE(FactItemResidual[Gain])
+	measure 'Avg Gain' = AVERAGE(FactItemResidual[Gain])
 		formatString: +0.00;-0.00;0.00
 		lineageTag: 11a20001-0001-4a01-8b01-100000000005
 
@@ -26,7 +26,7 @@ table FactItemResidual
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: 11a20001-0001-4a01-8b01-100000000006
 
-	measure Episodes = SUM(FactItemResidual[Episodes])
+	measure 'Total Episodes' = SUM(FactItemResidual[Episodes])
 		formatString: #,0
 		lineageTag: 11a20001-0001-4a01-8b01-100000000007
 
