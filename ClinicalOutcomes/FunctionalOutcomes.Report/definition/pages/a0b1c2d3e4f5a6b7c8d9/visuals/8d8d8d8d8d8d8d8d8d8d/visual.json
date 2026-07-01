@@ -1,0 +1,128 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "8d8d8d8d8d8d8d8d8d8d",
+  "position": {
+    "x": 16,
+    "y": 416,
+    "z": 3,
+    "height": 288,
+    "width": 928,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimItem"
+                    }
+                  },
+                  "Property": "Family"
+                }
+              },
+              "queryRef": "DimItem.Family",
+              "nativeQueryRef": "Family"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimItem"
+                    }
+                  },
+                  "Property": "Item"
+                }
+              },
+              "queryRef": "DimItem.Item",
+              "nativeQueryRef": "Item",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimItem"
+                    }
+                  },
+                  "Property": "Population Admission"
+                }
+              },
+              "queryRef": "DimItem.Population Admission",
+              "nativeQueryRef": "Population Admission"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimItem"
+                    }
+                  },
+                  "Property": "Population Gain"
+                }
+              },
+              "queryRef": "DimItem.Population Gain",
+              "nativeQueryRef": "Population Gain"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimItem"
+                    }
+                  },
+                  "Property": "Population % >= Expected"
+                }
+              },
+              "queryRef": "DimItem.Population % >= Expected",
+              "nativeQueryRef": "Population % >= Expected"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimItem"
+                    }
+                  },
+                  "Property": "Reliability (split-half)"
+                }
+              },
+              "queryRef": "DimItem.Reliability (split-half)",
+              "nativeQueryRef": "Reliability (split-half)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Where the room is: each function starts and gains differently — and how reliably it ranks providers'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

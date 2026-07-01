@@ -1,0 +1,141 @@
+/// One row per Section GG item (26). Population columns describe the whole caseload for that
+/// item; Reliability = split-half agreement of facility residual (how well the item tells
+/// providers apart). Item is sorted by SortOrder so Mobility (A..S) precedes Self-Care (A..H).
+table DimItem
+	lineageTag: 33c40003-0003-4c03-8d03-300000000001
+
+	measure 'Population Gain' = AVERAGE(DimItem[PopGain])
+		formatString: +0.00;-0.00;0.00
+		lineageTag: 33c40003-0003-4c03-8d03-300000000002
+
+	measure 'Population % >= Expected' = AVERAGE(DimItem[PopPctGeExp]) / 100
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 33c40003-0003-4c03-8d03-300000000003
+
+	measure 'Reliability (split-half)' = AVERAGE(DimItem[Reliability])
+		formatString: 0.00
+		lineageTag: 33c40003-0003-4c03-8d03-300000000004
+
+	measure 'Population Admission' = AVERAGE(DimItem[PopAdmission])
+		formatString: 0.00
+		lineageTag: 33c40003-0003-4c03-8d03-300000000005
+
+	column ItemCode
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 33c40003-0003-4c03-8d03-300000000010
+		summarizeBy: none
+		sourceColumn: ItemCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Item
+		dataType: string
+		lineageTag: 33c40003-0003-4c03-8d03-300000000011
+		summarizeBy: none
+		sourceColumn: Item
+		sortByColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemGroup
+		dataType: string
+		lineageTag: 33c40003-0003-4c03-8d03-300000000012
+		summarizeBy: none
+		sourceColumn: ItemGroup
+
+		annotation SummarizationSetBy = Automatic
+
+	column Family
+		dataType: string
+		lineageTag: 33c40003-0003-4c03-8d03-300000000013
+		summarizeBy: none
+		sourceColumn: Family
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemLetter
+		dataType: string
+		lineageTag: 33c40003-0003-4c03-8d03-300000000014
+		summarizeBy: none
+		sourceColumn: ItemLetter
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 33c40003-0003-4c03-8d03-300000000015
+		summarizeBy: none
+		sourceColumn: SortOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column PopEpisodes
+		dataType: int64
+		formatString: #,0
+		lineageTag: 33c40003-0003-4c03-8d03-300000000016
+		summarizeBy: sum
+		sourceColumn: PopEpisodes
+
+		annotation SummarizationSetBy = Automatic
+
+	column PopAdmission
+		dataType: double
+		isHidden
+		lineageTag: 33c40003-0003-4c03-8d03-300000000017
+		summarizeBy: none
+		sourceColumn: PopAdmission
+
+		annotation SummarizationSetBy = Automatic
+
+	column PopObserved
+		dataType: double
+		isHidden
+		lineageTag: 33c40003-0003-4c03-8d03-300000000018
+		summarizeBy: none
+		sourceColumn: PopObserved
+
+		annotation SummarizationSetBy = Automatic
+
+	column PopGain
+		dataType: double
+		isHidden
+		lineageTag: 33c40003-0003-4c03-8d03-300000000019
+		summarizeBy: none
+		sourceColumn: PopGain
+
+		annotation SummarizationSetBy = Automatic
+
+	column PopPctGeExp
+		dataType: double
+		isHidden
+		lineageTag: 33c40003-0003-4c03-8d03-300000000020
+		summarizeBy: none
+		sourceColumn: PopPctGeExp
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reliability
+		dataType: double
+		isHidden
+		lineageTag: 33c40003-0003-4c03-8d03-300000000021
+		summarizeBy: none
+		sourceColumn: Reliability
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimItem = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\KLM0001\Documents\Dev\Work\fabric-data\data\item-dim-feed.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Kept = Table.SelectColumns(Promoted, {"ItemCode", "Item", "ItemGroup", "Family", "ItemLetter", "SortOrder", "PopEpisodes", "PopAdmission", "PopObserved", "PopGain", "PopPctGeExp", "Reliability"}),
+				    Typed = Table.TransformColumnTypes(Kept, {{"ItemCode", Int64.Type}, {"Item", type text}, {"ItemGroup", type text}, {"Family", type text}, {"ItemLetter", type text}, {"SortOrder", Int64.Type}, {"PopEpisodes", Int64.Type}, {"PopAdmission", type number}, {"PopObserved", type number}, {"PopGain", type number}, {"PopPctGeExp", type number}, {"Reliability", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

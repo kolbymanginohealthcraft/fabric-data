@@ -1,0 +1,8 @@
+relationship 44d50004-0004-4d04-8e04-400000000001
+	fromColumn: FactItemResidual.Facility_ID
+	toColumn: DimFacility.Facility_ID
+
+relationship 44d50004-0004-4d04-8e04-400000000002
+	fromColumn: FactItemResidual.ItemCode
+	toColumn: DimItem.ItemCode
+
