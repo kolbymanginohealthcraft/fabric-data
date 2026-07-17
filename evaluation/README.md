@@ -14,7 +14,6 @@ node queries/pull-track-outcomes.js    # track-outcomes.csv  (ungated per-outcom
 node queries/pull-eval-author.js       # eval-author.csv     (registered-credit source)
 node queries/pull-employee-dim.js      # employee-dim.csv    (roles + supervisor edge + HomeLocation)
 node queries/pull-attribution.js       # therapist-attribution.csv (treatment minutes, eval excluded)
-node queries/pull-library-dim.js       # library-dim.csv     (LibraryItem -> OP/SNF)
 node queries/pull-facility-dim.js      # facility-dim.csv    (Facility_ID -> DivisionCode)
 node queries/pull-facility-hier.js     # facility-hier.csv   (District/Area/Region ledgers)
 node queries/pull-missed-visits.js     # missed-visits.csv   (per Person x Setting missed/delivered counts)
@@ -29,13 +28,15 @@ score              # therapist-metrics.csv  per (therapist x metric x stay) Raw/
 build_roster       # employee-roster.csv    per-employee audit (role, group, template, ...)
 build_missed_visits_feed  # missed-visits-feed.csv  MissedVisitRate, long schema (ready, gated off)
 build_hh_candidates       # hh-clinician-candidates.csv  HH-group roster options (see docs/home-health-roster-options.md)
-build_feed         # therapist-scorecard-feed.csv  wide app feed (the IT handoff surface)
+build_feed         # therapist-scorecard-feed.csv  wide app feed (the IT handoff surface; FULL audit set)
+build_deliverable  # outcomes_and_satisfaction.xlsx  scored-only (OK) Sheet1 deliverable; --deliver to ship
 ```
 
 ## What each consumer step does
 
 - **build_tracks** — assembles the per-track table; derives valid/disregarded/included/gain,
-  dominant library, ServiceLine, PoR bucket, hours (treatment minutes).
+  library (authoritative `TxDocument.Library_ID` → `Library.Name` → OP/SNF/HH via the
+  `library_group_of()` rule, one per track), ServiceLine, PoR bucket, hours (treatment minutes).
 - **build_attribution** — Registered = full credit for tracks they authored the eval on;
   Assistant = treatment-minute share; SL Area Manager = building credit over territory (shared
   `territory_codes` ledger rule). CR DORs + the leadership tier are PARKED.
@@ -48,6 +49,13 @@ build_feed         # therapist-scorecard-feed.csv  wide app feed (the IT handoff
 - **build_feed** — pivots metrics wide + joins identity/group + stamps version metadata. Folds in
   satisfaction always; folds in missed-visits only when `INCLUDE_MISSED_VISITS=1` (off by default —
   the metric is ready but HH clinicians aren't a scored group yet, and it currently spans all settings).
+  Emits the FULL evaluated set (OK + low_volume) as the audit surface.
+- **build_deliverable** — the last mile. Filters the feed to `data_quality_flag == 'OK'` (scored
+  only), writes a single-sheet `Sheet1` `outcomes_and_satisfaction.xlsx` mirroring the live file's
+  types (integer IDs/volumes as ints, metrics as floats, blank = empty cell / N/A — never 0).
+  Default STAGES to `data/` only; `--deliver` backs up the current live file to
+  `data/deliverable-backups/` then atomically replaces it in the ITPowerBiFiles OneDrive folder
+  (`--target` overrides the path).
 
 Auth: `fabric-query.js` shells `az` directly; run `az login` once (rolling refresh → no re-auth).
 Install deps: `pip install -r evaluation/requirements.txt`.
