@@ -114,6 +114,7 @@ One line per gotcha. Add to it whenever we hit a new Fabric trap (and a memory f
 - Cross-host single-query joins fail post-medallion (different endpoint hosts) — source from one layer or split partitions.
 - Bronze raw dates are dirty (CompletedDate = 2051) — filter defensively; prefer Silver where conformed.
 - Repoint is NOT a hostname swap: int↔varchar key changes + Division=Region level-shift will silently corrupt joins if missed.
+- Bronze lands NetHealth GUID `varbinary` Id columns in TWO encodings — 16-byte binary AND the 36-byte ASCII text of the GUID string — and they don't join. `PatientLevelOptionalServices.Instance` flipped binary→text on 2026-06-01 while `.Service` stayed mixed, silently dropping ~98% of category lookups. Detect with `DATALENGTH(col)` (16 vs 36); normalize both sides to a canonical GUID string before joining. Assume ANY varbinary Id join can hit this. (2026-07-27)
 
 ## Related
 - **pbip-authoring** — PBIP file structure & TMDL syntax. The seam between the two is model binding
