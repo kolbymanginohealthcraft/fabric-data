@@ -22,6 +22,10 @@ data/*.csv
 !data/satisfaction-scoring.csv
 !data/satisfaction-dictionary.csv
 !data/library-group-map.csv
+# Facility restorative go-live dates: an ANALYSIS BOUNDARY, not a data extract. Tracked so the
+# pre/post windows stay stable and auditable (and reconcilable against Brad's rollout answer)
+# instead of silently re-deriving per run. Regenerate: queries/pull-restorative-golive.js
+!data/restorative-golive.csv
 
 # Generated analysis outputs (derived/case-level residual tables — keep the code, not the outputs)
 analysis/outputs/

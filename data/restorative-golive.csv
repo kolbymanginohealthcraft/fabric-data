@@ -1,0 +1,54 @@
+FacilityId,FacilityNumber,FacilityName,Status,FirstActivityMonth,GoLiveMonth,PreEndDate,PostStartDate,PlateauMinutes,ActiveMonths
+997,92379,Wichita Presbyterian Manor,implemented,2025-03,2025-03,2025-02-28,2025-04-01,7155,17
+1704,97582,Alfredo Gonzalez Texas State Veterans Home,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9754,10
+881,4877,Brickyard Healthcare -  Elkhart,implemented,2025-10,2025-11,2025-09-30,2025-12-01,12767,8
+859,220,Brickyard Healthcare - 12th Street,implemented,2025-11,2025-11,2025-10-31,2025-12-01,6194,9
+855,2046,Brickyard Healthcare - Bloomington,implemented,2025-11,2025-11,2025-10-31,2025-12-01,8100,9
+822,93,Brickyard Healthcare - Brookview,implemented,2025-11,2025-11,2025-10-31,2025-12-01,7056,9
+527,242,Brickyard Healthcare - Fountainview,implemented,2025-10,2025-11,2025-09-30,2025-12-01,4309,10
+817,256,Brickyard Healthcare - Fountainview Terrace,implemented,2025-10,2025-11,2025-09-30,2025-12-01,14153,10
+857,97,Brickyard Healthcare - Golden Rule,implemented,2025-10,2025-11,2025-09-30,2025-12-01,8334,10
+882,4875,Brickyard Healthcare - Knox,implemented,2025-10,2025-11,2025-09-30,2025-12-01,11366,10
+819,257,Brickyard Healthcare - La Porte,implemented,2025-10,2025-11,2025-09-30,2025-12-01,12030,10
+869,2272,Brickyard Healthcare - Lincoln Hills,implemented,2025-10,2025-11,2025-09-30,2025-12-01,7207,10
+851,276,Brickyard Healthcare - Merrillville,implemented,2025-11,2025-11,2025-10-31,2025-12-01,18353,9
+887,4878,Brickyard Healthcare - Muncie,implemented,2025-10,2025-11,2025-09-30,2025-12-01,30153,10
+854,98,Brickyard Healthcare - Petersburg,implemented,2025-10,2025-11,2025-09-30,2025-12-01,8895,10
+850,96,Brickyard Healthcare - Richmond,implemented,2025-11,2025-11,2025-10-31,2025-12-01,9039,9
+886,2281,Brickyard Healthcare - Sycamore Village,implemented,2025-10,2025-11,2025-09-30,2025-12-01,17291,10
+853,218,Brickyard Healthcare - Valparaiso,implemented,2025-10,2025-11,2025-09-30,2025-12-01,7995,9
+818,92,Brickyard Healthcare - Willow Springs,implemented,2025-10,2025-11,2025-09-30,2025-12-01,8324,10
+884,2158,Brickyard Healthcare - Woodbridge,implemented,2025-10,2025-11,2025-09-30,2025-12-01,5886,10
+888,3678,Brickyard Healthcare - Woodlands,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9327,10
+852,90,Brickyard Healthcare – Churchman,implemented,2025-10,2025-11,2025-09-30,2025-12-01,8753,10
+1686,97581,Country Care Manor,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9776,10
+1695,97575,Frank M. Tejeda Texas State Veterans Home,implemented,2025-10,2025-11,2025-09-30,2025-12-01,7585,10
+2031,97812,Hill Country Heights,implemented,2025-10,2025-11,2025-09-30,2025-12-01,6845,10
+2165,97909,La Frontera  Nursing & Rehabilitation,implemented,2025-10,2025-11,2025-09-30,2025-12-01,11648,10
+1702,97571,Lamun-Lusk-Sanchez Texas State Vets Home,implemented,2025-10,2025-11,2025-09-30,2025-12-01,12435,10
+1687,97579,Laredo Nursing and Rehabilitation Center,implemented,2025-10,2025-11,2025-09-30,2025-12-01,10065,10
+2029,97799,Las Alturas Brownsville,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9180,10
+1693,97586,Las Alturas de Penitas,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9300,10
+1707,97580,Las Alturas Nursing & Transitional Care,implemented,2025-10,2025-11,2025-09-30,2025-12-01,16560,10
+1690,97583,Mid Valley Nursing & Rehab,implemented,2025-10,2025-11,2025-09-30,2025-12-01,10605,10
+1700,97591,Stone Oak Care Center,implemented,2025-10,2025-11,2025-09-30,2025-12-01,14926,10
+1701,97588,The Enclave,implemented,2025-10,2025-11,2025-09-30,2025-12-01,15510,10
+2163,97907,The Heights at Medical Center,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9873,10
+1698,97569,The Heights of Alamo,implemented,2025-10,2025-11,2025-09-30,2025-12-01,10200,10
+1689,97572,The Heights of Bulverde,implemented,2025-10,2025-11,2025-09-30,2025-12-01,12064,10
+1696,97576,The Heights of Gonzales,implemented,2025-10,2025-11,2025-09-30,2025-12-01,6990,10
+2164,97908,The Heights of League City,implemented,2025-10,2025-11,2025-09-30,2025-12-01,19155,10
+1699,97593,The Heights of Tomball,implemented,2025-10,2025-11,2025-09-30,2025-12-01,17606,10
+1705,97594,The Heights of Tyler,implemented,2025-10,2025-11,2025-09-30,2025-12-01,12030,10
+1684,97590,The Heights on Huebner,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9304,10
+1692,97578,West Oaks Nursing & Rehab Center,implemented,2025-10,2025-11,2025-09-30,2025-12-01,9415,10
+823,88,Brickyard Healthcare - Brandywine,implemented,2025-10,2025-12,2025-09-30,2026-01-01,11927,10
+1706,97574,Del Rio Nursing and Rehabilitation Center,implemented,2025-12,2025-12,2025-11-30,2026-01-01,6945,8
+1691,97584,The Heights (at Pleasanton),implemented,2025-12,2025-12,2025-11-30,2026-01-01,9621,8
+2032,97813,Rosewood Heights and Rose Villas,implemented,2026-02,2026-02,2026-01-31,2026-03-01,3920,6
+1685,97585,The Heights on Valley Ranch,implemented,2025-10,2026-02,2025-09-30,2026-03-01,6630,10
+824,259,Brickyard Healthcare – Portage,implemented,2025-10,2026-03,2025-09-30,2026-04-01,11469,9
+2030,97811,Harker Heights Nursing & Rehab,implemented,2026-03,2026-04,2026-02-28,2026-05-01,4680,5
+2364,98039,The Heights of Magnolia,implemented,2026-03,2026-04,2026-02-28,2026-05-01,4325,5
+528,3679,Brickyard Healthcare - Brentwood,post_too_thin,2026-06,2026-06,2026-05-31,2026-07-01,10011,2
+1194,95993,The Ching Villas,never_implemented,2025-05,,,,705,1
