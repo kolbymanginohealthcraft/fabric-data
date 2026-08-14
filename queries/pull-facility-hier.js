@@ -10,10 +10,11 @@ const SQL = `
 SELECT
     RIGHT('00000' + LTRIM(RTRIM(FacilityNumber)), 5) AS code,
     DistrictNumber, DistrictName, AreaNumber, AreaName, RegionNumber, RegionName, Closed
+-- 2026-08-14: moved to Silver_Aegis_Facility_Lakehouse; see pull-facility-dim.js
 FROM dbo.facilityhierarchy`;
 (async () => {
   const out = path.join(__dirname, "..", "data", "facility-hier.csv");
-  const r = await query(SQL, "silver");
+  const r = await query(SQL, "silver-facility");
   console.error(`facility-hier rows: ${r.recordset.length}`);
   fs.writeFileSync(out, toCsv(r.recordset));
   console.error(`wrote ${out}`);

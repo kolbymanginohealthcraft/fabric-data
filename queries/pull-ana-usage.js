@@ -75,15 +75,20 @@ FROM dbo.employee WHERE NetHealthId IS NOT NULL`;
   console.error(`bronze rows: ${gg.length} in ${Math.round((Date.now() - t0) / 1000)}s`);
 
   // Employee name map (prefer Active when a Person_ID has multiple rows).
-  const emp = (await query(EMP_SQL, "silver")).recordset;
+  // 2026-08-14: employee moved to Silver_Aegis_Employee_Lakehouse in the Silver domain split.
+  // Key on String(): the new Silver employee.NetHealthId is bigint, which the driver hands back as
+  // a STRING, while bronze Person_ID is int -> a NUMBER. Map lookups use strict equality, so
+  // without this every single name silently came back "(unmatched)".
+  const emp = (await query(EMP_SQL, "silver-employee")).recordset;
   const empMap = new Map();
   for (const e of emp) {
-    const prev = empMap.get(e.Person_ID);
-    if (!prev || (e.Status === "Active" && prev.Status !== "Active")) empMap.set(e.Person_ID, e);
+    const k = String(e.Person_ID);
+    const prev = empMap.get(k);
+    if (!prev || (e.Status === "Active" && prev.Status !== "Active")) empMap.set(k, e);
   }
 
   const rows = gg.map((r) => {
-    const e = empMap.get(r.AuthorPerson_ID) || {};
+    const e = empMap.get(String(r.AuthorPerson_ID)) || {};
     return {
       AuthorPerson_ID: r.AuthorPerson_ID,
       FullName: e.FullName || "",

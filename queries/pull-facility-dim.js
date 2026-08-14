@@ -42,6 +42,8 @@ SELECT
     f.Name               AS FacilityName,
     fh.RegionNumber      AS DivisionCode,
     fh.RegionName        AS DivisionName
+-- 2026-08-14: moved to Silver_Aegis_Facility_Lakehouse (alias silver-facility) in the Silver
+-- domain split. Table and column names unchanged; only the database differs.
 FROM dbo.facility f
 LEFT JOIN dbo.facilityhierarchy fh ON f.FacilityNumber = fh.FacilityNumber
 `;
@@ -49,7 +51,7 @@ LEFT JOIN dbo.facilityhierarchy fh ON f.FacilityNumber = fh.FacilityNumber
 (async () => {
   const { outPath } = parseArgs();
   console.error(`Running facility dim pull (Silver) → ${outPath}`);
-  const result = await query(SQL, "silver");
+  const result = await query(SQL, "silver-facility");
   const rows = result.recordset;
   console.error(`Query returned ${rows.length} facilities`);
   fs.writeFileSync(outPath, toCsv(rows));

@@ -47,6 +47,10 @@ function toCsv(rows) {
 // EVAL services (Bronze): Service[Type]='Eval' iff Description contains 'eval' (mirrors the
 // PBI model's M derivation). Treatment minutes = Duration on NON-eval services. ServiceId in
 // silver.treatmentminute is the same ID space as bronze.Service.Service_ID.
+//
+// 2026-08-14: the session/minute tables moved to Silver_Aegis_Treatment_Lakehouse (alias
+// `silver-treatment`) in the Silver domain split. Table/column names unchanged. Service still comes
+// from Bronze, though note silver-treatment now carries its own dbo.service if we ever want it.
 const EVAL_IDS_SQL = `SELECT Service_ID FROM dbo.Service WHERE LOWER(Description) LIKE '%eval%'`;
 
 const SQL = (evalIds) => `
@@ -84,7 +88,7 @@ ORDER BY s.TrackId, m.PersonId
   const sql = SQL(evalIds).replace("@YEARS", `-${years}`);
   console.error(`Running attribution pull: tracks active in last ${years} year(s) → ${outPath}`);
   const t0 = Date.now();
-  const result = await query(sql, "silver");
+  const result = await query(sql, "silver-treatment");
   const rows = result.recordset;
   console.error(`Query returned ${rows.length} (therapist × track) rows in ${Math.round((Date.now() - t0) / 1000)}s`);
   fs.writeFileSync(outPath, toCsv(rows));

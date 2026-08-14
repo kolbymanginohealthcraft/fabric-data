@@ -109,14 +109,19 @@ WHERE NetHealthId IS NOT NULL AND EmployeeNumber IS NOT NULL`;
   const t0 = Date.now();
 
   const agg = (await query(clockSql(years), "bronze")).recordset;
-  const emp = (await query(empSql, "silver")).recordset;
+  // 2026-08-14: employee moved to Silver_Aegis_Employee_Lakehouse in the Silver domain split.
+  const emp = (await query(empSql, "silver-employee")).recordset;
   console.error(`bronze person-aggregates: ${agg.length} | silver employees: ${emp.length} in ${Math.round((Date.now() - t0) / 1000)}s`);
 
   // NetHealthId -> employee (prefer an Active record if a NetHealthId has duplicates)
+  // Key on String(): the new Silver employee.NetHealthId is bigint, which the driver hands back as
+  // a STRING, while the bronze Labor person id is int -> a NUMBER. Map lookups use strict equality,
+  // so without this the join matched nothing and the script wrote 0 therapists.
   const byNh = new Map();
   for (const e of emp) {
-    const prev = byNh.get(e.NetHealthId);
-    if (!prev || (e.Status === "Active" && prev.Status !== "Active")) byNh.set(e.NetHealthId, e);
+    const k = String(e.NetHealthId);
+    const prev = byNh.get(k);
+    if (!prev || (e.Status === "Active" && prev.Status !== "Active")) byNh.set(k, e);
   }
 
   // Fold person-grain aggregates up to EmployeeNumber (weighted by entry count), so a
@@ -124,7 +129,7 @@ WHERE NetHealthId IS NOT NULL AND EmployeeNumber IS NOT NULL`;
   const byEmp = new Map();
   let unmatched = 0;
   for (const r of agg) {
-    const e = byNh.get(r.Person_ID);
+    const e = byNh.get(String(r.Person_ID));
     if (!e) { unmatched++; continue; }
     let acc = byEmp.get(e.EmployeeNumber);
     if (!acc) {

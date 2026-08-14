@@ -83,7 +83,8 @@ function docRating(pct) {
   const t0 = Date.now();
 
   const agg = (await query(docSql(years), "bronze")).recordset;
-  const emp = (await query(empSql, "silver")).recordset;
+  // 2026-08-14: employee moved to Silver_Aegis_Employee_Lakehouse in the Silver domain split.
+  const emp = (await query(empSql, "silver-employee")).recordset;
   console.error(`bronze username-aggregates: ${agg.length} | silver employees: ${emp.length} in ${Math.round((Date.now() - t0) / 1000)}s`);
 
   // Username -> employee (prefer Active on duplicates)

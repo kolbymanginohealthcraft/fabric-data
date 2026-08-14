@@ -58,10 +58,21 @@ repoint is a hostname swap** (it isn't — keys, level-shifts, and cross-host jo
 Medallion is the DEFAULT source; the ClinicalOutcomes migration onto it is largely complete.
 `aegisdataprod` / `AegisPreImplementationLakehouse` / PBI dataflows are now RARE exceptions.
 
-- **Silver** (`Aegis_Core_Silver_Lakehouse`, alias `silver`): conformed + fresh. Activity/labor/
-  census/people → here NOW. `dbo.treatmentsession`, `dbo.treatmentminute`, `dbo.labor`,
-  `dbo.employee` (UPN→security, JobCode→peer group), org spine (region/area/district/facility/
-  facilityhierarchy). Case/stay/track tables are SKELETAL (keys only).
+- **Silver** — conformed + fresh. Activity/labor/census/people → here NOW. **As of 2026-08-14 Silver
+  is SPLIT ACROSS DOMAIN LAKEHOUSES** (see the pitfalls log); the old alias `silver`
+  (`Aegis_Core_Silver_Lakehouse`) is now nearly empty. Use, on the same endpoint host:
+  - `silver-employee` → `dbo.employee` (UPN→security, JobCode→peer group), `dbo.labor`, `dbo.professionallicense`
+  - `silver-facility` → org spine: `dbo.facility`, `dbo.facilityhierarchy`, `dbo.region/area/district`
+  - `silver-treatment` → `dbo.treatmentsession`, `dbo.treatmentminute`, `dbo.service`
+  - `silver-patient` → `dbo.patient`, `dbo.patientcase`, `dbo.patientstay`, `dbo.track` (still SKELETAL — keys only)
+  - `silver-payers`, `silver-reference`
+  - **`silver-aggregate` (`Silver_Aegis_Aggregate_Lakehouse`) — despite the name, NOT rollups.** It
+    carries ALL 23 `dbo` tables from every domain in ONE database, verified row-for-row identical and
+    equally fresh. It is therefore the **1:1 drop-in replacement for the old `silver` alias**, and the
+    ONLY Silver option that can join across domains (e.g. employee ⨝ facility) in a single query —
+    the domain lakehouses are separate databases, so cross-domain NativeQuery joins fail there.
+    Prefer it for semantic-model expressions and any multi-domain query; per-domain aliases are fine
+    for single-domain pulls where explicit provenance is nicer.
 - **Bronze** (`NetHealth_Bronze_Lakehouse`, alias `bronze`): full near-real-time mirror, current to
   the hour. Has what Silver lacks: `dbo.TxDocument`/`TxDocumentItem` (271M), `dbo.PatientCase`,
   `dbo.Stay` (Admit/Discharge/DischargedTo/IsCurrent), `dbo.TxTrack` (Discipline, dates,
@@ -114,6 +125,9 @@ One line per gotcha. Add to it whenever we hit a new Fabric trap (and a memory f
 - Cross-host single-query joins fail post-medallion (different endpoint hosts) — source from one layer or split partitions.
 - Bronze raw dates are dirty (CompletedDate = 2051) — filter defensively; prefer Silver where conformed.
 - Repoint is NOT a hostname swap: int↔varchar key changes + Division=Region level-shift will silently corrupt joins if missed.
+- **Silver was split into DOMAIN lakehouses (2026-08-14).** `Aegis_Core_Silver_Lakehouse` kept only `reportdailyinfo` + `control.*`; everything else moved to `Silver_Aegis_{Employee,Facility,Treatment,Patient,Payers,Reference,Aggregate}_Lakehouse` in the same workspace (same endpoint host, different `database` → aliases `silver-employee`, `silver-facility`, …). **Table and column names are UNCHANGED (`dbo.employee`, `dbo.facility`, `dbo.treatmentsession`), so a repoint is an ALIAS SWAP ONLY.** Use these domain lakehouses, NOT the `silver-wh` mirror (`A_SilverWarehousesLakehouse`), which serves the same rows under schema `Aegis_Core_Silver_Lakehouse__dbo` with PascalCase renames and forces needless SQL rewrites. Each domain lakehouse also has an `inter.*` staging schema — always read `dbo.*`. Symptom when stale: `Invalid object name 'dbo.employee'`. (2026-08-14)
+- **Silver `employee.NetHealthId` is now `bigint`, which the mssql driver returns as a STRING** while Bronze person ids are `int` → NUMBER. JS `Map` lookups use strict equality, so employee joins in Node **silently match nothing** (pull-clocking wrote 0 therapists; pull-ana-usage showed every name as "(unmatched)"). Key on `String(id)` both sides. Python/pandas consumers are immune because the CSV round-trip normalizes types — so this hides from the eval pipeline and only bites the JS pulls. (2026-08-14)
+- Post-split `employee` grew ~10.2k → ~23k rows: ~94% of the added rows are historical **Terminated** Workday records (deeper history), plus `SourceType` (Workday/Special/Contractor) and `JobDiscipline` columns. NOT Broad River employees — UPN domains are still 99.8% `@aegistherapies.com`. `NetHealthId` stays unique, so no join fan-out. (2026-08-14)
 - Bronze lands NetHealth GUID `varbinary` Id columns in TWO encodings — 16-byte binary AND the 36-byte ASCII text of the GUID string — and they don't join. `PatientLevelOptionalServices.Instance` flipped binary→text on 2026-06-01 while `.Service` stayed mixed, silently dropping ~98% of category lookups. Detect with `DATALENGTH(col)` (16 vs 36); normalize both sides to a canonical GUID string before joining. Assume ANY varbinary Id join can hit this. (2026-07-27)
 
 ## Related

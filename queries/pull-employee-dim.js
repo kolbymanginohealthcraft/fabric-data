@@ -4,7 +4,14 @@
 // eval population to actual treating clinicians (PersonId in treatment minutes sweeps in
 // admins/execs who occasionally logged minutes).
 //
-// Replaces the old EmployeeBasicInfo (security db). dbo.employee is a superset.
+// Replaces the old EmployeeBasicInfo (security db). employee is a superset.
+//
+// 2026-08-14: the Fabric - Silver workspace was split into domain lakehouses. employee moved out of
+// Aegis_Core_Silver_Lakehouse into Silver_Aegis_Employee_Lakehouse (db alias `silver-employee`).
+// Table/column names are UNCHANGED (still dbo.employee) — only the database differs.
+// Population widened ~10.2k -> ~23k rows: ~94% of the added rows are historical Terminated
+// employees (deeper Workday history), NOT new companies. NetHealthId is still unique, so joins do
+// not fan out, and the scored population is gated on treatment minutes rather than this dimension.
 // NOTE: Status is 'Active'/'Terminated' (old code used 'A'); Discipline is
 // PT/OT/ST/PTA/COTA (assistants included); JobTitle/JobCode for role filtering + the
 // future `job` cohort dimension.
@@ -58,7 +65,7 @@ WHERE NetHealthId IS NOT NULL
 (async () => {
   const { outPath } = parseArgs();
   console.error(`Running employee dim pull (Silver) → ${outPath}`);
-  const result = await query(SQL, "silver");
+  const result = await query(SQL, "silver-employee");
   const rows = result.recordset;
   console.error(`Query returned ${rows.length} employees`);
   fs.writeFileSync(outPath, toCsv(rows));
