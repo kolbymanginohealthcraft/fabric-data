@@ -1,0 +1,210 @@
+table DischargeDestination
+	lineageTag: 5fe2a3e2-3055-482c-a178-aae58a78794e
+
+	measure 'Descrip List' =
+			
+			VAR __DISTINCT_VALUES_COUNT = DISTINCTCOUNT('DischargeDestination'[Descrip])
+			VAR __MAX_VALUES_TO_SHOW = 3
+			RETURN
+				IF(
+					__DISTINCT_VALUES_COUNT > __MAX_VALUES_TO_SHOW,
+					CONCATENATE(
+						CONCATENATEX(
+							TOPN(
+								__MAX_VALUES_TO_SHOW,
+								VALUES('DischargeDestination'[Descrip]),
+								'DischargeDestination'[Descrip],
+								ASC
+							),
+							'DischargeDestination'[Descrip],
+							", ",
+							'DischargeDestination'[Descrip],
+							ASC
+						),
+						", etc."
+					),
+					CONCATENATEX(
+						VALUES('DischargeDestination'[Descrip]),
+						'DischargeDestination'[Descrip],
+						", ",
+						'DischargeDestination'[Descrip],
+						ASC
+					)
+				)
+		lineageTag: 25256078-39ff-431a-a844-7772688914f6
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "ConcatenateValues"
+				}
+
+		changedProperty = FormatString
+
+	column Lookup_ID
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: 50cb8e7e-8cdf-4d6a-bf3b-4c9bca79d7f3
+		summarizeBy: none
+		sourceColumn: Lookup_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descrip
+		dataType: string
+		lineageTag: 85411d28-7f2d-474f-9cb4-bfc9aa1eebf8
+		summarizeBy: none
+		sourceColumn: Descrip
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setting =
+			
+			IF(LEFT(DischargeDestination[Descrip],3)="ILF","ILF",
+			IF(LEFT(DischargeDestination[Descrip],3)="ALF","ALF",
+			IF(LEFT(DischargeDestination[Descrip],4)="Home","Home",
+			// IF(CONTAINSSTRING(DischargeDestination[Descrip],"ospital"),"Hospital",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Acute care hospital"),"Hospital",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Rehab Hospital"),"IRF",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"SNF"),"SNF",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Memory"),"Memory Care",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Hospice"),"Hospice",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Expired"),"Expired",
+			DischargeDestination[Descrip]
+			)))))))))
+		lineageTag: a7a34e16-aa0a-4bc8-a65c-b6ff124764c5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group =
+			
+			SWITCH(
+			    DischargeDestination[Setting],
+			    "ALF","Community",
+			    "ILF","Community",
+			    "Home","Community",
+			    "IRF","Institutional",
+			    "Hospital","Institutional",
+			    "Hospice","Institutional",
+			    "Memory Care","Institutional",
+			    "SNF","Institutional",
+			    "Other"
+			)
+		lineageTag: 08a01640-1e00-469d-8784-20026d2cb34a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type =
+			
+			IF(
+			    DischargeDestination[Setting] IN {"Hospital", "Hospice", "Expired", "Left Facility AMA"},
+			    "Unplanned",
+			    "Planned"
+			)
+		lineageTag: 0439d3b7-ad49-47d7-9e57-a07b178331ed
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Updated
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 031d74d0-c66b-4d02-82c3-5978f0e93daf
+		summarizeBy: none
+		sourceColumn: Updated
+
+		variation Variation
+			isDefault
+			relationship: 99a67698-0466-41aa-9b66-283814c451a5
+			defaultHierarchy: LocalDateTable_a7c3593a-a733-49ff-b800-7e7da4482e43.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0e6cdfac-5933-4626-8602-f956cef1a3ce
+		summarizeBy: none
+		sourceColumn: FromDate
+
+		variation Variation
+			isDefault
+			relationship: d9a86d97-653a-4013-8124-ac7b449600f0
+			defaultHierarchy: LocalDateTable_a4e0e4d9-76c7-441f-9d6a-660ddf526c00.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThruDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fa167576-86b7-4c18-8c00-bfb3b044405f
+		summarizeBy: none
+		sourceColumn: ThruDate
+
+		variation Variation
+			isDefault
+			relationship: 1edfc84e-922e-4478-b74e-3cb4b270f326
+			defaultHierarchy: LocalDateTable_ae436351-83d3-450f-941a-f7c5f89a7a74.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplaySequence
+		dataType: int64
+		formatString: 0
+		lineageTag: 161bc2fa-9737-4ba6-baa2-0bb549c22e19
+		summarizeBy: sum
+		sourceColumn: DisplaySequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSystem
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4cd97167-d9ff-4ea5-aaa8-d61eb74c72de
+		summarizeBy: none
+		sourceColumn: IsSystem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedBy
+		dataType: string
+		lineageTag: 4ed8c0d3-2546-44d0-9276-51c3c0729ed4
+		summarizeBy: none
+		sourceColumn: ModifiedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCommon
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: cc761508-d66c-4438-9a5d-87860f5f7c8c
+		summarizeBy: none
+		sourceColumn: IsCommon
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DischargeDestination = m
+		mode: import
+		queryGroup: Discharge
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
+				    Lookup_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Lookup",version=""]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(Lookup_, each ([Type] = "DISCHRGTO ")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type", "Abbrev", "Category"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,90 @@
+table Treatments
+	lineageTag: 3d89d687-6afb-41b7-879b-898698788a34
+
+	column SessionId
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 4c6a3dd7-8745-4da4-b737-0b77a79b9a23
+		summarizeBy: none
+		sourceColumn: SessionId
+
+		annotation SummarizationSetBy = Automatic
+
+	column LaborDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: a4ccdca8-1ca1-4775-8aa9-bba416586116
+		summarizeBy: none
+		sourceColumn: LaborDate
+
+		variation Variation
+			isDefault
+			relationship: 5579e76c-e0ab-4803-98d8-beee220e4d3f
+			defaultHierarchy: LocalDateTable_71a89098-b6f7-4c97-87cf-aafa4271ee86.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TxTrack_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 201e808f-976c-49f0-aef9-47b2d676b8ea
+		summarizeBy: none
+		sourceColumn: TxTrack_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CaseIDDate = RELATED(StayCases[PatientCase_ID])&" - "&Treatments[LaborDate]
+		lineageTag: f30d2654-ff09-4dd7-93cb-ab03555eb050
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Person_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 91eb02b2-0d41-4117-8974-bd80030fc68f
+		summarizeBy: none
+		sourceColumn: Person_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssistantModifier
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 42a9c762-55b9-493f-bcb9-8b55ca2634fd
+		summarizeBy: none
+		sourceColumn: AssistantModifier
+
+		annotation SummarizationSetBy = Automatic
+
+	column TherapistLabel = RELATED(Employees[Name])&IF(Treatments[AssistantModifier]," (A)")
+		lineageTag: 5253aad1-f681-4924-b285-b18e55e831f2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Treatments = m
+		mode: import
+		queryGroup: Visits
+		source =
+				let
+				    Source = dbo_vw_Treatments,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Person_ID", "SessionId", "LaborDate", "AssistantModifier", "TxTrack_ID"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"LaborDate", type date}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Changed Type", {"SessionId"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Exception
+
+	annotation PBI_NavigationStepName = Navigation
+

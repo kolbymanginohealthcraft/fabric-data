@@ -1,0 +1,120 @@
+table CaseTracks
+	lineageTag: 2f70d1c5-9fb4-4d9d-941b-5ce3ae7e833e
+
+	measure 'Total Tracks' = COUNTROWS(CaseTracks)
+		formatString: #,0
+		lineageTag: 1ea16cd9-2277-418c-9247-407e5b7127e4
+
+	measure 'Min Track Start' = MIN(CaseTracks[StartDate])
+		formatString: Short Date
+		lineageTag: 8c853bd8-baac-4971-9553-54f573b0b2f6
+
+	measure 'Max Track End' = MAX(CaseTracks[EndDate])
+		formatString: Short Date
+		lineageTag: 0b208edd-95a4-4fde-aa15-820d858f21e4
+
+	measure 'Track Days' =
+			
+			SUM(CaseTracks[Track Length])
+		formatString: #,0
+		lineageTag: 1800a049-1b1d-4337-9152-e168d09285ec
+
+	column TxTrack_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: f709a6a9-1ecc-49d3-80f7-444932be70ec
+		summarizeBy: none
+		sourceColumn: TxTrack_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PatientCase_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 17432cc1-d58a-4ebf-9b8f-a2707eda26c1
+		summarizeBy: none
+		sourceColumn: PatientCase_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discipline
+		dataType: string
+		isHidden
+		lineageTag: 84244e05-f26e-48a8-82f3-6eae2f11ae37
+		summarizeBy: none
+		sourceColumn: Discipline
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 8a906e0f-f580-4e1d-ad13-9f106f4d5587
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		variation Variation
+			isDefault
+			relationship: f0c9e52a-4ee7-487c-929e-040e7696e33e
+			defaultHierarchy: LocalDateTable_febca194-1226-4e46-8c16-e69576d74576.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EndDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: b1bfb695-b01d-4f69-9965-be761954bea4
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		variation Variation
+			isDefault
+			relationship: 46d9c0fd-f964-4a29-a6ef-ee4702b1e4b5
+			defaultHierarchy: LocalDateTable_b3efdfe7-251c-4dcf-af25-c80805613b02.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Track Length' = DATEDIFF(CaseTracks[StartDate]-1,CaseTracks[EndDate],DAY)
+		formatString: 0
+		lineageTag: 5357b496-8108-4e0a-989e-1c1a3bf8ad01
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Evaluating Therapist' =
+			
+			CALCULATE(
+			    FIRSTNONBLANK(Employees[Name],1),
+			    Service[Type]="Eval"
+			)
+		lineageTag: 848867f7-6e2d-4485-8d78-cdc7284719a8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CaseTracks = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = dbo_vw_CaseTracks,
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"StartDate", type date}, {"EndDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

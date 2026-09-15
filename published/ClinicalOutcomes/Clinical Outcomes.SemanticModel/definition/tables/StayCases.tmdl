@@ -1,0 +1,1064 @@
+table StayCases
+	lineageTag: 5c3d551f-2ca1-46e1-bed1-bae0250f8e70
+
+	measure 'Avg Number of Disciplines' =
+			
+			DIVIDE(
+			    SUMX(
+			        StayCases,
+			        [Total Disciplines]
+			    ),
+			    CALCULATE(
+			        [Total Cases],
+			        FILTER(
+			            StayCases,
+			            [Total Disciplines]>0
+			        )
+			    )
+			)
+		lineageTag: 2f69ee22-ffe4-4459-a544-7a56e8efd742
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PatientCase_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		displayFolder: Unique Identifiers
+		lineageTag: e6c6e0b4-f1a5-42de-ba8a-a36b1f0f078c
+		summarizeBy: none
+		sourceColumn: PatientCase_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stay_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Unique Identifiers
+		lineageTag: 953c463f-7056-49c4-ab5e-77400ba0841a
+		summarizeBy: none
+		sourceColumn: Stay_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TherapyStartDate
+		dataType: dateTime
+		formatString: Short Date
+		displayFolder: Date Range
+		lineageTag: b7a3265b-854f-45b0-b726-1e53c16c9fce
+		summarizeBy: none
+		sourceColumn: TherapyStartDate
+
+		variation Variation
+			isDefault
+			relationship: 2897ab3c-c225-4a45-8f71-1371ab21fd7f
+			defaultHierarchy: LocalDateTable_f61e1e84-deb9-488b-ad36-9c302078a77f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TherapyEndDate
+		dataType: dateTime
+		formatString: Short Date
+		displayFolder: Date Range
+		lineageTag: ac011c06-aa6a-478b-addc-6a85b3d0ae29
+		summarizeBy: none
+		sourceColumn: TherapyEndDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DischargedTo_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Discharge Destination
+		lineageTag: fe8453a2-5bc7-4051-b87f-b91c04c013cb
+		summarizeBy: none
+		sourceColumn: DischargedTo_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndReason_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Discharge Destination
+		lineageTag: a1b18d3c-5ccb-4775-a647-d68f05db058b
+		summarizeBy: none
+		sourceColumn: EndReason_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payer Categorization' = ```
+			
+			// IF(
+			//     COUNTROWS(RELATEDTABLE(vw_PatientPayers))=1,
+			//     MINX(RELATEDTABLE(vw_PatientPayers),vw_PatientPayers[Payer Group]),
+			//     "(8) Multiple Payers"
+			// )
+			
+			VAR RelatedRows =
+			    RELATEDTABLE(vw_PatientPayers)
+			VAR DistinctGroups =
+			    SUMMARIZE(RelatedRows, vw_PatientPayers[Payer Group])
+			RETURN
+			IF(
+			    COUNTROWS(DistinctGroups) = 1,
+			    MAXX(DistinctGroups, vw_PatientPayers[Payer Group]),
+			    "(8) Multiple Payers"
+			)
+			
+			```
+		displayFolder: Cohort Selection
+		lineageTag: d0cbab09-f8ef-4783-b638-ad7663d844dc
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Diagnostic Category' =
+			
+			CALCULATE(
+			    FIRSTNONBLANK(DiagnosisCode[L2],1),
+			    Diagnosis[DiagnosisType]="Medical",
+			    Diagnosis[DisplayOrder]=1
+			)
+		displayFolder: Cohort Selection
+		lineageTag: 050d017a-ed52-4c31-9a0d-74955df1881f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Avg Age]),"DOB N/A",
+			    [Avg Age]<18,"17 and under",
+			    [Avg Age]<50,"18-49",
+			    [Avg Age]<65,"50-64",
+			    [Avg Age]<70,"65-69",
+			    [Avg Age]<75,"70-74",
+			    [Avg Age]<80,"75-79",
+			    [Avg Age]<85,"80-84",
+			    [Avg Age]<90,"85-89",
+			    [Avg Age]<95,"90-94",
+			    "95+"
+			)
+		displayFolder: Cohort Selection
+		lineageTag: 60d8c7ba-04d6-4075-a262-3d18c04dd6fd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Intensity Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Units per Visit]),BLANK(),
+			    [Units per Visit]<1.8,"0.0-1.8",
+			    [Units per Visit]<1.8,"1.4-1.8",
+			    [Units per Visit]<2.2,"1.8-2.2",
+			    [Units per Visit]<2.6,"2.2-2.6",
+			    [Units per Visit]<3.0,"2.6-3.0",
+			    [Units per Visit]<3.4,"3.0-3.4",
+			    [Units per Visit]<3.8,"3.4-3.8",
+			    [Units per Visit]<4.2,"3.8-4.2",
+			    "4.2+"
+			)
+		displayFolder: Buckets
+		lineageTag: 7b100b74-3d78-4434-898e-03243540ca3b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ISNP Comparison' =
+			
+			IF(
+			    AND(
+			        RELATED('Payer Buckets'[Payer Grouping])="(b) Medicare Part B and HMO B",
+			        MINX(RELATEDTABLE(Payers),Payers[Special Needs])="ISNP"
+			    ),
+			    "ISNP",
+			    IF(
+			        RELATED('Payer Buckets'[Payer Grouping])="(b) Medicare Part B and HMO B",
+			        "Other Part B",
+			        "Other Payers"
+			    )
+			)
+		displayFolder: Buckets
+		lineageTag: 2ff21c1e-7db8-479f-a2d6-8aeaff5d7420
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Telehealth Minutes Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([% Minutes Telehealth]),"(a) None",
+			    [% Minutes Telehealth]=0,"(a) None",
+			    [% Minutes Telehealth]<=.02,"(b) 0%-2%",
+			    [% Minutes Telehealth]<=.04,"(c) 2%-4%",
+			    [% Minutes Telehealth]<=.06,"(d) 4%-6%",
+			    [% Minutes Telehealth]<=.08,"(e) 6%-8%",
+			    [% Minutes Telehealth]<=.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			)
+		displayFolder: Buckets
+		lineageTag: f932e9d2-4104-472f-8e93-8882d47c1d4d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Telehealth Visits Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([% Visits Telehealth]),"(a) None",
+			    [% Visits Telehealth]=0,"(a) None",
+			    [% Visits Telehealth]<=.02,"(b) 0%-2%",
+			    [% Visits Telehealth]<=.04,"(c) 2%-4%",
+			    [% Visits Telehealth]<=.06,"(d) 4%-6%",
+			    [% Visits Telehealth]<=.08,"(e) 6%-8%",
+			    [% Visits Telehealth]<=.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			)
+		displayFolder: Buckets
+		lineageTag: 100b8b9b-d180-48d4-ab3b-e35dbdce29e9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Modalities Minutes Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([% Minutes Modalities]),"(a) None",
+			    [% Minutes Modalities]=0,"(a) None",
+			    [% Minutes Modalities]<=.02,"(b) 0%-2%",
+			    [% Minutes Modalities]<=.04,"(c) 2%-4%",
+			    [% Minutes Modalities]<=.06,"(d) 4%-6%",
+			    [% Minutes Modalities]<=.08,"(e) 6%-8%",
+			    [% Minutes Modalities]<=.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			)
+		displayFolder: Buckets
+		lineageTag: 550d534d-23c1-4f16-870c-89aa0e6df4c3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Modalities Visits Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([% Visits Modalities]),"(a) None",
+			    [% Visits Modalities]=0,"(a) None",
+			    [% Visits Modalities]<=.02,"(b) 0%-2%",
+			    [% Visits Modalities]<=.04,"(c) 2%-4%",
+			    [% Visits Modalities]<=.06,"(d) 4%-6%",
+			    [% Visits Modalities]<=.08,"(e) 6%-8%",
+			    [% Visits Modalities]<=.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			)
+		displayFolder: Buckets
+		lineageTag: 3b8bd44d-c760-440e-9621-ac3562fbeeb2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Disc Inv' =
+			
+			var VisitsPT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="PT")>0,"PT")
+			var VisitsOT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="OT")>0,"OT")
+			var VisitsST = IF(CALCULATE([Total Visits],Disciplines[Discipline]="ST")>0,"ST")
+			var ValuesTable = FILTER({VisitsPT, VisitsOT, VisitsST}, NOT(ISBLANK([Value])))
+			var ValuesList = CONCATENATEX(ValuesTable,[Value],"/")
+			return ValuesList
+		displayFolder: Buckets
+		lineageTag: d28cfdbe-79a7-4089-8275-20e7c91a3736
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group Therapy Minutes Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([% Minutes Group Therapy]),"(a) None",
+			    [% Minutes Group Therapy]=0,"(a) None",
+			    [% Minutes Group Therapy]<=.02,"(b) 0%-2%",
+			    [% Minutes Group Therapy]<=.04,"(c) 2%-4%",
+			    [% Minutes Group Therapy]<=.06,"(d) 4%-6%",
+			    [% Minutes Group Therapy]<=.08,"(e) 6%-8%",
+			    [% Minutes Group Therapy]<=.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			)
+		displayFolder: Buckets
+		lineageTag: f3985248-1c4d-4ce1-a4e0-fa30b0abaef8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aquatic Minutes Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([% Minutes Aquatic]),"(a) None",
+			    [% Minutes Aquatic]=0,"(a) None",
+			    [% Minutes Aquatic]<=.02,"(b) 0%-2%",
+			    [% Minutes Aquatic]<=.04,"(c) 2%-4%",
+			    [% Minutes Aquatic]<=.06,"(d) 4%-6%",
+			    [% Minutes Aquatic]<=.08,"(e) 6%-8%",
+			    [% Minutes Aquatic]<=.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			)
+		displayFolder: Buckets
+		lineageTag: 6effef3f-f348-4148-a5cd-7a2f71203324
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reported Pain' =
+			
+			var rawpain = IF([Raw Admit Pain]>0,"(a) Cases who reported pain","(b) Cases who did not report pain")
+			var adjpain = IF([Admit Level (Pain)]>0,"(a) Cases who reported pain","(b) Cases who did not report pain")
+			return adjpain
+		lineageTag: 588d7098-3557-41a8-b137-c9e3484d1b63
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column UniqueDays =
+			
+			CALCULATE(
+			    COUNTROWS(
+			        FILTER(
+			            ALL('Calendar'),
+			            COUNTROWS(
+			                FILTER(
+			                    CaseTracks,
+			                    CaseTracks[PatientCase_ID] = SELECTEDVALUE(StayCases[PatientCase_ID])
+			                    && 'Calendar'[Date] >= CaseTracks[StartDate]
+			                    && 'Calendar'[Date] <= CaseTracks[EndDate]
+			                )
+			            ) > 0
+			        )
+			    )
+			)
+			
+			// DATEDIFF(StayCases[TherapyStartDate]-1,StayCases[TherapyEndDate],DAY)
+		formatString: 0
+		lineageTag: 1c4c1339-fd47-4f67-b92b-1e2e15c8dd49
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Minutes per Week' =
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Minutes per Week]),BLANK(),
+			    [Minutes per Week]<25,25,
+			    [Minutes per Week]<50,50,
+			    [Minutes per Week]<75,75,
+			    [Minutes per Week]<100,100,
+			    [Minutes per Week]<125,125,
+			    [Minutes per Week]<150,150,
+			    [Minutes per Week]<175,175,
+			    [Minutes per Week]<200,200,
+			    [Minutes per Week]<225,225,
+			    [Minutes per Week]<250,250,
+			    [Minutes per Week]<275,275,
+			    [Minutes per Week]<300,300,
+			    [Minutes per Week]<325,325,
+			    [Minutes per Week]<350,350,
+			    [Minutes per Week]<375,375,
+			    [Minutes per Week]<400,400,
+			    [Minutes per Week]<425,425,
+			    [Minutes per Week]<450,450,
+			    [Minutes per Week]<475,475,
+			    [Minutes per Week]<500,500,
+			    [Minutes per Week]<525,525,
+			    [Minutes per Week]<550,550,
+			    [Minutes per Week]<575,575,
+			    [Minutes per Week]<600,600,
+			    [Minutes per Week]<625,625,
+			    [Minutes per Week]<650,650,
+			    [Minutes per Week]<675,675,
+			    [Minutes per Week]<700,700,
+			    [Minutes per Week]<725,725,
+			    [Minutes per Week]<750,750,
+			    [Minutes per Week]<775,775,
+			    [Minutes per Week]<800,800,
+			    [Minutes per Week]<825,825,
+			    [Minutes per Week]<850,850,
+			    [Minutes per Week]<875,875,
+			    [Minutes per Week]<900,900,
+			    [Minutes per Week]<925,925,
+			    [Minutes per Week]<950,950,
+			    [Minutes per Week]<975,975,
+			    [Minutes per Week]<1000,1000,
+			    BLANK()
+			))
+		formatString: 0
+		displayFolder: Bins
+		lineageTag: b1b703de-247c-4316-b909-422817597106
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Minutes per Visit' =
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    [Minutes per Visit]<1,1,
+			    [Minutes per Visit]<2,2,
+			    [Minutes per Visit]<3,3,
+			    [Minutes per Visit]<4,4,
+			    [Minutes per Visit]<5,5,
+			    [Minutes per Visit]<6,6,
+			    [Minutes per Visit]<7,7,
+			    [Minutes per Visit]<8,8,
+			    [Minutes per Visit]<9,9,
+			    [Minutes per Visit]<10,10,
+			    [Minutes per Visit]<11,11,
+			    [Minutes per Visit]<12,12,
+			    [Minutes per Visit]<13,13,
+			    [Minutes per Visit]<14,14,
+			    [Minutes per Visit]<15,15,
+			    [Minutes per Visit]<16,16,
+			    [Minutes per Visit]<17,17,
+			    [Minutes per Visit]<18,18,
+			    [Minutes per Visit]<19,19,
+			    [Minutes per Visit]<20,20,
+			    [Minutes per Visit]<21,21,
+			    [Minutes per Visit]<22,22,
+			    [Minutes per Visit]<23,23,
+			    [Minutes per Visit]<24,24,
+			    [Minutes per Visit]<25,25,
+			    [Minutes per Visit]<26,26,
+			    [Minutes per Visit]<27,27,
+			    [Minutes per Visit]<28,28,
+			    [Minutes per Visit]<29,29,
+			    [Minutes per Visit]<30,30,
+			    [Minutes per Visit]<31,31,
+			    [Minutes per Visit]<32,32,
+			    [Minutes per Visit]<33,33,
+			    [Minutes per Visit]<34,34,
+			    [Minutes per Visit]<35,35,
+			    [Minutes per Visit]<36,36,
+			    [Minutes per Visit]<37,37,
+			    [Minutes per Visit]<38,38,
+			    [Minutes per Visit]<39,39,
+			    [Minutes per Visit]<40,40,
+			    [Minutes per Visit]<41,41,
+			    [Minutes per Visit]<42,42,
+			    [Minutes per Visit]<43,43,
+			    [Minutes per Visit]<44,44,
+			    [Minutes per Visit]<45,45,
+			    [Minutes per Visit]<46,46,
+			    [Minutes per Visit]<47,47,
+			    [Minutes per Visit]<48,48,
+			    [Minutes per Visit]<49,49,
+			    [Minutes per Visit]<50,50,
+			    [Minutes per Visit]<51,51,
+			    [Minutes per Visit]<52,52,
+			    [Minutes per Visit]<53,53,
+			    [Minutes per Visit]<54,54,
+			    [Minutes per Visit]<55,55,
+			    [Minutes per Visit]<56,56,
+			    [Minutes per Visit]<57,57,
+			    [Minutes per Visit]<58,58,
+			    [Minutes per Visit]<59,59,
+			    [Minutes per Visit]<60,60,
+			    [Minutes per Visit]<61,61,
+			    [Minutes per Visit]<62,62,
+			    [Minutes per Visit]<63,63,
+			    [Minutes per Visit]<64,64,
+			    [Minutes per Visit]<65,65,
+			    [Minutes per Visit]<66,66,
+			    [Minutes per Visit]<67,67,
+			    [Minutes per Visit]<68,68,
+			    [Minutes per Visit]<69,69,
+			    [Minutes per Visit]<70,70,
+			    BLANK()
+			))
+		formatString: 0.00
+		displayFolder: Bins
+		lineageTag: 0c6f295f-5c2d-4ba6-ac18-1b7c1cf99e09
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Minutes per Case' =
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    [Minutes per Case]<100,100,
+			    [Minutes per Case]<200,200,
+			    [Minutes per Case]<300,300,
+			    [Minutes per Case]<400,400,
+			    [Minutes per Case]<500,500,
+			    [Minutes per Case]<600,600,
+			    [Minutes per Case]<700,700,
+			    [Minutes per Case]<800,800,
+			    [Minutes per Case]<900,900,
+			    [Minutes per Case]<1000,1000,
+			    [Minutes per Case]<1100,1100,
+			    [Minutes per Case]<1200,1200,
+			    [Minutes per Case]<1300,1300,
+			    [Minutes per Case]<1400,1400,
+			    [Minutes per Case]<1500,1500,
+			    [Minutes per Case]<1600,1600,
+			    [Minutes per Case]<1700,1700,
+			    [Minutes per Case]<1800,1800,
+			    [Minutes per Case]<1900,1900,
+			    [Minutes per Case]<2000,2000,
+			    [Minutes per Case]<2100,2100,
+			    [Minutes per Case]<2200,2200,
+			    [Minutes per Case]<2300,2300,
+			    [Minutes per Case]<2400,2400,
+			    [Minutes per Case]<2500,2500,
+			    [Minutes per Case]<2600,2600,
+			    [Minutes per Case]<2700,2700,
+			    [Minutes per Case]<2800,2800,
+			    [Minutes per Case]<2900,2900,
+			    [Minutes per Case]<3000,3000,
+			    [Minutes per Case]<3100,3100,
+			    [Minutes per Case]<3200,3200,
+			    [Minutes per Case]<3300,3300,
+			    [Minutes per Case]<3400,3400,
+			    [Minutes per Case]<3500,3500,
+			    [Minutes per Case]<3600,3600,
+			    [Minutes per Case]<3700,3700,
+			    [Minutes per Case]<3800,3800,
+			    [Minutes per Case]<3900,3900,
+			    [Minutes per Case]<4000,4000,
+			    [Minutes per Case]<4100,4100,
+			    [Minutes per Case]<4200,4200,
+			    [Minutes per Case]<4300,4300,
+			    [Minutes per Case]<4400,4400,
+			    [Minutes per Case]<4500,4500,
+			    [Minutes per Case]<4600,4600,
+			    [Minutes per Case]<4700,4700,
+			    [Minutes per Case]<4800,4800,
+			    [Minutes per Case]<4900,4900,
+			    [Minutes per Case]<5000,5000,
+			    BLANK()
+			))
+		formatString: 0
+		displayFolder: Bins
+		lineageTag: 0ff34967-8512-4cd6-91fe-daa5c5eb331a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: LOS' =
+			
+			IF([Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    [ALOS]<=5,5,
+			    [ALOS]<=10,10,
+			    [ALOS]<=15,15,
+			    [ALOS]<=20,20,
+			    [ALOS]<=25,25,
+			    [ALOS]<=30,30,
+			    [ALOS]<=35,35,
+			    [ALOS]<=40,40,
+			    [ALOS]<=45,45,
+			    [ALOS]<=50,50,
+			    [ALOS]<=55,55,
+			    [ALOS]<=60,60,
+			    [ALOS]<=65,65,
+			    [ALOS]<=70,70,
+			    [ALOS]<=75,75,
+			    [ALOS]<=80,80,
+			    [ALOS]<=85,85,
+			    [ALOS]<=90,90,
+			    [ALOS]<=95,95,
+			    [ALOS]<=100,100,
+			    [ALOS]<=105,105,
+			    [ALOS]<=110,110,
+			    [ALOS]<=115,115,
+			    [ALOS]<=120,120,
+			    [ALOS]<=125,125,
+			    [ALOS]<=130,130,
+			    [ALOS]<=135,135,
+			    [ALOS]<=140,140,
+			    [ALOS]<=145,145,
+			    [ALOS]<=150,150,
+			    BLANK()
+			))
+		formatString: 0.0
+		displayFolder: Bins
+		lineageTag: 3065c83d-8245-4df3-8297-1d8d7ef32a6a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Admit Level' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Admit Level]) || [Admit Level]=0,BLANK(),
+			    [Admit Level]<=0.02,0.02,
+			    [Admit Level]<=0.04,0.04,
+			    [Admit Level]<=0.06,0.06,
+			    [Admit Level]<=0.08,0.08,
+			    [Admit Level]<=0.1,0.1,
+			    [Admit Level]<=0.12,0.12,
+			    [Admit Level]<=0.14,0.14,
+			    [Admit Level]<=0.16,0.16,
+			    [Admit Level]<=0.18,0.18,
+			    [Admit Level]<=0.2,0.2,
+			    [Admit Level]<=0.22,0.22,
+			    [Admit Level]<=0.24,0.24,
+			    [Admit Level]<=0.26,0.26,
+			    [Admit Level]<=0.28,0.28,
+			    [Admit Level]<=0.3,0.3,
+			    [Admit Level]<=0.32,0.32,
+			    [Admit Level]<=0.34,0.34,
+			    [Admit Level]<=0.36,0.36,
+			    [Admit Level]<=0.38,0.38,
+			    [Admit Level]<=0.4,0.4,
+			    [Admit Level]<=0.42,0.42,
+			    [Admit Level]<=0.44,0.44,
+			    [Admit Level]<=0.46,0.46,
+			    [Admit Level]<=0.48,0.48,
+			    [Admit Level]<=0.5,0.5,
+			    [Admit Level]<=0.52,0.52,
+			    [Admit Level]<=0.54,0.54,
+			    [Admit Level]<=0.56,0.56,
+			    [Admit Level]<=0.58,0.58,
+			    [Admit Level]<=0.6,0.6,
+			    [Admit Level]<=0.62,0.62,
+			    [Admit Level]<=0.64,0.64,
+			    [Admit Level]<=0.66,0.66,
+			    [Admit Level]<=0.68,0.68,
+			    [Admit Level]<=0.7,0.7,
+			    [Admit Level]<=0.72,0.72,
+			    [Admit Level]<=0.74,0.74,
+			    [Admit Level]<=0.76,0.76,
+			    [Admit Level]<=0.78,0.78,
+			    [Admit Level]<=0.8,0.8,
+			    [Admit Level]<=0.82,0.82,
+			    [Admit Level]<=0.84,0.84,
+			    [Admit Level]<=0.86,0.86,
+			    [Admit Level]<=0.88,0.88,
+			    [Admit Level]<=0.9,0.9,
+			    [Admit Level]<=0.92,0.92,
+			    [Admit Level]<=0.94,0.94,
+			    [Admit Level]<=0.96,0.96,
+			    [Admit Level]<=0.98,0.98,
+			    [Admit Level]<=1,1,
+			    BLANK()
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Bins
+		lineageTag: 0da725b2-9f69-4a82-92b8-e637074cb95b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Units per Visit' =
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Units per Visit]),BLANK(),
+			    [Units per Visit]<0.125,0.125,
+			    [Units per Visit]<0.25,0.25,
+			    [Units per Visit]<0.375,0.375,
+			    [Units per Visit]<0.5,0.5,
+			    [Units per Visit]<0.625,0.625,
+			    [Units per Visit]<0.75,0.75,
+			    [Units per Visit]<0.875,0.875,
+			    [Units per Visit]<1,1,
+			    [Units per Visit]<1.125,1.125,
+			    [Units per Visit]<1.25,1.25,
+			    [Units per Visit]<1.375,1.375,
+			    [Units per Visit]<1.5,1.5,
+			    [Units per Visit]<1.625,1.625,
+			    [Units per Visit]<1.75,1.75,
+			    [Units per Visit]<1.875,1.875,
+			    [Units per Visit]<2,2,
+			    [Units per Visit]<2.125,2.125,
+			    [Units per Visit]<2.25,2.25,
+			    [Units per Visit]<2.375,2.375,
+			    [Units per Visit]<2.5,2.5,
+			    [Units per Visit]<2.625,2.625,
+			    [Units per Visit]<2.75,2.75,
+			    [Units per Visit]<2.875,2.875,
+			    [Units per Visit]<3,3,
+			    [Units per Visit]<3.125,3.125,
+			    [Units per Visit]<3.25,3.25,
+			    [Units per Visit]<3.375,3.375,
+			    [Units per Visit]<3.5,3.5,
+			    [Units per Visit]<3.625,3.625,
+			    [Units per Visit]<3.75,3.75,
+			    [Units per Visit]<3.875,3.875,
+			    [Units per Visit]<4,4,
+			    [Units per Visit]<4.125,4.125,
+			    [Units per Visit]<4.25,4.25,
+			    [Units per Visit]<4.375,4.375,
+			    [Units per Visit]<4.5,4.5,
+			    [Units per Visit]<4.625,4.625,
+			    [Units per Visit]<4.75,4.75,
+			    [Units per Visit]<4.875,4.875,
+			    [Units per Visit]<5,5,
+			    [Units per Visit]<5.125,5.125,
+			    [Units per Visit]<5.25,5.25,
+			    [Units per Visit]<5.375,5.375,
+			    [Units per Visit]<5.5,5.5,
+			    [Units per Visit]<5.625,5.625,
+			    [Units per Visit]<5.75,5.75,
+			    [Units per Visit]<5.875,5.875,
+			    [Units per Visit]<6,6,
+			    BLANK()
+			))
+		formatString: 0.00
+		displayFolder: Bins
+		lineageTag: 1938d4cb-02f6-4742-bd6f-f5ef06793759
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Visits per Week' =
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    [Visits per Week]<0.15,0.15,
+			    [Visits per Week]<0.3,0.3,
+			    [Visits per Week]<0.45,0.45,
+			    [Visits per Week]<0.6,0.6,
+			    [Visits per Week]<0.75,0.75,
+			    [Visits per Week]<0.9,0.9,
+			    [Visits per Week]<1.05,1.05,
+			    [Visits per Week]<1.2,1.2,
+			    [Visits per Week]<1.35,1.35,
+			    [Visits per Week]<1.5,1.5,
+			    [Visits per Week]<1.65,1.65,
+			    [Visits per Week]<1.8,1.8,
+			    [Visits per Week]<1.95,1.95,
+			    [Visits per Week]<2.1,2.1,
+			    [Visits per Week]<2.25,2.25,
+			    [Visits per Week]<2.4,2.4,
+			    [Visits per Week]<2.55,2.55,
+			    [Visits per Week]<2.7,2.7,
+			    [Visits per Week]<2.85,2.85,
+			    [Visits per Week]<3,3,
+			    [Visits per Week]<3.15,3.15,
+			    [Visits per Week]<3.3,3.3,
+			    [Visits per Week]<3.45,3.45,
+			    [Visits per Week]<3.6,3.6,
+			    [Visits per Week]<3.75,3.75,
+			    [Visits per Week]<3.9,3.9,
+			    [Visits per Week]<4.05,4.05,
+			    [Visits per Week]<4.2,4.2,
+			    [Visits per Week]<4.35,4.35,
+			    [Visits per Week]<4.5,4.5,
+			    [Visits per Week]<4.65,4.65,
+			    [Visits per Week]<4.8,4.8,
+			    [Visits per Week]<4.95,4.95,
+			    [Visits per Week]<5.1,5.1,
+			    [Visits per Week]<5.25,5.25,
+			    [Visits per Week]<5.4,5.4,
+			    [Visits per Week]<5.55,5.55,
+			    [Visits per Week]<5.7,5.7,
+			    [Visits per Week]<5.85,5.85,
+			    [Visits per Week]<6,6,
+			    [Visits per Week]<6.15,6.15,
+			    [Visits per Week]<6.3,6.3,
+			    [Visits per Week]<6.45,6.45,
+			    [Visits per Week]<6.6,6.6,
+			    [Visits per Week]<6.75,6.75,
+			    [Visits per Week]<6.9,6.9,
+			    [Visits per Week]<7.05,7.05,
+			    BLANK()
+			))
+		formatString: 0.00
+		displayFolder: Bins
+		lineageTag: b394b923-b46d-4b5a-abf3-d8705000197e
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Visits per Case' =
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    [Total Visits]<=6,6,
+			    [Total Visits]<=8,8,
+			    [Total Visits]<=10,10,
+			    [Total Visits]<=12,12,
+			    [Total Visits]<=14,14,
+			    [Total Visits]<=16,16,
+			    [Total Visits]<=18,18,
+			    [Total Visits]<=20,20,
+			    [Total Visits]<=22,22,
+			    [Total Visits]<=24,24,
+			    [Total Visits]<=26,26,
+			    [Total Visits]<=28,28,
+			    [Total Visits]<=30,30,
+			    [Total Visits]<=32,32,
+			    [Total Visits]<=34,34,
+			    [Total Visits]<=36,36,
+			    [Total Visits]<=38,38,
+			    [Total Visits]<=40,40,
+			    [Total Visits]<=42,42,
+			    [Total Visits]<=44,44,
+			    [Total Visits]<=46,46,
+			    [Total Visits]<=48,48,
+			    [Total Visits]<=50,50,
+			    [Total Visits]<=52,52,
+			    [Total Visits]<=54,54,
+			    [Total Visits]<=56,56,
+			    [Total Visits]<=58,58,
+			    [Total Visits]<=60,60,
+			    [Total Visits]<=62,62,
+			    [Total Visits]<=64,64,
+			    [Total Visits]<=66,66,
+			    [Total Visits]<=68,68,
+			    [Total Visits]<=70,70,
+			    [Total Visits]<=72,72,
+			    [Total Visits]<=74,74,
+			    [Total Visits]<=76,76,
+			    [Total Visits]<=78,78,
+			    [Total Visits]<=80,80,
+			    [Total Visits]<=82,82,
+			    [Total Visits]<=84,84,
+			    [Total Visits]<=86,86,
+			    [Total Visits]<=88,88,
+			    [Total Visits]<=90,90,
+			    [Total Visits]<=92,92,
+			    [Total Visits]<=94,94,
+			    [Total Visits]<=96,96,
+			    [Total Visits]<=98,98,
+			    [Total Visits]<=100,100,
+			    [Total Visits]<=102,102,
+			    [Total Visits]<=104,104,
+			    [Total Visits]<=106,106,
+			    [Total Visits]<=108,108,
+			    [Total Visits]<=110,110,
+			    [Total Visits]<=112,112,
+			    [Total Visits]<=114,114,
+			    [Total Visits]<=116,116,
+			    [Total Visits]<=118,118,
+			    [Total Visits]<=120,120,
+			    BLANK()
+			))
+		formatString: 0
+		displayFolder: Bins
+		lineageTag: 251c0685-6b5a-4fe7-9b52-ee2ed9bfb444
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ST Utilization' =
+			
+			// SWITCH(
+			//     TRUE(),
+			//     ISBLANK([Total Visits ST]),"(a) None",
+			//     [Total Visits ST]=1,"(b) 1",
+			//     [Total Visits ST]=2,"(c) 2",
+			//     [Total Visits ST]<=5,"(d) 3-5",
+			//     [Total Visits ST]<=7,"(e) 5-7",
+			//     [Total Visits ST]<=10,"(f) 7-10",
+			//     [Total Visits ST]<=15,"(g) 10-15",
+			//     [Total Visits ST]<=20,"(h) 15-20",
+			//     [Total Visits ST]<=20,"(i) 20-25",
+			//     "25+"
+			// )
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Total Visits ST]),"(a) None",
+			    [Total Visits ST]<=2,"(b) 1-2",
+			    [Total Visits ST]<=5,"(c) 3-5",
+			    [Total Visits ST]<=7,"(d) 5-7",
+			    [Total Visits ST]<=10,"(e) 7-10",
+			    [Total Visits ST]<=15,"(f) 10-15",
+			    [Total Visits ST]<=20,"(g) 15-20",
+			    [Total Visits ST]<=25,"(h) 20-25",
+			    "(i) 25+"
+			)
+		lineageTag: 43c9a73b-4c0a-46d1-ba36-82a33baf8e85
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Discharge Level' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Discharge Level]) || [Discharge Level]=0,BLANK(),
+			    [Discharge Level]<=0.02,0.02,
+			    [Discharge Level]<=0.04,0.04,
+			    [Discharge Level]<=0.06,0.06,
+			    [Discharge Level]<=0.08,0.08,
+			    [Discharge Level]<=0.1,0.1,
+			    [Discharge Level]<=0.12,0.12,
+			    [Discharge Level]<=0.14,0.14,
+			    [Discharge Level]<=0.16,0.16,
+			    [Discharge Level]<=0.18,0.18,
+			    [Discharge Level]<=0.2,0.2,
+			    [Discharge Level]<=0.22,0.22,
+			    [Discharge Level]<=0.24,0.24,
+			    [Discharge Level]<=0.26,0.26,
+			    [Discharge Level]<=0.28,0.28,
+			    [Discharge Level]<=0.3,0.3,
+			    [Discharge Level]<=0.32,0.32,
+			    [Discharge Level]<=0.34,0.34,
+			    [Discharge Level]<=0.36,0.36,
+			    [Discharge Level]<=0.38,0.38,
+			    [Discharge Level]<=0.4,0.4,
+			    [Discharge Level]<=0.42,0.42,
+			    [Discharge Level]<=0.44,0.44,
+			    [Discharge Level]<=0.46,0.46,
+			    [Discharge Level]<=0.48,0.48,
+			    [Discharge Level]<=0.5,0.5,
+			    [Discharge Level]<=0.52,0.52,
+			    [Discharge Level]<=0.54,0.54,
+			    [Discharge Level]<=0.56,0.56,
+			    [Discharge Level]<=0.58,0.58,
+			    [Discharge Level]<=0.6,0.6,
+			    [Discharge Level]<=0.62,0.62,
+			    [Discharge Level]<=0.64,0.64,
+			    [Discharge Level]<=0.66,0.66,
+			    [Discharge Level]<=0.68,0.68,
+			    [Discharge Level]<=0.7,0.7,
+			    [Discharge Level]<=0.72,0.72,
+			    [Discharge Level]<=0.74,0.74,
+			    [Discharge Level]<=0.76,0.76,
+			    [Discharge Level]<=0.78,0.78,
+			    [Discharge Level]<=0.8,0.8,
+			    [Discharge Level]<=0.82,0.82,
+			    [Discharge Level]<=0.84,0.84,
+			    [Discharge Level]<=0.86,0.86,
+			    [Discharge Level]<=0.88,0.88,
+			    [Discharge Level]<=0.9,0.9,
+			    [Discharge Level]<=0.92,0.92,
+			    [Discharge Level]<=0.94,0.94,
+			    [Discharge Level]<=0.96,0.96,
+			    [Discharge Level]<=0.98,0.98,
+			    [Discharge Level]<=1,1,
+			    BLANK()
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Bins
+		lineageTag: 5f9e4269-a8e2-4b94-90c2-e5b8478ec238
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Gain' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Gain]) || [Gain]<=0,BLANK(),
+			    [Gain]<=0.02,0.02,
+			    [Gain]<=0.04,0.04,
+			    [Gain]<=0.06,0.06,
+			    [Gain]<=0.08,0.08,
+			    [Gain]<=0.1,0.1,
+			    [Gain]<=0.12,0.12,
+			    [Gain]<=0.14,0.14,
+			    [Gain]<=0.16,0.16,
+			    [Gain]<=0.18,0.18,
+			    [Gain]<=0.2,0.2,
+			    [Gain]<=0.22,0.22,
+			    [Gain]<=0.24,0.24,
+			    [Gain]<=0.26,0.26,
+			    [Gain]<=0.28,0.28,
+			    [Gain]<=0.3,0.3,
+			    [Gain]<=0.32,0.32,
+			    [Gain]<=0.34,0.34,
+			    [Gain]<=0.36,0.36,
+			    [Gain]<=0.38,0.38,
+			    [Gain]<=0.4,0.4,
+			    [Gain]<=0.42,0.42,
+			    [Gain]<=0.44,0.44,
+			    [Gain]<=0.46,0.46,
+			    [Gain]<=0.48,0.48,
+			    [Gain]<=0.5,0.5,
+			    [Gain]<=0.52,0.52,
+			    [Gain]<=0.54,0.54,
+			    [Gain]<=0.56,0.56,
+			    [Gain]<=0.58,0.58,
+			    [Gain]<=0.6,0.6,
+			    [Gain]<=0.62,0.62,
+			    [Gain]<=0.64,0.64,
+			    [Gain]<=0.66,0.66,
+			    [Gain]<=0.68,0.68,
+			    [Gain]<=0.7,0.7,
+			    [Gain]<=0.72,0.72,
+			    [Gain]<=0.74,0.74,
+			    [Gain]<=0.76,0.76,
+			    [Gain]<=0.78,0.78,
+			    [Gain]<=0.8,0.8,
+			    [Gain]<=0.82,0.82,
+			    [Gain]<=0.84,0.84,
+			    [Gain]<=0.86,0.86,
+			    [Gain]<=0.88,0.88,
+			    [Gain]<=0.9,0.9,
+			    [Gain]<=0.92,0.92,
+			    [Gain]<=0.94,0.94,
+			    [Gain]<=0.96,0.96,
+			    [Gain]<=0.98,0.98,
+			    [Gain]<=1,1,
+			    BLANK()
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Bins
+		lineageTag: e35ad799-bfe6-4366-b21c-2ed66dbf5ca0
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsStroke =
+			
+			IF(
+			    CALCULATE(
+			        COUNTROWS(RELATEDTABLE(Diagnosis)),
+			        CONTAINSSTRING(DiagnosisCode[L4],"cerebral infarction") || CONTAINSSTRING(DiagnosisCode[L4],"intracerebral hemorrhage")
+			    )>0,
+			    "Yes","No"
+			)
+		lineageTag: 2ddc94d8-e019-49bd-8041-16117bbe90b7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StayCases = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = dbo_vw_StayCases,
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"TherapyStartDate", type date}, {"TherapyEndDate", type date}, {"DischargedTo_ID", Int64.Type}, {"EndReason_ID", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

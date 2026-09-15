@@ -1,0 +1,81 @@
+table Service
+	lineageTag: d1f0d06f-0626-4513-a232-edddb8c2d9f1
+
+	column ServiceCode
+		dataType: string
+		isKey
+		lineageTag: 744068ec-5e51-485e-aee6-56eff016c506
+		summarizeBy: none
+		sourceColumn: ServiceCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 73380f66-ca96-4422-8386-6358acb21f01
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Abbrev
+		dataType: string
+		lineageTag: 272a3bcd-3844-4972-90ce-a0580c66b25f
+		summarizeBy: none
+		sourceColumn: Abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: b41d22db-d8bb-4642-83b4-9e4e08947b7b
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Specialty =
+			
+			IF(Service[ServiceCode] IN {"97150", "92508"},"Group",
+			IF(Service[ServiceCode] IN {"97113"},"Aquatic",
+			IF(OR(CONTAINSSTRING(Service[Description],"modal"),Service[ServiceCode] IN {"G0281", "G0283", "G0329"}),"Modality",
+			"-None-"
+			)))
+		lineageTag: 3356a821-96bc-4c8a-9815-b7721eb4616b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category =
+			
+			IF(Service[Type]="Eval","Evalulation",
+			IF(Service[Specialty]<>"-None-",Service[Specialty],
+			IF(Service[Abbrev]="","Other",
+			IF(LEFT(Service[Abbrev],4)="Well","Wellness",
+			Service[Abbrev]
+			))))
+		lineageTag: a2aa035e-e61a-4fbc-8f37-f64560cf39e5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Service = m
+		mode: import
+		queryGroup: Procedures
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
+				    Service_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Service",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Service_,{"ServiceCode", "Description", "Abbrev"}),
+				    #"Added Custom" = Table.AddColumn(#"Removed Other Columns", "Type", each if Text.Contains(Text.Lower([Description]),"eval") then "Eval" else "Treat"),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Custom",{{"Type", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

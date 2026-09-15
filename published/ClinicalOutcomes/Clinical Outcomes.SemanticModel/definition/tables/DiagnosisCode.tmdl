@@ -1,0 +1,83 @@
+table DiagnosisCode
+	lineageTag: 98fd4e14-52fd-41a5-adda-415c7e36b5e5
+
+	column DiagnosisCode_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 00b2a219-e677-4dda-89a6-1062a9df3d7d
+		summarizeBy: none
+		sourceColumn: DiagnosisCode_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column L4
+		dataType: string
+		lineageTag: 836168e9-8713-4a0c-b00d-6ce1104b32a1
+		summarizeBy: none
+		sourceColumn: L4
+
+		annotation SummarizationSetBy = Automatic
+
+	column L3
+		dataType: string
+		lineageTag: ccf1dacc-2caf-4564-9238-8940bb9c302c
+		summarizeBy: none
+		sourceColumn: L3
+
+		annotation SummarizationSetBy = Automatic
+
+	column L2
+		dataType: string
+		lineageTag: 91a5c15a-3a66-446f-afac-03ab6d28a80e
+		summarizeBy: none
+		sourceColumn: L2
+
+		annotation SummarizationSetBy = Automatic
+
+	column L1
+		dataType: string
+		lineageTag: dc0c5302-d9fd-46c5-8f08-3fba858cb12f
+		summarizeBy: none
+		sourceColumn: L1
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DiagnosisCode = m
+		mode: import
+		queryGroup: Diagnoses
+		source =
+				let
+				    //Source
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    CallWorkspace = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    CallDataflow = CallWorkspace{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
+				
+				    //Codes
+				    Codes_GetName = CallDataflow{[entity="DiagnosisCode",version=""]}[Data],
+				    Codes_RemovedOtherColumns = Table.SelectColumns(Codes_GetName,{"DiagnosisCode_ID", "Code", "Description", "ParentDiagnosisCode_ID", "DiagnosisCategory_ID"}),
+				    Codes_MergedColumns = Table.CombineColumns(Codes_RemovedOtherColumns,{"Code", "Description"},Combiner.CombineTextByDelimiter(" - ", QuoteStyle.None),"L4"),
+				    Codes_MergedQueries = Table.NestedJoin(Codes_MergedColumns, {"ParentDiagnosisCode_ID"}, Codes_MergedColumns, {"DiagnosisCode_ID"}, "Codes_MergedColumns", JoinKind.LeftOuter),
+				    Codes_Expanded = Table.ExpandTableColumn(Codes_MergedQueries, "Codes_MergedColumns", {"L4"}, {"L3"}),
+				    Codes_RemovedColumns = Table.RemoveColumns(Codes_Expanded,{"ParentDiagnosisCode_ID"}),
+				
+				    //Categories
+				    Categories_GetName = CallDataflow{[entity="DiagnosisCategory",version=""]}[Data],
+				    Categories_RemovedOtherColumns = Table.SelectColumns(Categories_GetName,{"DiagnosisCategory_ID", "Description", "ParentDiagnosisCategory_ID"}),
+				    Categories_RenamedColumns = Table.RenameColumns(Categories_RemovedOtherColumns,{{"Description", "L2"}}),
+				    Categories_Merge = Table.NestedJoin(Categories_RenamedColumns, {"ParentDiagnosisCategory_ID"}, Categories_RenamedColumns, {"DiagnosisCategory_ID"}, "Category", JoinKind.Inner),
+				    Categories_Expand = Table.ExpandTableColumn(Categories_Merge, "Category", {"L2"}, {"L1"}),
+				    Categories_RemovedColumns = Table.RemoveColumns(Categories_Expand,{"ParentDiagnosisCategory_ID"}),
+				
+				    //Combine
+				    Combine_Merge = Table.NestedJoin(Codes_RemovedColumns, {"DiagnosisCategory_ID"}, Categories_RemovedColumns, {"DiagnosisCategory_ID"}, "Category", JoinKind.Inner),
+				    Combine_Expand = Table.ExpandTableColumn(Combine_Merge, "Category", {"L2", "L1"}, {"L2", "L1"}),
+				    Combine_RemovedColumns = Table.RemoveColumns(Combine_Expand,{"DiagnosisCategory_ID"}),
+				    Combine_ReplacedValue = Table.ReplaceValue(Combine_RemovedColumns,null,each [L4],Replacer.ReplaceValue,{"L3"}),
+				    Combine_ChangedType = Table.TransformColumnTypes(Combine_ReplacedValue,{{"L3", type text}})
+				in
+				    Combine_ChangedType
+
+	annotation PBI_ResultType = Table
+

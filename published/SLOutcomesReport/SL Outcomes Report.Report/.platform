@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "SL Outcomes Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0e1acce8-6377-4c7c-8cac-2ac030b4dda0"
+  }
+}

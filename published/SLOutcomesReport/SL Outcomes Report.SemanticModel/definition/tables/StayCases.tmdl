@@ -1,0 +1,1116 @@
+table StayCases
+	lineageTag: 5c3d551f-2ca1-46e1-bed1-bae0250f8e70
+
+	measure 'Avg Number of Disciplines' =
+			
+			DIVIDE(
+			    SUMX(
+			        StayCases,
+			        [Total Disciplines Unique]
+			    ),
+			    CALCULATE(
+			        [Total Cases],
+			        FILTER(
+			            StayCases,
+			            [Total Disciplines Unique]>0
+			        )
+			    )
+			)
+		formatString: 0.00
+		lineageTag: 2f69ee22-ffe4-4459-a544-7a56e8efd742
+
+	measure 'Total Track Days (Test)' =
+			
+			// SUMX(
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     DISTINCTCOUNT(CaseTrackDays[TrackDate])
+			// )
+			
+			SUMX(
+			    VALUES(StayCases[PatientCase_ID]),
+			    [Total Unique CaseTrackDays]
+			)
+		formatString: #,0
+		lineageTag: 7a3d7e8d-c1bb-43e8-9d04-b926aef6d397
+
+	measure 'Top Diagnosis Category per Range' = ```
+			
+			
+			VAR CurrentCategory = SELECTEDVALUE(StayCases[Range: Minutes per Week])
+			VAR DiagnosisTable = 
+			    FILTER(
+			        DX_Cases,
+			        RELATED(StayCases[Range: Minutes per Week]) = CurrentCategory
+			    )
+			VAR TopGroup = 
+			    TOPN(
+			        1,
+			        SUMMARIZE(
+			            DiagnosisTable,
+			            DX_Cases[L2],
+			            "CaseCount", [Total Cases PM Dx]
+			        ),
+			        [CaseCount], DESC,
+			        DX_Cases[L2], ASC
+			    )
+			RETURN
+			    MAXX(TopGroup, DX_Cases[L2])
+			```
+		lineageTag: ddef7590-2e21-49c8-be0d-4d090d0ae0aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Dx Age' = AVERAGE(DX_Cases[Dx Age])
+		lineageTag: ab792d76-a594-44f0-9fa6-b7f4aa7aa30e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Number of Diagnoses' =
+			
+			// AVERAGEX(
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     COUNTROWS(
+			//         DISTINCT(
+			//             SELECTCOLUMNS(
+			//                 RELATEDTABLE(Diagnosis),
+			//                 "DiagnosisCode", Diagnosis[DiagnosisCode_ID]
+			//             )
+			//         )
+			//     )
+			// )
+			
+			// AVERAGEX(
+			//     VALUES(DX_Cases[PatientCase_ID]),
+			//     COUNTROWS(DX_Cases)
+			// )
+			
+			AVERAGEX(
+			    VALUES(StayCases[PatientCase_ID]),
+			    COUNTROWS(RELATEDTABLE(DX_Cases))
+			)
+		lineageTag: 13186359-811f-44b6-a8aa-208d5056ce46
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Number of Diagnoses BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Average Number of Diagnoses],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		lineageTag: 1298a59b-6071-40ea-8167-46f3aa308711
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Dx Age BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Avg Dx Age],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		lineageTag: d5bcc0a6-6761-4a75-b176-50e2c8a8e40e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Diagnosis Weight' =
+			
+			// AVERAGEX(
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     // COUNTROWS(RELATEDTABLE(DX_Cases))
+			//     SUMX(Weights,Weights[Weight])
+			// )
+			
+			// AVERAGEX(
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     SUMX(RELATEDTABLE(DX_Cases),SUMX(RELATEDTABLE(Weights),Weights[Weight]))
+			// )
+			
+			// AVERAGEX(
+			//     VALUES(StayCases[PatientCase_ID]),
+			//     SUM(DX_Cases[Weight])
+			// )
+			
+			AVERAGEX(
+			    VALUES(StayCases[PatientCase_ID]),
+			    SUMX(
+			        FILTER(
+			            DISTINCT(
+			                SELECTCOLUMNS(
+			                    RELATEDTABLE(DX_Cases),
+			                    "ICD", DX_Cases[ICD],
+			                    "Weight",RELATED(Weights[Weight])
+			                )
+			            ),
+			            NOT ISBLANK([Weight])
+			        ),
+			        [Weight]
+			    )
+			)
+		formatString: 0.00
+		lineageTag: 1df0ac62-13e5-49fa-a4f5-571582d397bb
+
+	measure 'Average Diagnosis Weight BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [Average Diagnosis Weight],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.00
+		lineageTag: 51169804-fe08-480e-9425-f313b1293d12
+
+	measure 'Average Number of Diagnoses Delta' = IF([Report Scope]="Filtered",[Average Number of Diagnoses]-[Average Number of Diagnoses BM])
+		lineageTag: 2d319c51-934a-4c6e-9278-c0a51dfd3e9f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Dx Age Delta' = IF([Report Scope]="Filtered",[Avg Dx Age]-[Avg Dx Age BM])
+		lineageTag: a4987ab4-d32a-4b9c-b900-7d5e4a13e324
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Diagnosis Weight Delta' = IF([Report Scope]="Filtered",[Average Diagnosis Weight]-[Average Diagnosis Weight BM])
+		lineageTag: 5baf57f7-13d6-402c-9a8b-a29d1f5abb54
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PLE % Community' =
+			
+			var numerator = CALCULATE([Total Cases],StayCases[Prior Living Environment]="Community")
+			var denominator = [Total Cases]
+			RETURN DIVIDE(numerator,denominator)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 3b2f2f86-2dd0-48ea-9931-a44dff08fe20
+
+	measure 'EDD % Community' =
+			
+			var numerator = CALCULATE([Total Cases],StayCases[Expected Discharge Destination]="Community")
+			var denominator = [Total Cases]
+			RETURN DIVIDE(numerator,denominator)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 09e2c8b2-5d25-44b7-a9db-562fa67a31d2
+
+	measure 'EDD % Community BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [EDD % Community],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: ad60e9cc-1f47-42d5-aac3-0faa57a3d2b1
+
+	measure 'PLE % Community BM' =
+			
+			IF([Report Scope]="Filtered",
+			CALCULATE(
+			    [PLE % Community],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			))
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: af6e2d4b-0f5f-40ab-97db-5a583f14533b
+
+	measure 'EDD % Community Delta' =
+			
+			IF([Report Scope]="Filtered",[EDD % Community]-[EDD % Community BM])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: d4e12670-1b8b-49d1-8e46-53a34bab48c0
+
+	measure 'PLE % Community Delta' =
+			
+			IF([Report Scope]="Filtered",[PLE % Community]-[PLE % Community BM])
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 4bed1247-128f-4736-93e9-19da7d7e1f12
+
+	measure 'EDD % Community Delta Image' =
+			
+			// var metric = [EDD % Community Delta]
+			// return
+			// IF([Report Scope]="Filtered",
+			// IF(metric=0,BLANK(),
+			// IF(metric>0,FORMAT([Patient Acuity Delta Image Higher],""),
+			// IF(metric<0,FORMAT([Patient Acuity Delta Image Lower],"")
+			// ))))
+			
+			
+			var metric = [EDD % Community Delta]
+			return
+			IF([Report Scope]="Filtered",
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT(SUBSTITUTE([Patient Acuity Delta Image Higher],"#9EB4C3","#7FBC42"),""),
+			IF(metric<0,FORMAT(SUBSTITUTE([Patient Acuity Delta Image Lower],"#9EB4C3","#D64550"),"")
+			))))
+		lineageTag: 072eb4a5-e007-4c17-a58c-248313b55cd4
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PLE % Community Delta Image' =
+			
+			var metric = [PLE % Community Delta]
+			return
+			IF([Report Scope]="Filtered",
+			IF(metric=0,BLANK(),
+			IF(metric>0,FORMAT(SUBSTITUTE([Patient Acuity Delta Image Higher],"#9EB4C3","#7FBC42"),""),
+			IF(metric<0,FORMAT(SUBSTITUTE([Patient Acuity Delta Image Lower],"#9EB4C3","#D64550"),"")
+			))))
+		lineageTag: 0f3346f2-2332-4d06-9282-131faa269d6a
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Case Start' = SELECTEDVALUE(StayCases[TherapyStartDate])
+		displayFolder: Date Range
+		lineageTag: bc52004e-be8b-4828-ba31-2af939c18975
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Case End' = SELECTEDVALUE(StayCases[TherapyEndDate])
+		displayFolder: Date Range
+		lineageTag: a7ebc0df-b69d-43a8-aaa8-37a7cdfcd722
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'PLE Label' = SELECTEDVALUE(StayCases[Prior Living Environment Granular])
+		lineageTag: 6d2cf185-75f1-48cd-b89e-d94e8961f65e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'EDD Label' = SELECTEDVALUE(StayCases[Expected Discharge Destination Granular])
+		lineageTag: 548dca09-b34f-4b3a-b985-3de899b56ad6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ADD Value' = SELECTEDVALUE(DischargeDestination[Descrip])
+		lineageTag: a1ad66a7-9f16-4182-959c-0de9867e6bf6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Payer Label' = ```
+			
+			// SELECTEDVALUE(Payers[Name])
+			
+			// CONCATENATEX(
+			//     DISTINCT(Payers[Name]),
+			//     Payers[Name],
+			//     ", ",
+			//     Payers[Name],
+			//     ASC
+			// )
+			
+			// CONCATENATEX(
+			//     SUMMARIZE(vw_PatientPayers,Payers[Name],vw_PatientPayers[FromDate]),
+			//     Payers[Name],
+			//     ", ",
+			//     vw_PatientPayers[FromDate],
+			//     ASC
+			// )
+			
+			// var fulltable = SUMMARIZE(vw_PatientPayers,Payers[Name],vw_PatientPayers[FromDate])
+			// var filteredtable = SUMMARIZE(fulltable,Payers[Name],"FirstFromDate",MIN(vw_PatientPayers[FromDate]))
+			// var listlength = DISTINCTCOUNT(Payers[Name])
+			// var final = 
+			// CONCATENATEX(
+			//     filteredtable,
+			//     Payers[Name],
+			//     ", ",
+			//     [FirstFromDate],
+			//     ASC
+			// )
+			// var charlength = LEN(final)
+			// var cutoff = 200
+			// return IF(LEN(final)>cutoff,LEFT(final,cutoff)&"...",final)
+			
+			
+			var fulltable = SUMMARIZE(vw_PatientPayers,Payers[Name],vw_PatientPayers[FromDate])
+			var filteredtable = SUMMARIZE(fulltable,Payers[Name],"FirstFromDate",MIN(vw_PatientPayers[FromDate]))
+			return
+			CONCATENATEX(
+			    filteredtable,
+			    Payers[Name],
+			    ", ",
+			    [FirstFromDate],
+			    ASC
+			)
+			```
+		lineageTag: 936226bb-4bb1-4278-909d-32d294501e1a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'DX Label' =
+			
+			// var fulllist = SUMMARIZE(FILTER(DX_Cases,DX_Cases[Type]="Primary"),DX_Cases[L4])
+			// RETURN
+			// CONCATENATEX(
+			//     fulllist,
+			//     DX_Cases[L4],
+			//     ", ",
+			//     DX_Cases[L4]
+			// )
+			
+			CONCATENATEX(
+			    CALCULATETABLE(
+			        DISTINCT(DX_Cases),
+			        DX_Cases[PatientCase_ID]=SELECTEDVALUE(StayCases[PatientCase_ID]),
+			        DX_Cases[Type]="Primary",
+			        ALL(DX_Cases[L4]),
+			        ALL(DX_Cases[L3]),
+			        ALL(DX_Cases[L2]),
+			        ALL(DX_Cases[L1])
+			    ),
+			    DX_Cases[L4],
+			    ", ",
+			    DX_Cases[L4],
+			    ASC
+			)
+		lineageTag: f8da997b-c6bb-4950-84c4-6e6140c5693e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gait Speed Skip Rate' = ```
+			
+			// var numerator = 
+			// CALCULATE(
+			//     [Total Cases],
+			//     StayCases[Admit Level: Walk 10 ft]>=.85,
+			//     ISBLANK(StayCases[Admit Level: Gait Speed])
+			// )
+			// var denominator = 
+			// CALCULATE(
+			//     [Total Cases],
+			//     StayCases[Admit Level: Walk 10 ft]>=.85
+			// )
+			// return DIVIDE(numerator,denominator)
+			
+			
+			var numerator = 
+			CALCULATE(
+			    [Total Tracks],
+			    CaseTracks[Admit Level: Walk 10 ft]>=.85,
+			    ISBLANK(CaseTracks[Admit Level: Gait Speed])
+			)
+			var denominator = 
+			CALCULATE(
+			    [Total Tracks],
+			    CaseTracks[Admit Level: Walk 10 ft]>=.85
+			)
+			return DIVIDE(numerator,denominator)
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 41ba6168-215f-457b-84ef-27b26b51b722
+
+	column PatientCase_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		displayFolder: Unique Identifiers
+		lineageTag: e6c6e0b4-f1a5-42de-ba8a-a36b1f0f078c
+		summarizeBy: none
+		sourceColumn: PatientCase_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stay_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Unique Identifiers
+		lineageTag: 953c463f-7056-49c4-ab5e-77400ba0841a
+		summarizeBy: none
+		sourceColumn: Stay_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TherapyStartDate
+		dataType: dateTime
+		formatString: Short Date
+		displayFolder: Date Range
+		lineageTag: b7a3265b-854f-45b0-b726-1e53c16c9fce
+		summarizeBy: none
+		sourceColumn: TherapyStartDate
+
+		variation Variation
+			isDefault
+			relationship: 030c38d2-9756-4824-bdb5-11d0fb022a24
+			defaultHierarchy: LocalDateTable_21309256-202d-42eb-a386-51990176119e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TherapyEndDate
+		dataType: dateTime
+		formatString: Short Date
+		displayFolder: Date Range
+		lineageTag: ac011c06-aa6a-478b-addc-6a85b3d0ae29
+		summarizeBy: none
+		sourceColumn: TherapyEndDate
+
+		variation Variation
+			isDefault
+			relationship: e919381e-5555-45b2-a7de-b28b69222413
+			defaultHierarchy: LocalDateTable_f693f8f2-f562-4595-84ad-077a43b827d7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DischargedTo_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Discharge Destination
+		lineageTag: fe8453a2-5bc7-4051-b87f-b91c04c013cb
+		summarizeBy: none
+		sourceColumn: DischargedTo_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EndReason_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Discharge Destination
+		lineageTag: a1b18d3c-5ccb-4775-a647-d68f05db058b
+		summarizeBy: none
+		sourceColumn: EndReason_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payer Categorization' =
+			
+			// IF(
+			//     COUNTROWS(RELATEDTABLE(vw_PatientPayers))=1,
+			//     MINX(RELATEDTABLE(vw_PatientPayers),vw_PatientPayers[Payer Group]),
+			//     "(8) Multiple Payers"
+			// )
+			
+			VAR RelatedRows =
+			    RELATEDTABLE(vw_PatientPayers)
+			VAR DistinctGroups =
+			    SUMMARIZE(RelatedRows, vw_PatientPayers[Payer Group])
+			RETURN
+			IF(
+			    COUNTROWS(DistinctGroups) = 1,
+			    MAXX(DistinctGroups, vw_PatientPayers[Payer Group]),
+			    "(8) Multiple Payers"
+			)
+		displayFolder: Cohort Selection
+		lineageTag: d0cbab09-f8ef-4783-b638-ad7663d844dc
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Range' =
+			
+			SWITCH(
+			    TRUE(),
+			    ISBLANK([Avg Age]),"UNK",
+			    [Avg Age]<18,"17U",
+			    [Avg Age]<50,"18-49",
+			    [Avg Age]<65,"50-64",
+			    [Avg Age]<70,"65-69",
+			    [Avg Age]<75,"70-74",
+			    [Avg Age]<80,"75-79",
+			    [Avg Age]<85,"80-84",
+			    [Avg Age]<90,"85-89",
+			    [Avg Age]<95,"90-94",
+			    "95+"
+			)
+		displayFolder: Cohort Selection
+		lineageTag: 60d8c7ba-04d6-4075-a262-3d18c04dd6fd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Disc Inv' =
+			
+			var VisitsPT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="PT")>0,"PT")
+			var VisitsOT = IF(CALCULATE([Total Visits],Disciplines[Discipline]="OT")>0,"OT")
+			var VisitsST = IF(CALCULATE([Total Visits],Disciplines[Discipline]="ST")>0,"ST")
+			var ValuesTable = FILTER({VisitsPT, VisitsOT, VisitsST}, NOT(ISBLANK([Value])))
+			var ValuesList = CONCATENATEX(ValuesTable,[Value],"/")
+			return ValuesList
+		displayFolder: Buckets
+		lineageTag: d28cfdbe-79a7-4089-8275-20e7c91a3736
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Minutes per Week' = ```
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || ISBLANK([Minutes per Week]) || [Minutes per Week] > 1000, 
+			    BLANK(), 
+			    CEILING([Minutes per Week], 20)
+			)
+			```
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: 9f787a22-2b6b-48f6-b9cd-57d378ab9388
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column UniqueDays =
+			
+			// [Total Unique CaseTrackDays]
+			CALCULATE(DISTINCTCOUNT(CaseTrackDays[TrackDate]))
+		formatString: 0
+		lineageTag: 4cac8fb4-ec41-40b9-a140-7daf5b788ffd
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Admit Level' =
+			
+			IF(
+			    ISBLANK([Admit Level]) || [Admit Level]=0,
+			    BLANK(),
+			    CEILING([Admit Level],.02)
+			)
+		displayFolder: Buckets
+		lineageTag: c39d0211-7b84-4d14-8619-a3590fceb33e
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Range: Discharge Level' =
+			
+			IF(
+			    ISBLANK([Discharge Level]) || [Discharge Level]=0,
+			    BLANK(),
+			    CEILING([Discharge Level],.02)
+			)
+		displayFolder: Buckets
+		lineageTag: 056d16a2-734d-4514-8d30-30f7f6e8ce47
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Range: Gain' = ```
+			
+			IF(
+			    ISBLANK([Gain]) || [Gain]<=0, 
+			    BLANK(), 
+			    CEILING([Gain], 0.02)
+			)
+			```
+		displayFolder: Buckets
+		lineageTag: 97d66f4f-9775-46ad-b4aa-e76e840034a1
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Range: LOS' = ```
+			
+			IF(
+			    [Total Visits]<5 || [Total Days]>200, 
+			    BLANK(), 
+			    CEILING([ALOS], 2)
+			)
+			```
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: 506defaf-1709-4b42-9a8d-53aa1b1e3783
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Minutes per Case' = ```
+			
+			IF(
+			    [ALOS]<7 || [Total Visits]<5 || [Total Minutes]>8000, 
+			    BLANK(), 
+			    CEILING([Minutes per Case], 100)
+			)
+			```
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: 95f26ed6-f96b-4fa9-9575-b4670719f47f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Minutes per Visit' = ```
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || [Minutes per Visit] > 70, 
+			    BLANK(), 
+			    CEILING([Minutes per Visit], 1)
+			)
+			```
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: 3c5d009d-acb7-4b14-b6f1-399bcbf97134
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Units per Visit (pt/ot)' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || ISBLANK([Units per Visit (pt/ot)]) || [Units per Visit (pt/ot)] > 6,
+			    BLANK(),
+			    CEILING([Units per Visit (pt/ot)], 0.125)
+			)
+		displayFolder: Buckets
+		lineageTag: f9c9eaa1-54dd-45f4-bc85-4276c096f5a6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Range: Visits per Case' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || [Total Visits] > 200,
+			    BLANK(),
+			    CEILING([Total Visits], 2)
+			)
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: 57ef9288-e7ed-4bfc-9f28-f7b044f7e58a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Visits per Discipline per Week' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || [Visits per Discipline per Week] > 7,
+			    BLANK(),
+			    CEILING([Visits per Discipline per Week], 0.15)
+			)
+		displayFolder: Buckets
+		lineageTag: d417029f-1568-435b-a2fb-38a3791ed23d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Range: Minutes per Discipline per Week' = ```
+			
+			IF(
+			    [ALOS]< 7 || [Total Visits]<5 || ISBLANK([Minutes per Discipline per Week]) || [Minutes per Discipline per Week]>500, 
+			    BLANK(), 
+			    CEILING([Minutes per Discipline per Week], 10)
+			)
+			```
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: 48469d22-3b15-47ec-8015-4141c83a32a4
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Visits per Week' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || [Visits per Week] > 30,
+			    BLANK(),
+			    CEILING([Visits per Week], 0.3)
+			)
+		displayFolder: Buckets
+		lineageTag: 60a8797f-d8ca-4cc2-9745-552985b0b363
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsSkilledMaintenance =
+			
+			CALCULATE(
+			    COUNTROWS(RELATEDTABLE(Service)),
+			    Service[ServiceCode]="SkldM"
+			)>0
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f78e2eff-65fb-4596-8196-4526ad10822f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Case Result' =
+			
+			SWITCH(
+			    TRUE(),
+			    [Gain]>0,"Improved",
+			    [Gain]<0,"Declined",
+			    ISBLANK([Gain]),"N/A",
+			    "No Change"
+			)
+		lineageTag: 45d7fb26-cb2e-406c-b726-a36a9e9510d0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Avg Age' =
+			
+			IF(
+			    [ALOS]<7 || [Total Visits]<5,
+			    BLANK(),
+			    ROUNDUP([Avg Age], 0)
+			)
+		formatString: 0
+		displayFolder: Buckets
+		lineageTag: dea6d26d-3c51-46a5-b1c0-1d7d5f34b30b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Expected Discharge Destination' =
+			
+			var EDD_count = CALCULATE(COUNTROWS(DISTINCT(EDD[Label])))
+			return
+			SWITCH(
+			    EDD_count,
+			    0,BLANK(),
+			    1,CALCULATE(CONCATENATEX(DISTINCT(EDD[Label]),EDD[Label],", ",EDD[Label],ASC)),
+			    "Mixed"
+			)
+			
+			// var EDD_count = CALCULATE(COUNTROWS(DISTINCT(EDD[DisplayValue])))
+			// return
+			// SWITCH(
+			//     EDD_count,
+			//     0,BLANK(),
+			//     1,CALCULATE(CONCATENATEX(DISTINCT(EDD[DisplayValue]),EDD[DisplayValue],", ",EDD[DisplayValue],ASC)),
+			//     "Mixed"
+			// )
+		lineageTag: bae0c622-d184-48b8-910c-5819fa062003
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: PRN Utilization' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5,
+			    BLANK(),
+			    CEILING([% Minutes PRN], 0.05)
+			)
+		lineageTag: f7033f98-583d-40fa-9614-a1cd86646e40
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Evaluation Method' =
+			
+			// CONCATENATEX(
+			//     RELATEDTABLE(CaseTracks),
+			//     CaseTracks[Evaluation Method],
+			//     ", ",
+			//     CaseTracks[Evaluation Method],
+			//     ASC
+			// )
+			
+			CALCULATE(
+			    CONCATENATEX(
+			        DISTINCT(CaseTracks[Evaluation Method]),
+			        CaseTracks[Evaluation Method],
+			        ", ",
+			        CaseTracks[Evaluation Method],
+			        ASC
+			    )
+			)
+		lineageTag: 8c1dad12-5c7d-48dc-bbd4-50ae06415504
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Evaluator FTE' = ```
+			
+			var mylist = 
+			CALCULATE(
+			    CONCATENATEX(
+			        FILTER(DISTINCT(CaseTracks[Evaluating Therapist FTE Type]),ISBLANK(CaseTracks[Evaluating Therapist FTE Type])=FALSE()),
+			        CaseTracks[Evaluating Therapist FTE Type],
+			        ", ",
+			        CaseTracks[Evaluating Therapist FTE Type],
+			        ASC
+			    )
+			)
+			
+			var multiple = CONTAINSSTRING(mylist,", ")
+			return IF(multiple,"Mixed",mylist)
+			```
+		lineageTag: d5ce5009-5e20-44b0-b0ee-4b85f6f2394d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Prior Living Environment' =
+			
+			var PLE_count = CALCULATE(COUNTROWS(DISTINCT(PLE[Label])))
+			RETURN
+			SWITCH(
+			    PLE_count,
+			    0,BLANK(),
+			    1,CALCULATE(CONCATENATEX(DISTINCT(PLE[Label]),PLE[Label],", ",PLE[Label],ASC)),
+			    "Mixed"
+			)
+			
+			// var PLE_count = CALCULATE(COUNTROWS(DISTINCT(PLE[DisplayValue])))
+			// RETURN
+			// SWITCH(
+			//     PLE_count,
+			//     0,BLANK(),
+			//     1,CALCULATE(CONCATENATEX(DISTINCT(PLE[DisplayValue]),PLE[DisplayValue],", ",PLE[DisplayValue],ASC)),
+			//     "Mixed"
+			// )
+		lineageTag: 16fa0a11-c319-48e2-8fdc-93bc8f6667c2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Case Label' = RELATED(Patients[Patient Name])&" ("&StayCases[PatientCase_ID]&")"
+		lineageTag: b70eac55-ed98-4f70-a610-e2eee8fa6d8e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Expected Discharge Destination Granular' =
+			
+			var EDD_count = CALCULATE(COUNTROWS(DISTINCT(EDD[DisplayValue])))
+			return
+			SWITCH(
+			    EDD_count,
+			    0,BLANK(),
+			    1,CALCULATE(CONCATENATEX(DISTINCT(EDD[DisplayValue]),EDD[DisplayValue],", ",EDD[DisplayValue],ASC)),
+			    "Mixed"
+			)
+		lineageTag: 4ebc723d-f05f-4194-a5a8-727d24171ebf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Prior Living Environment Granular' =
+			
+			var PLE_count = CALCULATE(COUNTROWS(DISTINCT(PLE[DisplayValue])))
+			RETURN
+			SWITCH(
+			    PLE_count,
+			    0,BLANK(),
+			    1,CALCULATE(CONCATENATEX(DISTINCT(PLE[DisplayValue]),PLE[DisplayValue],", ",PLE[DisplayValue],ASC)),
+			    "Mixed"
+			)
+		lineageTag: 92ead82e-9056-40bd-8bba-b211e76fbb2f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Therapists per Discipline' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5 || [Therapists per Discipline] > 10,
+			    BLANK(),
+			    CEILING([Therapists per Discipline], 1)
+			)
+		formatString: 0.0
+		displayFolder: Buckets
+		lineageTag: 325324d7-b3fa-4c67-b808-e2a5e20f14a2
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Total Visits % Telehealth' =
+			
+			// IF(
+			//     [ALOS] < 7 || [Total Visits] < 5,
+			//     BLANK(),
+			//     CEILING([% Visits Telehealth],.02)
+			// )
+			
+			IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			SWITCH(
+			    TRUE(),
+			    [% Visits Telehealth]=0 || ISBLANK([% Visits Telehealth]),"(a) None",
+			    [% Visits Telehealth]<.02,"(b) 0%-2%",
+			    [% Visits Telehealth]<.04,"(c) 2%-4%",
+			    [% Visits Telehealth]<.06,"(d) 4%-6%",
+			    [% Visits Telehealth]<.08,"(e) 6%-8%",
+			    [% Visits Telehealth]<.10,"(f) 8%-10%",
+			    "(g) More than 10%"
+			))
+		displayFolder: Buckets
+		lineageTag: eed31fc7-8fef-47c7-80d3-2e4085936693
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Range: Total Minutes % Group Therapy' = ```
+			
+			// IF([ALOS]<7 || [Total Visits]<5,BLANK(),
+			// SWITCH(
+			//     TRUE(),
+			//     [% Minutes Group Therapy]=0 || ISBLANK([% Visits Group Therapy]),"(a) None",
+			//     [% Minutes Group Therapy]<.02,"(b) 0%-2%",
+			//     [% Minutes Group Therapy]<.04,"(c) 2%-4%",
+			//     [% Minutes Group Therapy]<.06,"(d) 4%-6%",
+			//     [% Minutes Group Therapy]<.08,"(e) 6%-8%",
+			//     [% Minutes Group Therapy]<.10,"(f) 8%-10%",
+			//     "(g) More than 10%"
+			// ))
+			
+			
+			IF(
+			    [ALOS]<7 || [Total Visits]<5 || [% Minutes Group Therapy] > .3, 
+			    BLANK(), 
+			    CEILING([% Minutes Group Therapy], .02)
+			)
+			
+			
+			
+			// IF(
+			//     [ALOS]<7 || [Total Visits]<5 || [% Minutes Group Therapy] > .3, 
+			//     BLANK(), 
+			//     SWITCH(TRUE(),[Total Minutes Group Therapy] > 0,CEILING([% Minutes Group Therapy], .02),0)
+			// )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Buckets
+		lineageTag: ce9c470a-6d09-4cf1-8368-0d11c7a04d65
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Uses: Aquatic Therapy' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5,
+			    BLANK(),
+			    SWITCH(TRUE(),[Total Minutes Aquatic]>0,"(a) Yes","(b) No"
+			))
+		displayFolder: Buckets
+		lineageTag: 74670477-24a8-49a0-a6be-be1911167c7a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Uses: Modalities' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5,
+			    BLANK(),
+			    SWITCH(TRUE(),[Total Minutes Modalities]>0,"(a) Yes","(b) No"
+			))
+		displayFolder: Buckets
+		lineageTag: 56492d8d-56d0-49a4-bbea-75882c0c1dd6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Uses: Telehealth' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5,
+			    BLANK(),
+			    SWITCH(TRUE(),[Total Minutes Telehealth]>0,"(a) Yes","(b) No"
+			))
+		displayFolder: Buckets
+		lineageTag: 1607273d-bde2-4fae-a09a-e901e3a0eb38
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Uses: Skilled Maintenance' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5,
+			    BLANK(),
+			    SWITCH(TRUE(),[Total Minutes Skilled Maintenance]>0,"(a) Yes","(b) No"
+			))
+		displayFolder: Buckets
+		lineageTag: f41aa7df-b48d-448d-8258-15074e44e872
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Uses: Group Therapy' =
+			
+			IF(
+			    [ALOS] < 7 || [Total Visits] < 5,
+			    BLANK(),
+			    SWITCH(TRUE(),[Total Minutes Group Therapy]>0,"(a) Yes","(b) No"
+			))
+		displayFolder: Buckets
+		lineageTag: f99b3349-2f6b-41ca-a46a-6dd0decf0924
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Analysis Eligible' = [ALOS] >= 7 && [Total Visits] >= 5
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0f0d4dfa-3418-4674-8ecd-7537c494079c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Admit Level: Walk 10 ft' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    Dictionary[Name] = "I. Walk 10 feet"
+			)
+		lineageTag: 1092819a-57d7-4ff7-a588-4b03a1733328
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Admit Level: Gait Speed' =
+			
+			CALCULATE(
+			    [Admit Level],
+			    Dictionary[Name] = "4MWT Gait Speed Test"
+			)
+		lineageTag: 04235c66-6f7d-41e6-8c9f-3a789ce7d874
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'CASE: Total Measurements' = [Total Measurements]
+		formatString: 0
+		lineageTag: f6592afe-66f5-4b3c-a605-3703ed100193
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StayCases = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = dbo_vw_StayCases,
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"TherapyStartDate", type date}, {"TherapyEndDate", type date}, {"DischargedTo_ID", Int64.Type}, {"EndReason_ID", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

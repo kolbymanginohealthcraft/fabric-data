@@ -1,0 +1,88 @@
+/// Admit and discharge dates for each patient's episode
+table PatientStays
+	lineageTag: 40351199-8ac4-4405-95a4-c849ef65ff3a
+
+	measure 'Total Stays' = COUNTROWS(PatientStays)
+		formatString: #,0
+		lineageTag: 3f201725-2e9f-48fe-a992-35e66767c77b
+
+	column PatientID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 175e276d-2e6f-4ed5-b6f7-c7d80d3f6885
+		summarizeBy: none
+		sourceColumn: PatientID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stay_ID
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: 9416b9cf-f885-4a0f-9b7e-c22dccce5c2e
+		summarizeBy: none
+		sourceColumn: Stay_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AdmitDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 6450bd16-900b-4dda-8a2f-804f3a70e5f5
+		summarizeBy: none
+		sourceColumn: AdmitDate
+
+		variation Variation
+			isDefault
+			relationship: e66cb4c0-b8cc-4894-a0af-925a199e5cf9
+			defaultHierarchy: LocalDateTable_3e5673c6-9976-4658-be6e-2fad58ea2a5c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DischargeDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: cf7f7ad8-5877-464e-9724-35fc2387c2fd
+		summarizeBy: none
+		sourceColumn: DischargeDate
+
+		variation Variation
+			isDefault
+			relationship: 5dc6644c-a56f-47a5-8a3f-eca222043de5
+			defaultHierarchy: LocalDateTable_b8ea571a-deed-46a3-b3b3-f91ba19c8dd8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column IntakeSource_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: f1226adc-37ff-460a-b0c7-b1394e758d23
+		summarizeBy: none
+		sourceColumn: IntakeSource_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PatientStays = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = dbo_vw_PatientStays,
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"AdmitDate", type date}, {"DischargeDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

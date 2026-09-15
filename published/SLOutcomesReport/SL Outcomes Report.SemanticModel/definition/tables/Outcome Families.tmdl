@@ -1,0 +1,36 @@
+table 'Outcome Families'
+	lineageTag: b945d4be-dc76-4574-a362-b14679fd0ae9
+
+	column 'Family Code'
+		dataType: string
+		lineageTag: f6007085-000c-4342-b4d0-9ce087ae3b5a
+		summarizeBy: none
+		sourceColumn: Family Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Family
+		dataType: string
+		lineageTag: eb1942a2-95c4-4da4-9da5-e5e1b5bb4d7a
+		summarizeBy: none
+		sourceColumn: Family
+		sortByColumn: 'Family Code'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Outcome Families' = m
+		mode: import
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45W0kjUVHB3V/DNT8rMySypVNJRQubF6gBVJIFVBKfmpCk4JxalQpQguGA1yZoKwQEBTkA5MAUWS9FU8C/JSC0CCkLo2FgA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Family Code" = _t, Family = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Family Code", type text}, {"Family", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

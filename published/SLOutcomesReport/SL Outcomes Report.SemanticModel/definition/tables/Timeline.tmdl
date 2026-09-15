@@ -1,0 +1,359 @@
+table Timeline
+	lineageTag: b222de8b-7d8b-4866-8d69-3ba205ef4851
+
+	measure Duration =
+			
+			DATEDIFF(
+			    SELECTEDVALUE(Timeline[Start])-1,
+			    SELECTEDVALUE(Timeline[End]),
+			    DAY
+			)
+		lineageTag: 2a0dcc9a-ecb6-48ba-8c4c-7e888a86c3a6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Timeline Start' =
+			
+			// CALCULATE(
+			//     MIN(Timeline[Start]),
+			//     ALLSELECTED(Timeline[CaseID])
+			// )
+			
+			// MINX(
+			//     KEEPFILTERS(VALUES('Timeline'[CaseID])),
+			//     CALCULATE(MIN(Timeline[Start]))
+			// )
+			
+			// CALCULATE(
+			//     MIN(Timeline[Start]),
+			//     FILTER(
+			//         Timeline,
+			//         Timeline[CaseID]=SELECTEDVALUE(Timeline[CaseID])
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     MIN(Timeline[Start]),
+			//     ALL(Timeline[ItemID])
+			// )
+			
+			LOOKUPVALUE(
+			    Timeline[Start],
+			    Timeline[ItemID],
+			    SELECTEDVALUE(Timeline[CaseID])
+			)
+		lineageTag: 190dc795-5b52-44b7-8044-5a563ba13091
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Timeline PaddingLeft' =
+			
+			var OverallStartDate = Timeline[Timeline Start]
+			var StartDate = SELECTEDVALUE(Timeline[Start])
+			var result = DATEDIFF(OverallStartDate,StartDate,DAY)
+			return result
+		lineageTag: 345cf627-a8fe-4e5b-9318-4128adfe38e6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Timeline SVG' =
+			
+			
+			var canvasWidth = 648
+			var canvasHeight = 172
+			var caseStartDate = [Timeline Start]
+			var caseStartEnd = [Timeline End]
+			
+			return
+			
+			//prefix
+			"data:image/svg+xml;utf8,"&
+			
+			//setup
+			"<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//visit PT
+			"<line x1=""7.75"" y1=""77"" x2=""7.75"" y2=""96"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			
+			//visit OT
+			"<line x1=""168.75"" y1=""112"" x2=""168.75"" y2=""131"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			
+			//visit ST
+			"<line x1=""387.75"" y1=""147"" x2=""387.75"" y2=""166"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			
+			//suffix
+			"</svg>"
+		lineageTag: f6811c12-a478-4167-9cdb-c06c11f21117
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Item Length' = SELECTEDVALUE(TreatmentsDetails[Duration])
+		lineageTag: 454355ce-bcf7-4d33-894b-6e2ffa0a2012
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Timeline End' =
+			
+			// CALCULATE(
+			//     MIN(Timeline[Start]),
+			//     ALLSELECTED(Timeline[CaseID])
+			// )
+			
+			// MINX(
+			//     KEEPFILTERS(VALUES('Timeline'[CaseID])),
+			//     CALCULATE(MIN(Timeline[Start]))
+			// )
+			
+			// CALCULATE(
+			//     MIN(Timeline[Start]),
+			//     FILTER(
+			//         Timeline,
+			//         Timeline[CaseID]=SELECTEDVALUE(Timeline[CaseID])
+			//     )
+			// )
+			
+			// CALCULATE(
+			//     MIN(Timeline[Start]),
+			//     ALL(Timeline[ItemID])
+			// )
+			
+			LOOKUPVALUE(
+			    Timeline[End],
+			    Timeline[ItemID],
+			    SELECTEDVALUE(Timeline[CaseID])
+			)
+		lineageTag: cc6f0781-42b6-4452-a6bd-f387060b0dd2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure GanttChartSVG = ```
+			
+			VAR StartDate = SELECTEDVALUE(StayCases[TherapyStartDate]) // Replace with the earliest date in your data
+			VAR EndDate = [Timeline End] // Replace with the earliest date in your data
+			VAR ChartWidth = 500 // Width of the entire SVG chart
+			VAR ChartHeight = 300 // Height of the entire SVG chart
+			VAR BarHeight = 30 // Height of each therapy bar
+			VAR BarSpacing = 10 // Spacing between therapy bars
+			VAR VisitMarkerSize = 5 // Size of each visit marker (e.g., line or circle)
+			
+			VAR BarsPT = 
+			    CONCATENATEX(
+			        VALUES(Disciplines[Ordered Discipline]),
+			        VAR Therapy = Disciplines[Ordered Discipline]
+			        VAR StartX = DATEDIFF(StartDate,MINX(FILTER(CaseTracks, Disciplines[Ordered Discipline] = Therapy), CaseTracks[StartDate]), DAY) 
+			                    * ChartWidth / DATEDIFF(StartDate, MAX(CaseTracks[EndDate]), DAY)
+			        VAR EndX = DATEDIFF(StartDate,MAXX(FILTER(CaseTracks, Disciplines[Ordered Discipline] = Therapy), CaseTracks[EndDate]), DAY) 
+			                  * ChartWidth / DATEDIFF(StartDate, MAX(CaseTracks[EndDate]), DAY)
+			        VAR BarY = (RANKX(ALL(Disciplines[Ordered Discipline]), Therapy) - 1) * (BarHeight + BarSpacing)
+			        RETURN 
+			            "<rect 
+			                x=""" & StartX & """ 
+			                y=""" & BarY & """ 
+			                width=""" & (EndX - StartX) & """ 
+			                height=""" & BarHeight & """ 
+			                fill=""#3DB3E3"" 
+			                fill-opacity=""0.25"" 
+			                stroke=""#3DB3E3"" 
+			                stroke-opacity=""0.10""
+			            />"
+			    )
+			
+			VAR BarsOT = 
+			    CONCATENATEX(
+			        VALUES(Disciplines[Ordered Discipline]),
+			        VAR Therapy = Disciplines[Ordered Discipline]
+			        VAR StartX = DATEDIFF(StartDate,MINX(FILTER(CaseTracks, Disciplines[Ordered Discipline] = Therapy), CaseTracks[StartDate]), DAY) 
+			                    * ChartWidth / DATEDIFF(StartDate, MAX(CaseTracks[EndDate]), DAY)
+			        VAR EndX = DATEDIFF(StartDate,MAXX(FILTER(CaseTracks, Disciplines[Ordered Discipline] = Therapy), CaseTracks[EndDate]), DAY) 
+			                  * ChartWidth / DATEDIFF(StartDate, MAX(CaseTracks[EndDate]), DAY)
+			        VAR BarY = (RANKX(ALL(Disciplines[Ordered Discipline]), Therapy) - 1) * (BarHeight + BarSpacing)
+			        RETURN 
+			            "<rect 
+			                x=""" & StartX+BarHeight & """ 
+			                y=""" & BarY & """ 
+			                width=""" & (EndX - StartX) & """ 
+			                height=""" & BarHeight & """ 
+			                fill=""#3DB3E3"" 
+			                fill-opacity=""0.25"" 
+			                stroke=""#3DB3E3"" 
+			                stroke-opacity=""0.10""
+			            />"
+			    )
+			
+			VAR VisitMarkers = 
+			    CONCATENATEX(
+			        VALUES(Treatments[LaborDate]),
+			        VAR VisitX = DATEDIFF(Treatments[LaborDate], StartDate, DAY) 
+			                     * ChartWidth / DATEDIFF(StartDate, MAX(CaseTracks[EndDate]), DAY)
+			        VAR Therapy = SELECTEDVALUE(Disciplines[Ordered Discipline])
+			        VAR BarY = (RANKX(ALL(Disciplines[Ordered Discipline]), Therapy) - 1) * (BarHeight + BarSpacing)
+			        RETURN 
+			            "<line 
+			                x1=""" & VisitX & """ 
+			                x2=""" & VisitX & """ 
+			                y1=""" & BarY & """ 
+			                y2=""" & (BarY + BarHeight) & """ 
+			                stroke=""#3DB3E3"" 
+			                stroke-width=""2"" 
+			            />"
+			    )
+			
+			RETURN 
+			    // "data:image/svg+xml;utf8,<svg width=""" & ChartWidth & """ height=""" & ChartHeight & """>" & Bars & VisitMarkers & "</svg>"
+			    "data:image/svg+xml;utf8,<svg width="""&ChartWidth&""" height="""&ChartHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			    BarsPT&
+			    BarsOT&
+			    VisitMarkers&
+			    "</svg>"
+			```
+		lineageTag: 777d0880-632c-4319-8879-5735aeb06223
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Timeline SVG 2' = ```
+			
+			
+			var canvasWidth = 700
+			var canvasHeight = 100
+			var caseStart = [Case Start]
+			var caseEnd = [Case End]
+			var leftPad = .02
+			var rightPad = 1-leftPad
+			var topPad = .02
+			var barSpacing = 5
+			var barHeight = canvasHeight/(3+4*barSpacing)
+			
+			
+			return
+			//prefix
+			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//case start
+			"<line x1="""&leftPad*canvasWidth&""" x2="""&leftPad*canvasWidth&"""  y1="""&topPad*canvasHeight&""" y2="""&"152"&""" 
+			stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			
+			//case end
+			"<line x1="""&"668.75"&""" x2="""&"668.75"&""" y1="""&"0"&""" y2="""&"152"&""" 
+			stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			
+			//boxPT
+			"<rect x=""1"" y=""1"" width=""268"" height=""28"" fill=""#0C436A"" fill-opacity=""0.3"" stroke=""#0C436A"" stroke-opacity=""0.8""/>"&
+			
+			//boxOT (2)
+			"<rect x=""43"" y=""71"" width=""268"" height=""28"" fill=""#0C436A"" fill-opacity=""0.3"" stroke=""#0C436A"" stroke-opacity=""0.8""/>"&
+			"<rect x=""350"" y=""71"" width=""268"" height=""28"" fill=""#0C436A"" fill-opacity=""0.3"" stroke=""#0C436A"" stroke-opacity=""0.8""/>"&
+			
+			//boxST
+			"<rect x=""162"" y=""36"" width=""268"" height=""28"" fill=""#0C436A"" fill-opacity=""0.3"" stroke=""#0C436A"" stroke-opacity=""0.8""/>"&
+			
+			//visits
+			"<line x1=""7.75"" y1=""5"" x2=""7.75"" y2=""24"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			"<line x1=""168.75"" y1=""40"" x2=""168.75"" y2=""59"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			"<line x1=""387.75"" y1=""75"" x2=""387.75"" y2=""94"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			"<line x1=""25.75"" y1=""5"" x2=""25.75"" y2=""24"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			"<line x1=""50.75"" y1=""5"" x2=""50.75"" y2=""24"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			"<line x1=""15.75"" y1=""5"" x2=""15.75"" y2=""24"" stroke=""#0C436A"" stroke-width=""1.5""/>"&
+			
+			//suffix
+			"</svg>"
+			```
+		lineageTag: f705b05e-485c-4ab1-bbd3-eaece8e46a74
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Item
+		lineageTag: 8ee8af5a-65ff-4cb5-8dd8-d990e997acf2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Item]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Start
+		formatString: Short Date
+		lineageTag: d5045546-bbea-4b4c-82b6-ec5f911943f3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Start]
+
+		variation Variation
+			isDefault
+			relationship: 8c234967-2f88-425c-84b1-c0b2e752d5e0
+			defaultHierarchy: LocalDateTable_a94d4a55-bb19-487e-85e2-9312fffa5d82.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column End
+		formatString: Short Date
+		lineageTag: f2e56e6c-ae2d-41ec-a6b1-b53f7e7c3b9e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [End]
+
+		variation Variation
+			isDefault
+			relationship: 7380cb4c-4a71-4326-a306-7ef9773f4d8e
+			defaultHierarchy: LocalDateTable_d5edfeea-d915-4d4e-8490-52b16bbb3d43.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column CaseID
+		formatString: 0
+		lineageTag: 0483d8a8-6f94-476e-8b32-43fb6e9a376f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CaseID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ItemID
+		formatString: 0
+		lineageTag: e783ea1d-cf02-4f13-9eea-6704a595d097
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [ItemID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Detail
+		lineageTag: ca39e2bf-e32d-4d41-a1a1-926d4b1ee7db
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Detail]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Length = DATEDIFF(Timeline[Start]-1,Timeline[End],DAY)
+		formatString: 0
+		lineageTag: dbe5cae1-a0a0-402c-800f-dcd79b2b4808
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Timeline = calculated
+		mode: import
+		source = ```
+				
+				FILTER(
+				    UNION(
+				        //cases
+				        SELECTCOLUMNS(StayCases,"CaseID",StayCases[PatientCase_ID],"ItemID",StayCases[PatientCase_ID],"Item","A: Case","Detail",BLANK(),"Start",StayCases[TherapyStartDate],"End",StayCases[TherapyEndDate]),
+				        
+				        //payers
+				        SELECTCOLUMNS(vw_PatientPayers,"CaseID",RELATED(StayCases[PatientCase_ID]),"ItemID",vw_PatientPayers[Payer_ID],"Item","B: Payer","Detail",RELATED(Payers[Name]),"Start",vw_PatientPayers[FromDate],"End",vw_PatientPayers[ThruDate]),
+				
+				        //tracks
+				        SELECTCOLUMNS(CaseTracks,"CaseID",RELATED(StayCases[PatientCase_ID]),"ItemID",CaseTracks[TxTrack_ID],"Item","C: Track","Detail",RELATED(Disciplines[Ordered Discipline]),"Start",CaseTracks[StartDate],"End",CaseTracks[EndDate]),
+				
+				        //visits
+				        SELECTCOLUMNS(Treatments,"CaseID",RELATED(StayCases[PatientCase_ID]),"ItemID",Treatments[SessionId],"Item","D: Visit","Detail",RELATED(Disciplines[Ordered Discipline]),"Start",Treatments[LaborDate],"End",Treatments[LaborDate])
+				    ),
+				    NOT(ISBLANK([CaseID]))
+				)
+				```
+
+	annotation PBI_Id = 8d7d386739aa464c9ee1ada423d75407
+

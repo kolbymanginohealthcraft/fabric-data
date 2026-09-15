@@ -1,0 +1,61 @@
+table 'X-Axis Parameter'
+	lineageTag: 4d7bea19-2f3b-4746-8cd9-9e32deb0ec0a
+
+	column 'X-Axis Parameter'
+		lineageTag: 3ad6bc95-f5c6-4989-b148-99d97297a8fa
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'X-Axis Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'X-Axis Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'X-Axis Parameter Fields'
+		isHidden
+		lineageTag: 75ca38d3-61e4-4b88-bd6a-d68caa9b80ba
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'X-Axis Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'X-Axis Parameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: 26ff7a92-6d75-4d67-9675-8bafdbe00160
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'X-Axis Parameter' = calculated
+		mode: import
+		source =
+				{
+				    ("Range: Admit Level", NAMEOF('StayCases'[Range: Admit Level]), 0),
+				    ("Range: Discharge Level", NAMEOF('StayCases'[Range: Discharge Level]), 1),
+				    ("Range: Gain", NAMEOF('StayCases'[Range: Gain]), 2),
+				    ("Range: Avg Age", NAMEOF('StayCases'[Range: Avg Age]), 3),
+				    ("Range: LOS", NAMEOF('StayCases'[Range: LOS]), 4),
+				    ("Range: Minutes per Case", NAMEOF('StayCases'[Range: Minutes per Case]), 5),
+				    ("Range: Minutes per Discipline per Week", NAMEOF('StayCases'[Range: Minutes per Discipline per Week]), 6),
+				    ("Range: Minutes per Visit", NAMEOF('StayCases'[Range: Minutes per Visit]), 7),
+				    ("Range: Minutes per Week", NAMEOF('StayCases'[Range: Minutes per Week]), 8),
+				    ("Range: Therapists per Discipline", NAMEOF('StayCases'[Range: Therapists per Discipline]), 9),
+				    ("Range: Units per Visit (pt/ot)", NAMEOF('StayCases'[Range: Units per Visit (pt/ot)]), 10),
+				    ("Range: Visits per Case", NAMEOF('StayCases'[Range: Visits per Case]), 11),
+				    ("Range: Visits per Discipline per Week", NAMEOF('StayCases'[Range: Visits per Discipline per Week]), 12),
+				    ("Range: Visits per Week", NAMEOF('StayCases'[Range: Visits per Week]), 13),
+				    ("Range: Total Minutes % Group Therapy", NAMEOF('StayCases'[Range: Total Minutes % Group Therapy]), 14)
+				}
+
+	annotation PBI_Id = bc846d071a3f4389bc9ba692b497b3da
+

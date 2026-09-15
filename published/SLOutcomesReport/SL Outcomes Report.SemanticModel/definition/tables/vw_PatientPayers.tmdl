@@ -1,0 +1,150 @@
+table vw_PatientPayers
+	lineageTag: 876298ed-e8c0-4dc4-9ac4-7d39121b9894
+
+	measure 'Total Payer Segments' = COUNTROWS(vw_PatientPayers)
+		formatString: #,0
+		lineageTag: 6b56cc88-b9c5-4c12-92a1-a604911d462e
+
+	measure 'Total Payer Group Segments' = DISTINCTCOUNT(vw_PatientPayers[Payer Group])
+		formatString: 0
+		lineageTag: 1f8022aa-c208-48a9-9a0a-6e5faf36a991
+
+	measure 'Min Payer Start' = MIN(vw_PatientPayers[FromDate])
+		lineageTag: 162f3a94-5293-4a88-be99-9c87cddf5729
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CaseID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b0391f5a-e018-4c89-904b-721d513a8ac8
+		summarizeBy: none
+		sourceColumn: CaseID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 2800adcc-d8db-4489-94f6-ead4b05e4498
+		summarizeBy: none
+		sourceColumn: FromDate
+
+		variation Variation
+			isDefault
+			relationship: 83035f91-211b-4312-a8b7-4b5bb91435cd
+			defaultHierarchy: LocalDateTable_fee57495-1b91-4ee4-9c2d-f9f8835f4ff1.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ThruDate
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 01548ff2-4d98-4c39-9031-ef0d45aed16b
+		summarizeBy: none
+		sourceColumn: ThruDate
+
+		variation Variation
+			isDefault
+			relationship: be62a77e-3054-42b5-8888-9afd5cebaf76
+			defaultHierarchy: LocalDateTable_6fdb85a3-2131-4437-9f34-4fe96d3cf0ac.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column PayorType
+		dataType: string
+		lineageTag: 2ac41e77-e097-4c80-a9ca-dfa36f1ea656
+		summarizeBy: none
+		sourceColumn: PayorType
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Payer_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: efe31194-3641-4df2-ba06-70f5bd9e353f
+		summarizeBy: none
+		sourceColumn: Payer_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payer Group' =
+			
+			// SWITCH(
+			//     RELATED(Payers[Name]),
+			//     "Medicare Part A","(1) Medicare A",
+			//     "Medicare Part B","(3) Medicare B",
+			//     SWITCH(
+			//         vw_PatientPayers[PayorType],
+			//         "Medicare Part A","(2) Managed A",
+			//         "Managed Care Part A","(2) Managed A",
+			//         "Medicare Part B",IF(vw_PatientPayers[Payer_ID] IN {550, 1389},"(5) ISNP B","(4) Managed B"),
+			//         "Managed Care Part B",IF(vw_PatientPayers[Payer_ID] IN {550, 1389},"(5) ISNP B","(4) Managed B"),
+			//         // "Managed Care Part B","(4) Managed B",
+			//         "Medicaid","(6) Medicaid",
+			//         "(7) Other"
+			//     )
+			// )
+			
+			SWITCH(
+			    vw_PatientPayers[PayorType],
+			    "Medicare Part A","(1) Medicare A",
+			    "Managed Care Part A","(2) Managed A",
+			    "Medicare Part B",IF(vw_PatientPayers[Payer_ID] IN {550, 1389},"(5) ISNP B","(3) Medicare B"),
+			    "Managed Care Part B",IF(vw_PatientPayers[Payer_ID] IN {550, 1389},"(5) ISNP B","(4) Managed B"),
+			    "Medicaid","(6) Medicaid",
+			    "(7) Other"
+			)
+		lineageTag: 8cfcb6a0-0030-42c2-9440-13a4d560b0b6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Days =
+			
+			DATEDIFF(
+			    vw_PatientPayers[FromDate]-1,
+			    vw_PatientPayers[ThruDate],
+			    DAY
+			)
+		formatString: #,0
+		lineageTag: d31df6f6-224c-4f5f-bb68-1a0397f2e286
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_PatientPayers = m
+		mode: import
+		queryGroup: Payer
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"18c870d8-8553-4905-8f67-97fe347f8ae8" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="18c870d8-8553-4905-8f67-97fe347f8ae8"]}[Data],
+				    vw_PatientPayers_ = #"18c870d8-8553-4905-8f67-97fe347f8ae8"{[entity="vw_PatientPayers",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(vw_PatientPayers_,{"CaseID", "FromDate", "ThruDate", "PayorType", "Payer_ID"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"FromDate", type date}, {"ThruDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

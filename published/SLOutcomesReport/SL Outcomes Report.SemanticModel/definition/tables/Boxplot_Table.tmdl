@@ -1,0 +1,1158 @@
+table Boxplot_Table
+	lineageTag: 31e3be14-de7a-40e0-88bd-b1dd5edc5527
+
+	measure Boxplot_p10 =
+			
+			// CALCULATE(
+			//     PERCENTILEX.INC(
+			//         StayCases,
+			//         SWITCH(
+			//             MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//             "Minutes per Case",[Minutes per Case],
+			//             "Visits per Case",[Visits per Case],
+			//             "Minutes per Week",[Minutes per Week],
+			//             "Visits per Week",[Visits per Discipline per Week],
+			//             "Minutes per Visit",[Minutes per Visit],
+			//             "Units per Visit",[Units per Visit (pt/ot)],
+			//             "ALOS",[ALOS],
+			//             "Number of Disciplines",1,
+			//             BLANK()
+			//         ),
+			//         .10
+			//     ),
+			//     ALL('Aegis Contract'),
+			//     ALL(StayCases[PatientCase_ID]),
+			//     ALL(vw_UpnFacilityAccess),
+			//     ALL(Perspectives)
+			// )
+			
+			
+			CALCULATE(
+			    SWITCH(
+			        MAX('Boxplot_Table'[_BoxplotMeasure]),
+			        "Minutes per Case",[Minutes per Case],
+			        "Visits per Case",[Visits per Case],
+			        "Minutes per Week",[Minutes per Week],
+			        "Visits per Week",[Visits per Discipline per Week],
+			        "Minutes per Visit",[Minutes per Visit],
+			        "Units per Visit",[Units per Visit (pt/ot)],
+			        "ALOS",[ALOS],
+			        "Number of Disciplines",1,
+			        BLANK()
+			    ),
+			    PercentileTable[PercentileColumn]="cases_p10"
+			)
+		lineageTag: 8fba59a2-ce81-4e49-8187-2223484c54e4
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_p25 =
+			
+			// IF(
+			//     MAX(Boxplot_Table[_BoxplotMeasure])="Number of Disciplines",
+			//     CALCULATE(
+			//         PERCENTILEX.INC(
+			//             Account,
+			//             [Avg Number of Disciplines],
+			//             .25
+			//         ),
+			//         ALL('Aegis Contract'),
+			//         ALL(StayCases[PatientCase_ID]),
+			//         ALL(vw_UpnFacilityAccess),
+			//         ALL(Perspectives)
+			//     ),
+			// CALCULATE(
+			//     PERCENTILEX.INC(
+			//         StayCases,
+			//         SWITCH(
+			//             MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//             "Minutes per Case",[Minutes per Case],
+			//             "Visits per Case",[Visits per Case],
+			//             "Minutes per Week",[Minutes per Week],
+			//             "Visits per Week",[Visits per Discipline per Week],
+			//             "Minutes per Visit",[Minutes per Visit],
+			//             "Units per Visit",[Units per Visit (pt/ot)],
+			//             "ALOS",[ALOS],
+			//             BLANK()
+			//         ),
+			//         .25
+			//     ),
+			//     ALL('Aegis Contract'),
+			//     ALL(StayCases[PatientCase_ID]),
+			//     ALL(vw_UpnFacilityAccess),
+			//     ALL(Perspectives)
+			// ))
+			
+			
+			
+			IF(
+			    MAX(Boxplot_Table[_BoxplotMeasure])="Number of Disciplines",
+			    CALCULATE(
+			        [Avg Number of Disciplines],
+			        PercentileTable[PercentileColumn]="sites_p25"
+			    ),
+			    CALCULATE(
+			        SWITCH(
+			            MAX('Boxplot_Table'[_BoxplotMeasure]),
+			            "Minutes per Case",[Minutes per Case],
+			            "Visits per Case",[Visits per Case],
+			            "Minutes per Week",[Minutes per Week],
+			            "Visits per Week",[Visits per Discipline per Week],
+			            "Minutes per Visit",[Minutes per Visit],
+			            "Units per Visit",[Units per Visit (pt/ot)],
+			            "ALOS",[ALOS],
+			            BLANK()
+			        ),
+			        PercentileTable[PercentileColumn]="cases_p25"
+			    )
+			)
+		lineageTag: 996f8b2d-e058-4fa2-8324-f2441836e5f0
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_p50 =
+			
+			// IF(
+			//     MAX(Boxplot_Table[_BoxplotMeasure])="Number of Disciplines",
+			//     CALCULATE(
+			//         PERCENTILEX.INC(
+			//             Account,
+			//             [Avg Number of Disciplines],
+			//             .50
+			//         ),
+			//         ALL('Aegis Contract'),
+			//         ALL(StayCases[PatientCase_ID]),
+			//         ALL(vw_UpnFacilityAccess),
+			//         ALL(Perspectives)
+			//     ),
+			// CALCULATE(
+			//     PERCENTILEX.INC(
+			//         StayCases,
+			//         SWITCH(
+			//             MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//             "Minutes per Case",[Minutes per Case],
+			//             "Visits per Case",[Visits per Case],
+			//             "Minutes per Week",[Minutes per Week],
+			//             "Visits per Week",[Visits per Discipline per Week],
+			//             "Minutes per Visit",[Minutes per Visit],
+			//             "Units per Visit",[Units per Visit (pt/ot)],
+			//             "ALOS",[ALOS],
+			//             BLANK()
+			//         ),
+			//         .50
+			//     ),
+			//     ALL('Aegis Contract'),
+			//     ALL(StayCases[PatientCase_ID]),
+			//     ALL(vw_UpnFacilityAccess),
+			//     ALL(Perspectives)
+			// ))
+			
+			
+			
+			IF(
+			    MAX(Boxplot_Table[_BoxplotMeasure])="Number of Disciplines",
+			    CALCULATE(
+			        [Avg Number of Disciplines],
+			        PercentileTable[PercentileColumn]="sites_p50"
+			    ),
+			    CALCULATE(
+			        SWITCH(
+			            MAX('Boxplot_Table'[_BoxplotMeasure]),
+			            "Minutes per Case",[Minutes per Case],
+			            "Visits per Case",[Visits per Case],
+			            "Minutes per Week",[Minutes per Week],
+			            "Visits per Week",[Visits per Discipline per Week],
+			            "Minutes per Visit",[Minutes per Visit],
+			            "Units per Visit",[Units per Visit (pt/ot)],
+			            "ALOS",[ALOS],
+			            BLANK()
+			        ),
+			        PercentileTable[PercentileColumn]="cases_p50"
+			    )
+			)
+		lineageTag: def80dc6-d7bc-4a0c-9331-d35a543b9515
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_p75 =
+			
+			// IF(
+			//     MAX(Boxplot_Table[_BoxplotMeasure])="Number of Disciplines",
+			//     CALCULATE(
+			//         PERCENTILEX.INC(
+			//             Account,
+			//             [Avg Number of Disciplines],
+			//             .75
+			//         ),
+			//         ALL('Aegis Contract'),
+			//         ALL(StayCases[PatientCase_ID]),
+			//         ALL(vw_UpnFacilityAccess),
+			//         ALL(Perspectives)
+			//     ),
+			// CALCULATE(
+			//     PERCENTILEX.INC(
+			//         StayCases,
+			//         SWITCH(
+			//             MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//             "Minutes per Case",[Minutes per Case],
+			//             "Visits per Case",[Visits per Case],
+			//             "Minutes per Week",[Minutes per Week],
+			//             "Visits per Week",[Visits per Discipline per Week],
+			//             "Minutes per Visit",[Minutes per Visit],
+			//             "Units per Visit",[Units per Visit (pt/ot)],
+			//             "ALOS",[ALOS],
+			//             BLANK()
+			//         ),
+			//         .75
+			//     ),
+			//     ALL('Aegis Contract'),
+			//     ALL(StayCases[PatientCase_ID]),
+			//     ALL(vw_UpnFacilityAccess),
+			//     ALL(Perspectives)
+			// ))
+			
+			
+			IF(
+			    MAX(Boxplot_Table[_BoxplotMeasure])="Number of Disciplines",
+			    CALCULATE(
+			        [Avg Number of Disciplines],
+			        PercentileTable[PercentileColumn]="sites_p75"
+			    ),
+			    CALCULATE(
+			        SWITCH(
+			            MAX('Boxplot_Table'[_BoxplotMeasure]),
+			            "Minutes per Case",[Minutes per Case],
+			            "Visits per Case",[Visits per Case],
+			            "Minutes per Week",[Minutes per Week],
+			            "Visits per Week",[Visits per Discipline per Week],
+			            "Minutes per Visit",[Minutes per Visit],
+			            "Units per Visit",[Units per Visit (pt/ot)],
+			            "ALOS",[ALOS],
+			            BLANK()
+			        ),
+			        PercentileTable[PercentileColumn]="cases_p75"
+			    )
+			)
+		lineageTag: cee191ab-585a-48bc-b610-4361d3517c91
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_p90 =
+			
+			// // IF(
+			// //     COUNTROWS('Boxplot_Measure')=1,
+			//     CALCULATE(
+			//         PERCENTILEX.INC(
+			//             StayCases,
+			//             SWITCH(
+			//                 MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//                 "Minutes per Case",[Minutes per Case],
+			//                 "Visits per Case",[Visits per Case],
+			//                 "Minutes per Week",[Minutes per Week],
+			//                 "Visits per Week",[Visits per Discipline per Week],
+			//                 "Minutes per Visit",[Minutes per Visit],
+			//                 "Units per Visit",[Units per Visit (pt/ot)],
+			//                 "ALOS",[ALOS],
+			//                 "Number of Disciplines",3,
+			//                 BLANK()
+			//             ),
+			//             .90
+			//         ),
+			//         ALL('Aegis Contract'),
+			//         ALL(StayCases[PatientCase_ID]),
+			//         ALL(vw_UpnFacilityAccess),
+			//         ALL(Perspectives)
+			//     )
+			// // )
+			
+			
+			CALCULATE(
+			    SWITCH(
+			        MAX('Boxplot_Table'[_BoxplotMeasure]),
+			        "Minutes per Case",[Minutes per Case],
+			        "Visits per Case",[Visits per Case],
+			        "Minutes per Week",[Minutes per Week],
+			        "Visits per Week",[Visits per Discipline per Week],
+			        "Minutes per Visit",[Minutes per Visit],
+			        "Units per Visit",[Units per Visit (pt/ot)],
+			        "ALOS",[ALOS],
+			        "Number of Disciplines",3,
+			        BLANK()
+			    ),
+			    PercentileTable[PercentileColumn]="cases_p90"
+			)
+		lineageTag: b49e7123-87d8-46fa-9433-b63883746e80
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_p05 =
+			
+			var range = [Boxplot_p90]-[Boxplot_p10]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [Boxplot_p10]-incrementalrange
+			return calc
+		lineageTag: 9bc06e67-0eec-4045-b9f3-3112af88ead9
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_p95 =
+			
+			var range = [Boxplot_p90]-[Boxplot_p10]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [Boxplot_p90]+incrementalrange
+			return calc
+		lineageTag: 431a4a99-faf2-46b8-9433-8985ebfec493
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure Boxplot_Value =
+			
+			SWITCH(
+			    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+			    "Minutes per Case",[Minutes per Case],
+			    "Visits per Case",[Visits per Case],
+			    "Minutes per Week",[Minutes per Week],
+			    "Visits per Week",[Visits per Discipline per Week],
+			    "Minutes per Visit",[Minutes per Visit],
+			    "Units per Visit",[Units per Visit (pt/ot)],
+			    "ALOS",[ALOS],
+			    "Number of Disciplines",[Avg Number of Disciplines],
+			    BLANK()
+			)
+		lineageTag: ce1d0dec-1f07-47e4-8b3d-ec50c0069b4e
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","0.00",
+				    "Minutes per Visit","0.0",
+				    "Units per Visit","0.00",
+				    "ALOS","0.0",
+				    "Number of Disciplines","0.00",
+				    ""
+				)
+
+	measure Boxplot_Percentile = ```
+			
+			var myvalue = 
+			    SWITCH(
+			        MAX('Boxplot_Table'[_BoxplotMeasure]),
+			        "Minutes per Case",[Minutes per Case],
+			        "Visits per Case",[Visits per Case],
+			        "Minutes per Week",[Minutes per Week],
+			        "Visits per Week",[Visits per Discipline per Week],
+			        "Minutes per Visit",[Minutes per Visit],
+			        "Units per Visit",[Units per Visit (pt/ot)],
+			        "ALOS",[ALOS],
+			        // "Number of Disciplines",[Avg Number of Disciplines],
+			        BLANK()
+			    )
+			
+			
+			return
+			DIVIDE(
+			    CALCULATE(
+			        COUNTROWS(
+			            FILTER(
+			                StayCases,
+			                    SWITCH(
+			                        MAX('Boxplot_Table'[_BoxplotMeasure]),
+			                        "Minutes per Case",[Minutes per Case],
+			                        "Visits per Case",[Visits per Case],
+			                        "Minutes per Week",[Minutes per Week],
+			                        "Visits per Week",[Visits per Discipline per Week],
+			                        "Minutes per Visit",[Minutes per Visit],
+			                        "Units per Visit",[Units per Visit (pt/ot)],
+			                        "ALOS",[ALOS],
+			                        // "Number of Disciplines",[Avg Number of Disciplines],
+			                        BLANK()
+			                    )
+			                <myvalue
+			            )
+			        ),
+			        //main filters
+			        ALL('Aegis Contract'),
+			        ALL(StayCases[PatientCase_ID]),
+			        ALL(vw_UpnFacilityAccess),
+			        ALL(Perspectives),
+			        ALL(Employees),
+			
+			        //override filters for state, type, and chain
+			        SWITCH(TRUE(),ISFILTERED('Override State'[BillingState]),Account[BillingState] IN VALUES('Override State'[BillingState]),TRUE()),
+			        SWITCH(TRUE(),ISFILTERED('Override Type'[Type]),Account[Type] IN VALUES('Override Type'[Type]),TRUE()),
+			        SWITCH(TRUE(),ISFILTERED('Override Chain'[Name]),Chain[Name] IN VALUES('Override Chain'[Name]),TRUE())
+			
+			        //override filter for payer
+			        // SWITCH(
+			        //     TRUE(),
+			        //     ISFILTERED('Override Payer'[Payer Grouping]),'Payer Buckets'[Payer Grouping] IN VALUES('Override Payer'[Payer Grouping]),
+			        //     ISFILTERED('Payer Buckets'[Payer Categorization]),'Payer Buckets'[Payer Categorization] IN VALUES('Payer Buckets'[Payer Categorization]),
+			        //     ISFILTERED('Payer Buckets'[Payer Grouping]),'Payer Buckets'[Payer Grouping] IN VALUES('Payer Buckets'[Payer Grouping]),
+			        //     TRUE()
+			        // )
+			    ),
+			    [Total Cases BM]
+			)
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: daa9a8d7-75e3-4ffd-baa3-e2c463b5f432
+
+	measure Boxplot_SelectedMeasureName = SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName])
+		lineageTag: 392699eb-576f-46ec-9bb2-6c9c3db7d937
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Boxplot_Benchmark =
+			
+			// IF([Report Scope]="Filtered",
+			// CALCULATE(
+			//     SWITCH(
+			//         MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//         "Minutes per Case",[Minutes per Case],
+			//         "Visits per Case",[Visits per Case],
+			//         "Minutes per Week",[Minutes per Week],
+			//         "Visits per Week",[Visits per Discipline per Week],
+			//         "Minutes per Visit",[Minutes per Visit],
+			//         "Units per Visit",[Units per Visit (pt/ot)],
+			//         "ALOS",[ALOS],
+			//         "Number of Disciplines",[Avg Number of Disciplines],
+			//         BLANK()
+			//     ),
+			//     ALLSELECTED(StayCases[PatientCase_ID]),
+			//     ALL(StayCases[PatientCase_ID]),
+			//     ALL(vw_UpnFacilityAccess)
+			// ))
+			
+			// IF([Report Scope]="Filtered",
+			// CALCULATE(
+			//     SWITCH(
+			//         MAX('Boxplot_Table'[_BoxplotMeasure]),
+			//         "Minutes per Case",[Minutes per Case],
+			//         "Visits per Case",[Visits per Case],
+			//         "Minutes per Week",[Minutes per Week],
+			//         "Visits per Week",[Visits per Discipline per Week],
+			//         "Minutes per Visit",[Minutes per Visit],
+			//         "Units per Visit",[Units per Visit (pt/ot)],
+			//         "ALOS",[ALOS],
+			//         "Number of Disciplines",[Avg Number of Disciplines],
+			//         BLANK()
+			//     ),
+			//     BenchmarkTable[BenchmarkSetting]="Benchmark"
+			// ))
+			
+			
+			IF(HASONEVALUE(Boxplot_Table[Boxplot_MeasureName]),
+			    CALCULATE(
+			        SWITCH(
+			            MAX('Boxplot_Table'[_BoxplotMeasure]),
+			            "Minutes per Case",[Minutes per Case],
+			            "Visits per Case",[Visits per Case],
+			            "Minutes per Week",[Minutes per Week],
+			            "Visits per Week",[Visits per Discipline per Week],
+			            "Minutes per Visit",[Minutes per Visit],
+			            "Units per Visit",[Units per Visit (pt/ot)],
+			            "ALOS",[ALOS],
+			            "Number of Disciplines",[Avg Number of Disciplines],
+			            BLANK()
+			        ),
+			        BenchmarkTable[BenchmarkSetting]="Benchmark"
+			    )
+			)
+		lineageTag: f312fc5b-e622-4131-a137-525adcad1ff8
+
+		formatStringDefinition =
+				SWITCH(
+				    SELECTEDVALUE(Boxplot_Table[Boxplot_MeasureName]),
+				    "Minutes per Case","#,##0",
+				    "Visits per Case","#,##0.0",
+				    "Minutes per Week","#,##0",
+				    "Visits per Week","#,##0.0",
+				    "Minutes per Visit","#,##0.0",
+				    "Units per Visit","#,##0.00",
+				    "ALOS","#,##0.0",
+				    "Number of Disciplines","#,##0.00",
+				    "Admit Level","0.0%",
+				    "Discharge Level","0.0%",
+				    "Gain","0.0%",
+				    "% Improvement","#,##0.0%",
+				    "% Cases Improved","0.0%",
+				    "% D/C to Hospital","0.0%",
+				    "% D/C to Community","0.0",
+				    ""
+				)
+
+	measure 'Boxplot SVG 2' = ```
+			
+			
+			var canvasWidth = 774
+			var canvasHeight = 70
+			
+			var endLinePad_x = .12 //left and right padding for end lines (10th and 90th percentiles)
+			var endLinePad_y = .33 //top and bottom padding for end lines (10th and 90th percentiles)
+			var valueLine_y = .1 //top and bottom padding for value line (provider)
+			var endLabelSize = 25
+			var valueLabelSize = endLabelSize*1.25
+			var endLabel_x = .03 //left and right padding for end labels (10th and 90th percentiles)
+			var endLabel_y = (endLabelSize/100)/2+.5
+			var valueLabel_y = .5-((.5-valueLabelSize/100)/2) //where the value label sits (prev .45)
+			var averageLabel_y = .5+((.5-endLabelSize/100)/2)+endLabelSize/100 //where the average label sits (prev .80)
+			var box_y = .25 //top and bottom padding for the box
+			
+			return
+			
+			//prefix
+			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//box
+			"<rect 
+			    x="""&(([Boxplot_p25]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth&""" 
+			    y="""&box_y*canvasHeight&""" 
+			    width="""&(([Boxplot_p75]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth-(([Boxplot_p25]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth&""" 
+			    height="""&(1-(2*box_y))*canvasHeight&""" 
+			    fill=""#3DB3E3"" 
+			    fill-opacity=""0.25""
+			    stroke=""#3DB3E3""
+			    stroke-opacity=""0.10""
+			/>"&
+			
+			//left end line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_x*canvasWidth&""" 
+			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
+			    stroke=""#3DB3E3"" 
+			    stroke-width=""1.5""
+			/>"&
+			
+			//right end line
+			"<line 
+			    x1="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y2="""&(1-endLinePad_y)*canvasHeight&""" 
+			    stroke=""#3DB3E3"" 
+			    stroke-width=""1.5""
+			/>"&
+			
+			//value line
+			"<line 
+			    x1="""&(([Boxplot_Value]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth&""" 
+			    y1="""&valueLine_y*canvasHeight&""" 
+			    x2="""&(([Boxplot_Value]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth&""" 
+			    "&
+			        IF([Report Scope]="Filtered","y2="""&.5*canvasHeight&""" ","y2="""&(1-valueLine_y)*canvasHeight&""" ")
+			    &"
+			    stroke=""#0C436A"" 
+			    stroke-width=""5""
+			/>"&
+			
+			//average line
+			IF([Report Scope]="Filtered",
+			"<line 
+			    x1="""&(([Boxplot_Benchmark]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth&""" 
+			    y1="""&.5*canvasHeight&""" 
+			    x2="""&(([Boxplot_Benchmark]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth&""" 
+			    y2="""&(1-valueLine_y)*canvasHeight&""" 
+			    stroke=""#3DB3E3"" 
+			    stroke-width=""3""
+			/>")&
+			
+			//span line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&.50*canvasHeight&""" 
+			    x2="""&(1-endLinePad_x)*canvasWidth&""" 
+			    y2="""&.50*canvasHeight&""" 
+			    stroke=""#3DB3E3""
+			    stroke-width=""1.5""
+			/>"&
+			
+			//left label
+			"<text 
+			    fill=""#3DB3E3"" fill-opacity="".75"" font-family=""Calibri"" font-size="""&endLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&endLabel_x*canvasWidth&""" 
+			        y="""&endLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        // FORMAT([Boxplot_p10],"###")
+			        SWITCH(
+			            TRUE(),
+			            [Boxplot_Value]<10,FORMAT([Boxplot_p10],"0.00"),
+			            [Boxplot_Value]<100,FORMAT([Boxplot_p10],"0.0"),
+			            FORMAT([Boxplot_p10],"#,###")
+			        )
+			        &""
+			    &"</tspan>
+			</text>"&
+			
+			//right label
+			"<text 
+			    fill=""#3DB3E3"" fill-opacity="".75"" font-family=""Calibri"" font-size="""&endLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&.91*canvasWidth&""" 
+			        y="""&endLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        // FORMAT([Boxplot_p90],"#,###")
+			        SWITCH(
+			            TRUE(),
+			            [Boxplot_Value]<10,FORMAT([Boxplot_p90],"0.00"),
+			            [Boxplot_Value]<100,FORMAT([Boxplot_p90],"0.0"),
+			            FORMAT([Boxplot_p90],"#,###")
+			        )
+			        &""
+			    &"</tspan>
+			</text>"&
+			
+			//value label
+			"<text 
+			    fill=""#0C436A"" fill-opacity="".90"" font-family=""Calibri"" font-size="""&valueLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&(([Boxplot_Value]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth*1.04&""" 
+			        y="""&valueLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        SWITCH(
+			            TRUE(),
+			            [Boxplot_Value]<10,FORMAT([Boxplot_Value],"0.00"),
+			            [Boxplot_Value]<100,FORMAT([Boxplot_Value],"0.0"),
+			            FORMAT([Boxplot_Value],"#,###")
+			        )
+			        &""
+			    &"</tspan>
+			</text>"&
+			
+			
+			//average label
+			IF([Report Scope]="Filtered",
+			"<text 
+			    fill=""#3DB3E3"" fill-opacity="".90"" font-family=""Calibri"" font-size="""&endLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&(([Boxplot_Benchmark]-[Boxplot_p05])/([Boxplot_p95]-[Boxplot_p05]))*canvasWidth*1.04&""" 
+			        y="""&averageLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        SWITCH(
+			            TRUE(),
+			            [Boxplot_Value]<10,FORMAT([Boxplot_Benchmark],"0.00"),
+			            [Boxplot_Value]<100,FORMAT([Boxplot_Benchmark],"0.0"),
+			            FORMAT([Boxplot_Benchmark],"#,###")
+			        )
+			        &""
+			    &"</tspan>
+			</text>")&
+			
+			//suffix
+			"</svg>"
+			```
+		lineageTag: c64d1cf9-49ff-43f8-a44d-6ade40fee268
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Boxplot SVG 3' = ```
+			
+			
+			var canvasWidth = 750 //774
+			var canvasHeight = 70
+			
+			var endLinePad_x = .12 //left and right padding for end lines (10th and 90th percentiles)
+			var endLinePad_y = .33 //top and bottom padding for end lines (10th and 90th percentiles)
+			var endLinePad_xComp = 1-endLinePad_x
+			var endLinePad_yComp = 1-endLinePad_y
+			
+			var valueLine_y = .1 //top and bottom padding for value line (provider)
+			var valueLine_yComp = 1-valueLine_y
+			
+			var endLabelSize = 25
+			var valueLabelSize = endLabelSize*1.25
+			var middleLabelSize = endLabelSize*.8
+			
+			var endLabel_x = .03 //left and right padding for end labels (10th and 90th percentiles)
+			var endLabel_y = (endLabelSize/100)/2+.5
+			
+			var valueLabel_y = .5-((.5-valueLabelSize/100)/2) //where the value label sits (prev .45)
+			var averageLabel_y = .5+((.5-endLabelSize/100)/2)+endLabelSize/100 //where the average label sits (prev .80)
+			
+			var box_y = .25 //top and bottom padding for the box
+			
+			var p05 = Boxplot_Table[Boxplot_p05]
+			var p10 = Boxplot_Table[Boxplot_p10] //left end line
+			var p25 = Boxplot_Table[Boxplot_p25] //box start
+			var p75 = Boxplot_Table[Boxplot_p75] //box end
+			var p90 = Boxplot_Table[Boxplot_p90] //right end line
+			var p95 = Boxplot_Table[Boxplot_p95]
+			var positionAdjustment = p95-p05 //for positioning within boxplot
+			var boxadj25 = p25-p05
+			var boxadj75 = p75-p05
+			
+			var bval = Boxplot_Table[Boxplot_Value]
+			var bbench = Boxplot_Table[Boxplot_Benchmark]
+			
+			var bval_pos = SWITCH(TRUE(),bval<p05,p05,bval>p95,p95,bval)-p05
+			var bbench_pos = bbench-p05
+			
+			var magnitudeFormatString = SWITCH(TRUE,bbench<10,"0.00",bbench<100,"0.0","#,###")
+			
+			return
+			
+			//prefix
+			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//box
+			"<rect 
+			    x="""&(boxadj25/positionAdjustment)*canvasWidth&""" 
+			    y="""&box_y*canvasHeight&""" 
+			    width="""&(boxadj75/positionAdjustment)*canvasWidth-(boxadj25/positionAdjustment)*canvasWidth&""" 
+			    height="""&(1-(2*box_y))*canvasHeight&""" 
+			    fill=""#3DB3E3"" fill-opacity=""0.25"" stroke=""#3DB3E3"" stroke-opacity=""0.10""
+			/>"&
+			
+			//left end line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_x*canvasWidth&""" 
+			    y2="""&endLinePad_yComp*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""1.5""
+			/>"&
+			
+			//right end line
+			"<line 
+			    x1="""&endLinePad_xComp*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_xComp*canvasWidth&""" 
+			    y2="""&endLinePad_yComp*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""1.5""
+			/>"&
+			
+			//value line
+			"<line 
+			    x1="""&(bval_pos/positionAdjustment)*canvasWidth&""" 
+			    y1="""&valueLine_y*canvasHeight&""" 
+			    x2="""&(bval_pos/positionAdjustment)*canvasWidth&""" 
+			    "&
+			        IF([Report Scope]="Filtered","y2="""&.5*canvasHeight&""" ","y2="""&(valueLine_yComp)*canvasHeight&""" ")
+			    &"
+			    stroke=""#0C436A"" stroke-width=""5""
+			/>"&
+			
+			//average line
+			IF([Report Scope]="Filtered",
+			"<line 
+			    x1="""&(bbench_pos/positionAdjustment)*canvasWidth&""" 
+			    y1="""&.5*canvasHeight&""" 
+			    x2="""&(bbench_pos/positionAdjustment)*canvasWidth&""" 
+			    y2="""&valueLine_yComp*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""3""
+			/>")&
+			
+			//span line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&.50*canvasHeight&""" 
+			    x2="""&endLinePad_xComp*canvasWidth&""" 
+			    y2="""&.50*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""1.5""
+			/>"&
+			
+			//left label
+			"<text 
+			    fill=""#3DB3E3"" fill-opacity="".75"" font-family=""Calibri"" font-size="""&endLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&endLabel_x*canvasWidth&""" 
+			        y="""&endLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        FORMAT(p10,magnitudeFormatString)
+			        &""
+			    &"</tspan>
+			</text>"&
+			
+			//right label
+			"<text 
+			    fill=""#3DB3E3"" fill-opacity="".75"" font-family=""Calibri"" font-size="""&endLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&.91*canvasWidth&""" 
+			        y="""&endLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        FORMAT(p90,magnitudeFormatString)
+			        &""
+			    &"</tspan>
+			</text>"&
+			
+			//value label
+			"<text 
+			    fill=""#0C436A"" fill-opacity="".90"" font-family=""Calibri"" font-size="""&valueLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&(bval_pos/positionAdjustment)*canvasWidth*1.04&""" 
+			        y="""&valueLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        FORMAT(bval,magnitudeFormatString)
+			        &""
+			    &"</tspan>
+			</text>"&
+			
+			//average label
+			IF([Report Scope]="Filtered",
+			"<text 
+			    fill=""#3DB3E3"" fill-opacity="".90"" font-family=""Calibri"" font-size="""&endLabelSize&""" font-weight=""bold""
+			>
+			    <tspan 
+			        x="""&(bbench_pos/positionAdjustment)*canvasWidth*1.04&""" 
+			        y="""&averageLabel_y*canvasHeight&""">"
+			        &
+			        ""&
+			        FORMAT(bbench,magnitudeFormatString)
+			        &""
+			    &"</tspan>
+			</text>")&
+			
+			//suffix
+			"</svg>"
+			```
+		lineageTag: 83ace2fb-b2a1-444c-8112-f9964b30545e
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Boxplot SVG 4' = ```
+			
+			
+			var canvasWidth = 150 //774
+			var canvasHeight = 14 //70
+			
+			var endLinePad_x = .12 //left and right padding for end lines (10th and 90th percentiles)
+			var endLinePad_y = .33 //top and bottom padding for end lines (10th and 90th percentiles)
+			var endLinePad_xComp = 1-endLinePad_x
+			var endLinePad_yComp = 1-endLinePad_y
+			
+			var valueLine_y = .1 //top and bottom padding for value line (provider)
+			var valueLine_yComp = 1-valueLine_y
+			
+			var box_y = .25 //top and bottom padding for the box
+			
+			var p05 = Boxplot_Table[Boxplot_p05]
+			var p10 = Boxplot_Table[Boxplot_p10] //left end line
+			var p25 = Boxplot_Table[Boxplot_p25] //box start
+			var p75 = Boxplot_Table[Boxplot_p75] //box end
+			var p90 = Boxplot_Table[Boxplot_p90] //right end line
+			var p95 = Boxplot_Table[Boxplot_p95]
+			var positionAdjustment = p95-p05 //for positioning within boxplot
+			var boxadj25 = p25-p05
+			var boxadj75 = p75-p05
+			
+			var bval = Boxplot_Table[Boxplot_Value]
+			var bval_pos = SWITCH(TRUE(),bval<p05,p05,bval>p95,p95,bval)-p05 //used to be bval-p05
+			
+			return
+			
+			//prefix
+			"data:image/svg+xml;utf8,<svg width="""&canvasWidth&""" height="""&canvasHeight&""" xmlns=""http://www.w3.org/2000/svg"">"&
+			
+			//box
+			"<rect 
+			    x="""&(boxadj25/positionAdjustment)*canvasWidth&""" 
+			    y="""&box_y*canvasHeight&""" 
+			    width="""&(boxadj75/positionAdjustment)*canvasWidth-(boxadj25/positionAdjustment)*canvasWidth&""" 
+			    height="""&(1-(2*box_y))*canvasHeight&""" 
+			    fill=""#3DB3E3"" fill-opacity=""0.25"" stroke=""#3DB3E3"" stroke-opacity=""0.10""
+			/>"&
+			
+			//left end line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_x*canvasWidth&""" 
+			    y2="""&endLinePad_yComp*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""1.5""
+			/>"&
+			
+			//right end line
+			"<line 
+			    x1="""&endLinePad_xComp*canvasWidth&""" 
+			    y1="""&endLinePad_y*canvasHeight&""" 
+			    x2="""&endLinePad_xComp*canvasWidth&""" 
+			    y2="""&endLinePad_yComp*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""1.5""
+			/>"&
+			
+			//value line
+			"<line 
+			    x1="""&(bval_pos/positionAdjustment)*canvasWidth&""" 
+			    y1="""&valueLine_y*canvasHeight&""" 
+			    x2="""&(bval_pos/positionAdjustment)*canvasWidth&""" 
+			    y2="""&valueLine_yComp*canvasHeight&""" 
+			    stroke=""#0C436A"" stroke-width=""2""
+			/>"&
+			
+			//span line
+			"<line 
+			    x1="""&endLinePad_x*canvasWidth&""" 
+			    y1="""&.50*canvasHeight&""" 
+			    x2="""&endLinePad_xComp*canvasWidth&""" 
+			    y2="""&.50*canvasHeight&""" 
+			    stroke=""#3DB3E3"" stroke-width=""1.5""
+			/>"&
+			
+			//suffix
+			"</svg>"
+			```
+		lineageTag: 5a08009f-23db-42c7-8a2a-7f4416d7eea6
+		dataCategory: ImageUrl
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column _BoxplotMeasure
+		lineageTag: b3148f1d-1c62-40cd-beab-155221d930d7
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: z_Boxplot_MeasureOrder
+
+		relatedColumnDetails
+			groupByColumn: z_Boxplot_MeasureFields
+
+		annotation SummarizationSetBy = Automatic
+
+	column z_Boxplot_MeasureFields
+		isHidden
+		lineageTag: 221a47b1-ebf8-4f07-827f-3f91c1fdbeb1
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: z_Boxplot_MeasureOrder
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column z_Boxplot_MeasureOrder
+		isHidden
+		formatString: 0
+		lineageTag: f73cf303-80ce-4599-afbf-57e6eb457dda
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Boxplot_MeasureName = Boxplot_Table[_BoxplotMeasure]
+		lineageTag: 87bfc8aa-53a7-4c48-850b-58d4552d9c62
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Boxplot_Group =
+			
+			IF(CONTAINSSTRING(Boxplot_Table[_BoxplotMeasure]," per Case"),"(a) Volume",
+			IF(CONTAINSSTRING(Boxplot_Table[_BoxplotMeasure],"ALOS"),"(b) Duration",
+			IF(CONTAINSSTRING(Boxplot_Table[_BoxplotMeasure]," per Week"),"(c) Frequency",
+			IF(CONTAINSSTRING(Boxplot_Table[_BoxplotMeasure]," per Visit"),"(d) Intensity",
+			IF(Boxplot_Table[_BoxplotMeasure] IN {"Number of Disciplines"},"(e) Variety",
+			"(z) Other"
+			)))))
+		lineageTag: 28b4fc56-a474-4dd1-bb15-4fde6956b957
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Boxplot_MeasureNamePatient =
+			
+			SWITCH(
+			    Boxplot_Table[Boxplot_MeasureName],
+			    "Minutes per Case","Total Minutes",
+			    "Visits per Case","Total Visits",
+			    "ALOS","Length of Stay",
+			    Boxplot_Table[Boxplot_MeasureName]
+			)
+		lineageTag: 93b3a291-1de5-4a47-af20-dc8d8927a07c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Boxplot_Table = calculated
+		mode: import
+		source =
+				
+				// {
+				//     ("Minutes per Case", NAMEOF([Minutes per Case]), 0),
+				//     ("Visits per Case", NAMEOF([Visits per Case]), 1),
+				//     ("Minutes per Week", NAMEOF([Minutes per Week]), 2),
+				//     ("Visits per Week", NAMEOF([Visits per Discipline per Week]), 3),
+				//     ("Minutes per Visit", NAMEOF([Minutes per Visit]), 4),
+				//     ("Units per Visit", NAMEOF([Units per Visit (pt/ot)]), 5),
+				//     ("ALOS", NAMEOF([ALOS]), 6),
+				//     ("Number of Disciplines", NAMEOF([Avg Number of Disciplines]), 7),
+				//     ("Admit Level", NAMEOF([Admit Level]), 8),
+				//     ("Discharge Level", NAMEOF([Discharge Level]), 9),
+				//     ("Gain", NAMEOF([Gain]), 10),
+				//     ("% Improvement", NAMEOF([% Improvement]), 11),
+				//     ("% Cases Improved", NAMEOF([% Total Cases Improved]), 12),
+				//     ("% D/C to Hospital", NAMEOF([Rehosp]), 13),
+				//     ("% D/C to Community", NAMEOF([DTC]), 14)
+				// }
+				
+				{
+				    ("Minutes per Case", NAMEOF([Minutes per Case]), 0),
+				    ("Visits per Case", NAMEOF([Visits per Case]), 1),
+				    ("Minutes per Week", NAMEOF([Minutes per Week]), 2),
+				    ("Visits per Week", NAMEOF([Visits per Discipline per Week]), 3),
+				    ("Minutes per Visit", NAMEOF([Minutes per Visit]), 4),
+				    ("Units per Visit", NAMEOF([Units per Visit (pt/ot)]), 5),
+				    ("ALOS", NAMEOF([ALOS]), 6),
+				    ("Number of Disciplines", NAMEOF([Avg Number of Disciplines]), 7)
+				}
+
+	annotation PBI_Id = 514f1d90fb134e5d9af773e0be28ad44
+

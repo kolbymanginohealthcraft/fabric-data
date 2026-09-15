@@ -1,0 +1,57 @@
+table BenchmarkTable
+	isHidden
+	lineageTag: e6d019ee-864f-4148-8fe5-1ac63c8c1b50
+
+	calculationGroup
+		precedence: 2
+
+		calculationItem Benchmark =
+				
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    ALLSELECTED(StayCases[PatientCase_ID]),
+				    ALL(StayCases[PatientCase_ID]),
+				    ALL(vw_UpnFacilityAccess),
+				    ALL(Patients),
+				    VW_NHAegisFacilities[Department]="All Other"
+				)
+				
+				
+				// VAR __Div = VALUES(VW_NHAegisFacilities[Department])   -- capture current Division selection
+				// RETURN
+				// CALCULATE(
+				//     SELECTEDMEASURE(),
+				
+				//     // reset almost everything
+				//     REMOVEFILTERS('Aegis Contract'),
+				//     REMOVEFILTERS(StayCases[PatientCase_ID]),
+				//     REMOVEFILTERS(vw_UpnFacilityAccess),
+				//     REMOVEFILTERS(Employees),
+				//     REMOVEFILTERS(Patients),
+				//     ALLSELECTED(StayCases[PatientCase_ID]),
+				//     ALL(StayCases[PatientCase_ID]),
+				
+				//     // keep Division if it was filtered (exactly as filtered)
+				//     KEEPFILTERS(__Div)
+				// )
+
+	column BenchmarkSetting
+		dataType: string
+		isHidden
+		lineageTag: 4713524f-7a6e-4015-a19d-8082c4f04ab9
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6a799bb4-dc76-4a8f-9f9a-a7c6bb0c695b
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

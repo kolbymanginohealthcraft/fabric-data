@@ -1,0 +1,50 @@
+table TUG_Remap
+	lineageTag: 887ddead-297f-468b-9203-d849476f23db
+
+	column TxDocument_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 191c8e64-2c81-4094-9c36-1f6d797ed59f
+		summarizeBy: count
+		sourceColumn: TxDocument_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TUG_LSV
+		dataType: int64
+		formatString: 0
+		lineageTag: ac6f43b8-e524-4b78-aa38-93599f3a2f32
+		summarizeBy: sum
+		sourceColumn: TUG_LSV
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TUG_Remap = m
+		mode: import
+		queryGroup: FabricTables
+		source =
+				let
+				    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-4wksxtle6exu7ne42rpqmph27i.datawarehouse.fabric.microsoft.com", "NetHealth_Bronze_Lakehouse"),
+				    Data = Value.NativeQuery(Source,
+				        "SELECT item.TxDocument_ID,
+				            MAX(CASE WHEN sec.v IS NULL OR sec.v <= 0 THEN NULL
+				                 WHEN sec.v <= 5   THEN 9278
+				                 WHEN sec.v <= 59  THEN 9273 + sec.v
+				                 WHEN sec.v <= 67  THEN 9333
+				                 WHEN sec.v <= 82  THEN 9334
+				                 WHEN sec.v <= 97  THEN 9335
+				                 WHEN sec.v <= 112 THEN 9336
+				                 WHEN sec.v <= 120 THEN 9337
+				                 ELSE 9338 END) AS TUG_LSV
+				         FROM dbo.TxDocumentItem item
+				         INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID
+				         CROSS APPLY (SELECT CAST(ROUND(TRY_CAST(item.Value AS float),0) AS int) AS v) sec
+				         WHERE item.LibraryItem_ID = 11080 AND doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0
+				         GROUP BY item.TxDocument_ID")
+				in
+				    Data
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,36 @@
+table CaseInclusionTable
+	lineageTag: c50b08a3-8212-4f6e-baa5-df16c15427d8
+
+	calculationGroup
+		precedence: 3
+
+		calculationItem 'NAs Out' =
+				
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    FILTER(
+				        StayCases,
+				        ISBLANK([Gain])=FALSE()
+				    )
+				)
+
+		calculationItem 'NAs In' = SELECTEDMEASURE()
+
+	column CaseInclusionSetting
+		dataType: string
+		lineageTag: 5c8560ab-fdba-45de-9e3b-60fec1dcb247
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e53d80d-0c08-467f-9a3f-6921138e5e3f
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

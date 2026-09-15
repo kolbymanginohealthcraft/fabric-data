@@ -1,0 +1,64 @@
+table LibraryScaleValue
+	lineageTag: 7cc99d88-fa02-4160-a04b-bd6e860e943f
+
+	column LibraryScaleValue_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: a2611e89-7213-4344-8681-ed959ae35d77
+		summarizeBy: none
+		sourceColumn: LibraryScaleValue_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplayValue
+		dataType: string
+		lineageTag: a6ac5089-c8eb-4f20-9118-bfe7611926de
+		summarizeBy: none
+		sourceColumn: DisplayValue
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrintValue
+		dataType: string
+		lineageTag: cd37548f-e900-4d5e-8888-71b72a965718
+		summarizeBy: none
+		sourceColumn: PrintValue
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumValue
+		dataType: double
+		lineageTag: 3e5a0832-4c1c-43a2-859e-6746a4a6deed
+		summarizeBy: none
+		sourceColumn: NumValue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LibraryScale_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: d1ae4348-b097-4f9e-b568-9b6908956313
+		summarizeBy: none
+		sourceColumn: LibraryScale_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition LibraryScaleValue = m
+		mode: import
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
+				    #"5527ef94-26ec-4a1d-b65c-21ed39104f2d" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
+				    LibraryScaleValue_ = #"5527ef94-26ec-4a1d-b65c-21ed39104f2d"{[entity="LibraryScaleValue",version=""]}[Data]
+				in
+				    LibraryScaleValue_
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

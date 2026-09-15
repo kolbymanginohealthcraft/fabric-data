@@ -1,0 +1,184 @@
+// =============================================================================
+// Therapist Performance Detailed - DAX Query (Power BI Desktop compatible)
+// =============================================================================
+// Single EVALUATE - no DEFINE/VAR (Power BI Query View has limited VAR support)
+// =============================================================================
+
+EVALUATE
+VAR ValidTrackIDs =
+    SELECTCOLUMNS (
+        FILTER (
+            ADDCOLUMNS (
+                VALUES ( CaseTracks[TxTrack_ID] ),
+                "@Duration", CALCULATE ( [Track Duration] ),
+                "@Admit", CALCULATE ( [Admit Level] ),
+                "@Discharge", CALCULATE ( [Discharge Level] )
+            ),
+            [@Duration] > 5
+                && NOT ( ISBLANK ( [@Admit] ) )
+                && NOT ( ISBLANK ( [@Discharge] ) )
+        ),
+        "TxTrack_ID", CaseTracks[TxTrack_ID]
+    )
+VAR __DateRange =
+    FILTER ( VALUES ( 'Calendar'[Date] ), 'Calendar'[Date] >= TODAY () - 365 )
+VAR AttributionBase =
+    CALCULATETABLE (
+        SUMMARIZECOLUMNS (
+            Employees[Person_ID],
+            Employees[Name],
+            Employees[StaffTitle],
+            CaseTracks[TxTrack_ID],
+            CaseTracks[Discipline],
+            TREATAS ( ValidTrackIDs, CaseTracks[TxTrack_ID] ),
+            "Total_Visits", [Total Visits],
+            "Total_Minutes", [Total Minutes],
+            "Track_Visits", CALCULATE ( [Total Visits], REMOVEFILTERS ( Employees ) ),
+            "Track_Minutes", CALCULATE ( [Total Minutes], REMOVEFILTERS ( Employees ) ),
+            "Gain", [Discharge Level] - [Admit Level],
+            "Total_Measurements", [Total Measurements],
+            "Total_Measurements_Recorded", [Total Measurements Recorded],
+            "Total_Measurements_Not_GG", [Total Measurements (not GG)],
+            "@One", 1
+        ),
+        KEEPFILTERS ( __DateRange ),
+        KEEPFILTERS ( NOT ( ISBLANK ( 'DischargeDestination'[Lookup_ID] ) ) ),
+        KEEPFILTERS ( NOT ( ISBLANK ( 'Aegis Contract'[Contract_Number__c] ) ) ),
+        KEEPFILTERS ( 'Calendar'[ReliableScope] = TRUE () )
+    )
+VAR AttributionWithPct =
+    ADDCOLUMNS (
+        AttributionBase,
+        "Contribution_Pct", DIVIDE (
+            DIVIDE ( [Total_Visits], [Track_Visits], 0 ) + DIVIDE ( [Total_Minutes], [Track_Minutes], 0 ),
+            2,
+            0
+        )
+    )
+VAR AttributionFinal =
+    ADDCOLUMNS (
+        AttributionWithPct,
+        "Attributed_Gain", [Gain] * [Contribution_Pct],
+        "Attributed_Improved", IF ( [Gain] > 0, [Contribution_Pct], 0 ),
+        "Attributed_Measurements", [Total_Measurements] * [Contribution_Pct],
+        "Attributed_Measurements_Recorded", [Total_Measurements_Recorded] * [Contribution_Pct],
+        "Attributed_Measurements_Not_GG", [Total_Measurements_Not_GG] * [Contribution_Pct],
+        "Attributed_EDD_Known", 0
+    )
+VAR TherapistKPIs =
+    GROUPBY (
+        AttributionFinal,
+        [Person_ID],
+        [Name],
+        [StaffTitle],
+        "Total_Visits", SUMX ( CURRENTGROUP (), [Total_Visits] ),
+        "Total_Minutes", SUMX ( CURRENTGROUP (), [Total_Minutes] ),
+        "Total_Tracks", SUMX ( CURRENTGROUP (), [@One] ),
+        "Total_Contribution_Pct", SUMX ( CURRENTGROUP (), [Contribution_Pct] ),
+        "_Attributed_Gain", SUMX ( CURRENTGROUP (), [Attributed_Gain] ),
+        "_Attributed_Improved", SUMX ( CURRENTGROUP (), [Attributed_Improved] ),
+        "_Attributed_Measurements", SUMX ( CURRENTGROUP (), [Attributed_Measurements] ),
+        "_Attributed_Measurements_Recorded", SUMX ( CURRENTGROUP (), [Attributed_Measurements_Recorded] ),
+        "_Attributed_Measurements_Not_GG", SUMX ( CURRENTGROUP (), [Attributed_Measurements_Not_GG] ),
+        "_Attributed_EDD_Known", SUMX ( CURRENTGROUP (), [Attributed_EDD_Known] )
+    )
+VAR TherapistWithDisciplines =
+    ADDCOLUMNS (
+        TherapistKPIs,
+        "All_Disciplines",
+            VAR P2 = [Person_ID]
+            RETURN CONCATENATEX (
+                SUMMARIZE ( FILTER ( AttributionFinal, [Person_ID] = P2 ), [Discipline] ),
+                [Discipline],
+                "; "
+            ),
+        "Primary_Discipline",
+            VAR P = [Person_ID]
+            VAR D1 =
+                ADDCOLUMNS (
+                    SUMMARIZE ( FILTER ( AttributionFinal, [Person_ID] = P ), [Discipline] ),
+                    "@C", COUNTROWS ( FILTER ( AttributionFinal, [Person_ID] = P && [Discipline] = EARLIER ( [Discipline] ) ) )
+                )
+            VAR MaxCnt = MAXX ( D1, [@C] )
+            RETURN MAXX ( FILTER ( D1, [@C] = MaxCnt ), [Discipline] )
+    )
+VAR TherapistWithMetrics =
+    ADDCOLUMNS (
+        TherapistWithDisciplines,
+        "Weighted_Gain_Per_Visit", DIVIDE ( [_Attributed_Gain], [Total_Visits], 0 ),
+        "Pct_Measurements_Valid", DIVIDE ( [_Attributed_Measurements], [_Attributed_Measurements_Recorded], 0 ),
+        "Weighted_Measurements_Per_Track", DIVIDE ( [_Attributed_Measurements], [Total_Contribution_Pct], 0 ),
+        "Weighted_Measurements_Per_Track_Not_GG", DIVIDE ( [_Attributed_Measurements_Not_GG], [Total_Contribution_Pct], 0 ),
+        "Pct_Tracks_Improved", DIVIDE ( [_Attributed_Improved], [Total_Contribution_Pct], 0 ),
+        "Weighted_EDD_Known", DIVIDE ( [_Attributed_EDD_Known], [Total_Contribution_Pct], 0 )
+    )
+VAR FilteredTherapists = FILTER ( TherapistWithMetrics, [Total_Tracks] >= 25 )
+VAR WithStaffGroup = ADDCOLUMNS ( FilteredTherapists, "Staff_Group", [StaffTitle] )
+VAR GroupCounts = ADDCOLUMNS (
+    SUMMARIZE ( WithStaffGroup, [Staff_Group] ),
+    "GroupCount", COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) )
+)
+VAR ValidGroupStaffGroups = FILTER ( GroupCounts, [GroupCount] >= 100 )
+VAR WithPercentiles =
+    ADDCOLUMNS (
+        WithStaffGroup,
+        "Weighted_Gain_Per_Visit_Percentile",
+            IF (
+                COUNTROWS ( FILTER ( ValidGroupStaffGroups, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) > 0,
+                RANKX ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ), [Weighted_Gain_Per_Visit],, ASC, Dense )
+                    / COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) * 100,
+                BLANK ()
+            ),
+        "Pct_Tracks_Improved_Percentile",
+            IF (
+                COUNTROWS ( FILTER ( ValidGroupStaffGroups, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) > 0,
+                RANKX ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ), [Pct_Tracks_Improved],, ASC, Dense )
+                    / COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) * 100,
+                BLANK ()
+            ),
+        "Weighted_Measurements_Per_Track_Percentile",
+            IF (
+                COUNTROWS ( FILTER ( ValidGroupStaffGroups, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) > 0,
+                RANKX ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ), [Weighted_Measurements_Per_Track],, ASC, Dense )
+                    / COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) * 100,
+                BLANK ()
+            ),
+        "Pct_Measurements_Valid_Percentile",
+            IF (
+                COUNTROWS ( FILTER ( ValidGroupStaffGroups, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) > 0,
+                RANKX ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ), [Pct_Measurements_Valid],, ASC, Dense )
+                    / COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) * 100,
+                BLANK ()
+            ),
+        "Weighted_Measurements_Per_Track_Not_GG_Percentile",
+            IF (
+                COUNTROWS ( FILTER ( ValidGroupStaffGroups, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) > 0,
+                RANKX ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ), [Weighted_Measurements_Per_Track_Not_GG],, ASC, Dense )
+                    / COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) * 100,
+                BLANK ()
+            ),
+        "Weighted_EDD_Known_Percentile",
+            IF (
+                COUNTROWS ( FILTER ( ValidGroupStaffGroups, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) > 0,
+                RANKX ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ), [Weighted_EDD_Known],, ASC, Dense )
+                    / COUNTROWS ( FILTER ( WithStaffGroup, [Staff_Group] = EARLIER ( [Staff_Group] ) ) ) * 100,
+                BLANK ()
+            )
+    )
+RETURN
+    ADDCOLUMNS (
+        WithPercentiles,
+        "Clinical_Outcomes_Score",
+            VAR A = [Weighted_Gain_Per_Visit_Percentile]
+            VAR B = [Pct_Tracks_Improved_Percentile]
+            VAR C = [Weighted_Measurements_Per_Track_Percentile]
+            VAR D = [Pct_Measurements_Valid_Percentile]
+            VAR E = [Weighted_Measurements_Per_Track_Not_GG_Percentile]
+            VAR F = [Weighted_EDD_Known_Percentile]
+            VAR SumPct = IF ( ISBLANK ( A ), 0, A ) + IF ( ISBLANK ( B ), 0, B ) + IF ( ISBLANK ( C ), 0, C )
+                + IF ( ISBLANK ( D ), 0, D ) + IF ( ISBLANK ( E ), 0, E ) + IF ( ISBLANK ( F ), 0, F )
+            VAR CntPct = IF ( NOT ( ISBLANK ( A ) ), 1, 0 ) + IF ( NOT ( ISBLANK ( B ) ), 1, 0 )
+                + IF ( NOT ( ISBLANK ( C ) ), 1, 0 ) + IF ( NOT ( ISBLANK ( D ) ), 1, 0 )
+                + IF ( NOT ( ISBLANK ( E ) ), 1, 0 ) + IF ( NOT ( ISBLANK ( F ) ), 1, 0 )
+            RETURN IF ( CntPct > 0, DIVIDE ( SumPct, CntPct ), 50 )
+    )

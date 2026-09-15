@@ -1,0 +1,42 @@
+table PLE
+	lineageTag: 4a846b47-d72d-4231-b4a2-bf51a102e1cd
+
+	column ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 57181eaa-1e3f-4470-96a9-3f574f501752
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplayValue
+		dataType: string
+		lineageTag: aad854c8-4265-4c71-9b19-0a08572f577b
+		summarizeBy: none
+		sourceColumn: DisplayValue
+
+		annotation SummarizationSetBy = Automatic
+
+	column Label
+		dataType: string
+		lineageTag: 5b831f9d-120a-4398-928f-0e4d075fe3ed
+		summarizeBy: none
+		sourceColumn: Label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PLE = m
+		mode: import
+		queryGroup: Patient
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMjK0MDVR0lFy9HEDks75ubmleZkllUqxOhA5U6Coe1F+aYGCR35uKlYlBkBRkKSChqcmVgWGMAXaWKWNgaKeOKy3AIr6l2SkFsFpmIw5TETBJ8QZyAaRMDkjmFxxTKmBgZE5brebAUVDMjKLkQ2JBQA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [ID = _t, DisplayValue = _t, Label = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"ID", Int64.Type}, {"DisplayValue", type text}, {"Label", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

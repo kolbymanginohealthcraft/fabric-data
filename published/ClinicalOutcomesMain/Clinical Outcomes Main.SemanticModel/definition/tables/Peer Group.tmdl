@@ -1,0 +1,44 @@
+table 'Peer Group'
+	lineageTag: cd03aaca-a2a6-4b13-913e-3e863e1bd20f
+
+	column 'Job Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ce302ba-a031-46c3-925d-35667da5ca8c
+		summarizeBy: none
+		sourceColumn: Job Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Peer Group'
+		dataType: string
+		lineageTag: 34474aa3-a4fa-443d-a784-d0ac357b7d9e
+		summarizeBy: none
+		sourceColumn: Peer Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cohort
+		dataType: string
+		lineageTag: 7f98d420-b390-4c35-a7cc-264c81110e4a
+		summarizeBy: none
+		sourceColumn: Cohort
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Peer Group' = m
+		mode: import
+		queryGroup: People
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://aegis.sharepoint.com/sites/ITPowerBiFiles/Shared%20Documents/Outcomes/Job%20Code%20to%20Peer%20Group.xlsx"), null, true),
+				    Sheet1_Sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet1_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Job Code", Int64.Type}, {"Peer Group", type text}, {"Cohort", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

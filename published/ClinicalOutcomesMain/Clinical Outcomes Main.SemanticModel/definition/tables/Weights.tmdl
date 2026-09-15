@@ -1,0 +1,47 @@
+table Weights
+	lineageTag: a6c23eff-d28b-4155-8ebc-6f1df671277e
+
+	column HCC
+		dataType: int64
+		formatString: 0
+		lineageTag: 211524b7-4d49-4319-9355-5de97cee64c7
+		summarizeBy: none
+		sourceColumn: HCC
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: f22f6b3e-f715-447a-8377-e52b066f5875
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: double
+		lineageTag: a9c5b4fd-92b9-4c3c-928c-31059e7c0093
+		summarizeBy: none
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Weights = m
+		mode: import
+		queryGroup: Diagnoses
+		source =
+				let
+				    Source = csv_C2824T2n,
+				    #"Filtered Rows" = Table.SelectRows(Source, each Text.Contains([_NAME_], "INS_HCC")),
+				    #"Renamed Columns" = Table.RenameColumns(#"Filtered Rows",{{"_NAME_", "HCC"}, {"COL1", "Weight"}, {"_LABEL_", "Description"}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns","INS_HCC","",Replacer.ReplaceText,{"HCC"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{"HCC", Int64.Type}, {"Weight", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

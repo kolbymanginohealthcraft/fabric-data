@@ -1,0 +1,41 @@
+table Telehealth
+	isHidden
+	lineageTag: 3e7fba33-73f2-48bc-97bc-dca627a34842
+
+	column TxSession_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 92acea7d-dcf2-4781-a73a-54800963e41a
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: TxSession_ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Telehealth = m
+		mode: import
+		queryGroup: Visits
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"60c237c9-bec9-41af-bf9e-6afa43a264e9" = Workspaces{[workspaceId="60c237c9-bec9-41af-bf9e-6afa43a264e9"]}[Data],
+				    #"a29b1603-e21b-4698-8710-e9fa39dc77e3" = #"60c237c9-bec9-41af-bf9e-6afa43a264e9"{[dataflowId="a29b1603-e21b-4698-8710-e9fa39dc77e3"]}[Data],
+				    BillingInfo_ = #"a29b1603-e21b-4698-8710-e9fa39dc77e3"{[entity="BillingInfo",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(BillingInfo_,{"TxSession_ID", "Modifier1", "Modifier2", "Modifier3", "Modifier4"}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Other Columns", {"TxSession_ID"}, "Attribute", "Value"),
+				    #"Filtered Rows" = Table.SelectRows(#"Unpivoted Other Columns", each ([Value] = "95")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Attribute", "Value"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Columns")
+				in
+				    #"Removed Duplicates"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,82 @@
+table 'Service Columns'
+	lineageTag: f9f32701-e5cb-41de-ba33-cb7be8f80583
+
+	column 'Service Columns'
+		lineageTag: 5318e868-16ca-43c5-91da-97a9efd34940
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Service Columns Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Service Columns Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Columns Fields'
+		isHidden
+		lineageTag: bd349964-a97f-4dbb-ac75-de9e76b2dfe5
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Service Columns Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Columns Order'
+		isHidden
+		formatString: 0
+		lineageTag: e73cee34-6c0b-4747-9a60-125bbf94d55b
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Service Columns' = calculated
+		mode: import
+		source =
+				{
+				    ("Total Cases", NAMEOF('MeasureTable'[Total Cases]), 0),
+				    ("Total Cases %", NAMEOF('MeasureTable'[Total Cases %]), 1),
+				    ("Admit Level", NAMEOF('MeasureTable'[Admit Level]), 2),
+				    ("Discharge Level", NAMEOF('MeasureTable'[Discharge Level]), 3),
+				    ("Gain", NAMEOF('MeasureTable'[Gain]), 4),
+				    ("% Improvement", NAMEOF('MeasureTable'[% Improvement]), 5),
+				    ("% Total Cases Improved", NAMEOF('MeasureTable'[% Total Cases Improved]), 6),
+				    ("ALOS", NAMEOF('MeasureTable'[ALOS]), 7),
+				    ("DTC", NAMEOF('MeasureTable'[DTC]), 8),
+				    ("Rehosp", NAMEOF('MeasureTable'[Rehosp]), 9),
+				    ("Day 1 Evals", NAMEOF('MeasureTable'[Day 1 Evals]), 10),
+				    ("% Assistant Minutes", NAMEOF('MeasureTable'[% Assistant Minutes]), 11),
+				    ("Total Minutes", NAMEOF('MeasureTable'[Total Minutes]), 12),
+				    ("Total Visits", NAMEOF('MeasureTable'[Total Visits]), 13),
+				    ("Total Units", NAMEOF('MeasureTable'[Total Units]), 14),
+				    ("Minutes per Week", NAMEOF('MeasureTable'[Minutes per Week]), 15),
+				    ("Visits per Week", NAMEOF('MeasureTable'[Visits per Week]), 16),
+				    ("Minutes per Case", NAMEOF('MeasureTable'[Minutes per Case]), 17),
+				    ("Visits per Case", NAMEOF('MeasureTable'[Visits per Case]), 18),
+				    ("Minutes per Visit", NAMEOF('MeasureTable'[Minutes per Visit]), 19),
+				    ("Units per Visit (pt/ot)", NAMEOF('MeasureTable'[Units per Visit (pt/ot)]), 20),
+				    ("Gain per Day", NAMEOF('MeasureTable'[Gain per Day]), 21),
+				    ("Gain per Visit", NAMEOF('MeasureTable'[Gain per Visit]), 22),
+				    ("Gain per Hour", NAMEOF('MeasureTable'[Gain per Hour]), 22.5),
+				    ("PLE % Community", NAMEOF('StayCases'[PLE % Community]), 23),
+				    ("EDD % Community", NAMEOF('StayCases'[EDD % Community]), 24),
+				    ("Total Cases with Pain", NAMEOF([Total Cases with Pain]), 25),
+				    ("Admit Level (Pain)", NAMEOF('MeasureTable'[Admit Level (Pain)]), 26),
+				    ("Discharge Level (Pain)", NAMEOF('MeasureTable'[Discharge Level (Pain)]), 27),
+				    ("Gain (Pain)", NAMEOF('MeasureTable'[Gain (Pain)]), 28),
+				    ("% Pain Cases Improved", NAMEOF('MeasureTable'[% Pain Cases Improved]), 29),
+				    ("% Evals Telehealth", NAMEOF('MeasureTable'[% Evals Telehealth]), 30),
+				    ("% Visits Telehealth", NAMEOF('MeasureTable'[% Visits Telehealth]), 31),
+				    ("Therapists per Discipline", NAMEOF([Therapists per Discipline]), 32),
+				    ("Total Facilities", NAMEOF([Total Facilities]), 33),
+				    ("Avg Age", NAMEOF([Avg Age]), 34)
+				}
+
+	annotation PBI_Id = bfb29e5ee123483c9c0be4e6125eede4
+

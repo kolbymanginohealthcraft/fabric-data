@@ -1,0 +1,72 @@
+table 'Dimension Selector'
+	lineageTag: 9301b3ef-ab66-481e-8bd7-5e6728c01d68
+
+	column 'Dimension Selector'
+		lineageTag: 1706dcb9-fc9e-4d6b-8cd4-d97dbcaefd75
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Dimension Selector Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Dimension Selector Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dimension Selector Fields'
+		isHidden
+		lineageTag: fa0e622e-ea81-4a2f-adc6-2536b601eb8f
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Dimension Selector Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dimension Selector Order'
+		isHidden
+		formatString: 0
+		lineageTag: 8cff614e-3e55-48f7-83e2-3af13d0c0caa
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dimension Selector' = calculated
+		mode: import
+		source =
+				{
+				    ("Payer Grouping", NAMEOF('Payer Buckets'[Payer Grouping]), 0),
+				    ("Payer Categorization", NAMEOF('Payer Buckets'[Payer Categorization]), 1),
+				    ("Diagnosis Level 1", NAMEOF('DX_Cases'[L1]), 2),
+				    ("Diagnosis Level 2", NAMEOF('DX_Cases'[L2]), 3),
+				    ("Diagnosis Level 3", NAMEOF('DX_Cases'[L3]), 4),
+				    ("Diagnosis Level 4", NAMEOF('DX_Cases'[L4]), 5),
+				    ("Place of Residence: SourceType", NAMEOF('IntakeSources'[SourceType]), 6),
+				    ("Place of Residence: Name", NAMEOF('IntakeSources'[Name]), 7),
+				    ("Place of Residence: Abbrev", NAMEOF('IntakeSources'[Abbrev]), 8),
+				    ("Account Name", NAMEOF('Account'[Name]), 9),
+				    ("Account Type", NAMEOF('Account'[Type]), 10),
+				    ("State", NAMEOF('Account'[BillingState]), 11),
+				    ("Facility ID", NAMEOF('Aegis Contract'[Contract_Number__c]), 12),
+				    ("Contract Name", NAMEOF('Aegis Contract'[Name]), 13),
+				    ("Chain Name", NAMEOF('Chain'[Name]), 14),
+				    ("Outcome Area: Family", NAMEOF('Dictionary'[Family]), 15),
+				    ("Outcome Area: Group", NAMEOF('Dictionary'[Group]), 16),
+				    ("Outcome Area: Name", NAMEOF('Dictionary'[Name]), 17),
+				    ("Discharge Destination: Descrip", NAMEOF('DischargeDestination'[Descrip]), 18),
+				    ("Discharge Destination: Setting", NAMEOF('DischargeDestination'[Setting]), 19),
+				    ("Discharge Destination: Type", NAMEOF('DischargeDestination'[Type]), 20),
+				    ("Expected Discharge Destination", NAMEOF('StayCases'[Expected Discharge Destination]), 21),
+				    ("Discipline", NAMEOF('Disciplines'[Ordered Discipline]), 22),
+				    ("Therapist Name", NAMEOF('EmployeeBasicInfo'[Therapist Label]), 23),
+				    ("PatientID", NAMEOF('Patients'[PatientID]), 24),
+				    ("Patient Name", NAMEOF('Patients'[Patient Name]), 25)
+				}
+
+	annotation PBI_Id = 8c44c2bc9d43453f98846604af972286
+

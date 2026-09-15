@@ -1,0 +1,39 @@
+table HCC
+	lineageTag: b629b5c1-26f6-423e-a948-439f6ef8ec06
+
+	column ICD
+		dataType: string
+		lineageTag: 2f388ec5-e13c-4bc7-871e-522f702ea021
+		summarizeBy: none
+		sourceColumn: ICD
+
+		annotation SummarizationSetBy = Automatic
+
+	column HCC
+		dataType: int64
+		formatString: 0
+		lineageTag: d117829c-628e-4ffb-8422-90a8f3caf037
+		summarizeBy: none
+		sourceColumn: HCC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition HCC = m
+		mode: import
+		queryGroup: Diagnoses
+		source =
+				let
+				    Source = ICD_10_CM_Mappings,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Diagnosis_Code", "Description", "CMS-HCC_Model_Category_V28"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each [#"CMS-HCC_Model_Category_V28"] <> null and [#"CMS-HCC_Model_Category_V28"] <> ""),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Description"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"Diagnosis_Code", "ICD"}, {"CMS-HCC_Model_Category_V28", "HCC"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"ICD"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Removed Duplicates",{{"HCC", Int64.Type}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

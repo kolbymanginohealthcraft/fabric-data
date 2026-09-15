@@ -1,0 +1,33 @@
+table CustomerGroups
+	lineageTag: bafc9850-4f47-4b7a-ae06-abac2e29cc8e
+
+	column CCN
+		dataType: string
+		lineageTag: 2be890e9-3122-4604-b96d-68c72aa214ee
+		summarizeBy: none
+		sourceColumn: CCN
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Group'
+		dataType: string
+		lineageTag: 1235f130-787a-41bb-8df1-54442b58cdc7
+		summarizeBy: none
+		sourceColumn: Customer Group
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CustomerGroups = m
+		mode: import
+		queryGroup: Places
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("hZbBbtswDIZfxci5B5EiKenadMCwDTtswS5FD0HiLsEKG3DjQ99+sh0ndRzSySXIx58/Scmynp9XIIxIq4fVpj2Vzbb4Vf491lUBq5eHHvroDcigwcTkVRgYg+qZlYiGEqICUZhVCMQpzVvxI8xfHbJzOkQWI200lBH0ggRkPoSLMvG8T+qhAyaZe9K12qDD5OatXGBw84JoHHyU+WKHEYLMPS+QQ9JhtJQxzPsM4zZh0tJmSMn0nK/KAH3Mz0rnmf8tq91H8bStiu9lVR13/8YAILQD8gIZAezyHl4IQJ9sC4xLNQgtZPALGbBfb2sOPi5ZWJPMbXr6nGFT74untno9lm/7axHeiuhysFuKkLQQQX4phwu85DJZkbsRzuwFMC/a55F/qw95Ys3xvew5Ue6ke1bWX9bTg68jnhWC6FVNUomq6c/QGUHOK3VD8EIAFQIYNE30mgZAIR61Cly6yeav2VAhKCoJoBEijbhwj0gQN5xFdbs7vJ/qqiz+/Hjs2cZ1nyn7Xbenw1mZZ5Sm9Gvddj/GzOhvMq/L6tRs30Z9ZCt7omCqJQRDHbWuet9o1zVcHO5pxYPXXAOxOS8hYYsCGf1IQGtWYnYkhGxzAqMyiGCrwXYfzml9n/jhdmNwZ+8zQZsj2fUH03+8t6k8cri/X4DPJ+Zjk186H9tmP7HOWKKJob8K6LgfrIqjJ1PNpvdwnqrY9UMzSpsm/1k35w3VQZcMGKIBvejQ9ftAU0ajIG8pJRqeElmHeNPK9anqPJMzYCQdIqMByfIMfA++/Ac=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [CCN = _t, #"Customer Group" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"CCN", type text}, {"Customer Group", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
