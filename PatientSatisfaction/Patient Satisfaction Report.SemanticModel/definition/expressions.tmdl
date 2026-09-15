@@ -1,0 +1,9 @@
+expression _SilverSource =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-vox2z5x5nsnuri4qviabf7xo3i.datawarehouse.fabric.microsoft.com", "Silver_Aegis_Aggregate_Lakehouse")
+		in
+		    Source
+	lineageTag: c1acd30d-6aab-443b-9bdb-d7abc0927353
+	queryGroup: 'Customer Data'
+
+	annotation PBI_NavigationStepName = Navigation

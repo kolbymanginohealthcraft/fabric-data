@@ -1,3 +1,6 @@
+/// Soft security table: which UPNs may see which facilities. The dataflow half is
+/// unchanged; the second half (blanket access for the report owners) formerly
+/// enumerated Salesforce Aegis_Contract__c and now reads Silver dbo.facility.
 table vw_UpnFacilityAccess
 	lineageTag: 599bce96-7b5b-464e-88e5-65a0caea05f4
 
@@ -30,19 +33,17 @@ table vw_UpnFacilityAccess
 				    UPN_CallTable = UPN_CallDataFlow{[entity="vw_UpnFacilityAccess",version=""]}[Data],
 				    #"Changed Type" = Table.TransformColumnTypes(UPN_CallTable,{{"FacilityId", Int64.Type}}),
 				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"FacilityId", type text}}),
-				    //Aegis Contracts
-				    Contracts_Source = Salesforce.Data("https://login.salesforce.com/", [ApiVersion=48]),
-				    Contracts_Table = Contracts_Source{[Name="Aegis_Contract__c"]}[Data],
-				    Contracts_RemovedOtherColumns = Table.SelectColumns(Contracts_Table,{"Contract_Number__c"}),
-				    Contracts_RenamedColumns = Table.RenameColumns(Contracts_RemovedOtherColumns,{{"Contract_Number__c", "FacilityId"}}),
-				    Contracts_AddedCustom = Table.AddColumn(Contracts_RenamedColumns, "UPN", each "kolby.mangino@healthcraftcreative.com;sara.mcolvin@healthcraftcreative.com;sara.spencer@aegistherapies.com"),
-				    Contracts_SplitColumnbyDelimiter = Table.SplitColumn(Contracts_AddedCustom, "UPN", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"UPN.1", "UPN.2", "UPN.3"}),
-				    Contracts_UnpivotedOtherColumns = Table.UnpivotOtherColumns(Contracts_SplitColumnbyDelimiter, {"FacilityId"}, "Attribute", "Value"),
-				    Contracts_RemovedColumns = Table.RemoveColumns(Contracts_UnpivotedOtherColumns,{"Attribute"}),
-				    Contracts_RenamedColumns2 = Table.RenameColumns(Contracts_RemovedColumns,{{"Value", "UPN"}}),
-				
+				    //Aegis facilities (was Salesforce Aegis_Contract__c; now Silver dbo.facility)
+				    Facilities_Source = Value.NativeQuery(_SilverSource, "SELECT FacilityNumber FROM dbo.facility WHERE IsTest = 0"),
+				    Facilities_Renamed = Table.RenameColumns(Facilities_Source,{{"FacilityNumber", "FacilityId"}}),
+				    Facilities_AddedCustom = Table.AddColumn(Facilities_Renamed, "UPN", each "kolby.mangino@healthcraftcreative.com;sara.mcolvin@healthcraftcreative.com;sara.spencer@aegistherapies.com"),
+				    Facilities_SplitColumnbyDelimiter = Table.SplitColumn(Facilities_AddedCustom, "UPN", Splitter.SplitTextByDelimiter(";", QuoteStyle.Csv), {"UPN.1", "UPN.2", "UPN.3"}),
+				    Facilities_UnpivotedOtherColumns = Table.UnpivotOtherColumns(Facilities_SplitColumnbyDelimiter, {"FacilityId"}, "Attribute", "Value"),
+				    Facilities_RemovedColumns = Table.RemoveColumns(Facilities_UnpivotedOtherColumns,{"Attribute"}),
+				    Facilities_RenamedColumns2 = Table.RenameColumns(Facilities_RemovedColumns,{{"Value", "UPN"}}),
+
 				    //Combine
-				    Combine_Append = Table.Combine({#"Changed Type1", Contracts_RenamedColumns2}),
+				    Combine_Append = Table.Combine({#"Changed Type1", Facilities_RenamedColumns2}),
 				    Combine_TrimmedText = Table.TransformColumns(Combine_Append,{{"FacilityId", Text.Trim, type text}}),
 				    Combine_LowercasedText = Table.TransformColumns(Combine_TrimmedText,{{"UPN", Text.Lower, type text}}),
 				    Combine_RemovedDuplicates = Table.Distinct(Combine_LowercasedText)
@@ -52,4 +53,3 @@ table vw_UpnFacilityAccess
 	annotation PBI_ResultType = Table
 
 	annotation PBI_NavigationStepName = Navigation
-

@@ -235,7 +235,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "Name"
@@ -259,10 +259,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Chain"
+                "Entity": "Facility"
               }
             },
-            "Property": "Name"
+            "Property": "ChainName"
           }
         },
         "type": "Categorical",
@@ -276,10 +276,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
-            "Property": "BillingState"
+            "Property": "State"
           }
         },
         "type": "Categorical",
@@ -309,10 +309,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Aegis Contract"
+                "Entity": "Facility"
               }
             },
-            "Property": "Contract_Number__c"
+            "Property": "FacilityNumber"
           }
         },
         "type": "Categorical",
@@ -325,7 +325,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "Division"
@@ -341,7 +341,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "Region"
@@ -357,7 +357,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "VW_NHAegisFacilities"
+                "Entity": "Facility"
               }
             },
             "Property": "District"
@@ -373,10 +373,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Aegis Contract"
+                "Entity": "Facility"
               }
             },
-            "Property": "Contract_Number__c"
+            "Property": "FacilityNumber"
           }
         },
         "type": "Advanced",
@@ -385,7 +385,7 @@
           "From": [
             {
               "Name": "a",
-              "Entity": "Aegis Contract",
+              "Entity": "Facility",
               "Type": 0
             }
           ],
@@ -403,7 +403,7 @@
                               "Source": "a"
                             }
                           },
-                          "Property": "Contract_Number__c"
+                          "Property": "FacilityNumber"
                         }
                       },
                       "Right": {
@@ -428,7 +428,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Account"
+                "Entity": "Facility"
               }
             },
             "Property": "Showable"
@@ -440,7 +440,7 @@
           "From": [
             {
               "Name": "a",
-              "Entity": "Account",
+              "Entity": "Facility",
               "Type": 0
             }
           ],

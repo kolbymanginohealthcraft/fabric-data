@@ -1,3 +1,8 @@
+/// Customer sub-region groupings (Tutera Region 1, Touchstone South, ...).
+/// Sourced from the SAME maintained CSV the HAP PDPM Impact report reads, so the
+/// two reports cannot drift. Replaces a hand-embedded 117-row Table.FromRows blob
+/// that had gone stale (missing Tutera Region 8 / Touchstone East).
+/// CCN joins Facility[LicenseNumber], which carries the CMS CCN in Silver.
 table CustomerGroups
 	lineageTag: d1f6bc88-80bc-40c5-8858-417b94ccb978
 
@@ -22,10 +27,21 @@ table CustomerGroups
 		queryGroup: 'Customer Data'
 		source =
 				let
-				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("hZbBbtswDIZfxci5B5EiKenadMCwDTtswS5FD0HiLsEKG3DjQ99+sh0ndRzSySXIx58/Scmynp9XIIxIq4fVpj2Vzbb4Vf491lUBq5eHHvroDcigwcTkVRgYg+qZlYiGEqICUZhVCMQpzVvxI8xfHbJzOkQWI200lBH0ggRkPoSLMvG8T+qhAyaZe9K12qDD5OatXGBw84JoHHyU+WKHEYLMPS+QQ9JhtJQxzPsM4zZh0tJmSMn0nK/KAH3Mz0rnmf8tq91H8bStiu9lVR13/8YAILQD8gIZAezyHl4IQJ9sC4xLNQgtZPALGbBfb2sOPi5ZWJPMbXr6nGFT74untno9lm/7axHeiuhysFuKkLQQQX4phwu85DJZkbsRzuwFMC/a55F/qw95Ys3xvew5Ue6ke1bWX9bTg68jnhWC6FVNUomq6c/QGUHOK3VD8EIAFQIYNE30mgZAIR61Cly6yeav2VAhKCoJoBEijbhwj0gQN5xFdbs7vJ/qqiz+/Hjs2cZ1nyn7Xbenw1mZZ5Sm9Gvddj/GzOhvMq/L6tRs30Z9ZCt7omCqJQRDHbWuet9o1zVcHO5pxYPXXAOxOS8hYYsCGf1IQGtWYnYkhGxzAqMyiGCrwXYfzml9n/jhdmNwZ+8zQZsj2fUH03+8t6k8cri/X4DPJ+Zjk186H9tmP7HOWKKJob8K6LgfrIqjJ1PNpvdwnqrY9UMzSpsm/1k35w3VQZcMGKIBvejQ9ftAU0ajIG8pJRqeElmHeNPK9anqPJMzYCQdIqMByfIMfA++/Ac=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [CCN = _t, #"Customer Group" = _t]),
-				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"CCN", type text}, {"Customer Group", type text}})
+				    Site = "https://aegis.sharepoint.com/sites/PACSPDPMImpactReports",
+				    Root = SharePoint.Contents(Site, [ApiVersion = 15]),
+				    LibName = List.First(List.Select(Root[Name], each Text.Lower(_) = "documents" or Text.Lower(_) = "shared documents")),
+				    Lib = Root{[Name = LibName]}[Content],
+				    Drop = Lib{[Name = "_External Data"]}[Content],
+				    File = Drop{[Name = "_customer-groups.csv"]}[Content],
+				    Parsed = Table.PromoteHeaders(Csv.Document(File, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    Clean = Table.SelectRows(Parsed, each [CCN] <> null and Text.Trim([CCN]) <> ""),
+				    // CCN is the ONE side of the relationship to Facility[LicenseNumber], so a duplicate
+				    // CCN in the CSV must fail the refresh rather than quietly fan out.
+				    Unique = Table.Distinct(Clean, {"CCN"}),
+				    #"Changed Type" = Table.TransformColumnTypes(Unique,{{"CCN", type text}, {"Customer Group", type text}})
 				in
 				    #"Changed Type"
 
 	annotation PBI_ResultType = Table
 
+	annotation PBI_NavigationStepName = Navigation

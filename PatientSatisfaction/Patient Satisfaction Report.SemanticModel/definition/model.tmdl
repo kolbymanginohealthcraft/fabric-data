@@ -24,7 +24,7 @@ queryGroup Clinical
 
 	annotation PBI_QueryGroupOrder = 3
 
-annotation PBI_QueryOrder = ["Data","Surveys","Dictionary","Disciplines","Sentiments","Scoring","Respondent","Aegis Contract","VW_NHAegisFacilities","Account","Chain","vw_UpnFacilityAccess","ScoringType","Comments","CustomerGroups","Patients","PatientStays","StayCases","DischargeReason","DischargeDestination"]
+annotation PBI_QueryOrder = ["Data","Surveys","Dictionary","Disciplines","Sentiments","Scoring","Respondent","Facility","vw_UpnFacilityAccess","ScoringType","Comments","CustomerGroups","Patients","PatientStays","StayCases","DischargeReason","DischargeDestination"]
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
@@ -36,9 +36,7 @@ ref table Dictionary
 ref table Scoring
 ref table Calendar
 ref table Disciplines
-ref table Account
-ref table Chain
-ref table 'Aegis Contract'
+ref table Facility
 ref table Respondent
 ref table vw_UpnFacilityAccess
 ref table ContextTable
@@ -50,7 +48,6 @@ ref table StayCases
 ref table PatientStays
 ref table Patients
 ref table DischargeReason
-ref table VW_NHAegisFacilities
 ref table DischargeDestination
 
 ref cultureInfo en-US

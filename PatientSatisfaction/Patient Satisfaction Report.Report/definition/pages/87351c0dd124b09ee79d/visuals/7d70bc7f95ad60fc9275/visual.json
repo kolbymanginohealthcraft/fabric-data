@@ -49,13 +49,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Aegis Contract"
+                      "Entity": "Facility"
                     }
                   },
-                  "Property": "Contract_Number__c"
+                  "Property": "FacilityNumber"
                 }
               },
-              "queryRef": "Aegis Contract.Contract_Number__c",
+              "queryRef": "Facility.FacilityNumber",
               "nativeQueryRef": "Facility ID",
               "displayName": "Facility ID"
             },
@@ -248,7 +248,7 @@
             }
           },
           "selector": {
-            "metadata": "Aegis Contract.Contract_Number__c"
+            "metadata": "Facility.FacilityNumber"
           }
         },
         {
@@ -660,10 +660,10 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Aegis Contract"
+                "Entity": "Facility"
               }
             },
-            "Property": "Contract_Number__c"
+            "Property": "FacilityNumber"
           }
         },
         "type": "Categorical",

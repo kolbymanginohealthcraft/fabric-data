@@ -240,7 +240,7 @@
                             "From": [
                               {
                                 "Name": "a",
-                                "Entity": "Account",
+                                "Entity": "Facility",
                                 "Type": 0
                               }
                             ],
@@ -254,13 +254,13 @@
                                   },
                                   "Property": "Customer Name"
                                 },
-                                "Name": "Account.Customer Name"
+                                "Name": "Facility.Customer Name"
                               }
                             ]
                           }
                         }
                       },
-                      "Property": "Account.Customer Name"
+                      "Property": "Facility.Customer Name"
                     }
                   },
                   "IncludeAllTypes": 1

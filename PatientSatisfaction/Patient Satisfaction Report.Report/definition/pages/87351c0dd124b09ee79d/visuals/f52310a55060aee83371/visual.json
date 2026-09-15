@@ -57,7 +57,7 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Account"
+                      "Entity": "Facility"
                     }
                   },
                   "Property": "Report Title"

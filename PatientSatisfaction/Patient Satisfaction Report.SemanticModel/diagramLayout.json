@@ -11,7 +11,7 @@
         {
           "location": {
             "x": 1446.7843583902809,
-            "y": 2727.3109665281759
+            "y": 2727.310966528176
           },
           "nodeIndex": "Surveys",
           "nodeLineageTag": "ffaccbc6-18f1-4009-aad5-33adb0296a84",
@@ -23,8 +23,8 @@
         },
         {
           "location": {
-            "x": 2246.7843583902809,
-            "y": 2759.3109665281759
+            "x": 2246.784358390281,
+            "y": 2759.310966528176
           },
           "nodeIndex": "Dictionary",
           "nodeLineageTag": "ec86bacb-264b-4e17-a276-85c0ecc1b76d",
@@ -37,7 +37,7 @@
         {
           "location": {
             "x": 1818.7843583902809,
-            "y": 2757.3109665281759
+            "y": 2757.310966528176
           },
           "nodeIndex": "Sentiments",
           "nodeLineageTag": "2308a965-b4fb-4b0b-8e21-da8cbc5872eb",
@@ -55,15 +55,15 @@
           "nodeIndex": "Scoring",
           "nodeLineageTag": "44f1b43d-04fe-4317-8412-ae74b83bfa73",
           "size": {
-            "height": 228.86184113194349,
+            "height": 228.8618411319435,
             "width": 234
           },
           "zIndex": 16
         },
         {
           "location": {
-            "x": 1691.1156694688859,
-            "y": 2215.4083532476411
+            "x": 1691.115669468886,
+            "y": 2215.408353247641
           },
           "nodeIndex": "Calendar",
           "nodeLineageTag": "5177e8fd-0f7c-4cd6-9008-d19cdfffa1e0",
@@ -88,45 +88,6 @@
         },
         {
           "location": {
-            "x": 291.76074785311658,
-            "y": 2652.0163093211308
-          },
-          "nodeIndex": "Account",
-          "nodeLineageTag": "f7144510-3f4a-4585-aae0-fec818de15fb",
-          "size": {
-            "height": 300,
-            "width": 234
-          },
-          "zIndex": 10
-        },
-        {
-          "location": {
-            "x": 816.4152595846532,
-            "y": 2734.27888254597
-          },
-          "nodeIndex": "Aegis Contract",
-          "nodeLineageTag": "9a599296-665f-4a83-99bd-dd7020babb37",
-          "size": {
-            "height": 272,
-            "width": 234
-          },
-          "zIndex": 20
-        },
-        {
-          "location": {
-            "x": 257.8680745820264,
-            "y": 3050.6256390031185
-          },
-          "nodeIndex": "Chain",
-          "nodeLineageTag": "a67207a2-4d6d-4a11-87ce-df9567bfa4ba",
-          "size": {
-            "height": 128,
-            "width": 234
-          },
-          "zIndex": 17
-        },
-        {
-          "location": {
             "x": 1530.132352051884,
             "y": 3307.1508159017817
           },
@@ -140,7 +101,7 @@
         },
         {
           "location": {
-            "x": 768.24341955579121,
+            "x": 768.2434195557912,
             "y": 2349.1184386365576
           },
           "nodeIndex": "vw_UpnFacilityAccess",
@@ -166,7 +127,7 @@
         },
         {
           "location": {
-            "x": 1909.0823446546531,
+            "x": 1909.082344654653,
             "y": 3469.0443651856153
           },
           "nodeIndex": "ScoringType",
@@ -180,7 +141,7 @@
         {
           "location": {
             "x": 1258.4528344265036,
-            "y": 3264.7447210163359
+            "y": 3264.744721016336
           },
           "nodeIndex": "Comments",
           "nodeLineageTag": "a0a11d81-4761-4273-b0ef-37e327fc886c",
@@ -207,7 +168,7 @@
         {
           "location": {
             "x": 249.10650819255682,
-            "y": 2448.6325294043659
+            "y": 2448.632529404366
           },
           "nodeIndex": "CustomerGroups",
           "nodeLineageTag": "d1f6bc88-80bc-40c5-8858-417b94ccb978",
@@ -219,7 +180,7 @@
         },
         {
           "location": {
-            "x": 1086.7711473099821,
+            "x": 1086.771147309982,
             "y": 2174.3141892906833
           },
           "nodeIndex": "Patients",
@@ -265,19 +226,6 @@
           "nodeLineageTag": "af548291-7c3b-4ed6-ad17-73bfb11dca98",
           "size": {
             "height": 128,
-            "width": 234
-          },
-          "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 695.86860473476861,
-            "y": 3239.1933367472157
-          },
-          "nodeIndex": "VW_NHAegisFacilities",
-          "nodeLineageTag": "dabeb9b1-03f5-48cc-8b02-6155e550a5f4",
-          "size": {
-            "height": 200,
             "width": 234
           },
           "zIndex": 0
