@@ -1,0 +1,205 @@
+table Surveys
+	lineageTag: ffaccbc6-18f1-4009-aad5-33adb0296a84
+
+	measure 'Total Respondents' =
+			
+			COALESCE(
+			    COUNTROWS(Surveys),
+			    IF([Total Planned Discharges]>0,0)
+			)
+		formatString: #,0
+		lineageTag: 9f57d015-3d02-419c-9db7-886218c83e81
+
+	measure 'Total Respondents (PT)' = CALCULATE([Total Respondents],Surveys[Received PT]="Yes")
+		formatString: #,0
+		lineageTag: 314cbbe3-57cb-4c34-86b6-3301a60b8726
+
+	measure 'Total Respondents (OT)' = CALCULATE([Total Respondents],Surveys[Received OT]="Yes")
+		formatString: #,0
+		lineageTag: 54372904-76c9-4f06-8864-b3274967e29d
+
+	measure 'Total Respondents (SLP)' = CALCULATE([Total Respondents],Surveys[Received SLP]="Yes")
+		formatString: #,0
+		lineageTag: ffdb653e-2211-42da-8da8-80f117754071
+
+	measure '% Total Respondents' =
+			
+			DIVIDE(
+			    [Total Respondents],
+			    CALCULATE([Total Respondents],ALL(Respondent))
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 49700d09-3dd2-474d-9679-b0c75cb3a082
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "MinPerCategory"
+				}
+
+		changedProperty = FormatString
+
+	measure 'Respondent Text' = SELECTEDVALUE(Surveys[Respondent])
+		lineageTag: 7ed17746-aa27-499d-9db9-9503ec716e81
+
+	measure 'Total Respondents by Discipline Text' =
+			
+			"Total Respondents = "&
+			"PT ("&FORMAT(CALCULATE([Total Respondents],Surveys[Received PT]="Yes"),"#,###")&"); "&
+			"OT ("&FORMAT(CALCULATE([Total Respondents],Surveys[Received OT]="Yes"),"#,###")&"); "&
+			"SLP ("&FORMAT(CALCULATE([Total Respondents],Surveys[Received SLP]="Yes"),"#,###")&")"
+		lineageTag: 3626e1f5-1419-4026-8c7f-07710d4ff144
+
+	column Timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1f940574-93d2-41da-b6eb-87df2b78c9f2
+		summarizeBy: none
+		sourceColumn: Timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Respondent
+		dataType: string
+		lineageTag: 90f88614-e86f-4a83-b249-184550d91c1b
+		summarizeBy: none
+		sourceColumn: Respondent
+
+		annotation SummarizationSetBy = Automatic
+
+	column SurveyID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3754a32d-16b1-4f46-8f1f-515f4728682a
+		summarizeBy: none
+		sourceColumn: SurveyID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Received OT'
+		dataType: string
+		lineageTag: 71544ec6-a97c-4b94-9f04-2d8fd2ea8a49
+		summarizeBy: none
+		sourceColumn: Received OT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Received PT'
+		dataType: string
+		lineageTag: 75ae7658-d459-4c26-9a51-dad91e22d709
+		summarizeBy: none
+		sourceColumn: Received PT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Received SLP'
+		dataType: string
+		lineageTag: fc49aafc-7bf1-4a4c-8e87-8182dd6fbdca
+		summarizeBy: none
+		sourceColumn: Received SLP
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NPS Category' =
+			
+			/*SWITCH(
+			    [Net Promoter Score],
+			    1,"(a) Promoter",
+			    BLANK(),"(b) Passive",
+			    -1,"(c) Detractor"
+			)*/
+			
+			IF(ISBLANK([NPS Score]),BLANK(),
+			IF([NPS Score]<=6,"(c) Detractor",
+			IF([NPS Score]<=8,"(b) Passive",
+			"(a) Promoter"
+			)))
+		lineageTag: 71d56983-4c42-4486-8544-865ce98624dc
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Received Rehab'
+		dataType: string
+		lineageTag: b60c1e84-7a36-44f2-aad5-e16518398e4d
+		summarizeBy: none
+		sourceColumn: Received Rehab
+
+		annotation SummarizationSetBy = Automatic
+
+	column Facility
+		dataType: string
+		lineageTag: 1d93dcbc-969e-412c-a016-97472c2be9f6
+		summarizeBy: none
+		sourceColumn: Facility
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discipline Summary' =
+			
+			// Disciplines[Disciplines]
+			var hasPT = IF(Surveys[Received PT]="Yes","PT")
+			var hasOT = IF(Surveys[Received OT]="Yes","OT")
+			var hasSLP = IF(Surveys[Received SLP]="Yes","SLP")
+			var valuestable = FILTER({hasPT,hasOT,hasSLP},NOT(ISBLANK([Value])))
+			var list = CONCATENATEX(valuestable,[Value],"/")
+			return list
+		lineageTag: ca1bd392-30d3-4485-b69b-1d4d380f5959
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'A Score' =
+			
+			CALCULATE(
+			    [Advocacy Score],
+			    Disciplines[Discipline] IN {"Rehab","PT","OT","SLP"}
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 418a94ad-05e8-41f3-bc0f-3bc42284ca21
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column SurveyDate = DATEVALUE(Surveys[Timestamp])
+		formatString: Short Date
+		lineageTag: 9188dde1-54fa-4404-9294-c5f969855cd8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NPS Score Value' = [NPS Score]
+		formatString: 0
+		lineageTag: 1d9b34f5-da23-4bd4-b49e-c02491a68cbb
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'A Score All' = [Advocacy Score]
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 56b759ec-7a33-4949-8f23-8d4161091456
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Surveys = m
+		mode: import
+		queryGroup: Survey
+		source =
+				let
+				    Source = Data,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Timestamp", "Person completing the form", "Did you receive therapy services?", "Did you receive Occupational Therapy ?", "Did you receive Physical Therapy?", "Did you receive Speech Therapy?", "Facility", "SurveyID"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"Did you receive Speech Therapy?", type text}, {"Did you receive Physical Therapy?", type text}, {"Did you receive Occupational Therapy ?", type text}, {"Person completing the form", type text}, {"Facility", type text}, {"Timestamp", type datetime}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Did you receive Occupational Therapy ?", "Received OT"}, {"Did you receive Physical Therapy?", "Received PT"}, {"Did you receive Speech Therapy?", "Received SLP"}, {"Person completing the form", "Respondent"}, {"Did you receive therapy services?", "Received Rehab"}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns",null,"None Listed",Replacer.ReplaceValue,{"Respondent"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value",null,"95993",Replacer.ReplaceValue,{"Facility"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1"," ","None Listed",Replacer.ReplaceValue,{"Respondent"})
+				in
+				    #"Replaced Value2"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

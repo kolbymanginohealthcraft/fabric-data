@@ -1,0 +1,92 @@
+table Scoring
+	lineageTag: 44f1b43d-04fe-4317-8412-ae74b83bfa73
+
+	measure 'Sentiment Text' =
+			
+			// IF(
+			//     HASONEVALUE(Dictionary[Question]),
+			//     SELECTEDVALUE(Sentiments[Sentiment])
+			// )
+			
+			IF(
+			    HASONEVALUE(Dictionary[Question]) && HASONEVALUE(Surveys[SurveyID]),
+			    SELECTEDVALUE(Sentiments[Sentiment])
+			)
+		lineageTag: d054b14c-b568-46c5-9370-7972ad2ead21
+
+	measure 'Point Value' = SELECTEDVALUE(Scoring[Points])
+		formatString: 0
+		lineageTag: f8f617ed-6125-473f-a8a6-8ab1cbc3623a
+
+	measure 'Point Value Text' = IF(HASONEVALUE(Scoring[Sentiment]),SELECTEDVALUE(Scoring[Points])&"/"&SELECTEDVALUE(Scoring[Max Points]))
+		lineageTag: 8d0d4db5-f2f9-468d-96e7-c51fa0f97d9a
+
+	column Sentiment
+		dataType: string
+		lineageTag: 98da6be7-5c7b-490e-bbda-15a6036d4efb
+		summarizeBy: none
+		sourceColumn: Sentiment
+		sortByColumn: Sort
+
+		changedProperty = IsHidden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Points
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 264aba98-df37-49cd-9b5e-939d353f6fde
+		summarizeBy: none
+		sourceColumn: Points
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column Sort
+		dataType: int64
+		formatString: 0
+		lineageTag: 818b0df8-13a2-4c86-804a-ceadf26f9675
+		summarizeBy: sum
+		sourceColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 610176d7-79b1-4c80-8850-7f84f01bed57
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Max Points' =
+			
+			var CurrentType = Scoring[Type]
+			
+			return
+			MAXX(
+			    FILTER(Scoring,Scoring[Type]=CurrentType),
+			    Scoring[Points]
+			)
+		formatString: 0
+		lineageTag: fab05c98-e065-46b1-b333-d2845563c9de
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Scoring = m
+		mode: import
+		queryGroup: 'Survey Support'
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("fVLLasMwEPwVo3MOkfI+Bvq4BBNq2ovJQaRbY1AsIjtp9PfR7qZbY5IcBOOZtXZmUFmqogu+qVzM1lUAUCO1gTO4zP8IMU1Hq92oVA9HJukYGsnX93RDM6i/1K19dIumZTglpp6Nj9OZ0fjrZQ/OQdMl5sN2dVPdbM9J/oIQs3fvv/syWl6QPFTQ7JLzniHYCvoielyRuPU+9BW0o8f8n/u1sU3fbwGOJ2j28bZQc4+f7ck6FwcDuFdzi4U/QFcfYHgHbtdcZJ7qCAOZLHCDCPNt8UdyT1pIuojbMUKSAe5kIiTZ5jqmQtKT4BpmQiIyXMBcSESGUy+ERGQ46VJIRIazrYREZDiR/o9E0KRMuys=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Sentiment = _t, Type = _t, Points = _t, Sort = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Sentiment", type text}, {"Points", Int64.Type}, {"Sort", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

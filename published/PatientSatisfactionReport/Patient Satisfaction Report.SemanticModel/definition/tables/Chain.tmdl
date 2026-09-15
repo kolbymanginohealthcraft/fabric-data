@@ -1,0 +1,34 @@
+table Chain
+	lineageTag: a67207a2-4d6d-4a11-87ce-df9567bfa4ba
+
+	column Id
+		dataType: string
+		lineageTag: 628c5c39-f8e9-4547-b1e5-214db78b93e6
+		summarizeBy: none
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: a88ab948-175f-41b1-bebc-a4f17fd80e21
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Chain = m
+		mode: import
+		queryGroup: 'Customer Data'
+		source =
+				let
+				    Source = Salesforce.Data("https://login.salesforce.com/", [ApiVersion=48]),
+				    Account1 = Source{[Name="Account"]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(Account1,{"Id", "Name", "Type"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Type] = "Corporate")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

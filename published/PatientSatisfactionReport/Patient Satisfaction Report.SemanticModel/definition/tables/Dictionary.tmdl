@@ -1,0 +1,55 @@
+table Dictionary
+	lineageTag: ec86bacb-264b-4e17-a276-85c0ecc1b76d
+
+	column Question
+		dataType: string
+		lineageTag: 599b39f1-6356-4fac-b804-b7aff179e8b1
+		summarizeBy: none
+		sourceColumn: Question
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discipline
+		dataType: string
+		isHidden
+		lineageTag: 9be8c73c-f603-4f2f-98c5-b094ca5bc4a3
+		summarizeBy: none
+		sourceColumn: Discipline
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Topic
+		dataType: string
+		lineageTag: 325a53fa-e2a0-4ffb-b72d-610be3652ff0
+		summarizeBy: none
+		sourceColumn: Topic
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sort Order'
+		dataType: int64
+		formatString: 0
+		lineageTag: e6107920-4924-4b42-b4df-a7fc340c135a
+		summarizeBy: sum
+		sourceColumn: Sort Order
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dictionary = m
+		mode: import
+		queryGroup: 'Survey Support'
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("vZXPbhoxEMZfZcSplVCV0CRNeqmqpFUjpYECUg+Ig7M7sFa89sb2ku6tr9HXy5N0xl4WAvkDRfQCu/bY85v5PobRqDXM0CH8KNF5abQDi0p4BG+gMqUFM0MrlIJEWAT8VaCVqBOE0TdzD2biUcM90lYI1oipgxw9eJmjqj6NW+1WN95AT0NelBqdo5fD1rj979kvSiv1NAY5L6o2ZAse4eJGISTT8XmjvTVKYbqC1OOQ87hLr50lqLvXoCYikUr6agnsY+zLvSlVysFgw8EMF8Hz0wHka7269Ah94ak0Wnm/N5jQzrCCCcpZ3ZUlmHMOaECO9gLCggVxwvFUuiQTdoq1iYKpyEkrYBdN2HUI+46eVo+3AbSYiZvHdLUf2qE5d6WIQk341YqiAod2JhN0Tb+Cxxz1x1G53tjqHXP2+Wb6Hsw3CAOucIZsrZMdGelkw9NgWHSl8vRALhZQGCc9rYMpfWJyfATVD6GOy2J1aeXDjkSXtaKlC2QO1/slpvz7MpaJTZ6jTuvIJkJOwBGq0QiXcKvJE6w/VcQefVTAz5CsP7+IVk5DAf8BY4nimoZbz5rceLQwSEzo5FkA6WWVk4lQMKzzjyhwShK5YJdcpAj0LWrVosGkm+OGYntD/qiP8ZQ8eObqhR2k82/cW5ZGUZUYSgNvUXgqlAQXVO3UCEWGNbxXxd9WqVO0NDp1Km4ULpJ/4Xu0CN4lwmFzEdMcbkqTiZQKvZWUm/NTF3lcC++lL9OlbOdx43O9wTk6m+bgplKbCnItm96H6mjoezKof/j9x8VRskjWb4Ln/0FxxHaTpCxCxbuJ110V7+iF6/chYPdVAY+3IdpAxO4zIp5sk2cbIbtPCxln2aBATLJdJBxc9VY0PH3y5n2oF3O/KN/ZZjAbCBeTrSvXOdgsxTaaxVxronVomoz/Ag==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Question = _t, Discipline = _t, Topic = _t, #"Sort Order" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Question", type text}, {"Discipline", type text}, {"Topic", type text}, {"Sort Order", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

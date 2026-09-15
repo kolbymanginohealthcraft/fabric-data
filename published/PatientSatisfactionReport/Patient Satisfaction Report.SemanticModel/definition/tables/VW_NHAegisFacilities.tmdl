@@ -1,0 +1,65 @@
+table VW_NHAegisFacilities
+	lineageTag: dabeb9b1-03f5-48cc-8b02-6155e550a5f4
+
+	column FacilityId
+		dataType: string
+		lineageTag: f810582a-1e95-4e75-9c41-0830072708f5
+		summarizeBy: none
+		sourceColumn: FacilityId
+
+		annotation SummarizationSetBy = Automatic
+
+	column District
+		dataType: string
+		lineageTag: 3e217208-698e-473a-8548-dfdf4cadd7bb
+		summarizeBy: none
+		sourceColumn: District
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: cfed22f4-790a-43ee-b6e0-da65eb860bb8
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Division
+		dataType: string
+		lineageTag: c5f8c5f9-2c33-4e07-8786-4c2fe8a70946
+		summarizeBy: none
+		sourceColumn: Division
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsValid = VW_NHAegisFacilities[Division] IN {"5500 (Direct Bill)", "8450 (Contract Rehab)"}
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1aebe7bf-3119-4b54-bf64-9ce80dce89e3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition VW_NHAegisFacilities = m
+		mode: import
+		queryGroup: 'Customer Data'
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"7db0035e-f62e-4a62-ad9a-89e21cac8cce" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="7db0035e-f62e-4a62-ad9a-89e21cac8cce"]}[Data],
+				    VW_NHAegisFacilities_ = #"7db0035e-f62e-4a62-ad9a-89e21cac8cce"{[entity="VW_NHAegisFacilities",version=""]}[Data],
+				    #"Removed Other Columns" = Table.SelectColumns(VW_NHAegisFacilities_,{"FacilityId", "DistrictId", "AreaId", "Regionid"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Regionid", "Division"}, {"AreaId", "Region"}, {"DistrictId", "District"}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns","5555","5555 (Closed Locations)",Replacer.ReplaceText,{"Division"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","5500","5500 (Direct Bill)",Replacer.ReplaceText,{"Division"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","6500","6500 (PACS Consulting)",Replacer.ReplaceText,{"Division"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","8450","8450 (Contract Rehab)",Replacer.ReplaceText,{"Division"})
+				in
+				    #"Replaced Value3"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

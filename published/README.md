@@ -1,19 +1,20 @@
-# `published/` — snapshots of what is LIVE in the Clinical Outcomes workspace
+# `published/` — snapshots of what is LIVE in the Power BI service
 
-These are PBIP exports of the three semantic models (and their reports) currently
-published to the **Clinical Outcomes** Power BI workspace
-(`5f4d44ed-7a93-4ca3-961c-d57038f7421d`).
+PBIP exports of the semantic models (and their reports) currently published to the
+**Clinical Outcomes** workspace (`5f4d44ed-7a93-4ca3-961c-d57038f7421d`) and the
+**Patient Satisfaction Survey** workspace (`e3358290-a29b-48c3-9dea-d694da8407ae`).
 
 **This folder is a mirror of production, not a build target.** Do not confuse it with
-`ClinicalOutcomes/` at the repo root, which is the *rebuild* lineage (Fabric-native,
-Salesforce-free). The two have diverged deliberately — keeping them visibly separate is the
-point of this folder.
+`ClinicalOutcomes/` or `PatientSatisfaction/` at the repo root, which are the *rebuild*
+lineages (Fabric-native, Salesforce-free). The two have diverged deliberately — keeping
+them visibly separate is the point of this folder.
 
-| Folder | Service semantic model | Drives |
-|---|---|---|
-| `ClinicalOutcomes/` | `Clinical Outcomes` (`e9a7f4e0`) | Clinical Outcomes, Patient-Level Outcomes, ANA Reponses, Ohana Villas Stroke |
-| `ClinicalOutcomesMain/` | `Clinical Outcomes Main` (`cf59a121`) | Clinical Outcomes Semantic, Total Care Through Transitions |
-| `SLOutcomesReport/` | `SL Outcomes Report` (`ad568020`) | SL Outcomes Report |
+| Folder | Service semantic model | Workspace | Drives |
+|---|---|---|---|
+| `ClinicalOutcomes/` | `Clinical Outcomes` (`e9a7f4e0`) | Clinical Outcomes | Clinical Outcomes, Patient-Level Outcomes, ANA Reponses, Ohana Villas Stroke |
+| `ClinicalOutcomesMain/` | `Clinical Outcomes Main` (`cf59a121`) | Clinical Outcomes | Clinical Outcomes Semantic, Total Care Through Transitions |
+| `SLOutcomesReport/` | `SL Outcomes Report` (`ad568020`) | Clinical Outcomes | SL Outcomes Report |
+| `PatientSatisfactionReport/` | `Patient Satisfaction Report` (`db3c5ab9`) | Patient Satisfaction Survey | Patient Satisfaction Report, Patient Satisfaction Report - Ohana |
 
 ## Provenance
 
@@ -25,9 +26,28 @@ service definitions (`getDefinition?format=TMDL`) at time of import:
 | Clinical Outcomes Main | 108 | 325 | identical to service |
 | Clinical Outcomes | 63 | 162 | identical to service |
 | SL Outcomes Report | 97 | 315 | identical to service |
+| Patient Satisfaction Report | 22 | 62 | identical to service (after one fix, below) |
 
 Table counts include Power BI auto-date tables (`LocalDateTable_*`, `DateTableTemplate_*`).
 Main has 77 real tables once those are excluded.
+
+### One edit was made to the Patient Satisfaction export
+
+The Desktop export was missing a measure that exists in the service:
+
+```tmdl
+measure 'Current User' = USERPRINCIPALNAME()    -- on ContextTable
+```
+
+It is referenced by no visual in the report, so it is almost certainly a diagnostic left
+from testing the UPN soft-RLS. It was **added to the local copy** so the snapshot is a true
+mirror — without it, republishing this PBIP would silently delete the measure from the
+service. This is the only place `published/` deviates from what came out of Desktop.
+
+### Not captured
+
+`Patient Satisfaction Report - Ohana` is a second report on the same model in that
+workspace, and is **not** in this snapshot — the export covered only the primary report.
 
 ## Why this exists
 

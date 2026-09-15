@@ -1,0 +1,35 @@
+table ScoringType
+	lineageTag: 823ecd47-8230-4a64-9c66-08121a7c9ffe
+
+	column Type
+		dataType: string
+		lineageTag: d8d392cb-f1f8-45e8-9af1-58c3e0fe6480
+		summarizeBy: none
+		sourceColumn: Type
+		sortByColumn: Sort
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort
+		dataType: int64
+		formatString: 0
+		lineageTag: 328b94f5-3ae0-40f1-98b3-a7abccbd9ced
+		summarizeBy: none
+		sourceColumn: Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ScoringType = m
+		mode: import
+		queryGroup: 'Survey Support'
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45W8kktS81RyE9TcEwvSk1V0lEyVIrViVYKSizJzEsHco3AXLei1MLS1LzkSqCIsVJsLAA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Type = _t, Sort = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Type", type text}, {"Sort", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

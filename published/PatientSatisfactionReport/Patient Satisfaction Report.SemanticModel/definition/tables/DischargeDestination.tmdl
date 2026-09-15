@@ -1,0 +1,150 @@
+table DischargeDestination
+	lineageTag: 336a401b-dfa1-4a40-b016-0600a0ac808c
+
+	column Lookup_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a68530b-45a1-4e94-9f68-5223e7a65349
+		summarizeBy: none
+		sourceColumn: Lookup_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descrip
+		dataType: string
+		lineageTag: c4601781-1dcc-4026-a97f-c15f3b93d678
+		summarizeBy: none
+		sourceColumn: Descrip
+
+		annotation SummarizationSetBy = Automatic
+
+	column Setting =
+			
+			IF(LEFT(DischargeDestination[Descrip],3)="ILF","ILF",
+			IF(LEFT(DischargeDestination[Descrip],3)="ALF","ALF",
+			IF(LEFT(DischargeDestination[Descrip],4)="Home","Home",
+			// IF(CONTAINSSTRING(DischargeDestination[Descrip],"ospital"),"Hospital",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Acute care hospital"),"Hospital",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Rehab Hospital"),"IRF",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"SNF"),"SNF",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Memory"),"Memory Care",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Hospice"),"Hospice",
+			IF(CONTAINSSTRING(DischargeDestination[Descrip],"Expired"),"Expired",
+			DischargeDestination[Descrip]
+			)))))))))
+		lineageTag: 4a6e4e5c-7dc9-40a2-8dc1-39184cbefa54
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group =
+			
+			SWITCH(
+			    DischargeDestination[Setting],
+			    "ALF","Community",
+			    "ILF","Community",
+			    "Home","Community",
+			    "Hospital","Institutional",
+			    "Hospice","Institutional",
+			    "Memory Care","Institutional",
+			    "SNF","Institutional",
+			    "Other"
+			)
+		lineageTag: 6144e631-627e-4c0f-a9b7-744e9c21d912
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type =
+			
+			IF(
+			    DischargeDestination[Setting] IN {"Hospital", "Hospice", "Expired", "Left Facility AMA"},
+			    "Unplanned",
+			    "Planned"
+			)
+		lineageTag: ccc3b084-13c7-4d71-92ac-f444f93710b6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Updated
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2b8be6f5-d1e2-45bb-9b64-32aad10cc6ee
+		summarizeBy: none
+		sourceColumn: Updated
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: db14000c-74bb-47ff-b603-eb9a0f94959e
+		summarizeBy: none
+		sourceColumn: FromDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThruDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 493898ed-f81f-4c24-bcfd-51214fe0feb3
+		summarizeBy: none
+		sourceColumn: ThruDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplaySequence
+		dataType: int64
+		formatString: 0
+		lineageTag: ff4a9e13-b86a-4b45-8d71-00f11997cc14
+		summarizeBy: none
+		sourceColumn: DisplaySequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSystem
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 735c2e11-692a-4bb0-a2e2-9806372334fd
+		summarizeBy: none
+		sourceColumn: IsSystem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedBy
+		dataType: string
+		lineageTag: f0964c92-e91d-49ec-94b4-09bf476575ee
+		summarizeBy: none
+		sourceColumn: ModifiedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCommon
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fe15bb08-e2dc-403d-83fe-2396b14795bd
+		summarizeBy: none
+		sourceColumn: IsCommon
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DischargeDestination = m
+		mode: import
+		queryGroup: Clinical
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
+				    Lookup_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Lookup",version=""]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(Lookup_, each ([Type] = "DISCHRGTO ")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type", "Abbrev", "Category"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,305 @@
+table Sentiments
+	lineageTag: 2308a965-b4fb-4b0b-8e21-da8cbc5872eb
+
+	measure 'Total Responses' = COUNTROWS(Sentiments)
+		formatString: #,0
+		lineageTag: b5f045a5-75dd-4ab5-a46a-644ed290dc75
+
+	measure 'Total Points' =
+			
+			SUMX(
+			    Sentiments,
+			    RELATED(Scoring[Points])
+			)
+		formatString: #,0
+		lineageTag: cae23a25-eee7-4cec-b84a-38d812166074
+
+	measure 'Advocacy Score' =
+			
+			DIVIDE(
+			    [Total Points],
+			    [Total Points Possible]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 095a1d28-3053-4843-a6df-5bd9a0493722
+
+	measure '% Total Responses' =
+			
+			DIVIDE(
+			    [Total Responses],
+			    CALCULATE(
+			        [Total Responses],
+			        ALLSELECTED(Sentiments),
+			        KEEPFILTERS(ScoringType)
+			    )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 581a9669-cc67-441c-b816-d57042ca0ac8
+
+	measure 'Net Promoter Score' = ```
+			
+			
+			var promoters = 
+			DIVIDE(
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score",Scoring[Sentiment] IN {"9", "10"}),
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score")
+			)
+			
+			var detractors = 
+			DIVIDE(
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score",Scoring[Sentiment] IN {"0", "1", "2", "3", "4", "5", "6"}),
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score")
+			)
+			
+			return (promoters-detractors)*100
+			```
+		formatString: 0.0
+		lineageTag: 65d4f30e-44a4-4050-a0e5-be74029a3428
+
+	measure 'Avg Score Axis Min' =
+			
+			var breakpoint = MINX(Dictionary,[Advocacy Score])*.9
+			return IF(breakpoint<.6,0,breakpoint)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 53b92e6f-e19a-4580-8112-d0a692eed632
+
+	measure 'Total Points Possible' =
+			
+			SUMX(
+			    Sentiments,
+			    [Total Responses] * RELATED(Scoring[Max Points])
+			)
+		formatString: #,0
+		lineageTag: 48f147db-1bf7-4f32-a4f7-fcb107cdc905
+
+	measure 'Net Promoter Score Question Text' =
+			
+			"I would use these therapy services again or recommend these services if someone I know needed care."
+		lineageTag: 623ac49c-2287-4ce0-adff-63bedaa1fe35
+
+	measure 'Total Points Text' =
+			
+			IF(
+			    ISBLANK([Advocacy Score])=FALSE(), //check if valid facility
+			    FORMAT([Total Points],"#,###")&" points / "&FORMAT([Total Points Possible],"#,###")&" possible"
+			)
+		lineageTag: 9f406a62-91d2-4c5a-9203-ccad90d2b4b2
+
+	measure 'Total Responses Text' =
+			
+			IF(
+			    ISBLANK([Total Responses])=FALSE(),
+			    FORMAT([Total Responses],"#,###")&" ("&FORMAT([% Total Responses],"0.0%")&")"
+			)
+		lineageTag: f499db03-47c3-4d81-85fd-a4708ca81dcd
+
+	measure 'Net Promoter Score Formula' = ```
+			
+			var promoters = 
+			DIVIDE(
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score",Scoring[Sentiment] IN {"9", "10"}),
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score")
+			)+0
+			
+			var detractors = 
+			DIVIDE(
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score",Scoring[Sentiment] IN {"0", "1", "2", "3", "4", "5", "6"}),
+			    CALCULATE([Total Responses],Dictionary[Topic]="Net Promoter Score")
+			)+0
+			
+			var result = 
+			IF(ISBLANK([Advocacy Score]),BLANK(),
+			IF(ISBLANK([Net Promoter Score]),"No valid data to report", //either has no reponses or none that fall into either promoter or detractor group
+			FORMAT(promoters,"0.0%")&" promoters - "&FORMAT(detractors,"0.0%")&" detractors" //if all criteria are passed
+			))
+			
+			return result
+			```
+		lineageTag: 3a12e4af-46e7-42c9-9a5e-a72e308d1ee3
+
+	measure 'Total Responses Denom' =
+			
+			CALCULATE(
+			    [Total Responses],
+			    ALLSELECTED(Sentiments)
+			)
+		formatString: #,0
+		lineageTag: 2986c2be-46f4-4f4a-af33-9ecf0ed7776c
+
+	measure 'NPS Score' =
+			
+			CALCULATE(
+			    [Total Points],
+			    Scoring[Type]="NPS"
+			)
+		formatString: 0
+		lineageTag: bb8c6ad7-9dc9-4cbb-8db7-5c1249d009bc
+
+	measure 'Total Responses NPS' =
+			
+			CALCULATE(
+			    [Total Responses],
+			    Scoring[Type]="NPS"
+			)
+		formatString: #,0
+		lineageTag: 23332867-5fdd-416b-9a50-c81ddbc01bf6
+
+	measure 'Net Promoter Score Axis 1' = -100
+		formatString: 0
+		lineageTag: 10756262-d599-42f7-9697-7cc4c0197b42
+
+	measure 'Net Promoter Score Axis 2' = 40
+		formatString: 0
+		lineageTag: 617ce00a-7119-4932-a384-8bfdddb9a0c1
+
+	measure 'Net Promoter Score Axis 3' = 100-[Net Promoter Score Axis 2]
+		formatString: 0
+		lineageTag: dd1ff408-8574-477c-b8f7-c65c5b931258
+
+	measure 'Net Promoter Score Value Text' =
+			
+			IF(ISBLANK([Advocacy Score]),BLANK(),
+			IF(ISBLANK([Net Promoter Score])=FALSE(),FORMAT([Net Promoter Score],"0.0"),
+			"Score N/A"
+			))
+		lineageTag: 60384d93-ec3e-426c-970c-b9f8a859eb0a
+
+	measure 'Advocacy Score Axis 1' = .5
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: fe263c08-4a46-40ed-8135-ea7eb2b57e5e
+
+	measure 'Advocacy Score Axis 2' = .3
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a89b18e5-8c9b-475c-babd-cd4bd9e17e78
+
+	measure 'Advocacy Score Axis 3' = 1-[Advocacy Score Axis 2]
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 3ee4becc-5a4e-458d-8d7f-dfeaafaff23d
+
+	measure 'Advocacy Score Value Text' =
+			
+			IF(
+			    ISBLANK([Advocacy Score])=FALSE(), //check if valid facility
+			    FORMAT([Advocacy Score],"0.0%")
+			)
+		lineageTag: 9b3b389a-bf11-49e2-8b05-941cdd7de51e
+
+	measure 'Advocacy Score Axis 1 Label' = .5
+		formatString: 0%;-0%;0%
+		lineageTag: ec4d4ba3-202a-4f2b-b006-8d2206b90dd7
+
+	measure 'Advocacy Score Axis 2 Label' = .8
+		formatString: 0%;-0%;0%
+		lineageTag: 79fe0900-8e60-4253-a107-169128b847ba
+
+	measure 'Net Promoter Score Axis 1 Label' = 0
+		formatString: 0
+		lineageTag: 38a95ded-bece-4882-8f4e-811777e8fddf
+
+	measure 'Net Promoter Score Axis 2 Label' = 40
+		formatString: 0
+		lineageTag: a3980fb3-6d47-4ec3-937f-3f40015310df
+
+	measure 'NPS Threshold' = 18
+		formatString: 0
+		lineageTag: 17fcea6e-fd3c-4051-9933-7975b92f11f1
+
+	measure 'Respondents per Planned Discharge' =
+			
+			DIVIDE(
+			    [Total Respondents],
+			    [Total Planned Discharges]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b8022e5b-70ea-4cfd-8bfc-e2d387bb34bb
+
+	measure 'Respondents per Planned Discharge Baseline' = .4
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 0332494c-8f0d-4366-a880-318d8ba95169
+
+	measure 'Net Promoter Score Disclaimer' =
+			
+			IF(ISBLANK([Net Promoter Score]),BLANK(),
+			IF([Total Responses NPS]<[NPS Threshold],
+			"Caution: N = "&COALESCE([Total Responses NPS],0)&" is a low NPS sample size and could be subject to high volatility. Recommend at least "&[NPS Threshold]&"."
+			))
+		lineageTag: 74a69a03-4bd8-4921-9488-2239ac2d1be5
+
+	measure AS_PT =
+			
+			CALCULATE(
+			    [Advocacy Score],
+			    Surveys[Received PT]="Yes"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 894e93dc-e145-4e50-a99a-d180fe24ab67
+
+	measure AS_OT =
+			
+			CALCULATE(
+			    [Advocacy Score],
+			    Surveys[Received OT]="Yes"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 6fcf6733-d106-4e7d-8558-0fdc9479a5d5
+
+	measure AS_SLP =
+			
+			CALCULATE(
+			    [Advocacy Score],
+			    Surveys[Received SLP]="Yes"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 8b4293d4-13c7-45b3-ba7e-c9f0380ec15d
+
+	column Question
+		dataType: string
+		isHidden
+		lineageTag: 551aea5c-1472-47e8-90c9-eb8d01396635
+		summarizeBy: none
+		sourceColumn: Question
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sentiment
+		dataType: string
+		isHidden
+		lineageTag: 210ff1b2-2ae8-414a-91df-69500223594c
+		summarizeBy: none
+		sourceColumn: Sentiment
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SurveyID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 540ca482-baa6-4574-b9e2-f91a225cfa5b
+		summarizeBy: none
+		sourceColumn: SurveyID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sentiments = m
+		mode: import
+		queryGroup: Survey
+		source =
+				let
+				    Source = Data,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"These questions relate to your overall rehab experience: [I would use these therapy services again or recommend these services if someone I know needed care.]", "These questions relate to your overall rehab experience: [The therapy received resulted in a positive outcome.]", "These questions relate to your overall rehab experience: [Overall, the quality of therapy services received was satisfactory.]", "Occupational Therapy [The therapist(s) had a kind and caring attitude.]", "Occupational Therapy [The therapist(s) was responsive to the patient’s needs.]", "Occupational Therapy [The therapist(s) explained the treatments and goals so they were understandable.]", "Occupational Therapy [Progress was made as a result of this therapy.]", "Physical Therapy [The therapist(s) had a kind and caring attitude.]", "Physical Therapy [The therapist(s) was responsive to the patient’s needs.]", "Physical Therapy [The therapist(s) explained the treatments and goals so they were understandable.]", "Physical Therapy [Progress was made as a result of this therapy.]", "Speech Therapy [The therapist(s) had a kind and caring attitude.]", "Speech Therapy [The therapist(s) was responsive to the patient’s needs.]", "Speech Therapy [The therapist(s) explained the treatments and goals so they were understandable.]", "Speech Therapy [Progress was made as a result of this therapy.]", "I would use these therapy services again or recommend these services if someone I know needed care.", "These questions relate to your overall facility experience: [How would you rate the facility overall ?]", "These questions relate to your overall facility experience: [How would you rate the care you received?]", "These questions relate to your overall facility experience: [How would you rate how well your discharge needs were met]", "These Questions relate to your overall care experience [How often were your needs met timely?]", "These Questions relate to your overall care experience [During your stay, how often was your pain well controlled?]", "SurveyID"}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Other Columns", {"SurveyID"}, "Attribute", "Value"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Question"}, {"Value", "Sentiment"}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each true)
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

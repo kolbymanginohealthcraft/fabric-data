@@ -1,0 +1,130 @@
+table DischargeReason
+	lineageTag: af548291-7c3b-4ed6-ad17-73bfb11dca98
+
+	measure 'Reason Code' =
+			
+			IF(HASONEVALUE(DischargeReason[Lookup_ID]),
+			    FIRSTNONBLANK(DischargeReason[Lookup_ID],1),
+			    BLANK()
+			)
+		formatString: 0
+		lineageTag: c3fcd53a-6657-467e-97d4-6f9ad9a69612
+
+	column Lookup_ID
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ad09985-2eb8-4c4c-8cb8-c447d84b3c7d
+		summarizeBy: none
+		sourceColumn: Lookup_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descrip
+		dataType: string
+		lineageTag: a2f8fae2-1fde-406a-adcf-7567f8e438ae
+		summarizeBy: none
+		sourceColumn: Descrip
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type =
+			
+			// IF(
+			//     DischargeReason[Lookup_ID] IN {466, 467, 469, 480, 1544, 1546, 1548, 1553, 1554},
+			//     "Planned","Unplanned"
+			// )
+			
+			// IF(
+			//     DischargeReason[Lookup_ID] IN {468, 1545, 1543, 1552},
+			//     "Unplanned","Planned"
+			// )
+			
+			IF(DischargeReason[Lookup_ID] IN {464, 465, 468, 1506, 1545, 1543, 1547, 1549, 1550, 1551, 1552, 1555},"Unplanned",
+			"Planned"
+			)
+		lineageTag: 23ecb3d6-69b8-4066-adfa-41fc1fb37586
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Updated
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 71afc5d8-3a63-4da8-93ca-3fef7e78d79e
+		summarizeBy: none
+		sourceColumn: Updated
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6643236e-50d9-4345-8192-95ff5b139e6a
+		summarizeBy: none
+		sourceColumn: FromDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThruDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3a9c97d5-d765-43b6-a871-087f422929f1
+		summarizeBy: none
+		sourceColumn: ThruDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisplaySequence
+		dataType: int64
+		formatString: 0
+		lineageTag: 44c8b862-3f21-4a09-b59b-0da3f281922e
+		summarizeBy: none
+		sourceColumn: DisplaySequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsSystem
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7bbd1d72-4be7-42de-b8d9-cb0ec010c89e
+		summarizeBy: none
+		sourceColumn: IsSystem
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedBy
+		dataType: string
+		lineageTag: 19dcda7f-4b1f-496e-972c-246cbef0b006
+		summarizeBy: none
+		sourceColumn: ModifiedBy
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCommon
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 319887c6-8526-4e52-8766-b917391b3a6d
+		summarizeBy: none
+		sourceColumn: IsCommon
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DischargeReason = m
+		mode: import
+		queryGroup: Clinical
+		source =
+				let
+				    Source = PowerPlatform.Dataflows(null),
+				    Workspaces = Source{[Id="Workspaces"]}[Data],
+				    #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78" = Workspaces{[workspaceId="58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"]}[Data],
+				    #"1f384293-8e92-485c-bde7-4681f9cb36ca" = #"58ac0bf7-44e5-4241-a12e-4c6f42ba8a78"{[dataflowId="1f384293-8e92-485c-bde7-4681f9cb36ca"]}[Data],
+				    Lookup_ = #"1f384293-8e92-485c-bde7-4681f9cb36ca"{[entity="Lookup",version=""]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(Lookup_, each ([Type] = "CASEEND   ")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Type", "Abbrev", "Category"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
