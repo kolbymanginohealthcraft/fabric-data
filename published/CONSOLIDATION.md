@@ -27,6 +27,22 @@ exists in Main, so Part A is a single-file append.
 
 ---
 
+## Status (2026-09-15)
+
+**Part A — DONE in the repo, not yet published.** The 36 measures were appended verbatim to
+`published/ClinicalOutcomesMain/.../tables/MeasureTable.tmdl` (199 -> 235 measures, 520 lines
+inserted, no deletions). Dependencies were checked first: every table, column and measure they
+reference already exists in Main. Still needs opening in Desktop and republishing.
+
+**Part B — DECIDED: keep Main's behavior.** Benchmarks showing only when a filter is applied is
+intentional, to avoid the "14% vs 14%" problem of comparing a cohort to itself. The 12 gated
+measures stay as they are. Expectation to confirm after repointing: on `Patient-Level Outcomes`,
+filtering to a single patient should itself narrow the scope enough to trigger benchmarks.
+
+**Part C — TESTED EMPIRICALLY, half of it is a non-issue.** See the findings section below.
+
+---
+
 ## Part A — measures to add to Main (36)
 
 28 are the `Boxplot*` percentile family (4 groups x 7 percentiles), used only by
@@ -778,3 +794,62 @@ DIVIDE(
 
 Rebinding is a seconds-long API call and stays reversible while the `Clinical Outcomes` model
 exists. Keep it until all four of its reports are verified elsewhere.
+---
+
+## Empirical findings on Part C (2026-09-15)
+
+Each Part C measure was evaluated **both ways against the same model** — Main's definition and
+Clinical's definition, side by side on Main's data in the service, via
+`DEFINE MEASURE ... EVALUATE ROW(...)`. This distinguishes "the formula differs" from "the
+answer differs".
+
+### Six are inert — Clinical's extra logic changes nothing
+
+| Measure | Main | Clinical | |
+|---|---|---|---|
+| `Admit Level` | 0.3835624618313141 | 0.3835624618313139 | float noise |
+| `Discharge Level` | 0.6957440596794321 | 0.6957440596794318 | float noise |
+| `Total Measurements` | 1,622,785 | 1,622,785 | identical |
+| `Total Cases BM` | 153,096 | 153,096 | identical |
+| `Total Days` | 15,632,664 | 15,632,664 | identical |
+| `Customer Name` | same string | same string | identical |
+
+**Why**, for the first three: Clinical guards on
+`OutcomeSummary[Status] IN {"Included","Started with ANA 88","No start score"}`. In the current
+data `Status` only ever takes two values:
+
+| Status | Rows |
+|---|---|
+| Included | 1,622,785 |
+| Excluded | 1,393,915 |
+
+`"Started with ANA 88"` and `"No start score"` **do not occur at all**. The extra clauses are
+dead code left from an older `OutcomeSummary` structure. Main's simpler versions are equivalent
+*and* cleaner — no backfill needed, and nothing was lost when the clauses were dropped.
+
+Caveat: this is an argument from current data, not from the model. If those status values ever
+reappear upstream, Main and Clinical would diverge. Worth a note wherever `Status` is populated.
+
+### Six are real differences
+
+- **`Visits per Week`** — the substantive one. Main is `DIVIDE([Total Visits],[Total Days])*7`,
+  an aggregate rate. Clinical is
+  `AVERAGEX(StayCases, DIVIDE(DIVIDE([Total Visits],[Total Days])*7, [Total Disciplines]))`,
+  a per-case average divided by discipline count. These are different metrics, not different
+  spellings of one. Decide which the reports should show.
+- **`Units per Visit BM`** and **`Units per Visit Delta`** — Main calls
+  `[Units per Visit (pt/ot)]` where Clinical calls `[Units per Visit]`. Main narrowed the
+  metric to PT/OT. A real scope change, plus the Part B wrapper.
+- **`Total Outcome Areas Subtitle`** — Main references `[Total Outcome Areas Unique]`,
+  Clinical `[Total Outcome Areas]`. A rename, once Part A lands both exist; pick one.
+- **`Therapist List`** — Clinical wraps the concatenation in
+  `IF(HASONEVALUE(StayCases[PatientCase_ID])=FALSE(), BLANK(), IF(ISINSCOPE(Service[Type]), ...))`.
+  Main has no guard, so at low grain it would concatenate every therapist. Clinical's guard
+  looks like the better behavior and is probably worth porting *into* Main.
+- **`% Improvement Delta`** — two differences at once: Main's Part B gating, and Clinical's
+  `TRUNC(...,5)`. The truncation is the only piece not covered by the Part B decision.
+
+### Net effect on the job
+
+Of the 25 name collisions: 1 cosmetic, 12 resolved by the Part B decision, **6 proven inert**,
+leaving **6 genuine calls** — and only `Visits per Week` is a real methodology question.

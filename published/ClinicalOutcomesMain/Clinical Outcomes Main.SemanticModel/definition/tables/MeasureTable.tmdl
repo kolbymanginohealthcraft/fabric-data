@@ -2672,6 +2672,526 @@ table MeasureTable
 		displayFolder: Minutes
 		lineageTag: 90e95855-c1c8-4228-a2b8-589d9d4e27ce
 
+	measure BoxplotALOS_05th =
+			
+			var range = [BoxplotALOS_90th]-[BoxplotALOS_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotALOS_10th]-incrementalrange
+			return calc
+		displayFolder: ALOS
+		lineageTag: 32cf9bcd-de6f-41ae-8027-65af91885a41
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: cedaa85d-2796-44db-9b74-82f0b4df7f56
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: 82d843bd-5c12-4d5c-863d-02db8bd3902e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_50th =
+			
+			CALCULATE(
+			    [ALOS],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: ALOS
+		lineageTag: 7972dbee-a92b-402b-b759-58ecbbe379a3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: 14e42d5f-061f-4677-abda-c17a65a1d7b5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [ALOS],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: ALOS
+		lineageTag: 25a94264-7517-4bcb-ab62-7da958a52048
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotALOS_95th =
+			
+			var range = [BoxplotALOS_90th]-[BoxplotALOS_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotALOS_90th]+incrementalrange
+			return calc
+		displayFolder: ALOS
+		lineageTag: 82f21a41-c2c4-4b18-b925-925f0e6e17a1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_05th =
+			
+			var range = [BoxplotMinutes_90th]-[BoxplotMinutes_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotMinutes_10th]-incrementalrange
+			return calc
+		displayFolder: Minutes
+		lineageTag: c8bc7606-ca22-4ce1-ac6c-84295eac78df
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: 493703fb-2405-48fc-936a-3f320c826266
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: 832200b7-05b8-48c1-b91b-23bacbf07ff6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_50th =
+			
+			CALCULATE(
+			    [Minutes per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: Minutes
+		lineageTag: abbbe932-457f-4827-9c51-d5cef1c6225d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: c643f465-fa5b-45fe-91ae-ba5d6f4909a4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Minutes per Week],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Minutes
+		lineageTag: 0b922951-ed8c-41aa-b651-69fe9e01c336
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotMinutes_95th =
+			
+			var range = [BoxplotMinutes_90th]-[BoxplotMinutes_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotMinutes_90th]+incrementalrange
+			return calc
+		displayFolder: Minutes
+		lineageTag: 8be6ac3d-9250-4957-a55d-5d35a49780a1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_05th =
+			
+			var range = [BoxplotUnitsPerVisit_90th]-[BoxplotUnitsPerVisit_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotUnitsPerVisit_10th]-incrementalrange
+			return calc
+		displayFolder: Units
+		lineageTag: 047271b9-a7af-4d05-baca-f7c8da67d0bb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: 3e539eb9-b54c-4fb4-aa93-ed7d5ad0ed65
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: dc6b7efe-1d12-4528-9c61-cb4f37411cbe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_50th =
+			
+			CALCULATE(
+			    [Units per Visit],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: Units
+		lineageTag: 33e26ef8-32c8-46fd-85cc-2b9a84c49130
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: 25f46f39-ab02-4dfa-99ee-b197c34034a6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Units per Visit],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Units
+		lineageTag: b538c25d-d680-4353-8f06-5035f0cd16d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotUnitsPerVisit_95th =
+			
+			var range = [BoxplotUnitsPerVisit_90th]-[BoxplotUnitsPerVisit_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotUnitsPerVisit_90th]+incrementalrange
+			return calc
+		displayFolder: Units
+		lineageTag: a24c50bc-cd97-4bc2-9c72-a39d20366ed7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_05th =
+			
+			var range = [BoxplotVistsPerWeek_90th]-[BoxplotVistsPerWeek_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotVistsPerWeek_10th]-incrementalrange
+			return calc
+		displayFolder: Visits
+		lineageTag: 2c84718b-55e8-4156-89b4-446af478cc96
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_10th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .1
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: 116119df-ebd2-4fde-bff8-a396dfb25da0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_25th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .25
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: b48bbbb9-fcaa-4f0e-ae8a-3fe5310da495
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_50th =
+			
+			CALCULATE(
+			    [Visits per Week],
+			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
+			)
+		displayFolder: Visits
+		lineageTag: 23977c40-bc2e-42f9-9cf5-e6ed13a56666
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_75th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .75
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: 6a7030fa-2a9c-425c-a368-8e5900fb661a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_90th =
+			
+			CALCULATE(
+			    PERCENTILEX.INC(
+			        StayCases,
+			        [Visits per Week],
+			        .9
+			    ),
+			    ALLSELECTED(StayCases[PatientCase_ID]),
+			    ALL(StayCases[PatientCase_ID]),
+			    ALL(vw_UpnFacilityAccess)
+			)
+		displayFolder: Visits
+		lineageTag: 84330ccf-0e1a-4297-b0d8-6aa09c3528ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure BoxplotVistsPerWeek_95th =
+			
+			var range = [BoxplotVistsPerWeek_90th]-[BoxplotVistsPerWeek_10th]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = [BoxplotVistsPerWeek_90th]+incrementalrange
+			return calc
+		displayFolder: Visits
+		lineageTag: 3af68bc5-6f5a-4dda-a900-641b7c5763d6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Cohort Text' = ```
+			
+			var AgeRange = IF(ISFILTERED(StayCases[Age Range]), "age range")
+			var DiagnosticCategory = IF(ISFILTERED(StayCases[Diagnostic Category]), "diagnostic category")
+			var PayerCategorization = IF(OR(ISFILTERED('Payer Buckets'[Payer Categorization]),ISFILTERED('Payer Buckets'[Payer Grouping])), "payer")
+			
+			var ValuesTable = FILTER({AgeRange, DiagnosticCategory, PayerCategorization}, NOT(ISBLANK([Value])))
+			var TableLength = COUNTROWS(ValuesTable)
+			
+			var ValuesList = 
+			    IF(TableLength<3,
+			        //if two or less items - no need for "and"
+			        CONCATENATEX(ValuesTable,[Value]," and "),
+			        
+			        //if three or more items - need "and"
+			        CONCATENATEX(TOPN(TableLength-1,ValuesTable),[Value],", ")&", and "&
+			        CONCATENATEX(TOPN(1,ValuesTable,[Value],DESC),[Value],", ")
+			    )
+			
+			return
+			"National cohort of "&FORMAT([Total Cases BM]-1,"#,###")&" similar patients "&
+			IF(TableLength>0,"based on "&ValuesList)
+			```
+		displayFolder: Cases
+		lineageTag: 706e09d3-54f7-49e3-9786-5c85f1a45be2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Diagnosis Equals Cohort' =
+			
+			IF(
+			    SELECTEDVALUE(DiagnosisCode[L2])=SELECTEDVALUE(StayCases[Diagnostic Category]),
+			    1,0
+			)
+		displayFolder: Misc
+		lineageTag: 5f3bc0ed-8f98-454d-9170-8122d8a746b1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain AxisHigh' =
+			
+			var range = [Gain]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MAX([Gain],[Gain BM])+incrementalrange
+			return IF([Gain]>[Gain BM]-.1,calc,[Gain BM])
+		displayFolder: Outcomes
+		lineageTag: 1d70399f-f6cd-42cd-be10-1b191c38ddcf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain AxisLow' =
+			
+			var range = [Gain BM]-[Gain]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MIN(0,[Gain])-incrementalrange
+			return IF([Gain]<0,calc,0)
+		displayFolder: Outcomes
+		lineageTag: 7437af67-348b-413a-a09c-94123acc108d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Disciplines' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Disciplines[Discipline]),
+			    FILTER(
+			        CaseTracks,
+			        [Total Visits]>0
+			    )
+			)
+		formatString: 0
+		displayFolder: Misc
+		lineageTag: 30637786-6920-4722-9f4a-0c59fc87f64c
+
+	measure 'Total Outcome Areas' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(Dictionary[Name]),
+			    OR(
+			        OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763} && OutcomeSummary[Status] IN {"Included" ,"Started with ANA 88", "No start score"},
+			        NOT(OutcomeSummary[LibraryItem_ID] IN {7764,7765,7766,7760,7761,7762,7763}) && OutcomeSummary[Status] IN {"Included"}
+			    )
+			)
+		formatString: 0
+		displayFolder: Outcomes
+		lineageTag: 35717f59-d6c6-478a-8650-fade06168e18
+
+	measure 'Units per Visit' =
+			
+			IF([Total Cases All Payers]>0,
+			CALCULATE(
+			    DIVIDE(
+			        [Total Units],
+			        [Total Visits]
+			    ),
+			    Disciplines[Discipline] IN {"PT", "OT"}
+			))
+		formatString: 0.00
+		displayFolder: Units
+		lineageTag: 53b2f234-8bb4-425b-af53-c885887b0e79
+
+	measure 'Visits per Week Delta' = [Visits per Week]-[Visits per Week BM]
+		formatString: 0.00
+		displayFolder: Visits
+		lineageTag: 7813a48b-ce90-462b-ae0b-dcea35aa8371
+
 	partition MeasureTable = m
 		mode: import
 		source =

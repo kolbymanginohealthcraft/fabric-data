@@ -44,10 +44,26 @@ from testing the UPN soft-RLS. It was **added to the local copy** so the snapsho
 mirror — without it, republishing this PBIP would silently delete the measure from the
 service. This is the only place `published/` deviates from what came out of Desktop.
 
-### Not captured
+### The Ohana report was taken from the service, not from Desktop
 
-`Patient Satisfaction Report - Ohana` is a second report on the same model in that
-workspace, and is **not** in this snapshot — the export covered only the primary report.
+`Patient Satisfaction Report - Ohana` is a second report on the **same** model. Its folder
+here was pulled directly from the service via `getDefinition`, not exported from Desktop,
+because the local Desktop copy had diverged badly:
+
+| | Local Desktop copy | Service (what is live) |
+|---|---|---|
+| Model | its own embedded one | the shared `Patient Satisfaction Report` model |
+| Tables | 19 | 22 |
+| Measures | 27 | 62 |
+| Pages | `Main`, `Comments` | `Summary`, `Comments` |
+
+The local copy was missing 35 measures the service has, including the whole Advocacy Score
+and NPS families, and still carried `Aegis Area` / `Aegis District` / `Aegis Region` — the
+retired Salesforce hierarchy, which is why refreshing it fails. It contained **zero** measures
+the service does not have, so nothing was lost by not using it.
+
+`definition.pbir` was rewritten from `byConnection` to `byPath` so it binds to the local
+copy of the shared model, matching how the primary report's project is laid out.
 
 ## Why this exists
 
