@@ -853,3 +853,58 @@ reappear upstream, Main and Clinical would diverge. Worth a note wherever `Statu
 
 Of the 25 name collisions: 1 cosmetic, 12 resolved by the Part B decision, **6 proven inert**,
 leaving **6 genuine calls** — and only `Visits per Week` is a real methodology question.
+
+---
+
+## Part C resolved (2026-09-15)
+
+Each hypothesis was checked against the definitions and the data. Result: **only one item
+needs work, and it is in the reports, not the model.**
+
+### `Visits per Week` — the measure was SPLIT in Main, and this is a trap
+
+Main's `Total Disciplines Unique` is **byte-identical** to Clinical's `Total Disciplines`, and
+Main's `[Visits per Week]` is exactly Clinical's inner expression. Substituting:
+
+| | Definition |
+|---|---|
+| Main `Visits per Week` | `DIVIDE([Total Visits],[Total Days])*7` — an aggregate rate |
+| Main `Visits per Discipline per Week` | `AVERAGEX(StayCases, DIVIDE([Visits per Week],[Total Disciplines Unique]))` |
+| Clinical `Visits per Week` | `AVERAGEX(StayCases, DIVIDE(DIVIDE([Total Visits],[Total Days])*7,[Total Disciplines]))` |
+
+So **Clinical's `Visits per Week` IS Main's `Visits per Discipline per Week`.** Main split one
+measure into two; Clinical's single name carries the per-discipline meaning.
+
+**The trap:** `Visits per Week` is referenced by both `Clinical Outcomes` and
+`Patient-Level Outcomes`. Repoint without remapping and those visuals silently switch from
+per-discipline to aggregate — inflated by roughly the average discipline count (~1.94). No
+error, no broken visual, just wrong numbers.
+
+**Action, in the reports not the model:** remap `Visits per Week` -> `Visits per Discipline per
+Week` (and the matching `BM` / `Delta` variants, which Main also has) in those two reports.
+
+### Everything else resolved to no model change
+
+- **`Units per Visit`** — both versions filter `Disciplines[Discipline] IN {"PT","OT"}` *inside
+  the measure*; the visual-level-filter theory doesn't hold, but the conclusion does. The only
+  difference is Clinical's `IF([Total Cases All Payers]>0, ...)` zero guard. Pure rename to make
+  the PT/OT scope explicit. Pile A already added `Units per Visit`, so the reports resolve.
+- **`Total Outcome Areas Subtitle`** — Main's `Total Outcome Areas Unique` is
+  `Status="Included"`; Clinical's `Total Outcome Areas` is the same plus the dead ANA-88 clause.
+  Equivalent on current data. Note: neither counts excluded rows, so whatever the Data Quality
+  tab uses to count all measures, it is not one of these two. Both names now exist in Main and
+  are in active use by different reports (`Total Outcome Areas` by Clinical Outcomes and Ohana,
+  `Total Outcome Areas Unique` by SL), so keep both.
+- **`% Improvement Delta`** — Main's version already has no `TRUNC`. Keeping Main's *is* the
+  decision to drop the truncation. No change needed.
+- **`Therapist List`** — **DONE.** Main had the guarded form commented out and the unguarded
+  form live. Restored the guard (old version kept as a comment). Safe: only
+  `Patient-Level Outcomes` references this measure, and no report on Main uses it.
+
+### Redundancy introduced by Pile A, worth a later tidy
+
+Pile A added `Total Disciplines`, which is byte-identical to Main's existing
+`Total Disciplines Unique`. Harmless, but two names for one thing. Either drop it and remap
+`Patient-Level Outcomes` to `Total Disciplines Unique`, or leave it. Same pattern for
+`Units per Visit` vs `Units per Visit (pt/ot)` and `Total Outcome Areas` vs
+`Total Outcome Areas Unique`.

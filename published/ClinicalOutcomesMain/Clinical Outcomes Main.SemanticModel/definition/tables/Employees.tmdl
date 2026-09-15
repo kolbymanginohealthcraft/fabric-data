@@ -6,29 +6,29 @@ table Employees
 		lineageTag: 1f9fc776-56d6-44f6-8f0c-0a025d3f04f8
 
 	measure 'Therapist List' =
-			
-			// IF(HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),BLANK(),
-			//     IF(
-			//         ISINSCOPE(Service[Type]),
-			//         CONCATENATEX(
-			//             FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
-			//             Treatments[TherapistLabel],
-			//             ", ",
-			//             [Total Minutes],
-			//             DESC
-			//         )
-			//     )
+
+			// unguarded version, superseded 2026-09-15 - it concatenates every therapist
+			// at low grain. Restored the guarded form below so Patient-Level Outcomes keeps
+			// its behavior when repointed off the Clinical Outcomes model.
+			// CONCATENATEX(
+			//     FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
+			//     Treatments[TherapistLabel],
+			//     ", ",
+			//     [Total Minutes],
+			//     DESC
 			// )
-			
-			
-			
-			
-			CONCATENATEX(
-			    FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
-			    Treatments[TherapistLabel],
-			    ", ",
-			    [Total Minutes],
-			    DESC
+
+			IF(HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),BLANK(),
+			    IF(
+			        ISINSCOPE(Service[Type]),
+			        CONCATENATEX(
+			            FILTER(VALUES(Treatments[TherapistLabel]),NOT(ISBLANK(Treatments[TherapistLabel]))),
+			            Treatments[TherapistLabel],
+			            ", ",
+			            [Total Minutes],
+			            DESC
+			        )
+			    )
 			)
 		lineageTag: 79f2b150-bd2f-4e87-9ed5-e6cb801ae347
 
