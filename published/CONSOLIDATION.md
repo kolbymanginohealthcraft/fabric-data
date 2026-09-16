@@ -986,3 +986,8 @@ wrong numbers, because `Visits per Week` means per-discipline in Clinical and ag
 `Total Outcome Areas Unique`. `ANA Reponses` needs nothing.
 
 Every target measure was confirmed to exist in Main.
+
+> **2026-09-15 UPDATE: the repoint is BLOCKED.** Validating it uncovered a defect in
+> `Clinical Outcomes Main` that inflates `Total Days` 2.7x and `ALOS` from ~38 to ~102 days.
+> See `UNIQUEDAYS-DEFECT.md`. It also invalidates the "six Pile C measures are inert" finding
+> below, which was tested against a single model and therefore only proved formula equivalence.
