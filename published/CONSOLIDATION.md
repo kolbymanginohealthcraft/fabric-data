@@ -1018,3 +1018,40 @@ The residual `Gain AxisHigh` gap traces to `[Gain]` itself differing 0.112% betw
 (0.29193 vs 0.29161) — the two refresh 9.5 hours apart — amplified by the axis formula, plus
 `[Gain BM]` returning blank on Main under the intended `[Report Scope]` gating. `Total Cases` is
 identical at 115,183. No logic mismatch remains.
+
+---
+
+## Patient-Level Outcomes REPOINTED (2026-09-15)
+
+Pushed atomically — remapped content and the rebind to Main in a single
+`reports/{id}/updateDefinition` call, so there was no window where the report pointed at a
+model missing its measures.
+
+Guarded: the live report was fetched first and compared byte-for-byte against the original we
+captured. It matched, confirming nobody had edited it, and only `report.json` and
+`definition.pbir` differed in the payload.
+
+Verified after:
+
+| | |
+|---|---|
+| Bound to | `Clinical Outcomes Main` (`cf59a121`) |
+| Pages | 5, intact — Selection, Patient Episode Summary, Cohort Comparison, Internal Care Quality Review, Tooltip |
+| `Total Disciplines Unique` refs | 13 |
+| `Units per Visit (pt/ot)` refs | 5 |
+| `Visits per Discipline per Week` refs | 5 |
+| `Gain AxisHigh` refs | 2 |
+| Old names left in a `Property` position | **0** |
+| App contents | unchanged, 5 reports |
+
+### Remaining on the `Clinical Outcomes` model
+
+`Clinical Outcomes`, `ANA Reponses`, `Ohana Villas Stroke`. All three must move before that
+model can be retired.
+
+- `ANA Reponses` — no remap needed, and it touches only `Timeframe` among the drifted measures
+- `Ohana Villas Stroke` — one remap, `Total Outcome Areas` -> `Total Outcome Areas Unique`
+- `Clinical Outcomes` — five remaps, the same family Patient-Level Outcomes needed
+
+Rollback for any of them stays available while the `Clinical Outcomes` model exists: the
+original report parts are cached and the repoint reverses in one call.
