@@ -1,0 +1,68 @@
+{
+  "name": "Custom",
+  "textClasses": {
+    "label": {
+      "fontFace": "Calibri",
+      "fontSize": 8
+    },
+    "callout": {
+      "fontFace": "Calibri",
+      "fontSize": 14
+    },
+    "title": {
+      "fontFace": "Calibri",
+      "fontSize": 9
+    },
+    "header": {
+      "fontFace": "Calibri",
+      "fontSize": 11
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ],
+        "border": [
+          {
+            "show": true
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 100
+          }
+        ]
+      }
+    }
+  },
+  "dataColors": [
+    "#7FBC42",
+    "#0C436A",
+    "#007CBB",
+    "#3DB3E3",
+    "#26D9D8",
+    "#EB9035",
+    "#D9B300",
+    "#D64550"
+  ],
+  "minimum": "#F8696B",
+  "center": "#FCFCFF",
+  "maximum": "#63BE7B"
+}
