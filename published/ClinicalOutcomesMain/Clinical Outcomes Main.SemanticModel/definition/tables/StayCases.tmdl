@@ -1163,6 +1163,20 @@ table StayCases
 
 		annotation SummarizationSetBy = Automatic
 
+	column IsStroke =
+			
+			IF(
+			    CALCULATE(
+			        COUNTROWS(RELATEDTABLE(Diagnosis)),
+			        CONTAINSSTRING(DiagnosisCode[L4],"cerebral infarction") || CONTAINSSTRING(DiagnosisCode[L4],"intracerebral hemorrhage")
+			    )>0,
+			    "Yes","No"
+			)
+		lineageTag: afdb47df-4753-4a88-a1d3-9c71d54c3c1c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition StayCases = m
 		mode: import
 		queryGroup: Patient

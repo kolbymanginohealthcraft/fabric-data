@@ -1,0 +1,114 @@
+{
+  "config": "{\"version\":\"5.66\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY23SU04\",\"type\":2,\"version\":{\"visual\":\"1.8.82\",\"report\":\"2.0.82\",\"page\":\"1.3.82\"}},\"customTheme\":{\"name\":\"Custom35591434884558026.json\",\"type\":1,\"version\":{\"visual\":\"1.8.89\",\"report\":\"2.0.89\",\"page\":\"1.3.89\"}}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"filterSortOrder\":3,\"slowDataSourceSettings\":{\"isCrossHighlightingDisabled\":false,\"isSlicerSelectionsButtonEnabled\":false,\"isFilterSelectionsButtonEnabled\":false,\"isFieldWellButtonEnabled\":false,\"isApplyAllButtonEnabled\":false},\"linguisticSchemaSyncVersion\":2,\"settings\":{\"isPersistentUserStateDisabled\":false,\"hideVisualContainerHeader\":false,\"useStylableVisualContainerHeader\":true,\"exportDataMode\":1,\"useNewFilterPaneExperience\":true,\"optOutNewFilterPaneExperience\":false,\"defaultFilterActionIsDataFilter\":false,\"useCrossReportDrillthrough\":false,\"allowChangeFilterTypes\":true,\"allowInlineExploration\":false,\"disableFilterPaneSearch\":false,\"enableDeveloperMode\":false,\"useEnhancedTooltips\":true,\"useScaledTooltips\":false,\"useDefaultAggregateDisplayName\":true,\"queryLimitOption\":6,\"customMemoryLimit\":\"1048576\",\"customTimeoutLimit\":\"225\"},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}],\"outspacePane\":[{\"properties\":{\"expanded\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}",
+  "filters": "[{\"name\":\"Filter174ca4ebd80c10ac804d\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Calendar\"}},\"Property\":\"Date\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"Calendar\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"Date\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":-7,\"TimeUnit\":2}},\"TimeUnit\":2}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":-1,\"TimeUnit\":2}},\"TimeUnit\":2}}}}}]},\"type\":\"RelativeDate\",\"howCreated\":1,\"displayName\":\"Date Range\",\"ordinal\":0},{\"name\":\"1e918e262e1cf4a03416\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Account\"}},\"Property\":\"Name\"}},\"type\":\"Categorical\",\"howCreated\":1,\"displayName\":\"Account Name\",\"ordinal\":1},{\"name\":\"0c4f40a8b8899780a3c7\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Chain\"}},\"Property\":\"Name\"}},\"type\":\"Categorical\",\"howCreated\":1,\"displayName\":\"Chain Name\",\"ordinal\":2},{\"name\":\"Filter395fae40742f6b2e2fa5\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Payer Buckets\"}},\"Property\":\"Payer Grouping\"}},\"type\":\"Categorical\",\"howCreated\":1,\"objects\":{},\"ordinal\":3},{\"name\":\"7394bc4d300a82a3c05a\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Payer Buckets\"}},\"Property\":\"Payer Categorization\"}},\"type\":\"Categorical\",\"howCreated\":1,\"ordinal\":4},{\"name\":\"Filter150d2b17c70002604330\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"DischargeDestination\"}},\"Property\":\"Setting\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"d\",\"Entity\":\"DischargeDestination\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"Comparison\":{\"ComparisonKind\":0,\"Left\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"d\"}},\"Property\":\"Setting\"}},\"Right\":{\"Literal\":{\"Value\":\"null\"}}}}}}}]},\"type\":\"Advanced\",\"howCreated\":1,\"objects\":{\"general\":[{\"properties\":{}}]},\"isHiddenInViewMode\":true,\"displayName\":\"Discharge Destination\",\"ordinal\":5},{\"name\":\"Filterc3f03f732f9a77f787b7\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"ContextTable\"}},\"Property\":\"Context\"}},\"type\":\"Categorical\",\"howCreated\":1,\"objects\":{},\"isHiddenInViewMode\":true,\"ordinal\":6},{\"name\":\"Filter8677c376e49efd663f56\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Aegis Contract\"}},\"Property\":\"Contract_Number__c\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"a\",\"Entity\":\"Aegis Contract\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"Comparison\":{\"ComparisonKind\":0,\"Left\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"Contract_Number__c\"}},\"Right\":{\"Literal\":{\"Value\":\"null\"}}}}}}}]},\"type\":\"Advanced\",\"howCreated\":1,\"isHiddenInViewMode\":true,\"ordinal\":7}]",
+  "layoutOptimization": 0,
+  "publicCustomVisuals": [
+    "imagepro72F4F4C66B5C47EDB72C8CA5F4BFCD1A",
+    "simpleImageEBC4593F96F1425FB3D84C5BF02B5075"
+  ],
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "CY23SU04",
+            "path": "BaseThemes/CY23SU04.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    },
+    {
+      "resourcePackage": {
+        "items": [
+          {
+            "name": "AEGIS_T_45470043008555241.png",
+            "path": "AEGIS_T_45470043008555241.png",
+            "type": 100
+          },
+          {
+            "name": "Custom35591434884558026.json",
+            "path": "Custom35591434884558026.json",
+            "type": 100
+          }
+        ],
+        "name": "RegisteredResources",
+        "type": 1
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{\"visibility\":0}",
+      "displayName": "Page 1",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "c7ae828451533425dc78",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"4f1ef6a1ed83304a751a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":1088,\"y\":16,\"z\":1000,\"width\":184,\"height\":24,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"shape\",\"drillFilterOtherVisuals\":true,\"objects\":{\"shape\":[{\"properties\":{\"tileShape\":{\"expr\":{\"Literal\":{\"Value\":\"'rectangle'\"}}}}}],\"rotation\":[{\"properties\":{\"shapeAngle\":{\"expr\":{\"Literal\":{\"Value\":\"0L\"}}}}}],\"text\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}},{\"properties\":{\"text\":{\"expr\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"Calendar\"}},\"Property\":\"Timeframe\"}}},\"fontFamily\":{\"expr\":{\"Literal\":{\"Value\":\"'Calibri'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":3,\"Percent\":0}}}}},\"horizontalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'right'\"}}},\"rightMargin\":{\"expr\":{\"Literal\":{\"Value\":\"5L\"}}}},\"selector\":{\"id\":\"default\"}}],\"outline\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}],\"fill\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]},\"vcObjects\":{\"border\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
+          "filters": "[]",
+          "height": 24.00,
+          "width": 184.00,
+          "x": 1088.00,
+          "y": 16.00,
+          "z": 1000.00
+        },
+        {
+          "config": "{\"name\":\"54241b1053ee9ae0da0e\",\"layouts\":[{\"id\":0,\"position\":{\"x\":8,\"y\":48,\"z\":2000,\"width\":480,\"height\":664,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"Account.Name\"},{\"queryRef\":\"Assessments.Total GG Assessments\"},{\"queryRef\":\"Assessments.Total GG ANA Responses\"},{\"queryRef\":\"Assessments.% ANA Responses\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"a\",\"Entity\":\"Assessments\",\"Type\":0},{\"Name\":\"a1\",\"Entity\":\"Account\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"Total GG Assessments\"},\"Name\":\"Assessments.Total GG Assessments\",\"NativeReferenceName\":\"Total GG Assessments\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"Total GG ANA Responses\"},\"Name\":\"Assessments.Total GG ANA Responses\",\"NativeReferenceName\":\"Total GG ANA Responses\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"% ANA Responses\"},\"Name\":\"Assessments.% ANA Responses\",\"NativeReferenceName\":\"% ANA Responses\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a1\"}},\"Property\":\"Name\"},\"Name\":\"Account.Name\",\"NativeReferenceName\":\"Name\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"% ANA Responses\"}}}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"columnWidth\":[{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"75.20946470131885D\"}}}},\"selector\":{\"metadata\":\"Assessments.Total GG Assessments\"}},{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"73.30721715866581D\"}}}},\"selector\":{\"metadata\":\"Assessments.Total GG ANA Responses\"}},{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"63.17454365881527D\"}}}},\"selector\":{\"metadata\":\"Assessments.% ANA Responses\"}},{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"238.9720718853773D\"}}}},\"selector\":{\"metadata\":\"Account.Name\"}}],\"columnHeaders\":[{\"properties\":{}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'ANA Responses by Facility'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":3,\"Percent\":0}}}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"12D\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 664.00,
+          "queryBinary": "H4sIAAAAAAAEAMVV227bMAz9lUDA3rwiTjEM8FsuXR7aZl3Sy0MxBKrMJhpsydBlWRD430fKKeK4ztpgAZqXmNQReXREkRs21HnOVWpZ8rhhM8BvJ8UPD2Y94o7PlryALYQlGxYW6OMejJVasaQXsW9G52H7hOfAEsZZxC4wjEMk61sL1uagnEX37bpARLeMduB4Dy2E9sq1IkUdOOQZqJSbVmRaR46kFUtuFjAC66Tijmi3MuntMYGFtJ2hVs5wUSf0M0KZMkAfHfkauPUGSJKLP4XBowZVUErtjYApPO+MIE1ZRuzG6AJMSHOrHc8643GnrhNCtpxq3rNWKCGd/E2JwIASsN14IO4pCU/6nSnYQitM8CblPfDbpBux/5/2p3fxbaIOEX0dbYMPKfO5ejfBuMkwhK7Rql7CWTAP8aj2YEU+LIHEeSQaKpVum3sAbgXQQuo4sqLJFVsDBN+VXoEZINHQHcg9K3hLXFrpp+nrhYle4R+F6ufh5Sefv+JbkzncKYlWj5Ya5l1RnDxp/O+k+Isa2k60a9M1L7iRtmldSiLbRcHg2R1/AWnzAmbgsJctgnsqF8sQ80o6MDwL7ZlnnjYqn2WsLD/8ANhbGyd46azzic+fwMzn4qjDYM1/NymWwTpU/Uga7MgvA2mf0clbB2ZHxAAVoSvAvTdG5ryai2OjfYHuap5ilF8VL7K7URz1onMaIP7JUa9jSRxi0aidQuqF25UuvyeFkdF5VE/wgGlD+aKCoXS/dLt0ubuJHJekAAhPwa7BGSlsdX0xMf8LSnw4PvMHAAA=",
+          "width": 480.00,
+          "x": 8.00,
+          "y": 48.00,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"728553581005a43b25c3\",\"layouts\":[{\"id\":0,\"position\":{\"x\":856,\"y\":368,\"z\":5001,\"width\":416,\"height\":224,\"tabOrder\":5001}}],\"singleVisual\":{\"visualType\":\"textbox\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"06. Independent\"}]},{\"textRuns\":[{\"value\":\"05. Setup or clean-up assistance\"}]},{\"textRuns\":[{\"value\":\"04. Supervision or touching assistance\"}]},{\"textRuns\":[{\"value\":\"03. Partial/moderate assistance\"}]},{\"textRuns\":[{\"value\":\"02. Substantial/maximal assistance\"}]},{\"textRuns\":[{\"value\":\"01. Dependent  \"}]},{\"textRuns\":[{\"value\":\"\"}]},{\"textRuns\":[{\"value\":\"If activity was not attempted (ANA), code reason:\"}]},{\"textRuns\":[{\"value\":\"\"}]},{\"textRuns\":[{\"value\":\"07. Patient/resident refused\",\"textStyle\":{\"color\":\"#d64550\"}}]},{\"textRuns\":[{\"value\":\"09. Not applicable\",\"textStyle\":{\"color\":\"#d64550\"}}]},{\"textRuns\":[{\"value\":\"10. Not attempted due to environmental limitations\",\"textStyle\":{\"color\":\"#d64550\"}}]},{\"textRuns\":[{\"value\":\"88. Not attempted due to medical condition or safety concerns\",\"textStyle\":{\"color\":\"#d64550\"}}]}]}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'ANA Explanation'\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"12D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":3,\"Percent\":0}}}}}}}]}}}",
+          "filters": "[]",
+          "height": 224.00,
+          "width": 416.00,
+          "x": 856.00,
+          "y": 368.00,
+          "z": 5001.00
+        },
+        {
+          "config": "{\"name\":\"80a26b6514bd40b7127d\",\"layouts\":[{\"id\":0,\"position\":{\"x\":496,\"y\":48,\"z\":3000,\"width\":352,\"height\":664,\"tabOrder\":3000}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"CaseTracks.Evaluating Therapist\"},{\"queryRef\":\"Assessments.Total GG Assessments\"},{\"queryRef\":\"Assessments.Total GG ANA Responses\"},{\"queryRef\":\"Assessments.% ANA Responses\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"a\",\"Entity\":\"Assessments\",\"Type\":0},{\"Name\":\"c\",\"Entity\":\"CaseTracks\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"Total GG Assessments\"},\"Name\":\"Assessments.Total GG Assessments\",\"NativeReferenceName\":\"Total GG Assessments\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"Total GG ANA Responses\"},\"Name\":\"Assessments.Total GG ANA Responses\",\"NativeReferenceName\":\"Total GG ANA Responses\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"% ANA Responses\"},\"Name\":\"Assessments.% ANA Responses\",\"NativeReferenceName\":\"% ANA Responses\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"Evaluating Therapist\"},\"Name\":\"CaseTracks.Evaluating Therapist\",\"NativeReferenceName\":\"Evaluating Therapist\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"% ANA Responses\"}}}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"columnWidth\":[{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"75.20946470131885D\"}}}},\"selector\":{\"metadata\":\"Assessments.Total GG Assessments\"}},{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"73.30721715866581D\"}}}},\"selector\":{\"metadata\":\"Assessments.Total GG ANA Responses\"}},{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"63.17454365881527D\"}}}},\"selector\":{\"metadata\":\"Assessments.% ANA Responses\"}},{\"properties\":{\"value\":{\"expr\":{\"Literal\":{\"Value\":\"105.95810705973624D\"}}}},\"selector\":{\"metadata\":\"CaseTracks.Evaluating Therapist\"}}],\"columnHeaders\":[{\"properties\":{}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'ANA Responses by Evaluating Therapist'\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":3,\"Percent\":0}}}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"12D\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 664.00,
+          "queryBinary": "H4sIAAAAAAAEAMVVTW8aMRD9K8hSb9uIJaoqceMrHJrQFEhyqCrkeCfgdtde+SMUof3vnTGkLMvSBAWpXNgZP8+8GT+P16yns4yrxLL29zWbAH47Kb55MKs+d3yy4DlsIay9ZmGBPu7BWKkVa7cidmV0FraPeAaszTiL2ADDOESyjrVgbQbKWXRPVzkimkX0FyzK4B63MDVc/DqCjffBKaiEm1poUkb2pRULbubQB+uk4o6Y1+3iewk6MJe20dPKISVX2vAjwk6lgD6q+ga49QaoK4PfucFqQ2Owm9obAWN42hmhO0URsVujczAhzVQ7njaGw0a5VQjZcip5L2qhhHTymRKBASVgu/FI3HMSHnUaY7C5VpjgVcp74NdJV2K/n/aHN/Gtoo4RPYy2xruU+ky9laCoEhw889RjMjVvTBdgeC6tK7HcXY6LWuQxpvVhUcMPaEGQMGo8kW7LtgtuCVBTxonlxdX6cKBA8F3rJZiu9puZQu5JzmsC00onSQ4XRnqJfxSqk2EYvIcfP+P1lBncKYlWi5Yq5l2enz1p/O+k+IsqzR1pV9fYLOdG2qr1RRLZJjYMntzpJ5BUD2ACjmQQ3GM5X4SY19KhKNIw1FEotFH5NGVF8d8L4AcSehnGs5HPHsHMZuKkYlD0X02CMlgF2felwSH+8oztMzr7tMHsiOhiR+gIcO+tkRnfvKZDo32O7s0rjFF+bniR3YziqBVd0pvjHx2NR9aOQyx6oMeQeOF20uX31GFkdBmVEzxg2iBf7GCQ7qdmkw53947HBXUAhKdgN+CMFHZzfDEx/wMxQBptKQgAAA==",
+          "width": 352.00,
+          "x": 496.00,
+          "y": 48.00,
+          "z": 3000.00
+        },
+        {
+          "config": "{\"name\":\"869983fd9944603b6617\",\"layouts\":[{\"id\":0,\"position\":{\"x\":856,\"y\":48,\"z\":4000,\"width\":416,\"height\":312,\"tabOrder\":4000}}],\"singleVisual\":{\"visualType\":\"lineChart\",\"projections\":{\"Category\":[{\"queryRef\":\"Calendar.YearMonth\",\"active\":true}],\"Y\":[{\"queryRef\":\"Assessments.% ANA Responses\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"Calendar\",\"Type\":0},{\"Name\":\"a\",\"Entity\":\"Assessments\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"a\"}},\"Property\":\"% ANA Responses\"},\"Name\":\"Assessments.% ANA Responses\",\"NativeReferenceName\":\"% ANA Responses\"},{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"YearMonth\"},\"Name\":\"Calendar.YearMonth\",\"NativeReferenceName\":\"YearMonth\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"YearMonth\"}}}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"lineStyles\":[{\"properties\":{\"showMarker\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"areaShow\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}],\"labels\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"vcObjects\":{\"title\":[{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'% ANA Responses by Month'\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"12D\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":3,\"Percent\":0}}}}}}}]}}}",
+          "filters": "[]",
+          "height": 312.00,
+          "queryBinary": "H4sIAAAAAAAEAMVUbWvbMBD+K0Gwb16xy2CQb3np+mFN1iVrSyklaPI10bAkc5KWheD/vjslXTw3GystzF/se3+eu/NtxcgZI23pRf9uK+ZA30GrzxFwM5ZBzleyhr2L6G9FMvDHNaDXzor+aSY+oDMpfCoNiL5QIhNnlCaQpxjJCmwpkXRfNjWZ8yb75SnbngPvwXsDNvijzmXbeay9Wklcwhh80FYGBnO0RPFbDVhq3xs5G1Cq0Aq4z4h8BaRjIhOQPiIw0bMfNRKsxJUa5CIqmMHDQUg0miYTl+hqwFTmTW8wHfRm4GtniZQg6x5Oi+RJ14udgv7O6QHBKtjHPM22pbFV0dh/Bai6AG9B4oS6sGpBe5zUycH4J0StcGrczQq4V3eMypY67KEMIawBjmB8IXbaS0i6C7cGHLq4W01Wz2t5JC9bBmX51DB1a3pxqoGhNDT7t+9pJbSBK6tJOmVTR7yq61cvWvy9KD1Zp7dTF4711dQSte9KHzWDzalh8BCeP4CyO4A5BPrllkk908tVynmhA6Cs0m2QVeRAG6tKNM1/J0AnoMPg8QAsptF8BVws1LPI0M5/wpLWYJO2fqyRDkeCQJN81V1v/WhUlmxDagX3nqIuURu5u8bn6GJN6t0Vp/hvO0As51lxn0L5ns+gjCocVlReMz4q/S5r57uhKmlNCX9a0SLPc57i4e4XDVMFFTnbBAJq5XdzKhjpT1LRpedZBgAA",
+          "width": 416.00,
+          "x": 856.00,
+          "y": 48.00,
+          "z": 4000.00
+        },
+        {
+          "config": "{\"name\":\"f5acfbc6304d286012d7\",\"layouts\":[{\"id\":0,\"position\":{\"x\":8,\"y\":8,\"z\":0,\"width\":344,\"height\":32,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"shape\",\"drillFilterOtherVisuals\":true,\"objects\":{\"shape\":[{\"properties\":{\"tileShape\":{\"expr\":{\"Literal\":{\"Value\":\"'rectangle'\"}}}}}],\"rotation\":[{\"properties\":{\"shapeAngle\":{\"expr\":{\"Literal\":{\"Value\":\"0L\"}}}}}],\"text\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}},{\"properties\":{\"text\":{\"expr\":{\"Literal\":{\"Value\":\"'ANA Response Rate'\"}}},\"fontFamily\":{\"expr\":{\"Literal\":{\"Value\":\"'Calibri'\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"fontColor\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":3,\"Percent\":0}}}}},\"horizontalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'left'\"}}},\"leftMargin\":{\"expr\":{\"Literal\":{\"Value\":\"5L\"}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"18D\"}}}},\"selector\":{\"id\":\"default\"}}],\"outline\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}],\"fill\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]},\"vcObjects\":{\"border\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
+          "filters": "[]",
+          "height": 32.00,
+          "width": 344.00,
+          "x": 8.00,
+          "y": 8.00,
+          "z": 0.00
+        }
+      ],
+      "width": 1280.00
+    }
+  ],
+  "theme": "Custom35591434884558026.json"
+}
