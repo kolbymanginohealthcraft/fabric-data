@@ -1,0 +1,70 @@
+/// Authoritative library dimension — one row per NetHealth library (Bronze dbo.Library).
+/// LibraryGroup collapses each library to its care-setting cohort (OP / SNF / HH) via a
+/// name-driven rule that MIRRORS build_tracks.library_group_of() in the therapist-eval
+/// pipeline (there is no stored OP/SNF field; the library Name is the signal Jaclyn
+/// Warshauer validated). Keyed on Library_ID, related to CaseTracks.Library_ID so outcomes
+/// cohort by the TRACK's real library — replacing the old element-grain LibraryItem heuristic.
+table Library
+	lineageTag: 11b20000-0000-4000-8000-000000000001
+
+	column Library_ID
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 11b20000-0000-4000-8000-000000000002
+		summarizeBy: none
+		sourceColumn: Library_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 11b20000-0000-4000-8000-000000000003
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column VersionName
+		dataType: string
+		lineageTag: 11b20000-0000-4000-8000-000000000004
+		summarizeBy: none
+		sourceColumn: VersionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsInactive
+		dataType: boolean
+		lineageTag: 11b20000-0000-4000-8000-000000000005
+		summarizeBy: none
+		sourceColumn: IsInactive
+
+		annotation SummarizationSetBy = Automatic
+
+	column LibraryGroup =
+			
+			SWITCH(
+			    TRUE(),
+			    CONTAINSSTRINGEXACT(Library[Name], "SNF"), "SNF",
+			    CONTAINSSTRINGEXACT(Library[Name], "HH") || CONTAINSSTRINGEXACT(Library[Name], "OASIS"), "HH",
+			    CONTAINSSTRINGEXACT(Library[Name], "Outpatient") || CONTAINSSTRINGEXACT(Library[Name], "Group Practice") || CONTAINSSTRINGEXACT(Library[Name], "CORF") || CONTAINSSTRINGEXACT(Library[Name], "Pediatric"), "OP",
+			    BLANK()
+			)
+		lineageTag: 11b20000-0000-4000-8000-000000000006
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Library = m
+		mode: import
+		queryGroup: Outcomes
+		source =
+				let
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT Library_ID, Name, VersionName, IsInactive FROM dbo.Library WHERE Library_ID IS NOT NULL")
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

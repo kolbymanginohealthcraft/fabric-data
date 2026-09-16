@@ -53,6 +53,18 @@ table CaseTracks
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Authoritative library for this track (TxDocument.Library_ID). Related to Library.Library_ID;
+	/// slice outcomes by Library[LibraryGroup] (OP/SNF/HH). Replaces the element-grain LibraryItem heuristic.
+	column Library_ID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 11b20000-0000-4000-8000-000000000010
+		summarizeBy: none
+		sourceColumn: Library_ID
+
+		annotation SummarizationSetBy = Automatic
+
 	column Discipline
 		dataType: string
 		isHidden

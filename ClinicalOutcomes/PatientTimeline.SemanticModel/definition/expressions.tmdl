@@ -18,10 +18,14 @@ expression _CohortAnchorDateText = Date.ToText(CohortAnchorDate, [Format="yyyy-M
 
 	annotation PBI_ResultType = Text
 
-/// Silver lakehouse SQL endpoint (Aegis_Core_Silver_Lakehouse) — conformed dims.
+/// Silver lakehouse SQL endpoint (Silver_Aegis_Aggregate_Lakehouse) — conformed dims. 2026-08-14:
+/// Silver was split into domain lakehouses and Aegis_Core_Silver_Lakehouse kept only
+/// reportdailyinfo, breaking dbo.employee/facility/facilityhierarchy here. Aggregate carries all
+/// of them under identical names in ONE database, so it is the drop-in replacement AND the only
+/// Silver option that can join across domains in a single native query.
 expression _SilverSource =
 		let
-		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-vox2z5x5nsnuri4qviabf7xo3i.datawarehouse.fabric.microsoft.com", "Aegis_Core_Silver_Lakehouse")
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-vox2z5x5nsnuri4qviabf7xo3i.datawarehouse.fabric.microsoft.com", "Silver_Aegis_Aggregate_Lakehouse")
 		in
 		    Source
 	lineageTag: aaaaaaaa-0000-0000-0000-000000000003
@@ -89,7 +93,7 @@ expression _QualifyingCases = Value.NativeQuery(_NetHealthBronze, "SELECT pc.Pat
 	annotation PBI_ResultType = Table
 
 /// All tracks belonging to qualifying cases.
-expression _QualifyingTracks = Value.NativeQuery(_NetHealthBronze, "SELECT tt.TxTrack_ID, tt.PatientCase_ID, tt.Discipline, tt.StartDate, tt.EndDate FROM dbo.TxTrack tt WHERE ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
+expression _QualifyingTracks = Value.NativeQuery(_NetHealthBronze, "SELECT tt.TxTrack_ID, tt.PatientCase_ID, tt.Discipline, tt.StartDate, tt.EndDate, lib.Library_ID FROM dbo.TxTrack tt LEFT JOIN (SELECT TxTrack_ID, MIN(Library_ID) AS Library_ID FROM dbo.TxDocument WHERE DocumentType IN ('EVAL','DISCH') AND ISNULL(IsInactive,0)=0 AND Library_ID IS NOT NULL GROUP BY TxTrack_ID) lib ON lib.TxTrack_ID = tt.TxTrack_ID WHERE ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
 	lineageTag: aaaaaaaa-0000-0000-0000-000000000009
 	queryGroup: FabricTables
 
@@ -185,9 +189,15 @@ expression excelOutcomesCrosswalk =
 
 	annotation PBI_ResultType = Table
 
+/// TUG remap: the outpatient TUG (LibraryItem 11080, on the NUMERIC scale 1479) only carries a
+/// coded LibraryScaleValue_ID when the entered seconds happen to equal an anchor (10/20/30/31);
+/// every other value is null and would be dropped. We translate the raw seconds (TxDocumentItem.Value)
+/// onto the SNF TUG scale 916's value ids (5-59s = 9278..9332 one-to-one; 60-120s -> nearest 1/4-min
+/// bucket 9333..9337; >120s -> 9338), so the existing scale->Points join scores it identically to the
+/// SNF TUG. Blank/<=0 stays null (excluded) pending clinical confirmation. See project_outcomes_crosswalk_staleness.
 expression 'dbo vw_AllEvalsAndDischargesLight_Items' =
 		let
-		    Source = Value.NativeQuery(_NetHealthBronze, "SELECT item.TxDocument_ID, item.LibraryItem_ID, item.LibraryScaleValue_ID FROM dbo.TxDocumentItem item INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
+		    Source = Value.NativeQuery(_NetHealthBronze, "SELECT item.TxDocument_ID, item.LibraryItem_ID, CASE WHEN item.LibraryItem_ID = 11080 THEN CASE WHEN sec.v IS NULL OR sec.v <= 0 THEN NULL WHEN sec.v <= 5 THEN 9278 WHEN sec.v <= 59 THEN 9273 + sec.v WHEN sec.v <= 67 THEN 9333 WHEN sec.v <= 82 THEN 9334 WHEN sec.v <= 97 THEN 9335 WHEN sec.v <= 112 THEN 9336 WHEN sec.v <= 120 THEN 9337 ELSE 9338 END ELSE item.LibraryScaleValue_ID END AS LibraryScaleValue_ID FROM dbo.TxDocumentItem item INNER JOIN dbo.TxDocument doc ON doc.TxDocument_ID = item.TxDocument_ID INNER JOIN dbo.TxTrack tt ON tt.TxTrack_ID = doc.TxTrack_ID CROSS APPLY (SELECT CAST(ROUND(TRY_CAST(item.Value AS float),0) AS int) AS v) sec WHERE doc.DocumentType IN ('EVAL','DISCH') AND ISNULL(doc.IsInactive,0)=0 AND ISNULL(tt.IsDeletedTrack,0)=0 AND tt.PatientCase_ID IN " & _QualifyingCaseIdsSql)
 		in
 		    Source
 	lineageTag: 2aaa8513-4701-4124-81f6-500d5e2d8625

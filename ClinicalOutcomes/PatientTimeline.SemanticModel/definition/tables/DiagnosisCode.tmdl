@@ -68,7 +68,7 @@ table DiagnosisCode
 				    Codes_RemovedColumns = Table.RemoveColumns(Codes_ExpandL3,{"ParentDiagnosisCode_ID"}),
 				
 				    //Categories (L2 and L1)
-				    Categories_GetName = Value.NativeQuery(_AegisPatient, "SELECT DiagnosisCategory_ID, Description, ParentDiagnosisCategory_ID FROM NetHealthDocumentation.DiagnosisCategory"),
+				    Categories_GetName = Value.NativeQuery(_NetHealthBronze, "SELECT DiagnosisCategory_ID, Description, ParentDiagnosisCategory_ID FROM dbo.DiagnosisCategory"),
 				    Categories_RemovedOtherColumns = Table.SelectColumns(Categories_GetName,{"DiagnosisCategory_ID", "Description", "ParentDiagnosisCategory_ID"}),
 				    Categories_RenamedColumns = Table.RenameColumns(Categories_RemovedOtherColumns,{{"Description", "L2"}}),
 				    Categories_SplitL2 = Table.SplitColumn(Categories_RenamedColumns, "L2", Splitter.SplitTextByEachDelimiter({"("}, QuoteStyle.Csv, true), {"L2.Desc", "L2.Code"}),
