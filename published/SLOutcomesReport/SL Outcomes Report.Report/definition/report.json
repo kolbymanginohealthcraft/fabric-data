@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
   "themeCollection": {
     "baseTheme": {
       "name": "CY23SU04",
@@ -702,17 +702,6 @@
   ],
   "resourcePackages": [
     {
-      "name": "SharedResources",
-      "type": "SharedResources",
-      "items": [
-        {
-          "name": "CY23SU04",
-          "path": "BaseThemes/CY23SU04.json",
-          "type": "BaseTheme"
-        }
-      ]
-    },
-    {
       "name": "RegisteredResources",
       "type": "RegisteredResources",
       "items": [
@@ -722,14 +711,25 @@
           "type": "Image"
         },
         {
-          "name": "Aegis8394216460390778.json",
-          "path": "Aegis8394216460390778.json",
-          "type": "Image"
-        },
-        {
           "name": "AEGIS_T_White6162372706398307.png",
           "path": "AEGIS_T_White6162372706398307.png",
           "type": "Image"
+        },
+        {
+          "name": "Aegis8394216460390778.json",
+          "path": "Aegis8394216460390778.json",
+          "type": "Image"
+        }
+      ]
+    },
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY23SU04",
+          "path": "BaseThemes/CY23SU04.json",
+          "type": "BaseTheme"
         }
       ]
     }

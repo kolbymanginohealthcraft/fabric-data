@@ -1,0 +1,32 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e116b45e7ca0b7a09670",
+  "displayName": "Aggregate (quarterly)",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 960,
+  "filterConfig": {
+    "filterSortOrder": "Custom"
+  },
+  "pageBinding": {
+    "name": "0c77a84510b829d222ad",
+    "type": "Default",
+    "parameters": [
+      {
+        "name": "df0eca34080b337e0bcd",
+        "boundFilter": "aa2df8290bea50ded509",
+        "qnaSingleSelectRequired": true,
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Patients"
+              }
+            },
+            "Property": "Patient Name"
+          }
+        }
+      }
+    ]
+  }
+}

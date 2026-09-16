@@ -12,6 +12,9 @@ them visibly separate is the point of this folder.
 | Folder | Service semantic model | Workspace | Drives |
 |---|---|---|---|
 | `ClinicalOutcomesMain/` | `Clinical Outcomes Main` (`cf59a121`) | Clinical Outcomes | Clinical Outcomes, Clinical Outcomes Semantic, Patient-Level Outcomes, ANA Reponses, Ohana Villas Stroke, Total Care Through Transitions |
+
+All seven reports in the Clinical Outcomes workspace are **PBIR** as of 2026-09-16 (converted
+in the service; see the PBIR note below). The two Patient Satisfaction reports are still legacy.
 | `SLOutcomesReport/` | `SL Outcomes Report` (`ad568020`) | Clinical Outcomes | SL Outcomes Report |
 | `PatientSatisfactionReport/` | `Patient Satisfaction Report` (`db3c5ab9`) | Patient Satisfaction Survey | Patient Satisfaction Report, Patient Satisfaction Report - Ohana |
 
@@ -31,6 +34,30 @@ experiment: `Total Cases Reported Pain`, `% Total Cases Reported Pain`, and
 `Number of Primary Medical Diagnoses`. Main carries richer pain logic regardless
 (`Admit Level (Pain)`, `Discharge Level (Pain)`, `% Improvement (Pain)`, `Gain (Pain)`).
 All of it remains recoverable from git at `c47d90a`.
+
+## Report format
+
+Every report in the Clinical Outcomes workspace was converted from PBIR-Legacy to **PBIR** on
+2026-09-16, so each page and visual is its own file and a change is a readable diff instead of a
+line inside one large `report.json`. Conversion is one-way and the service no longer returns the
+legacy form, so the legacy snapshots exist only in git history (`7806e62` and its parent for the
+first three, the commit below for the rest).
+
+Each conversion was verified against the committed legacy copy: page count, visual count, visual
+type histogram, and every report-level filter condition. The only intentional change was on
+`ANA Reponses`, whose `ContextTable[Context]` filter card had no condition set and so exposed all
+facilities; it is now `FacilityRestricted` like the others.
+
+**Patient Satisfaction reports are deliberately NOT converted** — they are paused pending the
+Salesforce switchover. Verified read-only on 2026-09-16: both are LEGACY in the service.
+
+**Caution: a PBIR folder here is not proof the service report is PBIR.** Two folders in this
+mirror were built from a local PBIP rather than fetched from the service, and so showed PBIR while
+the live report was still legacy — `SL Outcomes Report` (since re-baselined from the service) and
+`Patient Satisfaction Report` (still PBIP-derived, left alone while Patient Satisfaction is
+paused). `Clinical Outcomes Main.Report` was worse: a 22-page folder for a report that had been
+deleted from the service entirely. It has been removed. When the format matters, probe the
+service with `getDefinition`, do not read it off this folder.
 
 ## Provenance
 
