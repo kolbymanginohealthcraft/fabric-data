@@ -1,0 +1,30 @@
+table 'Benchmark Mode'
+	lineageTag: 0c52063f-d190-4633-9327-a776ddb8bc4c
+
+	column Mode
+		dataType: string
+		lineageTag: c0c41be2-b702-4f2a-ab11-e1f0f30dc9e2
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Benchmark Mode Order'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Benchmark Mode Order'
+		isHidden
+		formatString: 0
+		lineageTag: b9100e40-76a3-4ff7-823b-d1efa3edb483
+		summarizeBy: sum
+		sourceColumn: [Value2]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Benchmark Mode' = calculated
+		mode: import
+		source =
+				{
+				    ("When Filtered", 0),
+				    ("Always", 1)
+				}
+
+	annotation PBI_Id = 1f9bc305edb74f009c0670e4bf01976d

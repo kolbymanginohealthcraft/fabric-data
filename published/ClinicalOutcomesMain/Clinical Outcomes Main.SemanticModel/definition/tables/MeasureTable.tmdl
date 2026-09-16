@@ -1821,7 +1821,7 @@ table MeasureTable
 		displayFolder: Telehealth
 		lineageTag: 7b1ae91e-0727-4ad4-afa1-0d1293827eb8
 
-	measure 'Report Scope' = IF([Total Facilities]=[Total Facilities BM],"Full","Filtered")
+	measure 'Report Scope' = IF(SELECTEDVALUE('Benchmark Mode'[Mode], "When Filtered") = "Always", "Filtered", IF([Total Facilities] = [Total Facilities BM], "Full", "Filtered"))
 		lineageTag: 66dc5f19-c12b-4a50-942b-050e2912e91d
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}

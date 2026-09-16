@@ -170,6 +170,7 @@ ref table ServiceTypes
 ref table LocalDateTable_1d67e324-065c-471b-a1b6-f0d01ae88ac9
 ref table LocalDateTable_ad249ee6-2bbe-446d-b43b-15eaec8aa2df
 ref table TUG_Remap
+ref table 'Benchmark Mode'
 
 ref cultureInfo en-US
 
