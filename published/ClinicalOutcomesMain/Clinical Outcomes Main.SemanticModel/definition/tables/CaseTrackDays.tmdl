@@ -56,8 +56,9 @@ table CaseTrackDays
 				let
 				    Source = CaseTracks,
 				    #"Removed Other Columns" = Table.SelectColumns(CaseTracks,{"TxTrack_ID", "StartDate", "EndDate"}),
+				    #"Filtered Open Tracks" = Table.SelectRows(#"Removed Other Columns", each [EndDate] <> null),
 				    #"Added Custom" = Table.AddColumn(
-				    #"Removed Other Columns",
+				    #"Filtered Open Tracks",
 				    "ListOfDates",
 				    each
 				        let
