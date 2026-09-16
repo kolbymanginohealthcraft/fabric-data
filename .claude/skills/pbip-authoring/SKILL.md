@@ -154,8 +154,23 @@ Wrong indentation makes Desktop read `lineageTag` as part of the DAX and throw
 		lineageTag: de02e475-22e0-4ffd-9682-602f87e12fca
 ```
 
-**Multi-line DAX** — `=` at end of the `measure` line, **blank line**, DAX body at
-**3 tabs**, then properties drop back to **2 tabs**:
+**Multi-line DAX, preferred form** — a triple-backtick block. No tab counting, so the
+commonest TMDL trap disappears. This is what Microsoft's own `powerbi-authoring` guidance uses,
+and it is already in this repo's live models (28 measures in the published model use it alongside
+260 in the older form, so both are accepted):
+```
+	measure 'My Measure' = ```
+			CALCULATE(
+			    COUNTROWS(MyTable),
+			    FILTER(MyTable, MyTable[Col] = "X")
+			)
+			```
+		formatString: #,0
+```
+
+**Multi-line DAX, legacy form** — what Desktop writes and what most of this repo still contains.
+`=` at end of the `measure` line, **blank line**, DAX body at **3 tabs**, then properties drop back
+to **2 tabs**. Match it when editing an existing measure; prefer the fenced form for new ones:
 ```
 	measure 'My Measure' =
 
@@ -168,7 +183,16 @@ Wrong indentation makes Desktop read `lineageTag` as part of the DAX and throw
 ```
 
 Rules:
-- `lineageTag` must be a real GUID (8-4-4-4-12 hex). Every measure/column/table needs a unique one.
+- `lineageTag`, when present, must be a real GUID (8-4-4-4-12 hex) and **unique** — duplicates are
+  rejected by `updateDefinition`.
+- **New objects do not need one, and omitting it is safer.** Tested 2026-09-16 by pushing a
+  semantic model to My Workspace with one measure carrying a tag and one without: the push
+  succeeded and the model deployed. Hand-minting GUIDs is what produced the duplicate-tag
+  rejection on 2026-09-15, so prefer omitting on new measures.
+  **Refinement to Microsoft's guidance:** they say the engine assigns a GUID on first save, which
+  is true of *Desktop*. The **service does not backfill** — re-fetching the pushed model showed the
+  untagged measure still untagged. So a model only pushed via API keeps measures with no tag, which
+  is valid but means no stable lineage id until someone opens and saves it in Desktop.
 - Property order after Desktop round-trips: `lineageTag` → `summarizeBy` → `sourceColumn`.
   Match that order to minimize diff churn.
 - `formatString` uses `#,0`, not `#,##0`.
@@ -196,6 +220,10 @@ For a new thin report:
       Legacy `config`/`filters` are escaped JSON STRINGS — parse them, never regex them.
 - [ ] **Cloned, not composed?** New report/model files originate from a working artifact.
 - [ ] **JSON valid?** Every edited `.json` parses (it's necessary, not sufficient).
+- [ ] **Validator delta clean?** For PBIR edits, run Microsoft's validator before and after and
+      compare. Only NEW codes matter — every report in this estate already fails it:
+      `npx --yes @microsoft/powerbi-report-authoring-cli@latest validate "<path>.Report"`
+      Baseline and caveats: `published/VALIDATOR-BASELINE.md`.
 - [ ] **TMDL indentation?** Single-line = 2-tab props; multi-line = blank line + 3-tab body + 2-tab props.
 - [ ] **GUIDs unique & well-formed?** No duplicated or malformed `lineageTag`s.
 - [ ] **Folder/index reconciled?** Added/removed pages or visuals are reflected in
