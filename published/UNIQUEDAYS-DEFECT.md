@@ -157,3 +157,43 @@ is baked in and no user filter can correct it.
 
 Those 2,233 cases sit in the analysis population carrying an LOS of 200+ days. That, rather
 than the headline `ALOS`, is the part worth fixing.
+
+---
+
+## RESOLVED: ReliableScope already neutralizes this (2026-09-15)
+
+`ReliableScope` is a `Calendar` column, **identical in both models** (same lineage tag):
+
+```dax
+'Calendar'[Date] >= DATE(YEAR(TODAY())-1, MONTH(TODAY()), 1)
+```
+
+Filtering `Calendar` propagates to `CaseTrackDays`, so an open track can only contribute dates
+inside the window, and open-ended cases drop out of scope entirely. Measured with
+`ReliableScope = TRUE`:
+
+| | Clinical | Main |
+|---|---|---|
+| `ALOS` | **43.24** | **43.24** |
+| `Total Cases` | 115,183 | 115,183 |
+| `Total Days` | 4,980,653 | 4,980,916 (+0.005%) |
+| Open-ended cases in scope | 0 | 0 |
+
+**Identical.** Since ReliableScope is applied by default, the inflation has no user-visible
+effect, and the 2,233 `Analysis Eligible` open-ended cases flagged above never appear either —
+they are filtered out before any visual renders.
+
+### Revised severity: low, and NOT a consolidation blocker
+
+This was over-escalated in the sections above. Corrected position:
+
+- **No user-visible defect in normal operation.** The models agree exactly under ReliableScope.
+- **The repoint is not blocked** by this.
+- Still worth fixing, for two narrower reasons:
+  1. **Cost** — 15,560,873 of `CaseTrackDays`' 24,696,114 rows (63%) exist only because open
+     tracks are expanded to today. That is model size and refresh time for rows nothing reads.
+  2. **Fragility** — it is a landmine for anyone who turns ReliableScope off, which is exactly
+     how it was found.
+
+Fix when convenient, not urgently. The end-date clamp (not a start-date clamp) is still the
+right change.
