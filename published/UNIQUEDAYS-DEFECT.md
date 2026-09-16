@@ -111,3 +111,49 @@ sound figure.
 It also invalidates the "six Pile C measures are inert" finding in `CONSOLIDATION.md`. That test
 evaluated both formulas against a single model, which establishes formula equivalence only.
 Any equivalence claim must compare each model **on its own data**.
+
+---
+
+## Tested: a 2020-01-01 clamp does NOT fix it (2026-09-15)
+
+Both models' `Calendar` tables already run 2020-01-01 to today (2,450 rows), and Clinical's
+`UniqueDays` is bounded by `Calendar`. Clamping Main's `CaseTrackDays` to the same window
+was the obvious candidate fix. Measured:
+
+| | |
+|---|---|
+| Main `Total Days` today | 15,632,664 |
+| Case-date pairs before 2020-01-01 | **81,278 (0.52%)** |
+| `Total Days` after a 2020 clamp | ~15,551,386 |
+| `ALOS` after a 2020 clamp | 102.11 -> **~101.6** |
+
+**The age of the dates is not the problem.** Only 78 of the 37,320 null-`EndDate` tracks
+started before 2020. The problem is that an open track runs to *today* regardless of when it
+started — a track opened 2024-06-01 with no end date contributes ~470 days, all post-2020 and
+all counted. **The clamp has to be on the end date, not the start.**
+
+## Why nobody noticed: a date filter hides it entirely
+
+| | Clinical | Main |
+|---|---|---|
+| `ALOS`, no date filter | 38.06 | **102.11** |
+| `ALOS`, last 3 complete months | **44.1** | **44.1** |
+
+Identical once filtered. A `Calendar` filter propagates to `CaseTrackDays`, so an open track can
+only contribute dates inside the window. Since the reports are normally viewed on a recent date
+range, the divergence has stayed invisible.
+
+## What a date filter does NOT fix
+
+`Range: LOS`, `Analysis Eligible`, and the `Range: *` / `Uses: *` family are **calculated
+columns**. They evaluate at refresh with no report filter, so each case's inflated `UniqueDays`
+is baked in and no user filter can correct it.
+
+| | |
+|---|---|
+| Open-ended cases | 26,875 |
+| ...with `UniqueDays` > 200 days | 9,518 |
+| ...**flagged `Analysis Eligible = True`** | **2,233** |
+
+Those 2,233 cases sit in the analysis population carrying an LOS of 200+ days. That, rather
+than the headline `ALOS`, is the part worth fixing.
