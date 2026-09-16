@@ -1,8 +1,11 @@
 // Track-grain base universe (Bronze): one row per discharged track in the window, with the
 // per-track cohort/scorecard dimensions + stay classification. This is the DENOMINATOR universe
 // for % Discharges-with-Outcome (includes tracks with zero outcomes). Per-outcome scoring
-// (gain/valid) comes from pull-track-outcomes.js; Library (aegisdataprod) + ServiceLine (Silver
-// facility-dim) + hours (Silver minutes) are joined downstream in /evaluation/.
+// (gain/valid) comes from pull-track-outcomes.js; ServiceLine (Silver facility-dim) + hours
+// (Silver minutes) are joined downstream in /evaluation/. Library is now fully Bronze: Library_ID
+// from TxDocument + authoritative Name/VersionName from Bronze dbo.Library (OP/SNF/HH grouping derived
+// downstream from Library.Name via build_tracks.library_group_of). Replaces the retired aegisdataprod
+// LibraryItem pull.
 //
 // Stay (payer-derived, validated 2026-06-06): primary payer over the track's dates via
 //   CasePayerSet -> ResidentPayerSequence(Seq=1) -> ResidentPayer -> PayerPayerType -> PayerType.
@@ -56,6 +59,14 @@ stay AS (
 ),
 disch AS (  -- tracks that have a DISCH document
   SELECT DISTINCT TxTrack_ID FROM dbo.TxDocument WHERE DocumentType = 'DISCH' AND IsInactive = 0
+),
+lib AS (  -- authoritative library per track: TxDocument.Library_ID (one per track, NetHealth-enforced).
+          -- Replaces the old element-VersionName heuristic. MIN is safe: verified exactly 1 distinct
+          -- Library_ID per track across all 2.48M tracks (EVAL/DISCH docs).
+  SELECT TxTrack_ID, MIN(Library_ID) AS Library_ID
+  FROM dbo.TxDocument
+  WHERE DocumentType IN ('EVAL','DISCH') AND IsInactive = 0 AND Library_ID IS NOT NULL
+  GROUP BY TxTrack_ID
 )
 SELECT
   t.TxTrack_ID,
@@ -63,6 +74,9 @@ SELECT
   t.Discipline,
   res.Facility_ID,
   isrc.Abbrev                       AS Residence,
+  lib.Library_ID                    AS Library_ID,
+  libd.Name                         AS LibraryName,
+  libd.VersionName                  AS LibraryVersionName,
   CASE WHEN s.TxTrack_ID IS NULL THEN 'NoPayer'
        WHEN s.ncat > 1 THEN 'Changed'
        WHEN s.hasS = 1 THEN 'Short'
@@ -78,6 +92,8 @@ JOIN dbo.Resident res   ON res.Resident_ID = stay2.Resident_ID AND res.IsDeleted
 LEFT JOIN dbo.IntakeSource isrc ON isrc.IntakeSource_ID = stay2.IntakeSource_ID
 LEFT JOIN stay s        ON s.TxTrack_ID = t.TxTrack_ID
 LEFT JOIN disch d       ON d.TxTrack_ID = t.TxTrack_ID
+LEFT JOIN lib           ON lib.TxTrack_ID = t.TxTrack_ID
+LEFT JOIN dbo.Library libd ON libd.Library_ID = lib.Library_ID   -- authoritative library name/version (Bronze)
 ORDER BY t.TxTrack_ID`;
 
 (async () => {

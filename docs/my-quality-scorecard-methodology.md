@@ -77,20 +77,38 @@ satisfaction survey already labels the discipline.
 
 ### 4.2 Library (the assessment "version")
 
-NetHealth assessment libraries come in outpatient and skilled-nursing flavors. We classify each
-library item by its **version name**, using a single rule:
+NetHealth assessment libraries come in outpatient and skilled-nursing flavors, and each is turned
+on per facility. We read each track's library directly from the **library recorded on its
+documents** (`TxDocument.Library_ID`) and classify that library as **OP** (outpatient) or **SNF**.
 
-> **OP** (outpatient) if the version name contains `OP` or `GP`; otherwise **SNF** (the default).
+**One library per track is enforced by NetHealth, and the data confirms it exactly:** across all
+**2,480,159** tracks with evaluation/discharge documents, **every single one carries exactly one
+library — zero cross-library tracks**. "The library you start in is the library you end in" is not
+an approximation here; it is absolute. A track's library is therefore unambiguous, with no
+tiebreak required.
 
-A *track* can technically touch more than one library, so we assign each track the **dominant
-library** — the one used by the majority of its outcomes, with ties broken to **SNF**.
+> **How we used to do it, and why we changed.** Earlier versions inferred the library from the
+> *version-name tag of each individual measurement element* (OP if the tag contained `OP`/`GP`,
+> else SNF). That was unreliable: a version name is an *element's own revision tag, not the library
+> it belongs to*. Outpatient libraries heavily reuse elements that carry older or shared tags — in
+> fact even the current outpatient library is only ~39% "OP-tagged" at the element level — so the
+> old rule manufactured **phantom** multi-library tracks and mislabeled genuinely-outpatient tracks
+> as SNF. Reading the document-level `Library_ID` removes the guesswork entirely. (This was
+> surfaced by National Director of Medical Review Jaclyn Warshauer, who reads the library at the
+> document level — the correct grain.)
 
-**A key validation for the committee:** the long-standing assumption that a track draws on a single
-library holds for **98.8%** of scored tracks — only **0.3%** are a genuine tie the SNF rule has to
-break. We tested whether flipping the tiebreak
-(SNF-wins → OP-wins) changes any ratings: among scored therapists the composite percentile moves
-**0.4 points on average**, and exactly **one** person moves more than 10 points. **The tiebreak is
-immaterial** — the single-library assumption is sound, and the rare exceptions don't sway results.
+**Impact of the correction.** The fix is a modest, one-directional cleanup: **1.1%** of scored
+tracks move from a SNF cohort to an OP cohort (and none move the other way), and ~1,150 previously
+unclassifiable tracks now get a library. **No therapist's ratable status changes.** Among rated
+therapists the Clinical Excellence composite percentile moves **0.95 points on average** (94% move
+under 5 points); the achievement metrics (Gain, Gain/hr, % Improved) barely move, while the two
+quality metrics (% Usage, % Measurements Valid) account for most of the shift as the smaller OP
+cohorts re-rank.
+
+> *Provisional note:* the OP-vs-SNF label for each `Library_ID` is currently confirmed for the
+> high-volume libraries and pending final confirmation of the NetHealth library catalog (the
+> "Library" lookup table) for a few low-volume IDs. None of the unconfirmed IDs are material to
+> Contract Rehab / Senior Living results.
 
 ### 4.3 Place of Residence (PoR)
 
@@ -251,7 +269,8 @@ consistent "has real work" denominator it is ~7% whether measured on credited or
 Either way it is a small minority, and **every straddler is resolved cleanly by home division** —
 the 1:1 rule assigns one bucket regardless of footprint, so the home rule rarely even contradicts
 the footprint; it mostly just *settles* the ambiguous cases. Same encouraging pattern as the
-single-library finding: the messy exceptions are a small, identifiable minority.
+library finding (§4.2): each track has exactly one NetHealth-recorded library, so the messy
+exceptions are a small, identifiable minority.
 
 ---
 
@@ -400,9 +419,10 @@ A few principles recur and are worth stating as the committee's guardrails:
 - **Credit follows accountability.** Treaters, evaluators, and managers each earn credit for their
   facet; attribution is not forced to sum to 1.0.
 - **Reliability before ranking.** A volume floor keeps thin samples out of the rated results.
-- **Honest exceptions.** The categorization assumptions hold the vast majority of the time
-  (~99% single-library and ~93% single-division on the scored data); the exceptions are measured,
-  flagged, and small — not hidden.
+- **Honest exceptions.** The categorization assumptions hold: each track has exactly one
+  NetHealth-recorded library (100%, no cross-library tracks), and ~93% of clinicians practice in a
+  single division on scored work; the division exceptions are measured, flagged, and small — not
+  hidden.
 
 ---
 
