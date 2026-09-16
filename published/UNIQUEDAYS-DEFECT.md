@@ -1,111 +1,113 @@
-# Defect: `StayCases[UniqueDays]` is inflated in `Clinical Outcomes Main`
+# Defect: open-ended tracks inflate `Total Days` / `ALOS` in `Clinical Outcomes Main`
 
 **Found 2026-09-15 while validating the Clinical -> Main consolidation. Not yet fixed.**
 
-`ALOS` reads **102.1 days** on the `Clinical Outcomes Main` model and **38.1 days** on the
-`Clinical Outcomes` model, for the same 153,096 cases. Main is wrong.
+`ALOS` reads **102.1 days** on `Clinical Outcomes Main` and **38.1 days** on
+`Clinical Outcomes`, for the same 153,096 cases.
 
 This is live. `Clinical Outcomes Semantic` (133 viewers, the app's most-used report) runs on
 Main and shows the inflated figure today.
 
-## The two definitions
+> **Correction.** An earlier version of this document claimed Main's `UniqueDays` column was
+> broadly broken and that 15.6% of cases were impossible. That was wrong on both counts and is
+> corrected below. For the 130,561 **closed** cases the two models agree to within 0.02%. The
+> defect is confined to open-ended cases, and the mechanism is not a DAX scoping failure — it is
+> the M query that builds `CaseTrackDays`.
 
-Both models define `Total Days` as `SUM(StayCases[UniqueDays])` and `ALOS` as
-`DIVIDE([Total Days],[Total Cases])` — **identical DAX**. The divergence is entirely in the
-`UniqueDays` calculated column.
-
-**`Clinical Outcomes` (sound):**
-
-```dax
-CALCULATE(
-    COUNTROWS(
-        FILTER(
-            ALL('Calendar'),
-            COUNTROWS(
-                FILTER(
-                    CaseTracks,
-                    CaseTracks[PatientCase_ID] = SELECTEDVALUE(StayCases[PatientCase_ID])
-                    && 'Calendar'[Date] >= CaseTracks[StartDate]
-                    && 'Calendar'[Date] <= CaseTracks[EndDate]
-                )
-            ) > 0
-        )
-    )
-)
-```
-
-Counts calendar dates falling inside the case's own track spans. Self-scoping — the case id is
-matched explicitly.
-
-**`Clinical Outcomes Main` (defective):**
-
-```dax
-CALCULATE(DISTINCTCOUNT(CaseTrackDays[TrackDate]))
-```
-
-Relies on filter context reaching `CaseTrackDays` through
-`StayCases -> CaseTracks -> CaseTrackDays`. The last hop is an **auto-detected**,
-bidirectional relationship on `TxTrack_ID`. When that propagation does not constrain the case,
-the `DISTINCTCOUNT` widens beyond the case.
-
-## Evidence
+## Where the models actually differ
 
 | | Clinical | Main |
 |---|---|---|
-| `StayCases` rows | 157,436 | 157,436 |
-| `SUM(UniqueDays)` | 5,826,667 | **15,632,664** |
-| `AVERAGE(UniqueDays)` | 43.7 | **102.1** |
-| `MAX(UniqueDays)` | 2,057 | **7,792** |
-| Avg therapy span (independent reference) | 38.84 | 38.84 |
-| Max therapy span | 6,947 | 6,947 |
+| Closed cases (real `TherapyEndDate`) | 130,561 | 130,561 |
+| `SUM(UniqueDays)` over closed cases | 5,531,195 | **5,532,436** |
+| Average over closed cases | 43.07 | **43.08** |
+| Open-ended cases (null `TherapyEndDate`) | 26,875 | 26,875 |
+| `SUM(UniqueDays)` over open-ended cases | **295,472** | **10,100,228** |
+| Average over open-ended cases | 11.0 | **375.8** |
 
-Three things convict Main:
+Closed cases agree to 0.02%, which is just the refresh-time gap. **All 9.8M excess days come
+from the 26,875 open-ended cases**, which are 17% of cases but 65% of Main's `Total Days`.
 
-1. **The therapy span is identical in both models** (38.84 avg, 6,947 max), so the underlying
-   case data agrees. Only the derived column differs.
-2. **Main's max `UniqueDays` (7,792) exactly equals `DISTINCTCOUNT(CaseTrackDays[TrackDate])`
-   over the whole table (7,792).** For at least one case the filter collapses entirely and it
-   counts every date in a 2005-05-17 to 2026-09-15 range.
-3. **24,533 of 157,436 cases (15.6%) have `UniqueDays` greater than their own therapy span** —
-   logically impossible. A case cannot have more treatment days than calendar days in its
-   therapy window.
+Within that bucket, 4,195 cases carry `UniqueDays` over 1,000 and together contribute
+**6,456,119 days** — 41% of Main's entire total from 2.7% of cases.
 
-Clinical's 43.7 average sits just above the 38.84 therapy span, which is what you would expect
-when track spans extend slightly past the therapy dates. Main's 102.1 is 2.6x the span.
+## Root cause
 
-## Blast radius
+`CaseTrackDays` is built by an M query that expands each track into one row per calendar day.
+When a track has no `EndDate` it substitutes **today**:
 
-**46 objects** in Main depend on `[Total Days]` or `[ALOS]`, including:
+```m
+actualEndDate = if [EndDate] = null then Date.From(DateTime.LocalNow()) else [EndDate],
+daysCount    = Duration.Days(actualEndDate - [StartDate]) + 1
+```
 
-- `ALOS`, `ALOS BM`, `ALOS Delta`, `Gain per Day`, `_Correlation - ALOS to Gain`
-- `Minutes per Week`, `Minutes per Discipline per Week`, `Visits per Week`,
-  `Visits per Discipline per Week`
-- every `BoxplotALOS_*` percentile and the `Boxplot_p*` family
-- the `StayCases` bucketing columns: `Range: LOS`, `Range: Minutes per Week`,
-  `Range: Visits per Week`, `Range: PRN Utilization`, `Uses: *`, and `Analysis Eligible`
+A track opened in 2005 and never closed therefore generates 7,792 rows — one per day through
+today. `UniqueDays` counts them faithfully, so the column is doing exactly what it was asked to.
 
-`Analysis Eligible` is the concerning one — a defective LOS can change which cases are
-considered eligible at all.
+The previous version of this query, still present commented-out directly above it, **excluded
+those tracks entirely**:
 
-## Recommended fix
+```m
+#"Filtered Rows" = Table.SelectRows(#"Changed Type",
+    each [EndDate] <> null and [EndDate] <> "" and [EndDate] >= #date(2022, 1, 1))
+```
 
-Replace Main's `UniqueDays` with the Clinical definition, which is explicitly case-scoped and
-does not depend on relationship propagation. If the `CaseTrackDays` approach is preferred for
-performance, it needs an explicit case filter rather than relying on the auto-detected
-bidirectional relationship.
+Replacing that filter with the null-to-today substitution is what introduced the inflation.
 
-Either way this is a **calculated column**, so the model must be refreshed after the change,
-and `ALOS` on `Clinical Outcomes Semantic` will drop from ~102 to ~38 days. That is a large,
-visible correction on the app's most-viewed report and should be communicated, not slipped in.
+### Scale
+
+| | |
+|---|---|
+| Tracks total | 297,539 |
+| Tracks with null `EndDate` | **37,320 (12.5%)** |
+| Rows those generate in `CaseTrackDays` | **15,560,873** |
+| `CaseTrackDays` rows total | 24,696,114 |
+| Null-end tracks started before 2024 | 6,661 |
+| Null-end tracks started before 2020 | 78 |
+| Oldest null-end track start | 2005-05-17 |
+
+**63% of `CaseTrackDays` is generated by 12.5% of tracks**, most of which are stale rather than
+genuinely active. That is also a meaningful share of the model's size and refresh cost.
+
+The substitution assumes a null `EndDate` means "still in progress today." In practice most of
+these are abandoned or never-closed tracks. 78 of them have been "open" since before 2020.
+
+## Which model is right?
+
+Neither is right for open-ended cases; they fail in opposite directions.
+
+- **Main overcounts.** It treats an abandoned 2005 track as 21 years of continuous care.
+- **Clinical undercounts.** Its `UniqueDays` requires `'Calendar'[Date] <= CaseTracks[EndDate]`,
+  which no date satisfies when `EndDate` is null — hence the implausibly low 11-day average for
+  a bucket that includes genuinely active cases.
+
+For the 83% of cases that are closed, both are correct and agree.
+
+## Fix options
+
+1. **Restore the exclusion** — drop null-`EndDate` tracks from `CaseTrackDays`, as the previous
+   query did. Simplest, matches prior behavior, but genuinely active cases contribute nothing.
+2. **Cap at last recorded activity** — substitute the track's last actual treatment or session
+   date instead of today. Most defensible: an open track's real extent is its last recorded
+   care, not the calendar. Needs a per-track max date from `Treatments` / `Documents`.
+3. **Cap the age** — substitute `MIN(today, StartDate + n)` for a clinically plausible `n`.
+   Crude, but bounds the damage in one line.
+
+Option 2 is the recommended direction. Whichever is chosen, it is a change to the M query, so
+the model must be **refreshed** for it to take effect, and `ALOS` on `Clinical Outcomes
+Semantic` will fall from ~102 toward ~40 days. That is a large, visible correction on the app's
+most-viewed report and should be communicated rather than slipped in.
+
+Worth deciding at the same time: the same null-end pattern affects Senior Living, which is
+built on open-ended cases by design.
 
 ## Consequence for the consolidation
 
-The Clinical -> Main repoint is **blocked** until this is resolved. The measure remap staged in
+The Clinical -> Main repoint is **blocked** until this is settled. The measure remap staged in
 `ClinicalOutcomesMain/Patient-Level Outcomes.Report` is correct as far as measure *names* go,
 but repointing now would carry the inflated `Total Days` into reports that currently show the
 sound figure.
 
-It also invalidates the earlier "six Pile C measures are inert" finding in `CONSOLIDATION.md`.
-That test evaluated both formulas against a single model, which establishes formula equivalence
-only. Evaluated against their own models, most core measures disagree — `Total Days` most of
-all. Any future equivalence claim must compare each model on its own data.
+It also invalidates the "six Pile C measures are inert" finding in `CONSOLIDATION.md`. That test
+evaluated both formulas against a single model, which establishes formula equivalence only.
+Any equivalence claim must compare each model **on its own data**.
