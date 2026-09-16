@@ -73,6 +73,12 @@ Power BI Desktop (open, save as PBIP with PBIR enabled, republish). Check which 
 before writing code against it: legacy is a single `report.json`, PBIR is
 `definition/pages/<pageId>/`.
 
+**Deploying a report via REST requires a `byConnection` `datasetReference`, not `byPath`.**
+`byPath` is for opening the PBIP locally; over the API only the semantic model id is needed:
+`{"datasetReference": {"byConnection": {"connectionString": "semanticmodelid=<id>"}}}`. Our
+`published/` mirror deliberately carries `byPath` so the folders open in Desktop — do not push
+that copy's `definition.pbir` back to the service unchanged.
+
 Parts come back base64 in `definition.parts[]` as `{path, payload, payloadType}`; send them
 back the same shape. **Drop `.pbi/` parts before pushing** — they carry local cache and
 credential blobs.

@@ -75,6 +75,40 @@ Stroke, Patient Satisfaction Report - Ohana, ANA Reponses).
 **The API cannot convert between them** (`Report_Report_FailedToExportReport`). Only Desktop
 can: open, save as PBIP with PBIR enabled, republish. See `fabric-service`.
 
+### Converting legacy -> PBIR
+
+**This will stop being optional.** Microsoft: *"When PBIR reaches General Availability, it will
+become the only supported report format, and conversion will be mandatory."* PBIR is still in
+preview, so convert on our timing, with verification, rather than having it happen to us.
+
+Two routes. **The API is not one of them** (`Report_Report_FailedToExportReport`).
+
+**A. In the Service (no Desktop).** Editing an existing report in the service auto-converts it.
+A PBIR-Legacy backup is kept **28 days**; restore from the workspace via report settings ->
+*Restore as PBIR-Legacy*. Requires the tenant setting *"Automatically convert and store reports
+in the Power BI enhanced metadata format (PBIR)"* and the rollout to have reached the tenant.
+Reading tenant settings needs Fabric admin, which Kolby is not — so test empirically on a small
+report rather than trying to confirm it up front.
+
+**B. In Power BI Desktop (controlled).**
+1. File > Options and settings > Options > **Preview features**
+2. Check **"Store reports using enhanced metadata format (PBIR)"**
+   (PBIX files use the separate *"Store PBIR reports using enhanced metadata format (PBIR)"*)
+3. Open the PBIP and **Save** → a prompt appears → **Upgrade**
+
+`report.json` is replaced by the `definition\` folder. **One-way from the UI.** Desktop keeps a
+backup for **30 days**:
+```
+%USERPROFILE%\AppData\Local\Microsoft\Power BI Desktop\TempSaves\Backups   (exe installer)
+%USERPROFILE%\Microsoft\Power BI Desktop Store App\TempSaves\Backups         (Store version)
+```
+
+Note the service backup exists **only** for reports upgraded in the service. Upgrade by
+publishing from Desktop and the Desktop backup is the only one you get.
+
+Service-enforced PBIR ceilings: 1,000 pages/report, 1,000 visuals/page, 300 MB of report files,
+300 MB of resource packages, 1,000 resource files.
+
 ### Legacy `report.json` anatomy
 
 ```
