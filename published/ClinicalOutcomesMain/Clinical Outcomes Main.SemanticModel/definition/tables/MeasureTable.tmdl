@@ -3123,6 +3123,30 @@ table MeasureTable
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	measure 'Gain AxisHigh' =
+			
+			var range = [Gain]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MAX([Gain],[Gain BM])+incrementalrange
+			return IF([Gain]>[Gain BM]-.1,calc,[Gain BM])
+		displayFolder: Outcomes
+		lineageTag: 1d760f1d-1f06-4eb0-bc98-a4ebd42eeef9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gain AxisLow' =
+			
+			var range = [Gain BM]-[Gain]
+			var extendedrange = range/.8
+			var incrementalrange = (extendedrange-range)/2
+			var calc = MIN(0,[Gain])-incrementalrange
+			return IF([Gain]<0,calc,0)
+		displayFolder: Outcomes
+		lineageTag: 61798ac2-c981-4e95-a7f2-f37f816658eb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	partition MeasureTable = m
 		mode: import
 		source =

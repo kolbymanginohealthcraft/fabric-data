@@ -6,7 +6,7 @@ table Employees
 		lineageTag: 1f9fc776-56d6-44f6-8f0c-0a025d3f04f8
 
 	measure 'Therapist List' =
-
+			
 			// unguarded version, superseded 2026-09-15 - it concatenates every therapist
 			// at low grain. Restored the guarded form below so Patient-Level Outcomes keeps
 			// its behavior when repointed off the Clinical Outcomes model.
@@ -17,7 +17,7 @@ table Employees
 			//     [Total Minutes],
 			//     DESC
 			// )
-
+			
 			IF(HASONEVALUE(StayCases[PatientCase_ID])=FALSE(),BLANK(),
 			    IF(
 			        ISINSCOPE(Service[Type]),

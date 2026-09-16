@@ -991,3 +991,30 @@ Every target measure was confirmed to exist in Main.
 > `Clinical Outcomes Main` that inflates `Total Days` 2.7x and `ALOS` from ~38 to ~102 days.
 > See `UNIQUEDAYS-DEFECT.md`. It also invalidates the "six Pile C measures are inert" finding
 > below, which was tested against a single model and therefore only proved formula equivalence.
+
+---
+
+## Gain Axis correction (2026-09-15)
+
+Option B mapped `Gain AxisHigh`/`AxisLow` to `% Improvement AxisHigh`/`AxisLow` on the strength
+of a shared lineage tag. **That was wrong.** Tested against live data the two returned 0.330 vs
+0.815 — `Gain` is an absolute measure and `% Improvement` a relative one. A shared lineage tag
+proves shared ancestry, not equivalence; the values have to be checked.
+
+Corrected: those two are now **added** to Main as new measures with fresh lineage tags (Pile A
+is 32, model 325 -> 357), and the two remap entries were reverted in the staged report.
+
+### All five remaps verified under ReliableScope
+
+| From (Clinical) | To (Main) | Clinical | Main | |
+|---|---|---|---|---|
+| `Gain AxisHigh` | `Gain AxisHigh` | 0.33007 | 0.32806 | freshness |
+| `Gain AxisLow` | `Gain AxisLow` | 0 | 0 | match |
+| `Total Disciplines` | `Total Disciplines Unique` | 3 | 3 | match |
+| `Units per Visit` | `Units per Visit (pt/ot)` | 2.757623 | 2.757623 | match |
+| `Visits per Week` | `Visits per Discipline per Week` | 3.577854 | 3.577814 | match |
+
+The residual `Gain AxisHigh` gap traces to `[Gain]` itself differing 0.112% between the models
+(0.29193 vs 0.29161) — the two refresh 9.5 hours apart — amplified by the axis formula, plus
+`[Gain BM]` returning blank on Main under the intended `[Report Scope]` gating. `Total Cases` is
+identical at 115,183. No logic mismatch remains.
