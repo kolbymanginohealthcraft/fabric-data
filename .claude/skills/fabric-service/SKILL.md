@@ -181,6 +181,34 @@ Also check `groups/{ws}/datasets/{id}/refreshes` and `/refreshSchedule`: an orph
 refreshes daily is costing source-system load for nothing, and that is often the first sign a
 model was superseded but never retired.
 
+## 6b. Converting a report to PBIR (tested 2026-09-16)
+
+Service-side conversion **is enabled in this tenant** and works in two clicks. Proven on a
+throwaway copy in My Workspace (`360c187f-69a0-4655-b77b-1c61df22dec6`, addressable via the
+Fabric API as a normal workspace, type `Personal`):
+
+| probe | before the save | after |
+|---|---|---|
+| `getDefinition?format=PBIR-Legacy` | OK, 6 parts | **FAILS** |
+| `getDefinition?format=PBIR` | FAILS | **OK, 15 parts** |
+
+Lossless on that report: 1 page and 6 visuals both sides, identical visual types.
+
+**The conversion itself cannot be automated from here.** The agent can copy, probe, verify and
+commit; only a human Edit + Save in the service (or a Desktop save) performs the translation,
+because producing PBIR parts from legacy IS the conversion and the API refuses it.
+
+**One-way at the API level, not just in the UI.** After conversion the service will no longer
+return the legacy form at all. So **commit the legacy snapshot to `published/` BEFORE the save** —
+git becomes the only remaining copy of it. The service keeps its own 28-day *Restore as
+PBIR-Legacy*, but only for reports converted in the service, not ones published from Desktop.
+
+Working split, per report: agent syncs and commits the legacy state -> human opens, edits, saves
+-> agent re-fetches as PBIR, writes it down, checks page/visual counts and visual types against
+the committed legacy copy, commits. Pick a nudge that is a real improvement where one is
+available; a report missing its `ContextTable[Context] = FacilityRestricted` condition is a good
+candidate, since several reports carry that card with no condition set.
+
 ## 7. Mirroring the service into `published/`
 
 `published/` is a snapshot of what is LIVE, not a build target. When you change a live
@@ -189,6 +217,24 @@ artifact, re-fetch and write it back down, or the repo starts lying. Set each re
 so the mirror opens locally, and commit the sync **in the same commit as the change** — a doc
 describing a reversal while the definitions still hold the pre-revert state is worse than no
 doc.
+
+### `queryBinary` is noise, not drift
+
+When comparing a `published/` mirror against the service, report visuals will differ on
+`queryBinary` alone. It is the service's compiled-query cache and it regenerates on its own, so
+it changes without anyone editing the report. Verified 2026-09-16 across three reports (17 of 30
+visuals on one page of `Clinical Outcomes`): **strip `queryBinary` recursively before comparing**,
+and all three were byte-identical afterwards. Do not resync or raise an alarm over it.
+
+```python
+def strip_qb(o):
+    if isinstance(o, dict):  return {k: strip_qb(v) for k, v in o.items() if k != 'queryBinary'}
+    if isinstance(o, list):  return [strip_qb(v) for v in o]
+    return o
+```
+
+Unrelated but adjacent: print report content with `PYTHONIOENCODING=utf-8`. Page names contain
+characters (e.g. a diamond) that crash the default Windows console codepage mid-diff.
 
 ## 8. Pre-flight checklist
 
