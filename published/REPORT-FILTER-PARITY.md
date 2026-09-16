@@ -57,16 +57,22 @@ They look like incomplete records rather than real activity:
 
 ## Resolution
 
-The filter was **added to `Clinical Outcomes Semantic`**, hidden, matching the exclusion
-`Clinical Outcomes` already applied. It is hidden there rather than visible because it is a
-data-quality exclusion, not a user control, and that report already has a separate visible
-Discharge Destination filter on `DischargeDestination[Lookup_ID]`.
+**The exclusion was removed from both reports**, so both now report 25,811 cases / 339,934
+measurements / 299 facilities.
 
-Rationale for aligning in that direction: the Semantic report labelled the figure
-**"Discharges"** while counting 905 records with no discharge destination and no outcomes, and
-reported a 299-facility footprint that included 21 facilities contributing only blank records.
+It was first added to `Clinical Outcomes Semantic` to match `Clinical Outcomes`, but that put a
+long list of every non-null Setting value into the report's "Filters Applied" panel. Aligning
+the other way is cleaner and costs nothing analytically.
 
-Outcomes math was never affected either way — measurements differed by 15 in ~340,000.
+- `Clinical Outcomes Semantic` - the added filter was deleted outright.
+- `Clinical Outcomes` - the **visible filter card was kept but its condition cleared**, so users
+  still have Discharge Destination available in the filter pane and nothing is excluded by
+  default. It now matches the shape of the other unfiltered cards.
+
+Note this means the 905 incomplete records are now counted in both reports, including in a
+figure labelled "Discharges", and the facility footprint reads 299 rather than 278. That is a
+deliberate trade for a cleaner filter description, and outcomes math is unaffected either way -
+measurements differ by 15 in ~340,000.
 
 ## Worth remembering
 
