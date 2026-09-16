@@ -10,12 +10,21 @@ table 'Benchmark Mode'
 
 		annotation SummarizationSetBy = Automatic
 
+	column Scope
+		dataType: string
+		isHidden
+		lineageTag: 3f07a928-2713-400a-bc38-a8913255352a
+		summarizeBy: none
+		sourceColumn: [Value2]
+
+		annotation SummarizationSetBy = Automatic
+
 	column 'Benchmark Mode Order'
 		isHidden
 		formatString: 0
 		lineageTag: b9100e40-76a3-4ff7-823b-d1efa3edb483
 		summarizeBy: sum
-		sourceColumn: [Value2]
+		sourceColumn: [Value3]
 
 		annotation SummarizationSetBy = Automatic
 
@@ -23,8 +32,8 @@ table 'Benchmark Mode'
 		mode: import
 		source =
 				{
-				    ("When Filtered", 0),
-				    ("Always", 1)
+				    ("When Filtered", "Divisional", 0),
+				    ("Always", "National", 1)
 				}
 
-	annotation PBI_Id = 1f9bc305edb74f009c0670e4bf01976d
+	annotation PBI_Id = 575225353e7749f6b1563f075eab3813
