@@ -908,3 +908,81 @@ Pile A added `Total Disciplines`, which is byte-identical to Main's existing
 `Patient-Level Outcomes` to `Total Disciplines Unique`, or leave it. Same pattern for
 `Units per Visit` vs `Units per Visit (pt/ot)` and `Total Outcome Areas` vs
 `Total Outcome Areas Unique`.
+
+---
+
+## Option B adopted; Pile A revised to 30 measures (2026-09-15)
+
+### Why Pile A changed
+
+Pushing the original 36-measure Pile A **failed**, caught in a sandbox rehearsal before it
+reached production:
+
+> Failed to add a deserialized Measure object - name: `'Gain AxisHigh'` - An object with
+> lineage-tag `1d70399f-...` already exists in the collection.
+
+The measures were copied from Clinical verbatim, lineage tags included, and six of those tags
+already exist in Main under **different names**. Shared lineage tags are proof these are the
+same objects renamed, not coincidence — Main systematically renamed measures to be more precise
+and Clinical kept the old names.
+
+| Old name (Clinical) | Main's renamed version | Same DAX? |
+|---|---|---|
+| `Gain AxisHigh` | `% Improvement AxisHigh` | identical |
+| `Gain AxisLow` | `% Improvement AxisLow` | identical |
+| `Total Disciplines` | `Total Disciplines Unique` | identical |
+| `Total Outcome Areas` | `Total Outcome Areas Unique` | differs only by the dead ANA-88 clause |
+| `Units per Visit` | `Units per Visit (pt/ot)` | differs only by a zero guard |
+| `Visits per Week Delta` | `Visits per Discipline per Week Delta` | different — grain + Report Scope |
+
+**Option B chosen:** drop those 6 from Pile A and point the reports at Main's existing,
+better-named measures, rather than carrying two names for one thing.
+
+**Pile A is now 30 measures** (28 `Boxplot*` + `Cohort Text` + `Diagnosis Equals Cohort`).
+Model goes 325 -> 355 measures. Duplicate lineage tags: 0.
+
+### Verified by rehearsal, not by assumption
+
+The whole operation was rehearsed in **KM Sandbox**, which sits on the same Pro/shared capacity
+as Clinical Outcomes (`isOnDedicatedCapacity=False`, no capacity id):
+
+1. `createItem` from the current service definition — **Succeeded**
+2. `updateDefinition` with the Option B payload — **Succeeded**
+3. Read back: **355 measures**, all 30 additions present, all 6 duplicates absent
+4. Scratch model deleted
+
+This also settles the capacity question: **the Fabric item-definition APIs work on this
+non-Fabric workspace.** No Power BI Desktop round-trip is required to publish.
+
+Payload excludes Desktop-only working files that are not part of the service definition:
+`DAXQueries/`, `TMDLScripts/`, `diagramLayout.json`, `.pbi/`. 115 parts.
+
+### Report remap required BEFORE repointing
+
+These are field references inside the reports. Repointing without them yields no error — just
+wrong numbers, because `Visits per Week` means per-discipline in Clinical and aggregate in Main.
+
+**`Clinical Outcomes`** (5 fields)
+
+| From | To |
+|---|---|
+| `Total Outcome Areas` | `Total Outcome Areas Unique` |
+| `Units per Visit` | `Units per Visit (pt/ot)` |
+| `Visits per Week` | `Visits per Discipline per Week` |
+| `Visits per Week BM` | `Visits per Discipline per Week BM` |
+| `Visits per Week Delta` | `Visits per Discipline per Week Delta` |
+
+**`Patient-Level Outcomes`** (5 fields)
+
+| From | To |
+|---|---|
+| `Gain AxisHigh` | `% Improvement AxisHigh` |
+| `Gain AxisLow` | `% Improvement AxisLow` |
+| `Total Disciplines` | `Total Disciplines Unique` |
+| `Units per Visit` | `Units per Visit (pt/ot)` |
+| `Visits per Week` | `Visits per Discipline per Week` |
+
+**Later, when re-homing:** `Ohana Villas Stroke` needs `Total Outcome Areas` ->
+`Total Outcome Areas Unique`. `ANA Reponses` needs nothing.
+
+Every target measure was confirmed to exist in Main.
