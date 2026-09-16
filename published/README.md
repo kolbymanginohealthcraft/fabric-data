@@ -11,10 +11,26 @@ them visibly separate is the point of this folder.
 
 | Folder | Service semantic model | Workspace | Drives |
 |---|---|---|---|
-| `ClinicalOutcomes/` | `Clinical Outcomes` (`e9a7f4e0`) | Clinical Outcomes | Clinical Outcomes, Patient-Level Outcomes, ANA Reponses, Ohana Villas Stroke |
-| `ClinicalOutcomesMain/` | `Clinical Outcomes Main` (`cf59a121`) | Clinical Outcomes | Clinical Outcomes Semantic, Total Care Through Transitions |
+| `ClinicalOutcomesMain/` | `Clinical Outcomes Main` (`cf59a121`) | Clinical Outcomes | Clinical Outcomes, Clinical Outcomes Semantic, Patient-Level Outcomes, ANA Reponses, Ohana Villas Stroke, Total Care Through Transitions |
 | `SLOutcomesReport/` | `SL Outcomes Report` (`ad568020`) | Clinical Outcomes | SL Outcomes Report |
 | `PatientSatisfactionReport/` | `Patient Satisfaction Report` (`db3c5ab9`) | Patient Satisfaction Survey | Patient Satisfaction Report, Patient Satisfaction Report - Ohana |
+
+## Retired
+
+**`Clinical Outcomes` (`e9a7f4e0`) was deleted from the service on 2026-09-16, and its
+`ClinicalOutcomes/` folder removed from this mirror.** The consolidation repointed every report
+onto `Clinical Outcomes Main`, leaving it with zero consumers (verified: 0 reports across all 78
+visible workspaces, 0 dashboards, and all 5 app reports resolving to Main or SL) while it kept
+running a scheduled refresh at 05:00 daily for nothing.
+
+Nine measures existed only in the retired model and were deliberately not ported, because no live
+report referenced any of them. Six were superseded by better-named equivalents in Main
+(`Total Disciplines Unique`, `Total Outcome Areas Unique`, `Units per Visit BM`/`Delta`,
+`Visits per Week`/`BM`, `Total Track Days (Test)`). Three had no analog and were a retired
+experiment: `Total Cases Reported Pain`, `% Total Cases Reported Pain`, and
+`Number of Primary Medical Diagnoses`. Main carries richer pain logic regardless
+(`Admit Level (Pain)`, `Discharge Level (Pain)`, `% Improvement (Pain)`, `Gain (Pain)`).
+All of it remains recoverable from git at `c47d90a`.
 
 ## Provenance
 
@@ -23,8 +39,7 @@ service definitions (`getDefinition?format=TMDL`) at time of import:
 
 | Model | Tables | Measures | Verified |
 |---|---|---|---|
-| Clinical Outcomes Main | 108 | 325 | identical to service |
-| Clinical Outcomes | 63 | 162 | identical to service |
+| Clinical Outcomes Main | 109 | 356 | identical to service |
 | SL Outcomes Report | 97 | 315 | identical to service |
 | Patient Satisfaction Report | 22 | 62 | identical to service (after one fix, below) |
 
