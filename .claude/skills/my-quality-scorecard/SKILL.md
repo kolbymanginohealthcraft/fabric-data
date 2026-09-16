@@ -1,17 +1,31 @@
 ---
 name: my-quality-scorecard
 description: >-
-  Runbook for producing and delivering the monthly My Quality Scorecard (therapist
+  Runbook AND preserved methodology for the My Quality Scorecard (therapist
   clinical-outcomes + satisfaction evaluation) — the outcomes_and_satisfaction.xlsx file
-  IT ingests for the People Dashboard. Use whenever the task is to run, refresh, rerun,
-  or deliver the monthly therapist scorecard / therapist evaluation / "the scorecard",
-  or to debug a step of that pipeline. Covers the one-command orchestrator, the
+  IT ingests for the People Dashboard. The programme is DORMANT as of 2026-09-02, so the
+  usual use is explaining or reviving how it worked, not running it. Use whenever the task
+  is to run, refresh, rerun or deliver the therapist scorecard, to debug a step of that
+  pipeline, or to hand the approach to someone picking it up later. Covers the one-command orchestrator, the
   10th-of-month window rule, the review-before-deliver gate, auth prereqs, and the
   known traps. For Fabric auth/query mechanics see fabric-workflow; for the scoring
   definitions see docs/my-quality-scorecard-methodology.md.
 ---
 
 # My Quality Scorecard — monthly deliverable runbook
+
+> **Status: dormant, kept deliberately (2026-09-16).** The committee series behind this ended
+> **2026-09-02**, so nothing is being delivered monthly right now. This skill is retained as the
+> record of HOW it worked, for whoever revives it — Kolby, Billy or someone else. Treat it as a
+> design document with a runbook attached, not a live obligation.
+>
+> **Before trusting any of it again, re-verify:** the trailing-window and 10th-of-month rules
+> still match what IT ingests; the auth prereqs (see `fabric-workflow`) still hold; and the
+> source tables have not moved. Two things underneath it HAVE already changed — library
+> classification now comes from the authoritative `TxDocument.Library_ID` rather than a
+> VersionName heuristic, and the outcomes crosswalk gained the OP2025.5 items it had been
+> silently dropping (both 2026-09-16). The methodology doc is current on those; this runbook's
+> operational steps are the part most likely to have drifted.
 
 Produces `outcomes_and_satisfaction.xlsx` (single sheet `Sheet1`, scored therapists only) and
 delivers it to the ITPowerBiFiles OneDrive folder, where IT's ingest picks it up for the People

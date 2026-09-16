@@ -77,10 +77,13 @@ Medallion is the DEFAULT source; the ClinicalOutcomes migration onto it is large
   the hour. Has what Silver lacks: `dbo.TxDocument`/`TxDocumentItem` (271M), `dbo.PatientCase`,
   `dbo.Stay` (Admit/Discharge/DischargedTo/IsCurrent), `dbo.TxTrack` (Discipline, dates,
   **IsUnplannedDischarge bit**), `Billing.*`, `dbo.Lookup`. Clinical outcomes/case-episode → Bronze.
-- **Gold:** EMPTY — nothing to bind to yet.
-- **The one orphan:** `LibraryItem` / `LibraryScaleValue` exist in NEITHER bronze nor silver — still
-  pulled ONLY from aegisdataprod `BINetHealthPatientLakehouse.NetHealthDocumentation`. This is the
-  single confirmed hard blocker to fully retiring aegisdataprod for the outcomes model. → Scott's list.
+- **Gold:** nothing wired up — there is no `gold` alias in `databases.json`. Do not plan against it.
+- **The orphan is RESOLVED (2026-09-16).** `Library`, `LibraryItem` and `LibraryScaleValue` are all
+  in Bronze now (11 / 56 / 16 columns), so the outcomes models no longer read aegisdataprod at all.
+  This entry previously called it "the single confirmed hard blocker to fully retiring aegisdataprod";
+  that is no longer true. `dbo.Library` also gives an authoritative `Library_ID` per track via
+  `TxDocument`, which replaced the old `VersionName LIKE '%OP%'` heuristic. **Re-verify before
+  trusting any 'X is not in Bronze' claim here — this one silently became false.**
 - **Bronze caveat:** raw layer = dirty data (e.g. TxDocument max CompletedDate = 2051). Bronze-bound
   reports need defensive date filtering; prefer Silver where conformed.
 
@@ -131,7 +134,14 @@ One line per gotcha. Add to it whenever we hit a new Fabric trap (and a memory f
 - Bronze lands NetHealth GUID `varbinary` Id columns in TWO encodings — 16-byte binary AND the 36-byte ASCII text of the GUID string — and they don't join. `PatientLevelOptionalServices.Instance` flipped binary→text on 2026-06-01 while `.Service` stayed mixed, silently dropping ~98% of category lookups. Detect with `DATALENGTH(col)` (16 vs 36); normalize both sides to a canonical GUID string before joining. Assume ANY varbinary Id join can hit this. (2026-07-27)
 
 ## Related
+- **fabric-service** — changing what is LIVE: item definitions over REST, rebinding,
+  publishing, deleting, and auditing a model's consumers. This skill gets data OUT of Fabric;
+  that one changes what is IN the service.
 - **pbip-authoring** — PBIP file structure & TMDL syntax. The seam between the two is model binding
   (`definition.pbir` → dataset; a repointed .tmdl table's source partition).
 - Memory: `project_fabric_connection`, `feedback_never_device_code`, `project_fabric_medallion`,
   `project_fabric_data_freshness`, `project_salesforce_removal`.
+- `Service.MinutesPerUnit` is NULL on every high-volume service code (29 of 634 populated) and `Service.Billable` is a varchar `Always`/`Never`/`User Discretion`, not a bit. `Billing.ARCharge` is a ~8.6%-coverage direct-bill slice, NOT billing of record — never treat it as "what we billed". Minutes/unit is only comparable WITHIN `IsTimeBased` (14.4 vs 28.9 min/unit, July 2026). (2026-09-02)
+- **`Billing.ARCharge` is Aegis OUTPATIENT ONLY** (all top facilities are "Aegis OP/GP at …", Division 5500; 3,395 of 39,419 July tracks; zero Contract Rehab SNF sessions). Never use it as a company-wide billing fact. And `Billing.ARClaimDetail` fans out ~1.54 rows per charge (26,524 of 47,967 July charges have 2), so `SUM(ARCharge.Duration)` across that join double-counts (+58%). (2026-09-02)
+- **Silver `facility.LicenseNumber` IS the CMS CCN.** Silver has no column called CCN (only `NPI` and `LicenseNumber`), so CCN looks Salesforce-only and isn't. Verified 2026-09-15 against Salesforce `Account.CCN__c`: 232/232 overlapping facilities agree, ZERO contradictions; it is never wrong, only missing (1,781/2,713 populated, gaps are termed sites + `- PES - Teamworkers` screening sites). Use `COALESCE(NULLIF(LTRIM(RTRIM(LicenseNumber)),''), FacilityNumber)` when you need full coverage. This is what let PatientSatisfaction drop Salesforce entirely. (2026-09-15)
+- **`FacilityNumber` is a CONTRACT LINE, not a building.** Silver `dbo.facility` has ~1.54 rows per physical building (666 distinct Salesforce Accounts vs 1,025 active `Contract_Number__c`), because a building carries separate SNF/OP/etc. contracts. Any measure ported from a Salesforce-era `DISTINCTCOUNT(Account[Id])` must count a building key (LicenseNumber, falling back to FacilityNumber) or it inflates ~50%. (2026-09-15)
