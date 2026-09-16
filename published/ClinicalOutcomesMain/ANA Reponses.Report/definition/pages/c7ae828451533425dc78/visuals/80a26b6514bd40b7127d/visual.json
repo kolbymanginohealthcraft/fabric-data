@@ -1,0 +1,210 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "80a26b6514bd40b7127d",
+  "position": {
+    "x": 496,
+    "y": 48,
+    "z": 3000,
+    "height": 664,
+    "width": 352,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "CaseTracks"
+                    }
+                  },
+                  "Property": "Evaluating Therapist"
+                }
+              },
+              "queryRef": "CaseTracks.Evaluating Therapist",
+              "nativeQueryRef": "Evaluating Therapist"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Total GG Assessments"
+                }
+              },
+              "queryRef": "Assessments.Total GG Assessments",
+              "nativeQueryRef": "Total GG Assessments"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "Total GG ANA Responses"
+                }
+              },
+              "queryRef": "Assessments.Total GG ANA Responses",
+              "nativeQueryRef": "Total GG ANA Responses"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Assessments"
+                    }
+                  },
+                  "Property": "% ANA Responses"
+                }
+              },
+              "queryRef": "Assessments.% ANA Responses",
+              "nativeQueryRef": "% ANA Responses"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Assessments"
+                  }
+                },
+                "Property": "% ANA Responses"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "75.20946470131885D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Assessments.Total GG Assessments"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "73.30721715866581D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Assessments.Total GG ANA Responses"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "63.17454365881527D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Assessments.% ANA Responses"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "105.95810705973624D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "CaseTracks.Evaluating Therapist"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ANA Responses by Evaluating Therapist'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 3,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

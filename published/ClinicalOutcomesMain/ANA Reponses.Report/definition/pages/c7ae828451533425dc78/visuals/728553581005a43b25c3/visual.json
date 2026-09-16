@@ -1,0 +1,177 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "728553581005a43b25c3",
+  "position": {
+    "x": 856,
+    "y": 368,
+    "z": 5001,
+    "height": 224,
+    "width": 416,
+    "tabOrder": 5001
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "06. Independent"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "05. Setup or clean-up assistance"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "04. Supervision or touching assistance"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "03. Partial/moderate assistance"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "02. Substantial/maximal assistance"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "01. Dependent  "
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "If activity was not attempted (ANA), code reason:"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "07. Patient/resident refused",
+                    "textStyle": {
+                      "color": "#d64550"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "09. Not applicable",
+                    "textStyle": {
+                      "color": "#d64550"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "10. Not attempted due to environmental limitations",
+                    "textStyle": {
+                      "color": "#d64550"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "88. Not attempted due to medical condition or safety concerns",
+                    "textStyle": {
+                      "color": "#d64550"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ANA Explanation'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 3,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
