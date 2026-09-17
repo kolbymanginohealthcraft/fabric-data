@@ -218,6 +218,51 @@ so the mirror opens locally, and commit the sync **in the same commit as the cha
 describing a reversal while the definitions still hold the pre-revert state is worse than no
 doc.
 
+### Removing a field from a report visual is more than its projection
+
+Deleting a field means finding **every** reference to it, and some are bare strings in lists that a
+structural walk over field objects will not see. Verified 2026-09-16 removing `Aegis Contract[Tech
+Status]` from two pivot tables: after clearing `visual.query.queryState.<role>.projections`, a
+fourth reference survived in
+
+```
+visual.expansionStates[0].levels[1].queryRefs[0] = "Aegis Contract.Tech Status"
+```
+
+the pivot's row-hierarchy collapse/pin state. Both visuals had one. Pushing without it would have
+left an expansion level keyed to a column that no longer exists.
+
+So: after removing projections, also strip matching `queryRefs` entries from `expansionStates`,
+drop levels that empty out, and drop an `expansionStates` entry with no levels left. Then **assert
+the field name does not appear anywhere in the serialized visual** before pushing:
+
+```python
+if b'Tech Status' in json.dumps(j, indent=2).encode():
+    raise SystemExit('ABORT - reference survives')
+```
+
+That raw-string assertion is what caught it; a walk over `field.Column.Property` did not. When a
+role's projection list empties entirely, delete the role rather than leaving `projections: []` — a
+pivot whose only row field is removed becomes a totals-only visual, which is valid but usually
+wants deleting, so say so rather than silently leaving it.
+
+### Syncing the mirror: compare normalized, and never re-fetch `.platform`
+
+Writing service bytes straight into `published/` rewrites line endings on every file, so a sync of
+one changed table can show **124 modified paths** and bury the real diff. Two rules, both learned
+2026-09-16:
+
+- **Write only files whose content differs with line endings normalized** (`b.replace(b'
+', b'
+')`).
+  Six files changed that day; a naive full write staged 124.
+- **Never overwrite `.platform` from a `getDefinition`.** It came back with
+  `"logicalId": "00000000-0000-0000-0000-000000000000"` instead of the item's real id. Skip it on
+  sync; it is also the field that trips cross-workspace diffs (see the guarded push above).
+
+Also: deleting a mirror folder fails with `PermissionError: WinError 32` if any shell's working
+directory is inside it. Run syncs from the repo root.
+
 ### `queryBinary` is noise, not drift
 
 When comparing a `published/` mirror against the service, report visuals will differ on
