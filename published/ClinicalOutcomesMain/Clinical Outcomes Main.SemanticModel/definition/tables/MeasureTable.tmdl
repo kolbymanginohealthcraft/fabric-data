@@ -2895,7 +2895,7 @@ table MeasureTable
 			CALCULATE(
 			    PERCENTILEX.INC(
 			        StayCases,
-			        [Units per Visit],
+			        [Units per Visit (pt/ot)],
 			        .1
 			    ),
 			    ALLSELECTED(StayCases[PatientCase_ID]),
@@ -2912,7 +2912,7 @@ table MeasureTable
 			CALCULATE(
 			    PERCENTILEX.INC(
 			        StayCases,
-			        [Units per Visit],
+			        [Units per Visit (pt/ot)],
 			        .25
 			    ),
 			    ALLSELECTED(StayCases[PatientCase_ID]),
@@ -2927,7 +2927,7 @@ table MeasureTable
 	measure BoxplotUnitsPerVisit_50th =
 			
 			CALCULATE(
-			    [Units per Visit],
+			    [Units per Visit (pt/ot)],
 			    BenchmarkTable[BenchmarkSetting] = "Benchmark"
 			)
 		displayFolder: Units
@@ -2940,7 +2940,7 @@ table MeasureTable
 			CALCULATE(
 			    PERCENTILEX.INC(
 			        StayCases,
-			        [Units per Visit],
+			        [Units per Visit (pt/ot)],
 			        .75
 			    ),
 			    ALLSELECTED(StayCases[PatientCase_ID]),
@@ -2957,7 +2957,7 @@ table MeasureTable
 			CALCULATE(
 			    PERCENTILEX.INC(
 			        StayCases,
-			        [Units per Visit],
+			        [Units per Visit (pt/ot)],
 			        .9
 			    ),
 			    ALLSELECTED(StayCases[PatientCase_ID]),

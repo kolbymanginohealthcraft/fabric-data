@@ -80,13 +80,9 @@ table LibraryItem
 		queryGroup: Outcomes
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"5527ef94-26ec-4a1d-b65c-21ed39104f2d" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
-				    LibraryItem_ = #"5527ef94-26ec-4a1d-b65c-21ed39104f2d"{[entity="LibraryItem",version=""]}[Data]
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT LibraryItem_ID, Caption, SectionName, GroupName, PrintCaption, LibraryScale_ID, PrintSectionName, PrintGroupName, Name FROM dbo.LibraryItem WHERE LibraryItem_ID IS NOT NULL")
 				in
-				    LibraryItem_
+				    Source
 
 	annotation PBI_NavigationStepName = Navigation
 

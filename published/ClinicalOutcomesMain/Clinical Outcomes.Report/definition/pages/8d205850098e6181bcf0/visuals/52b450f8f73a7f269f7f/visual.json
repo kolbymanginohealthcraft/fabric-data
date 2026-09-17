@@ -29,21 +29,6 @@
               "queryRef": "Payer Buckets.Payer Grouping",
               "nativeQueryRef": "Payer Grouping",
               "active": true
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Aegis Contract"
-                    }
-                  },
-                  "Property": "Tech Status"
-                }
-              },
-              "queryRef": "Aegis Contract.Tech Status",
-              "nativeQueryRef": "Tech Status",
-              "active": true
             }
           ]
         },
@@ -161,13 +146,6 @@
             "queryRefs": [
               "Payer Buckets.Payer Grouping"
             ],
-            "isPinned": true
-          },
-          {
-            "queryRefs": [
-              "Aegis Contract.Tech Status"
-            ],
-            "isCollapsed": true,
             "isPinned": true
           }
         ],

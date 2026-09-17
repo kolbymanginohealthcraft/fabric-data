@@ -108,18 +108,6 @@ table 'Aegis Contract'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Tech Status' =
-			
-			IF(
-			    ISBLANK(RELATED(Tech[ID])),
-			    "(b) No Rehab Tech",
-			    "(a) Has Rehab Tech"
-			)
-		lineageTag: f4d57a71-546b-41c9-b967-780262ed1aaf
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
 	column 'Contract Label' = 'Aegis Contract'[Contract_Number__c]&" - "&'Aegis Contract'[Name]
 		lineageTag: eaa5c207-4686-4b51-84d2-abcd8830f24e
 		summarizeBy: none

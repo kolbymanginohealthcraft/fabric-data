@@ -13,25 +13,6 @@
     "visualType": "pivotTable",
     "query": {
       "queryState": {
-        "Rows": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Aegis Contract"
-                    }
-                  },
-                  "Property": "Tech Status"
-                }
-              },
-              "queryRef": "Aegis Contract.Tech Status",
-              "nativeQueryRef": "Tech Status",
-              "active": true
-            }
-          ]
-        },
         "Values": {
           "projections": [
             {
@@ -136,23 +117,7 @@
         }
       }
     },
-    "expansionStates": [
-      {
-        "roles": [
-          "Rows"
-        ],
-        "levels": [
-          {
-            "queryRefs": [
-              "Aegis Contract.Tech Status"
-            ],
-            "isCollapsed": true,
-            "isPinned": true
-          }
-        ],
-        "root": {}
-      }
-    ],
+    "expansionStates": [],
     "visualContainerObjects": {
       "title": [
         {

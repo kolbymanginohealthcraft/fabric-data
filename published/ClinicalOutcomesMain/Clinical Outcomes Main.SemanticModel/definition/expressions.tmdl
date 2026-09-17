@@ -206,3 +206,17 @@ expression SF_Aegis_Contract =
 
 	annotation PBI_ResultType = Table
 
+/// NetHealth_Bronze_Lakehouse SQL endpoint - raw NetHealth tables (medallion).
+/// Added 2026-09-16 to begin replacing the Power BI dataflow sources.
+expression _NetHealthBronze =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-4wksxtle6exu7ne42rpqmph27i.datawarehouse.fabric.microsoft.com", "NetHealth_Bronze_Lakehouse")
+		in
+		    Source
+	lineageTag: 4f74648c-f540-41b1-876b-19dcdcbf5ccc
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
