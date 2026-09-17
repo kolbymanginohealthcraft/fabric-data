@@ -50,13 +50,9 @@ table LibraryScaleValue
 		queryGroup: Outcomes
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"5527ef94-26ec-4a1d-b65c-21ed39104f2d" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
-				    LibraryScaleValue_ = #"5527ef94-26ec-4a1d-b65c-21ed39104f2d"{[entity="LibraryScaleValue",version=""]}[Data]
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT [LibraryScaleValue_ID], [DisplayValue], [PrintValue], [NumValue], [LibraryScale_ID] FROM dbo.[LibraryScaleValue]")
 				in
-				    LibraryScaleValue_
+				    Source
 
 	annotation PBI_NavigationStepName = Navigation
 
