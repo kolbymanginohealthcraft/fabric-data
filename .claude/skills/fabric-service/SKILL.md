@@ -309,6 +309,25 @@ One line per gotcha. Add when we hit a new one (and a memory file if it's a disc
 - The API **will not convert a report between legacy and PBIR** — `Report_Report_FailedToExportReport`. Only Desktop can. (2026-09-16)
 - Conditional formatting with a `"Conditional": {"Cases": [...]}` block and **no else branch** falls through to the theme default, which is how a stray green bar appears. Fixing it model-side beat editing 26 conditional blocks. (2026-09-15)
 - Deleting a workspace's usage-metrics report does not keep it gone — Power BI regenerates `Report Usage Metrics Model`. Don't treat its reappearance as a mistake. (2026-09-16)
+- **`updateDefinition` validates model STRUCTURE, not that the M query runs.** A partition whose
+  native SQL is malformed pushes back `Succeeded`, then fails at the next refresh. Always **dry-run
+  the generated SQL against the endpoint** before pushing (`SELECT TOP 1 * FROM (<sql>) AS _p`).
+  This caught a `CHARINDEX(eval,...)` that should have been `CHARINDEX('eval',...)`. (2026-09-18)
+- **Bash cannot escape a single quote inside a single-quoted string.** `'...''eval''...'` silently
+  becomes `eval`, stripping the SQL literal quotes. Pass SQL through a **file**, never an inline
+  shell-quoted env var. The push still reports `Succeeded`, so only the dry-run catches it. (2026-09-18)
+- **A TMDL `column X` block is not necessarily a source column.** DAX calculated columns match the
+  same pattern but have no `sourceColumn:` line; including one in a generated `SELECT` collides with
+  itself. Key column extraction off `sourceColumn:`. (2026-09-18)
+- **Bronze `varchar` columns can carry trailing padding that the dataflow trimmed.** `dbo.Service`
+  returns `'Fitness '` where the model holds `'Fitness'` — and `ServiceCode` is a relationship key, so
+  porting without `RTRIM` silently breaks every join. Compare keys, not just row counts. (2026-09-18)
+- **Mojibake in a query result may be the CLIENT, not the data.** Bronze `Latin1_General_100_BIN2_UTF8`
+  stores a real en dash; the Node mssql reader rendered it `â€“`. Confirm with
+  `UNICODE(SUBSTRING(...))` and `DATALENGTH` vs `LEN` before 'fixing' anything. (2026-09-18)
+- **`updateDefinition` can fail on capacity, not correctness** — `Dataset_Import_FailedToImportDataset`
+  / 'throttled ... because of insufficient memory'. It rolls back atomically (verify!), and an identical
+  retry usually succeeds. Ports run near 03:00 UTC succeeded first try; 13:30 UTC did not. (2026-09-18)
 
 ## Related
 - **pbip-authoring** — the file formats you are pushing (TMDL syntax, PBIR vs legacy layout).
