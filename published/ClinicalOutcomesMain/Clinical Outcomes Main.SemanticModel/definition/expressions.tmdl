@@ -220,3 +220,17 @@ expression _NetHealthBronze =
 
 	annotation PBI_ResultType = Function
 
+/// Silver_Aegis_Aggregate_Lakehouse SQL endpoint - the only Silver database that can
+/// join across domains. Added 2026-09-18; Silver is a DIFFERENT endpoint from Bronze.
+expression _SilverSource =
+		let
+		    Source = Sql.Database("asot7hu5ofuezkzklqea75om6i-vox2z5x5nsnuri4qviabf7xo3i.datawarehouse.fabric.microsoft.com", "Silver_Aegis_Aggregate_Lakehouse")
+		in
+		    Source
+	lineageTag: 8c2f1d6a-4b7e-4c39-9a10-5e63f0d2b741
+	queryGroup: FabricTables
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
