@@ -116,13 +116,9 @@ table PatientLevelOptionalServices_Service
 		queryGroup: Patient
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
-				    PatientLevelOptionalServices_Service_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="PatientLevelOptionalServices_Service",version=""]}[Data]
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT [Service_ID], CASE WHEN DATALENGTH([Id])=16 THEN SUBSTRING(CONVERT(varchar(32),[Id],2),1,8)+'-'+SUBSTRING(CONVERT(varchar(32),[Id],2),9,4)+'-'+SUBSTRING(CONVERT(varchar(32),[Id],2),13,4)+'-'+SUBSTRING(CONVERT(varchar(32),[Id],2),17,4)+'-'+SUBSTRING(CONVERT(varchar(32),[Id],2),21,12) ELSE UPPER(CAST([Id] AS varchar(36))) END AS [Id], [Name], [Category], [DisplayOrder], [StartDate], [EndDate], [IsActive], [ModifiedBy], [CreatedDate], [EpochTimestamp] FROM PatientLevelOptionalServices.[Service]")
 				in
-				    PatientLevelOptionalServices_Service_
+				    Source
 
 	annotation PBI_NavigationStepName = Navigation
 

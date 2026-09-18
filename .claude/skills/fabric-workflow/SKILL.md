@@ -155,5 +155,11 @@ One line per gotcha. Add to it whenever we hit a new Fabric trap (and a memory f
   link despite their 3-char parent existing, and 16 three-char codes appear TWICE as roots (the
   higher `DiagnosisCode_ID` is the live one, carrying the children and the newer wording). Dedupe
   before joining or the fan-out is silent. (2026-09-18)
+- **Converting a Bronze varbinary GUID: `CAST(x AS uniqueidentifier)` gives the WRONG string.**
+  NetHealth stores these big-endian, so the cast byte-reverses the first three groups
+  (`35CB45F6-57CC-4E30-...` becomes `F645CB35-CC57-304E-...`) and every join silently misses. Read
+  the hex straight instead: `CONVERT(varchar(32),col,2)` + `SUBSTRING` at 1/9/13/17/21 with dashes.
+  And handle BOTH encodings in one expression, keyed on `DATALENGTH` 16 vs 36 — `PatientLevelOptional
+  Services.Instance` is 470,729 binary / 150,560 text and even its 56-row `Service` splits 32/24. (2026-09-18)
 - **Silver `facility.LicenseNumber` IS the CMS CCN.** Silver has no column called CCN (only `NPI` and `LicenseNumber`), so CCN looks Salesforce-only and isn't. Verified 2026-09-15 against Salesforce `Account.CCN__c`: 232/232 overlapping facilities agree, ZERO contradictions; it is never wrong, only missing (1,781/2,713 populated, gaps are termed sites + `- PES - Teamworkers` screening sites). Use `COALESCE(NULLIF(LTRIM(RTRIM(LicenseNumber)),''), FacilityNumber)` when you need full coverage. This is what let PatientSatisfaction drop Salesforce entirely. (2026-09-15)
 - **`FacilityNumber` is a CONTRACT LINE, not a building.** Silver `dbo.facility` has ~1.54 rows per physical building (666 distinct Salesforce Accounts vs 1,025 active `Contract_Number__c`), because a building carries separate SNF/OP/etc. contracts. Any measure ported from a Salesforce-era `DISTINCTCOUNT(Account[Id])` must count a building key (LicenseNumber, falling back to FacilityNumber) or it inflates ~50%. (2026-09-15)

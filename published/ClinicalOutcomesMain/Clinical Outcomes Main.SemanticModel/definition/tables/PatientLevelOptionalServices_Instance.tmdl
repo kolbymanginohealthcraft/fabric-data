@@ -37,14 +37,9 @@ table PatientLevelOptionalServices_Instance
 		queryGroup: Patient
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
-				    PatientLevelOptionalServices_Instance_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="PatientLevelOptionalServices_Instance",version=""]}[Data],
-				    #"Removed Other Columns" = Table.SelectColumns(PatientLevelOptionalServices_Instance_,{"Resident_ID", "Service_ID", "CreatedDate"})
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT [Resident_ID], CASE WHEN DATALENGTH([Service_ID])=16 THEN SUBSTRING(CONVERT(varchar(32),[Service_ID],2),1,8)+'-'+SUBSTRING(CONVERT(varchar(32),[Service_ID],2),9,4)+'-'+SUBSTRING(CONVERT(varchar(32),[Service_ID],2),13,4)+'-'+SUBSTRING(CONVERT(varchar(32),[Service_ID],2),17,4)+'-'+SUBSTRING(CONVERT(varchar(32),[Service_ID],2),21,12) ELSE UPPER(CAST([Service_ID] AS varchar(36))) END AS [Service_ID], [CreatedDate] FROM PatientLevelOptionalServices.[Instance]")
 				in
-				    #"Removed Other Columns"
+				    Source
 
 	annotation PBI_NavigationStepName = Navigation
 
