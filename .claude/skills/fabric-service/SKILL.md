@@ -326,6 +326,9 @@ One line per gotcha. Add when we hit a new one (and a memory file if it's a disc
   stores a real en dash; the Node mssql reader rendered it `â€“`. Confirm with
   `UNICODE(SUBSTRING(...))` and `DATALENGTH` vs `LEN` before 'fixing' anything. (2026-09-18)
 - **`updateDefinition` can fail on capacity, not correctness** — `Dataset_Import_FailedToImportDataset`
+- **`executeQueries` TRUNCATES silently.** A 49,306-row x 6-wide-string-column query returned 44,241
+  rows with no error and HTTP 200 — a response-size cap, well under the documented 100k-row limit.
+  Always chunk and assert each chunk returned the row count you expected. (2026-09-18)
   / 'throttled ... because of insufficient memory'. It rolls back atomically (verify!), and an identical
   retry usually succeeds. Ports run near 03:00 UTC succeeded first try; 13:30 UTC did not. (2026-09-18)
 

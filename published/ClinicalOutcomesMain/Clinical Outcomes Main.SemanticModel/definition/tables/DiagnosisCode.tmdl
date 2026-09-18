@@ -54,45 +54,11 @@ table DiagnosisCode
 	partition DiagnosisCode = m
 		mode: import
 		queryGroup: Diagnoses
-		source = ```
+		source =
 				let
-				    //Source
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    CallWorkspace = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    CallDataflow = CallWorkspace{[dataflowId="5527ef94-26ec-4a1d-b65c-21ed39104f2d"]}[Data],
-				
-				    //Codes (L4 and L3)
-				    Codes_GetName = CallDataflow{[entity="DiagnosisCode",version=""]}[Data],
-				    Codes_RemovedOtherColumns = Table.SelectColumns(Codes_GetName,{"DiagnosisCode_ID", "Code", "Description", "ParentDiagnosisCode_ID", "DiagnosisCategory_ID"}),
-				    Codes_DuplicatedColumn = Table.DuplicateColumn(Codes_RemovedOtherColumns, "Code", "ICD"),
-				    Codes_MergeL4 = Table.CombineColumns(Codes_DuplicatedColumn,{"Code", "Description"},Combiner.CombineTextByDelimiter(": ", QuoteStyle.None),"L4"),
-				    Codes_MergeForL3 = Table.NestedJoin(Codes_MergeL4, {"ParentDiagnosisCode_ID"}, Codes_MergeL4, {"DiagnosisCode_ID"}, "Codes_MergedColumns", JoinKind.LeftOuter),
-				    Codes_ExpandL3 = Table.ExpandTableColumn(Codes_MergeForL3, "Codes_MergedColumns", {"L4"}, {"L3"}),
-				    Codes_RemovedColumns = Table.RemoveColumns(Codes_ExpandL3,{"ParentDiagnosisCode_ID"}),
-				
-				    //Categories (L2 and L1)
-				    Categories_GetName = CallDataflow{[entity="DiagnosisCategory",version=""]}[Data],
-				    Categories_RemovedOtherColumns = Table.SelectColumns(Categories_GetName,{"DiagnosisCategory_ID", "Description", "ParentDiagnosisCategory_ID"}),
-				    Categories_RenamedColumns = Table.RenameColumns(Categories_RemovedOtherColumns,{{"Description", "L2"}}),
-				    Categories_SplitL2 = Table.SplitColumn(Categories_RenamedColumns, "L2", Splitter.SplitTextByEachDelimiter({"("}, QuoteStyle.Csv, true), {"L2.Desc", "L2.Code"}),
-				    Categories_RemoveRightParen = Table.ReplaceValue(Categories_SplitL2,")","",Replacer.ReplaceText,{"L2.Code"}),
-				    Categories_MergeL2 = Table.CombineColumns(Categories_RemoveRightParen,{"L2.Code", "L2.Desc"},Combiner.CombineTextByDelimiter(": ", QuoteStyle.None),"L2"),
-				    Categories_MergeForL1 = Table.NestedJoin(Categories_MergeL2, {"ParentDiagnosisCategory_ID"}, Categories_MergeL2, {"DiagnosisCategory_ID"}, "Category", JoinKind.Inner),
-				    Categories_ExpandL1 = Table.ExpandTableColumn(Categories_MergeForL1, "Category", {"L2"}, {"L1"}),
-				    Categories_RemovedColumns = Table.RemoveColumns(Categories_ExpandL1,{"ParentDiagnosisCategory_ID"}),
-				    
-				    //Combine
-				    Combine_Merge = Table.NestedJoin(Codes_RemovedColumns, {"DiagnosisCategory_ID"}, Categories_RemovedColumns, {"DiagnosisCategory_ID"}, "Category", JoinKind.Inner),
-				    Combine_Expand = Table.ExpandTableColumn(Combine_Merge, "Category", {"L2", "L1"}, {"L2", "L1"}),
-				    Combine_RemovedColumns = Table.RemoveColumns(Combine_Expand,{"DiagnosisCategory_ID"}),
-				    Combine_ReplacedValue = Table.ReplaceValue(Combine_RemovedColumns,null,each [L4],Replacer.ReplaceValue,{"L3"}),
-				    Combine_ChangedType = Table.TransformColumnTypes(Combine_ReplacedValue,{{"L3", type text}}),
-				    Combine_RemoveDot = Table.ReplaceValue(Combine_ChangedType,".","",Replacer.ReplaceText,{"ICD"}),
-				    #"Replaced Value" = Table.ReplaceValue(Combine_RemoveDot,": Conditions of Uncertain Etiology","zzz: Conditions of Uncertain Etiology",Replacer.ReplaceText,{"L1"})
+				    Source = Value.NativeQuery(_NetHealthBronze, "SELECT c.DiagnosisCode_ID, c.Code + ':' + CHAR(32) + c.Description AS L4, r.Code + ':' + CHAR(32) + r.Description AS L3, g.label AS L2, gp.label AS L1, REPLACE(c.Code, '.', '') AS ICD FROM dbo.DiagnosisCode c INNER JOIN (SELECT Code, MAX(DiagnosisCode_ID) AS id FROM dbo.DiagnosisCode WHERE ParentDiagnosisCode_ID IS NULL AND LEN(Code) = 3 GROUP BY Code) rk ON rk.Code = LEFT(c.Code, 3) INNER JOIN dbo.DiagnosisCode r ON r.DiagnosisCode_ID = rk.id INNER JOIN (SELECT k.DiagnosisCategory_ID, k.ParentDiagnosisCategory_ID,  (CASE WHEN CHARINDEX('(', k.Description) > 0 THEN REPLACE(SUBSTRING(k.Description, CHARINDEX('(', k.Description) + 1, 200), ')', '') ELSE 'U00-U49' END) + ':' + CHAR(32) + RTRIM(CASE WHEN CHARINDEX('(', k.Description) > 0 THEN LEFT(k.Description, CHARINDEX('(', k.Description) - 1) ELSE k.Description END) AS label FROM dbo.DiagnosisCategory k) g ON c.DiagnosisCategory_ID = g.DiagnosisCategory_ID INNER JOIN (SELECT k.DiagnosisCategory_ID,  (CASE WHEN CHARINDEX('(', k.Description) > 0 THEN REPLACE(SUBSTRING(k.Description, CHARINDEX('(', k.Description) + 1, 200), ')', '') ELSE 'U00-U49' END) + ':' + CHAR(32) + RTRIM(CASE WHEN CHARINDEX('(', k.Description) > 0 THEN LEFT(k.Description, CHARINDEX('(', k.Description) - 1) ELSE k.Description END) AS label FROM dbo.DiagnosisCategory k) gp ON g.ParentDiagnosisCategory_ID = gp.DiagnosisCategory_ID")
 				in
-				    #"Replaced Value"
-				```
+				    Source
 
 	annotation PBI_ResultType = Table
 

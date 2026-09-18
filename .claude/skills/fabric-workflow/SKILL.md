@@ -143,5 +143,17 @@ One line per gotcha. Add to it whenever we hit a new Fabric trap (and a memory f
   `project_fabric_data_freshness`, `project_salesforce_removal`.
 - `Service.MinutesPerUnit` is NULL on every high-volume service code (29 of 634 populated) and `Service.Billable` is a varchar `Always`/`Never`/`User Discretion`, not a bit. `Billing.ARCharge` is a ~8.6%-coverage direct-bill slice, NOT billing of record — never treat it as "what we billed". Minutes/unit is only comparable WITHIN `IsTimeBased` (14.4 vs 28.9 min/unit, July 2026). (2026-09-02)
 - **`Billing.ARCharge` is Aegis OUTPATIENT ONLY** (all top facilities are "Aegis OP/GP at …", Division 5500; 3,395 of 39,419 July tracks; zero Contract Rehab SNF sessions). Never use it as a company-wide billing fact. And `Billing.ARClaimDetail` fans out ~1.54 rows per charge (26,524 of 47,967 July charges have 2), so `SUM(ARCharge.Duration)` across that join double-counts (+58%). (2026-09-02)
+- **The Fabric SQL endpoint TRIMS trailing spaces off string literals** when they are concatenated
+  with a column, so `Code + ': ' + Description` silently yields `A04.71:Enterocolitis`. An
+  all-constant test (`SELECT 'a' + ': ' + 'b'`) folds at parse time and looks fine, which is why this
+  hides. `CONCAT()` does NOT help. Use `':' + CHAR(32) +`. Caught by a per-row length sum that was
+  short by exactly one character per row. (2026-09-18)
+- **Joining on a computed expression (`ON r.id = CASE WHEN p4.id IS NOT NULL THEN ... END`) across
+  self-joins does not complete** — 600s timeout on 99k rows. Resolve the key in a small derived table
+  first and equi-join to it; the same result ran in 1.9s. (2026-09-18)
+- **NetHealth `dbo.DiagnosisCode` is a 5-level ICD tree with dirty edges**: 529 codes have no parent
+  link despite their 3-char parent existing, and 16 three-char codes appear TWICE as roots (the
+  higher `DiagnosisCode_ID` is the live one, carrying the children and the newer wording). Dedupe
+  before joining or the fan-out is silent. (2026-09-18)
 - **Silver `facility.LicenseNumber` IS the CMS CCN.** Silver has no column called CCN (only `NPI` and `LicenseNumber`), so CCN looks Salesforce-only and isn't. Verified 2026-09-15 against Salesforce `Account.CCN__c`: 232/232 overlapping facilities agree, ZERO contradictions; it is never wrong, only missing (1,781/2,713 populated, gaps are termed sites + `- PES - Teamworkers` screening sites). Use `COALESCE(NULLIF(LTRIM(RTRIM(LicenseNumber)),''), FacilityNumber)` when you need full coverage. This is what let PatientSatisfaction drop Salesforce entirely. (2026-09-15)
 - **`FacilityNumber` is a CONTRACT LINE, not a building.** Silver `dbo.facility` has ~1.54 rows per physical building (666 distinct Salesforce Accounts vs 1,025 active `Contract_Number__c`), because a building carries separate SNF/OP/etc. contracts. Any measure ported from a Salesforce-era `DISTINCTCOUNT(Account[Id])` must count a building key (LicenseNumber, falling back to FacilityNumber) or it inflates ~50%. (2026-09-15)
