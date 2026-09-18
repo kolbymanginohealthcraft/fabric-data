@@ -124,11 +124,11 @@ table Patients
 		queryGroup: Patient
 		source =
 				let
-				    Source = PowerPlatform.Dataflows(null),
-				    Workspaces = Source{[Id="Workspaces"]}[Data],
-				    #"85b4966e-36ff-4433-990a-06a46dbbba67" = Workspaces{[workspaceId="85b4966e-36ff-4433-990a-06a46dbbba67"]}[Data],
-				    #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc" = #"85b4966e-36ff-4433-990a-06a46dbbba67"{[dataflowId="0ad806a7-7698-4083-ba4f-c42c5aa91ecc"]}[Data],
-				    Patients_ = #"0ad806a7-7698-4083-ba4f-c42c5aa91ecc"{[entity="Patients",version=""]}[Data],
+				    _Res = Value.NativeQuery(_NetHealthBronze, "SELECT r.Resident_ID AS PatientID, ri.FirstName, ri.LastName, TRY_CAST(r.DOB AS date) AS DOB, CAST(r.Facility_ID AS varchar(20)) AS _NHID FROM dbo.Resident r LEFT JOIN dbo.ResidentInfo ri ON ri.Resident_ID = r.Resident_ID AND ri.IsCurrent = 1 WHERE ISNULL(r.IsDeletedResident,0) = 0 AND r.Facility_ID IS NOT NULL"),
+				    _FacMap = Value.NativeQuery(_SilverSource, "SELECT CAST(NetHealthId AS varchar(20)) AS _NHID, FacilityNumber AS Facility FROM dbo.facility WHERE NetHealthId IS NOT NULL"),
+				    _Joined = Table.NestedJoin(_Res, {"_NHID"}, _FacMap, {"_NHID"}, "_f", JoinKind.Inner),
+				    _Expanded = Table.ExpandTableColumn(_Joined, "_f", {"Facility"}),
+				    Patients_ = Table.RemoveColumns(_Expanded, {"_NHID"}),
 				    #"Removed Other Columns" = Table.SelectColumns(Patients_,{"PatientID", "FirstName", "LastName", "DOB", "Facility"}),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"DOB", type date}}),
 				    #"Inserted Merged Column" = Table.AddColumn(#"Changed Type", "Patient Name FirstLast", each Text.Combine({[FirstName], [LastName]}, " "), type text),

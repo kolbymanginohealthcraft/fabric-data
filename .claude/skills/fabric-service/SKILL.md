@@ -333,6 +333,9 @@ One line per gotcha. Add when we hit a new one (and a memory file if it's a disc
   retry usually succeeds. Ports run near 03:00 UTC succeeded first try; 13:30 UTC did not. (2026-09-18)
 
 ## Related
+- **Refresh triggering is rate limited.** After roughly a dozen `POST .../refreshes` in a day the
+  API returns **429** with 'Retry in 120 seconds'. Batch several table ports into ONE refresh rather
+  than refreshing per table, and make any trigger retry on 429. (2026-09-18)
 - **pbip-authoring** — the file formats you are pushing (TMDL syntax, PBIR vs legacy layout).
 - **fabric-workflow** — auth background, lakehouse endpoints, and repointing a model's SOURCE
   (as opposed to repointing a REPORT at a model, which is `Rebind`, here).
